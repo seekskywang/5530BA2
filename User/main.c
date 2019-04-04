@@ -74,7 +74,7 @@ int main(void)
 	TM1650_GPIO_INT();		/*TM1650引脚初始化 */
     EEPROM_READ_Coeff();//读取校准参数
 	DAC8531_GPIOCoing();//DAC初始化
-	AD7689_InitializeSPI2();//AD7689初始化
+	AD7689_InitializeSPI1();//AD7689初始化
 	LCD_Initializtion();//液晶屏初始化	
 	//IWDG_Inte();
 	Flash_Read16BitDatas(FLASH_USER_START_ADDR,20,InFlashSave);

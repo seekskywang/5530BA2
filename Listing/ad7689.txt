@@ -5,12 +5,12 @@
                           AREA ||i.AD7689_Delay||, CODE, READONLY, ALIGN=1
 
                   AD7689_Delay PROC
-;;;421    /************************************************************************/
-;;;422    void AD7689_Delay(void)
+;;;615    /************************************************************************/
+;;;616    void AD7689_Delay(void)
 000000  b508              PUSH     {r3,lr}
-;;;423    {
-;;;424    	vu16 count ;
-;;;425      for(count = 1000; count != 0; count--);
+;;;617    {
+;;;618    	vu16 count ;
+;;;619      for(count = 1000; count != 0; count--);
 000002  f44f707a          MOV      r0,#0x3e8
 000006  9000              STR      r0,[sp,#0]
 000008  e003              B        |L1.18|
@@ -22,21 +22,21 @@
 000012  f8bd0000          LDRH     r0,[sp,#0]
 000016  2800              CMP      r0,#0
 000018  d1f7              BNE      |L1.10|
-;;;426    }
+;;;620    }
 00001a  bd08              POP      {r3,pc}
-;;;427    void AD7689_Delay1(void)
+;;;621    void AD7689_Delay1(void)
                           ENDP
 
 
                           AREA ||i.AD7689_Delay1||, CODE, READONLY, ALIGN=1
 
                   AD7689_Delay1 PROC
-;;;426    }
-;;;427    void AD7689_Delay1(void)
+;;;620    }
+;;;621    void AD7689_Delay1(void)
 000000  b508              PUSH     {r3,lr}
-;;;428    {
-;;;429    	vu16 count ;
-;;;430      for(count = 3000; count != 0; count--);
+;;;622    {
+;;;623    	vu16 count ;
+;;;624      for(count = 3000; count != 0; count--);
 000002  f64030b8          MOV      r0,#0xbb8
 000006  9000              STR      r0,[sp,#0]
 000008  e003              B        |L2.18|
@@ -48,361 +48,305 @@
 000012  f8bd0000          LDRH     r0,[sp,#0]
 000016  2800              CMP      r0,#0
 000018  d1f7              BNE      |L2.10|
-;;;431    }
+;;;625    }
 00001a  bd08              POP      {r3,pc}
-;;;432    void AD7689_Scan_CH(void)
+;;;626    void AD7689_Scan_CH(void)
                           ENDP
 
 
-                          AREA ||i.AD7689_InitializeSPI2||, CODE, READONLY, ALIGN=2
+                          AREA ||i.AD7689_InitializeSPI1||, CODE, READONLY, ALIGN=2
 
-                  AD7689_InitializeSPI2 PROC
-;;;280    void Bubble_sort(vu16 *D_temp,vu8 num);
-;;;281    void AD7689_InitializeSPI2(void)
-000000  e92d41fc          PUSH     {r2-r8,lr}
-;;;282    {
-;;;283    	GPIO_InitTypeDef  GPIO_InitStructure;
-;;;284      //SPI_InitTypeDef  SPI_InitStructure;
-;;;285      /*!< SD_SPI_CS_GPIO, SD_SPI_MOSI_GPIO, SD_SPI_MISO_GPIO, SD_SPI_DETECT_GPIO 
-;;;286           and SD_SPI_SCK_GPIO Periph clock enable 
-;;;287    	// 	 RCC_AHBPeriphClockCmd(FLASH_CS_PIN_SCK|FLASH_SCK_PIN_SCK|FLASH_MISO_PIN_SCK | FLASH_MOSI_PIN_SCK, ENABLE);
-;;;288      !< SD_SPI Periph clock enable */
-;;;289    	/*RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-;;;290    	
-;;;291    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-;;;292    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-;;;293    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-;;;294    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//inv
-;;;295    	GPIO_Init(GPIOA, &GPIO_InitStructure);//
-;;;296      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3;//PC2~3复用功能输出	
-;;;297      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-;;;298      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-;;;299      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-;;;300      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-;;;301      GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
-;;;302    	
-;;;303    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PB10复用功能输出	
-;;;304      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-;;;305      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-;;;306      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-;;;307      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-;;;308      GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-;;;309    	
-;;;310      GPIO_PinAFConfig(GPIOC,GPIO_PinSource2,GPIO_AF_SPI2); //PC2复用为 SPI2
-;;;311    	GPIO_PinAFConfig(GPIOC,GPIO_PinSource3,GPIO_AF_SPI2); //PBC3复用为 SPI2
-;;;312    	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_SPI2); //PB13复用为 SPI2
-;;;313    	AD7689_CNV_1;
-;;;314    	AD7689_Delay();
-;;;315    	AD7689_CNV_0;
-;;;316    	//这里只针对SPI口初始化
-;;;317      SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
-;;;318    	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
-;;;319    	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
-;;;320    	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
-;;;321    	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
-;;;322    	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-;;;323    	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
-;;;324    	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
-;;;325    	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-;;;326    	SPI_Init(SPI2, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
-;;;327    	
-;;;328    	SPI_Cmd(SPI2, ENABLE);*/ //使能SPI外设*/
-;;;329    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-000004  2602              MOVS     r6,#2
-000006  f88d6005          STRB     r6,[sp,#5]
-;;;330    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-00000a  2401              MOVS     r4,#1
-00000c  f88d4004          STRB     r4,[sp,#4]
-;;;331    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-000010  2500              MOVS     r5,#0
-000012  f88d5006          STRB     r5,[sp,#6]
-;;;332    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
-000016  2040              MOVS     r0,#0x40
-000018  9000              STR      r0,[sp,#0]
-;;;333    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-00001a  4f1a              LDR      r7,|L3.132|
-00001c  4669              MOV      r1,sp
-00001e  4638              MOV      r0,r7
-000020  f7fffffe          BL       GPIO_Init
-;;;334    
-;;;335    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-000024  f88d6005          STRB     r6,[sp,#5]
-;;;336    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-000028  f88d4004          STRB     r4,[sp,#4]
-;;;337    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-00002c  f88d5006          STRB     r5,[sp,#6]
-;;;338    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;//sck,
-000030  2008              MOVS     r0,#8
-000032  9000              STR      r0,[sp,#0]
-;;;339    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-000034  4669              MOV      r1,sp
-000036  4638              MOV      r0,r7
-000038  f7fffffe          BL       GPIO_Init
-;;;340    	
-;;;341    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-00003c  f88d6005          STRB     r6,[sp,#5]
-;;;342    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-000040  f88d4004          STRB     r4,[sp,#4]
-;;;343    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-000044  f88d5006          STRB     r5,[sp,#6]
-;;;344    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//MOSI
-000048  2020              MOVS     r0,#0x20
-00004a  9000              STR      r0,[sp,#0]
-;;;345    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-00004c  4669              MOV      r1,sp
-00004e  4638              MOV      r0,r7
-000050  f7fffffe          BL       GPIO_Init
-;;;346    	
-;;;347    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;;
-000054  f88d5004          STRB     r5,[sp,#4]
-;;;348    	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;;
-000058  f88d4007          STRB     r4,[sp,#7]
-;;;349    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;//MISO
-00005c  2010              MOVS     r0,#0x10
-00005e  9000              STR      r0,[sp,#0]
-;;;350    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-000060  4669              MOV      r1,sp
-000062  4638              MOV      r0,r7
-000064  f7fffffe          BL       GPIO_Init
-;;;351    	
-;;;352    	AD7689_CNV_1;
-000068  2140              MOVS     r1,#0x40
-00006a  4638              MOV      r0,r7
-00006c  f7fffffe          BL       GPIO_SetBits
-;;;353    	GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-000070  2120              MOVS     r1,#0x20
-000072  4638              MOV      r0,r7
-000074  f7fffffe          BL       GPIO_SetBits
-;;;354    	GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=0
-000078  2108              MOVS     r1,#8
-00007a  4638              MOV      r0,r7
-00007c  f7fffffe          BL       GPIO_SetBits
-;;;355    }
-000080  e8bd81fc          POP      {r2-r8,pc}
-;;;356    
+                  AD7689_InitializeSPI1 PROC
+;;;534    void Bubble_sort(vu16 *D_temp,vu8 num);
+;;;535    void AD7689_InitializeSPI1(void)
+000000  e92d41f0          PUSH     {r4-r8,lr}
+;;;536    {
+000004  b088              SUB      sp,sp,#0x20
+;;;537    	GPIO_InitTypeDef  GPIO_InitStructure;
+;;;538      SPI_InitTypeDef  SPI_InitStructure;
+;;;539    	
+;;;540    	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+000006  2101              MOVS     r1,#1
+000008  0308              LSLS     r0,r1,#12
+00000a  f7fffffe          BL       RCC_APB2PeriphClockCmd
+;;;541    	
+;;;542    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
+00000e  2702              MOVS     r7,#2
+000010  f88d701d          STRB     r7,[sp,#0x1d]
+;;;543    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+000014  2601              MOVS     r6,#1
+000016  f88d601c          STRB     r6,[sp,#0x1c]
+;;;544    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+00001a  2400              MOVS     r4,#0
+00001c  f88d401e          STRB     r4,[sp,#0x1e]
+;;;545    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
+000020  2040              MOVS     r0,#0x40
+000022  9006              STR      r0,[sp,#0x18]
+;;;546    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
+000024  f8df80a0          LDR      r8,|L3.200|
+000028  a906              ADD      r1,sp,#0x18
+00002a  4640              MOV      r0,r8
+00002c  f7fffffe          BL       GPIO_Init
+;;;547    	
+;;;548      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5;//PB3~5复用功能输出	
+000030  2538              MOVS     r5,#0x38
+000032  9506              STR      r5,[sp,#0x18]
+;;;549      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
+000034  f88d701c          STRB     r7,[sp,#0x1c]
+;;;550      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+000038  f88d401e          STRB     r4,[sp,#0x1e]
+;;;551      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
+00003c  2003              MOVS     r0,#3
+00003e  f88d001d          STRB     r0,[sp,#0x1d]
+;;;552      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
+000042  f88d601f          STRB     r6,[sp,#0x1f]
+;;;553      GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
+000046  a906              ADD      r1,sp,#0x18
+000048  4640              MOV      r0,r8
+00004a  f7fffffe          BL       GPIO_Init
+;;;554    
+;;;555      GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1); //PCB3复用为 SPI1
+00004e  2205              MOVS     r2,#5
+000050  2103              MOVS     r1,#3
+000052  4640              MOV      r0,r8
+000054  f7fffffe          BL       GPIO_PinAFConfig
+;;;556    	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1); //PBB4复用为 SPI1
+000058  2205              MOVS     r2,#5
+00005a  2104              MOVS     r1,#4
+00005c  4640              MOV      r0,r8
+00005e  f7fffffe          BL       GPIO_PinAFConfig
+;;;557    	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1); //PB5复用为 SPI1
+000062  2205              MOVS     r2,#5
+000064  4611              MOV      r1,r2
+000066  4640              MOV      r0,r8
+000068  f7fffffe          BL       GPIO_PinAFConfig
+;;;558    	AD7689_CNV_1;
+00006c  2140              MOVS     r1,#0x40
+00006e  4640              MOV      r0,r8
+000070  f7fffffe          BL       GPIO_SetBits
+;;;559    	AD7689_Delay();
+000074  f7fffffe          BL       AD7689_Delay
+;;;560    	AD7689_CNV_0;
+000078  2140              MOVS     r1,#0x40
+00007a  4640              MOV      r0,r8
+00007c  f7fffffe          BL       GPIO_ResetBits
+;;;561    	//这里只针对SPI口初始化
+;;;562      SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
+000080  f8ad4004          STRH     r4,[sp,#4]
+;;;563    	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
+000084  f44f7082          MOV      r0,#0x104
+000088  f8ad0006          STRH     r0,[sp,#6]
+;;;564    	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
+00008c  02f0              LSLS     r0,r6,#11
+00008e  f8ad0008          STRH     r0,[sp,#8]
+;;;565    	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
+000092  f8ad400a          STRH     r4,[sp,#0xa]
+;;;566    	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
+000096  f8ad400c          STRH     r4,[sp,#0xc]
+;;;567    	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
+00009a  1080              ASRS     r0,r0,#2
+00009c  f8ad000e          STRH     r0,[sp,#0xe]
+;;;568    	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
+0000a0  f8ad5010          STRH     r5,[sp,#0x10]
+;;;569    	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
+0000a4  f8ad4012          STRH     r4,[sp,#0x12]
+;;;570    	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
+0000a8  2007              MOVS     r0,#7
+0000aa  f8ad0014          STRH     r0,[sp,#0x14]
+;;;571    	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
+0000ae  4c07              LDR      r4,|L3.204|
+0000b0  a901              ADD      r1,sp,#4
+0000b2  4620              MOV      r0,r4
+0000b4  f7fffffe          BL       SPI_Init
+;;;572    	
+;;;573    	SPI_Cmd(SPI1, ENABLE); //使能SPI外设*/
+0000b8  2101              MOVS     r1,#1
+0000ba  4620              MOV      r0,r4
+0000bc  f7fffffe          BL       SPI_Cmd
+;;;574    }
+0000c0  b008              ADD      sp,sp,#0x20
+0000c2  e8bd81f0          POP      {r4-r8,pc}
+;;;575    
                           ENDP
 
-                  |L3.132|
+0000c6  0000              DCW      0x0000
+                  |L3.200|
                           DCD      0x40020400
+                  |L3.204|
+                          DCD      0x40013000
 
                           AREA ||i.AD7689_Scan_CH||, CODE, READONLY, ALIGN=2
 
                   AD7689_Scan_CH PROC
-;;;431    }
-;;;432    void AD7689_Scan_CH(void)
-000000  b570              PUSH     {r4-r6,lr}
-;;;433    {
-000002  b086              SUB      sp,sp,#0x18
-;;;434    	static vu8 I_cont,I1_cont,V_cont;
-;;;435    	vu8 i,f;
-;;;436    	vu32 sum1;
-;;;437    	vu16 var_chI,var_chV,var_chV1;
-;;;438    	for(i=0;i<8;i++)
-000004  2500              MOVS     r5,#0
-000006  9505              STR      r5,[sp,#0x14]
-;;;439    		{
-;;;440    			AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
-000008  4c48              LDR      r4,|L4.300|
-00000a  e014              B        |L4.54|
-                  |L4.12|
-00000c  f89d1014          LDRB     r1,[sp,#0x14]
-000010  2001              MOVS     r0,#1
-000012  f7fffffe          BL       SPI_AD7689_Read
-000016  f89d1014          LDRB     r1,[sp,#0x14]
-00001a  f8240011          STRH     r0,[r4,r1,LSL #1]
-;;;441    			AD7689_Delay1();
-00001e  f7fffffe          BL       AD7689_Delay1
-;;;442    			var_chI=AD7689_Buffer[3];
-000022  88e0              LDRH     r0,[r4,#6]  ; AD7689_Buffer
-000024  9002              STR      r0,[sp,#8]
-;;;443    			var_chV=AD7689_Buffer[2];
-000026  88a0              LDRH     r0,[r4,#4]  ; AD7689_Buffer
-000028  9001              STR      r0,[sp,#4]
-;;;444    			var_chV1=AD7689_Buffer[4];
-00002a  8920              LDRH     r0,[r4,#8]  ; AD7689_Buffer
-00002c  9000              STR      r0,[sp,#0]
-00002e  f89d0014          LDRB     r0,[sp,#0x14]         ;438
-000032  1c40              ADDS     r0,r0,#1              ;438
-000034  9005              STR      r0,[sp,#0x14]         ;438
-                  |L4.54|
-000036  f89d0014          LDRB     r0,[sp,#0x14]         ;438
-00003a  2808              CMP      r0,#8                 ;438
-00003c  d3e6              BCC      |L4.12|
-;;;445    		}
-;;;446    	/***************电源电流滤波**********************/
-;;;447    	Ad7689_Fit_Imon1[I1_cont++]=var_chI;
-00003e  f8bd2008          LDRH     r2,[sp,#8]
-000042  4e3b              LDR      r6,|L4.304|
-000044  7870              LDRB     r0,[r6,#1]  ; I1_cont
-000046  1c41              ADDS     r1,r0,#1
-000048  7071              STRB     r1,[r6,#1]
-00004a  4c38              LDR      r4,|L4.300|
-00004c  34d8              ADDS     r4,r4,#0xd8
-00004e  f8242010          STRH     r2,[r4,r0,LSL #1]
-;;;448    	if(I1_cont==20)
-000052  7870              LDRB     r0,[r6,#1]  ; I1_cont
-000054  2814              CMP      r0,#0x14
-000056  d100              BNE      |L4.90|
-;;;449    	{
-;;;450    		I1_cont=0;
-000058  7075              STRB     r5,[r6,#1]
-                  |L4.90|
-;;;451    	}
-;;;452    	Bubble_sort( Ad7689_Fit_Imon1,20);//排序从大到小
-00005a  4834              LDR      r0,|L4.300|
-00005c  2114              MOVS     r1,#0x14
-00005e  30d8              ADDS     r0,r0,#0xd8
-000060  f7fffffe          BL       Bubble_sort
-;;;453    	sum1=0;
-000064  9503              STR      r5,[sp,#0xc]
-;;;454    	for(f=2;f<16;f++)
-000066  2202              MOVS     r2,#2
-000068  9204              STR      r2,[sp,#0x10]
-00006a  e00a              B        |L4.130|
-                  |L4.108|
-;;;455    	{
-;;;456    		sum1 +=Ad7689_Fit_Imon1[f];
-00006c  f89d0010          LDRB     r0,[sp,#0x10]
-000070  f8340010          LDRH     r0,[r4,r0,LSL #1]
-000074  9903              LDR      r1,[sp,#0xc]
-000076  4408              ADD      r0,r0,r1
-000078  9003              STR      r0,[sp,#0xc]
-00007a  f89d0010          LDRB     r0,[sp,#0x10]         ;454
-00007e  1c40              ADDS     r0,r0,#1              ;454
-000080  9004              STR      r0,[sp,#0x10]         ;454
-                  |L4.130|
-000082  f89d0010          LDRB     r0,[sp,#0x10]         ;454
-000086  2810              CMP      r0,#0x10              ;454
-000088  d3f0              BCC      |L4.108|
-;;;457    	}
-;;;458    	Imon_value=sum1/14;
-00008a  9803              LDR      r0,[sp,#0xc]
-00008c  230e              MOVS     r3,#0xe
-00008e  fbb0f0f3          UDIV     r0,r0,r3
-000092  4928              LDR      r1,|L4.308|
-000094  8008              STRH     r0,[r1,#0]
-;;;459    	/***************负载电压滤波**********************/
-;;;460    	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-000096  f8bd4004          LDRH     r4,[sp,#4]
-00009a  78b0              LDRB     r0,[r6,#2]  ; V_cont
-00009c  1c41              ADDS     r1,r0,#1
-00009e  70b1              STRB     r1,[r6,#2]
-0000a0  0041              LSLS     r1,r0,#1
-0000a2  4825              LDR      r0,|L4.312|
-0000a4  5244              STRH     r4,[r0,r1]
-;;;461    	if(V_cont==20)
-0000a6  78b1              LDRB     r1,[r6,#2]  ; V_cont
-0000a8  2914              CMP      r1,#0x14
-0000aa  d100              BNE      |L4.174|
-;;;462    	{
-;;;463    		V_cont=0;
-0000ac  70b5              STRB     r5,[r6,#2]
-                  |L4.174|
-;;;464    	}
-;;;465    //	Bubble_sort( Ad7689_Fit_Vmon,20);//排序从大到小
-;;;466    	sum1=0;
-0000ae  9503              STR      r5,[sp,#0xc]
-;;;467    	for(f=2;f<16;f++)
-0000b0  9204              STR      r2,[sp,#0x10]
-0000b2  e00a              B        |L4.202|
-                  |L4.180|
-;;;468    	{
-;;;469    		sum1 +=Ad7689_Fit_Vmon[f];
-0000b4  f89d1010          LDRB     r1,[sp,#0x10]
-0000b8  f8301011          LDRH     r1,[r0,r1,LSL #1]
-0000bc  9a03              LDR      r2,[sp,#0xc]
-0000be  4411              ADD      r1,r1,r2
-0000c0  9103              STR      r1,[sp,#0xc]
-0000c2  f89d1010          LDRB     r1,[sp,#0x10]         ;467
-0000c6  1c49              ADDS     r1,r1,#1              ;467
-0000c8  9104              STR      r1,[sp,#0x10]         ;467
-                  |L4.202|
-0000ca  f89d1010          LDRB     r1,[sp,#0x10]         ;467
-0000ce  2910              CMP      r1,#0x10              ;467
-0000d0  d3f0              BCC      |L4.180|
-;;;470    	}
-;;;471    	Vmon1_value=sum1/14;
-0000d2  9803              LDR      r0,[sp,#0xc]
-0000d4  4919              LDR      r1,|L4.316|
-0000d6  fbb0f0f3          UDIV     r0,r0,r3
-0000da  6008              STR      r0,[r1,#0]  ; Vmon1_value
-;;;472    /***************负载电流滤波**********************/
-;;;473    	Ad7689_Fit_Imon[I_cont++]=var_chV1;
-0000dc  f8bd2000          LDRH     r2,[sp,#0]
-0000e0  7830              LDRB     r0,[r6,#0]  ; I_cont
-0000e2  1c41              ADDS     r1,r0,#1
-0000e4  7031              STRB     r1,[r6,#0]
-0000e6  0041              LSLS     r1,r0,#1
-0000e8  4810              LDR      r0,|L4.300|
-0000ea  3010              ADDS     r0,r0,#0x10
-0000ec  5242              STRH     r2,[r0,r1]
-;;;474    	if(I_cont==30)
-0000ee  7831              LDRB     r1,[r6,#0]  ; I_cont
-0000f0  291e              CMP      r1,#0x1e
-0000f2  d100              BNE      |L4.246|
-;;;475    	{
-;;;476    		I_cont=0;
-0000f4  7035              STRB     r5,[r6,#0]
-                  |L4.246|
-;;;477    	}
-;;;478    //	Bubble_sort( Ad7689_Fit_Imon,20);//排序从大到小
-;;;479    	sum1=0;
-0000f6  9503              STR      r5,[sp,#0xc]
-;;;480    	for(f=0;f<30;f++)
-0000f8  9504              STR      r5,[sp,#0x10]
-0000fa  e00a              B        |L4.274|
-                  |L4.252|
-;;;481    	{
-;;;482    		sum1 +=Ad7689_Fit_Imon[f];
-0000fc  f89d1010          LDRB     r1,[sp,#0x10]
-000100  f8301011          LDRH     r1,[r0,r1,LSL #1]
-000104  9a03              LDR      r2,[sp,#0xc]
-000106  4411              ADD      r1,r1,r2
-000108  9103              STR      r1,[sp,#0xc]
-00010a  f89d1010          LDRB     r1,[sp,#0x10]         ;480
-00010e  1c49              ADDS     r1,r1,#1              ;480
-000110  9104              STR      r1,[sp,#0x10]         ;480
-                  |L4.274|
-000112  f89d1010          LDRB     r1,[sp,#0x10]         ;480
-000116  291e              CMP      r1,#0x1e              ;480
-000118  d3f0              BCC      |L4.252|
-;;;483    	}
-;;;484    	Imon1_value=sum1/30;
-00011a  9803              LDR      r0,[sp,#0xc]
-00011c  211e              MOVS     r1,#0x1e
-00011e  fbb0f0f1          UDIV     r0,r0,r1
-000122  4907              LDR      r1,|L4.320|
-000124  6008              STR      r0,[r1,#0]  ; Imon1_value
-;;;485    }
-000126  b006              ADD      sp,sp,#0x18
-000128  bd70              POP      {r4-r6,pc}
-;;;486    
+;;;625    }
+;;;626    void AD7689_Scan_CH(void)
+000000  e92d41f0          PUSH     {r4-r8,lr}
+;;;627    {
+000004  b086              SUB      sp,sp,#0x18
+;;;628    	static vu8 I_cont,I1_cont,V_cont;
+;;;629    	vu8 i,f;
+;;;630    	vu32 sum1;
+;;;631    	vu16 var_chI,var_chV,var_chV1;
+;;;632    	for(i=0;i<8;i++)
+000006  2600              MOVS     r6,#0
+000008  9605              STR      r6,[sp,#0x14]
+;;;633    	{
+;;;634    		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
+00000a  4c37              LDR      r4,|L4.232|
+;;;635    		var_chV=AD7689_Buffer[2];
+;;;636    		var_chI=AD7689_Buffer[3];
+;;;637    		Imon_value=AD7689_Buffer[5];
+00000c  4d37              LDR      r5,|L4.236|
+;;;638    		Vmon_value=AD7689_Buffer[6];
+00000e  4f38              LDR      r7,|L4.240|
+;;;639    		Rmon_value=AD7689_Buffer[7];
+000010  f8df80e0          LDR      r8,|L4.244|
+000014  e017              B        |L4.70|
+                  |L4.22|
+000016  f89d1014          LDRB     r1,[sp,#0x14]         ;634
+00001a  2001              MOVS     r0,#1                 ;634
+00001c  f7fffffe          BL       SPI_AD7689_Read
+000020  f89d1014          LDRB     r1,[sp,#0x14]         ;634
+000024  f8240011          STRH     r0,[r4,r1,LSL #1]     ;634
+000028  88a0              LDRH     r0,[r4,#4]            ;635  ; AD7689_Buffer
+00002a  9001              STR      r0,[sp,#4]            ;635
+00002c  88e0              LDRH     r0,[r4,#6]            ;636  ; AD7689_Buffer
+00002e  9002              STR      r0,[sp,#8]            ;636
+000030  8960              LDRH     r0,[r4,#0xa]          ;637  ; AD7689_Buffer
+000032  8028              STRH     r0,[r5,#0]            ;637
+000034  89a0              LDRH     r0,[r4,#0xc]          ;638  ; AD7689_Buffer
+000036  8038              STRH     r0,[r7,#0]            ;638
+000038  89e0              LDRH     r0,[r4,#0xe]  ; AD7689_Buffer
+00003a  f8a80000          STRH     r0,[r8,#0]
+00003e  f89d0014          LDRB     r0,[sp,#0x14]         ;632
+000042  1c40              ADDS     r0,r0,#1              ;632
+000044  9005              STR      r0,[sp,#0x14]         ;632
+                  |L4.70|
+000046  f89d0014          LDRB     r0,[sp,#0x14]         ;632
+00004a  2808              CMP      r0,#8                 ;632
+00004c  d3e3              BCC      |L4.22|
+;;;640    	}
+;;;641    	Ad7689_Fit_Imon[I_cont++]=var_chI;
+00004e  f8bd2008          LDRH     r2,[sp,#8]
+000052  4c29              LDR      r4,|L4.248|
+000054  7820              LDRB     r0,[r4,#0]  ; I_cont
+000056  1c41              ADDS     r1,r0,#1
+000058  7021              STRB     r1,[r4,#0]
+00005a  0041              LSLS     r1,r0,#1
+00005c  4822              LDR      r0,|L4.232|
+00005e  3010              ADDS     r0,r0,#0x10
+000060  5242              STRH     r2,[r0,r1]
+;;;642    	if(I_cont==20)
+000062  7821              LDRB     r1,[r4,#0]  ; I_cont
+;;;643    	{
+;;;644    		I_cont=0;
+;;;645    		sum1=0;
+;;;646    		for(f=0;f<20;f++)
+;;;647    		{
+;;;648    			sum1 +=Ad7689_Fit_Imon[f];
+;;;649    		}
+;;;650    		Imon1_value=sum1/20;
+000064  2314              MOVS     r3,#0x14
+000066  2914              CMP      r1,#0x14              ;642
+000068  d117              BNE      |L4.154|
+00006a  7026              STRB     r6,[r4,#0]            ;644
+00006c  9603              STR      r6,[sp,#0xc]          ;645
+00006e  9604              STR      r6,[sp,#0x10]         ;646
+000070  e00a              B        |L4.136|
+                  |L4.114|
+000072  f89d1010          LDRB     r1,[sp,#0x10]         ;648
+000076  f8301011          LDRH     r1,[r0,r1,LSL #1]     ;648
+00007a  9a03              LDR      r2,[sp,#0xc]          ;648
+00007c  4411              ADD      r1,r1,r2              ;648
+00007e  9103              STR      r1,[sp,#0xc]          ;648
+000080  f89d1010          LDRB     r1,[sp,#0x10]         ;646
+000084  1c49              ADDS     r1,r1,#1              ;646
+000086  9104              STR      r1,[sp,#0x10]         ;646
+                  |L4.136|
+000088  f89d1010          LDRB     r1,[sp,#0x10]         ;646
+00008c  2914              CMP      r1,#0x14              ;646
+00008e  d3f0              BCC      |L4.114|
+000090  9803              LDR      r0,[sp,#0xc]
+000092  491a              LDR      r1,|L4.252|
+000094  fbb0f0f3          UDIV     r0,r0,r3
+000098  6008              STR      r0,[r1,#0]  ; Imon1_value
+                  |L4.154|
+;;;651    	}
+;;;652    	
+;;;653    	Ad7689_Fit_Vmon[V_cont++]=var_chV;
+00009a  f8bd2004          LDRH     r2,[sp,#4]
+00009e  7860              LDRB     r0,[r4,#1]  ; V_cont
+0000a0  1c41              ADDS     r1,r0,#1
+0000a2  7061              STRB     r1,[r4,#1]
+0000a4  0041              LSLS     r1,r0,#1
+0000a6  4810              LDR      r0,|L4.232|
+0000a8  3038              ADDS     r0,r0,#0x38
+0000aa  5242              STRH     r2,[r0,r1]
+;;;654    	if(V_cont==20)
+0000ac  7861              LDRB     r1,[r4,#1]  ; V_cont
+0000ae  2914              CMP      r1,#0x14
+0000b0  d117              BNE      |L4.226|
+;;;655    	{
+;;;656    		V_cont=0;
+0000b2  7066              STRB     r6,[r4,#1]
+;;;657    		sum1=0;
+0000b4  9603              STR      r6,[sp,#0xc]
+;;;658    		for(f=0;f<20;f++)
+0000b6  9604              STR      r6,[sp,#0x10]
+0000b8  e00a              B        |L4.208|
+                  |L4.186|
+;;;659    		{
+;;;660    			sum1 +=Ad7689_Fit_Vmon[f];
+0000ba  f89d1010          LDRB     r1,[sp,#0x10]
+0000be  f8301011          LDRH     r1,[r0,r1,LSL #1]
+0000c2  9a03              LDR      r2,[sp,#0xc]
+0000c4  4411              ADD      r1,r1,r2
+0000c6  9103              STR      r1,[sp,#0xc]
+0000c8  f89d1010          LDRB     r1,[sp,#0x10]         ;658
+0000cc  1c49              ADDS     r1,r1,#1              ;658
+0000ce  9104              STR      r1,[sp,#0x10]         ;658
+                  |L4.208|
+0000d0  f89d1010          LDRB     r1,[sp,#0x10]         ;658
+0000d4  2914              CMP      r1,#0x14              ;658
+0000d6  d3f0              BCC      |L4.186|
+;;;661    		}
+;;;662    		Vmon1_value=sum1/20;
+0000d8  9803              LDR      r0,[sp,#0xc]
+0000da  4909              LDR      r1,|L4.256|
+0000dc  fbb0f0f3          UDIV     r0,r0,r3
+0000e0  6008              STR      r0,[r1,#0]  ; Vmon1_value
+                  |L4.226|
+;;;663    	}
+;;;664    }
+0000e2  b006              ADD      sp,sp,#0x18
+0000e4  e8bd81f0          POP      {r4-r8,pc}
                           ENDP
 
-00012a  0000              DCW      0x0000
-                  |L4.300|
+                  |L4.232|
                           DCD      ||.bss||
-                  |L4.304|
-                          DCD      ||.data||
-                  |L4.308|
+                  |L4.236|
                           DCD      Imon_value
-                  |L4.312|
-                          DCD      ||.bss||+0x100
-                  |L4.316|
-                          DCD      Vmon1_value
-                  |L4.320|
+                  |L4.240|
+                          DCD      Vmon_value
+                  |L4.244|
+                          DCD      Rmon_value
+                  |L4.248|
+                          DCD      ||.data||
+                  |L4.252|
                           DCD      Imon1_value
+                  |L4.256|
+                          DCD      Vmon1_value
 
                           AREA ||i.AD7689_TransferByte||, CODE, READONLY, ALIGN=2
 
                   AD7689_TransferByte PROC
-;;;404    /************************************************************************/
-;;;405    vu16 AD7689_TransferByte(vu16 uiTxData)
+;;;598    /************************************************************************/
+;;;599    vu16 AD7689_TransferByte(vu16 uiTxData)
 000000  b511              PUSH     {r0,r4,lr}
-;;;406    {
+;;;600    {
 000002  b081              SUB      sp,sp,#4
-;;;407    	vu8 uiRxData;
-;;;408    	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET);
+;;;601    	vu16 uiRxData;
+;;;602    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 000004  4c0c              LDR      r4,|L5.56|
                   |L5.6|
 000006  2102              MOVS     r1,#2
@@ -410,210 +354,82 @@
 00000a  f7fffffe          BL       SPI_I2S_GetFlagStatus
 00000e  2800              CMP      r0,#0
 000010  d0f9              BEQ      |L5.6|
-;;;409    	SPI_I2S_SendData(SPI2,uiTxData);
+;;;603    	SPI_I2S_SendData(SPI1,uiTxData);
 000012  f8bd1004          LDRH     r1,[sp,#4]
 000016  4620              MOV      r0,r4
 000018  f7fffffe          BL       SPI_I2S_SendData
                   |L5.28|
-;;;410    	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET);
+;;;604    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 00001c  2101              MOVS     r1,#1
 00001e  4620              MOV      r0,r4
 000020  f7fffffe          BL       SPI_I2S_GetFlagStatus
 000024  2800              CMP      r0,#0
 000026  d0f9              BEQ      |L5.28|
-;;;411    	uiRxData = SPI_I2S_ReceiveData(SPI2);
+;;;605    	uiRxData = SPI_I2S_ReceiveData(SPI1);
 000028  4620              MOV      r0,r4
 00002a  f7fffffe          BL       SPI_I2S_ReceiveData
 00002e  9000              STR      r0,[sp,#0]
-;;;412    	return uiRxData;
-000030  f89d0000          LDRB     r0,[sp,#0]
-;;;413    }
+;;;606    	return uiRxData;
+000030  f8bd0000          LDRH     r0,[sp,#0]
+;;;607    }
 000034  bd1c              POP      {r2-r4,pc}
-;;;414    /************************************************************************/
+;;;608    /************************************************************************/
                           ENDP
 
 000036  0000              DCW      0x0000
                   |L5.56|
-                          DCD      0x40003800
-
-                          AREA ||i.Bubble_sort||, CODE, READONLY, ALIGN=1
-
-                  Bubble_sort PROC
-;;;489     */
-;;;490    void Bubble_sort(vu16 *D_temp,vu8 num)
-000000  b513              PUSH     {r0,r1,r4,lr}
-;;;491    {
-;;;492    	unsigned int _temp;
-;;;493    	unsigned char m,n;
-;;;494    	for(m=0;m<num;m++)
-000002  2200              MOVS     r2,#0
-000004  e017              B        |L6.54|
-                  |L6.6|
-;;;495    	{
-;;;496    		for(n=m;n<num;n++)
-000006  4611              MOV      r1,r2
-000008  e00f              B        |L6.42|
-                  |L6.10|
-;;;497    		{
-;;;498    			if(D_temp[n]>D_temp[m])//最大的值放在第一位
-00000a  f8303011          LDRH     r3,[r0,r1,LSL #1]
-00000e  f8304012          LDRH     r4,[r0,r2,LSL #1]
-000012  42a3              CMP      r3,r4
-000014  d907              BLS      |L6.38|
-;;;499    			{
-;;;500    				_temp = D_temp[m];
-000016  f8303012          LDRH     r3,[r0,r2,LSL #1]
-;;;501    				D_temp[m] =D_temp[n];
-00001a  f8304011          LDRH     r4,[r0,r1,LSL #1]
-00001e  f8204012          STRH     r4,[r0,r2,LSL #1]
-;;;502    				D_temp[n]=_temp;		
-000022  f8203011          STRH     r3,[r0,r1,LSL #1]
-                  |L6.38|
-000026  1c49              ADDS     r1,r1,#1              ;496
-000028  b2c9              UXTB     r1,r1                 ;496
-                  |L6.42|
-00002a  f89d3004          LDRB     r3,[sp,#4]            ;496
-00002e  4299              CMP      r1,r3                 ;496
-000030  d3eb              BCC      |L6.10|
-000032  1c52              ADDS     r2,r2,#1              ;494
-000034  b2d2              UXTB     r2,r2                 ;494
-                  |L6.54|
-000036  f89d1004          LDRB     r1,[sp,#4]            ;494
-00003a  428a              CMP      r2,r1                 ;494
-00003c  d3e3              BCC      |L6.6|
-;;;503    			}
-;;;504    		}	
-;;;505    	}
-;;;506    }
-00003e  bd1c              POP      {r2-r4,pc}
-                          ENDP
-
+                          DCD      0x40013000
 
                           AREA ||i.SPI_AD7689_Read||, CODE, READONLY, ALIGN=2
 
                   SPI_AD7689_Read PROC
-;;;356    
-;;;357    vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
-000000  b573              PUSH     {r0,r1,r4-r6,lr}
-;;;358    {
-000002  b084              SUB      sp,sp,#0x10
-;;;359    	vu16 AD7689_Config=0;
-000004  2500              MOVS     r5,#0
-000006  9503              STR      r5,[sp,#0xc]
-;;;360    	vu16 AD7689_Data;
-;;;361    	vu8 i;
-;;;362    	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
-000008  f8bd0010          LDRH     r0,[sp,#0x10]
-00000c  f8bd1014          LDRH     r1,[sp,#0x14]
+;;;575    
+;;;576    vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
+000000  b513              PUSH     {r0,r1,r4,lr}
+;;;577    {
+000002  b082              SUB      sp,sp,#8
+;;;578    	vu16 AD7689_Config=0;
+000004  2000              MOVS     r0,#0
+000006  9001              STR      r0,[sp,#4]
+;;;579    	vu16 AD7689_Data;
+;;;580    	vu8 i;
+;;;581    	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
+000008  f8bd0008          LDRH     r0,[sp,#8]
+00000c  f8bd100c          LDRH     r1,[sp,#0xc]
 000010  0340              LSLS     r0,r0,#13
 000012  ea4010c1          ORR      r0,r0,r1,LSL #7
 000016  f6414159          MOV      r1,#0x1c59
 00001a  4308              ORRS     r0,r0,r1
-00001c  9003              STR      r0,[sp,#0xc]
-;;;363    	AD7689_Config <<=2;
-00001e  f8bd000c          LDRH     r0,[sp,#0xc]
-000022  f64f74ff          MOV      r4,#0xffff
-000026  ea040080          AND      r0,r4,r0,LSL #2
-00002a  9003              STR      r0,[sp,#0xc]
-;;;364    	AD7689_CNV_0;
-00002c  4e29              LDR      r6,|L7.212|
+00001c  9001              STR      r0,[sp,#4]
+;;;582    	AD7689_Config <<=2;
+00001e  f8bd0004          LDRH     r0,[sp,#4]
+000022  f64f71ff          MOV      r1,#0xffff
+000026  ea010080          AND      r0,r1,r0,LSL #2
+00002a  9001              STR      r0,[sp,#4]
+;;;583    	AD7689_CNV_0;
+00002c  4c09              LDR      r4,|L6.84|
 00002e  2140              MOVS     r1,#0x40
-000030  4630              MOV      r0,r6
+000030  4620              MOV      r0,r4
 000032  f7fffffe          BL       GPIO_ResetBits
-;;;365    	AD7689_Delay();
-000036  f7fffffe          BL       AD7689_Delay
-;;;366    	for(i=0;i<16;i++)
-00003a  9501              STR      r5,[sp,#4]
-00003c  4635              MOV      r5,r6                 ;364
-00003e  e032              B        |L7.166|
-                  |L7.64|
-;;;367    	{
-;;;368    		if(AD7689_Config&0x8000)
-000040  f8bd000c          LDRH     r0,[sp,#0xc]
-000044  0400              LSLS     r0,r0,#16
-000046  d504              BPL      |L7.82|
-;;;369    		{
-;;;370    			GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=1
-000048  2120              MOVS     r1,#0x20
-00004a  4628              MOV      r0,r5
-00004c  f7fffffe          BL       GPIO_SetBits
-000050  e003              B        |L7.90|
-                  |L7.82|
-;;;371    		}
-;;;372    		else
-;;;373    		{
-;;;374    			GPIO_ResetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-000052  2120              MOVS     r1,#0x20
-000054  4628              MOV      r0,r5
-000056  f7fffffe          BL       GPIO_ResetBits
-                  |L7.90|
-;;;375    		}
-;;;376    		AD7689_Delay();
-00005a  f7fffffe          BL       AD7689_Delay
-;;;377    		GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-00005e  2108              MOVS     r1,#8
-000060  4628              MOV      r0,r5
-000062  f7fffffe          BL       GPIO_ResetBits
-;;;378    		AD7689_Delay();
-000066  f7fffffe          BL       AD7689_Delay
-;;;379    		AD7689_Config <<= 1;
-00006a  f8bd100c          LDRH     r1,[sp,#0xc]
-00006e  ea040141          AND      r1,r4,r1,LSL #1
-000072  9103              STR      r1,[sp,#0xc]
-;;;380    		GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=1
-000074  2108              MOVS     r1,#8
-000076  4628              MOV      r0,r5
-000078  f7fffffe          BL       GPIO_SetBits
-;;;381    		AD7689_Delay();
-00007c  f7fffffe          BL       AD7689_Delay
-;;;382    		AD7689_Data <<=1;
-000080  f8bd1008          LDRH     r1,[sp,#8]
-000084  ea040141          AND      r1,r4,r1,LSL #1
-000088  9102              STR      r1,[sp,#8]
-;;;383    		if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4))
-00008a  2110              MOVS     r1,#0x10
-00008c  4628              MOV      r0,r5
-00008e  f7fffffe          BL       GPIO_ReadInputDataBit
-000092  b120              CBZ      r0,|L7.158|
-;;;384    		{
-;;;385    			AD7689_Data |=1;
-000094  f8bd0008          LDRH     r0,[sp,#8]
-000098  f0400001          ORR      r0,r0,#1
-00009c  9002              STR      r0,[sp,#8]
-                  |L7.158|
-00009e  f89d0004          LDRB     r0,[sp,#4]            ;366
-0000a2  1c40              ADDS     r0,r0,#1              ;366
-0000a4  9001              STR      r0,[sp,#4]            ;366
-                  |L7.166|
-0000a6  f89d0004          LDRB     r0,[sp,#4]            ;366
-0000aa  2810              CMP      r0,#0x10              ;366
-0000ac  d3c8              BCC      |L7.64|
-;;;386    		}
-;;;387    	}
-;;;388    	AD7689_Delay(); 
-0000ae  f7fffffe          BL       AD7689_Delay
-;;;389    	GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-0000b2  2108              MOVS     r1,#8
-0000b4  4628              MOV      r0,r5
-0000b6  f7fffffe          BL       GPIO_ResetBits
-;;;390    	AD7689_Delay(); 
-0000ba  f7fffffe          BL       AD7689_Delay
-;;;391    	AD7689_CNV_1;
-0000be  2140              MOVS     r1,#0x40
-0000c0  4628              MOV      r0,r5
-0000c2  f7fffffe          BL       GPIO_SetBits
-;;;392    	AD7689_Delay(); 
-0000c6  f7fffffe          BL       AD7689_Delay
-;;;393    	return AD7689_Data;
-0000ca  f8bd0008          LDRH     r0,[sp,#8]
-;;;394    }
-0000ce  b006              ADD      sp,sp,#0x18
-0000d0  bd70              POP      {r4-r6,pc}
-;;;395    
+;;;584    	AD7689_Data=AD7689_TransferByte(AD7689_Config);
+000036  f8bd0004          LDRH     r0,[sp,#4]
+00003a  f7fffffe          BL       AD7689_TransferByte
+00003e  9000              STR      r0,[sp,#0]
+;;;585    	AD7689_CNV_1;
+000040  2140              MOVS     r1,#0x40
+000042  4620              MOV      r0,r4
+000044  f7fffffe          BL       GPIO_SetBits
+;;;586    	AD7689_Delay(); 
+000048  f7fffffe          BL       AD7689_Delay
+;;;587    	return AD7689_Data;
+00004c  f8bd0000          LDRH     r0,[sp,#0]
+;;;588    }
+000050  b004              ADD      sp,sp,#0x10
+000052  bd10              POP      {r4,pc}
+;;;589    
                           ENDP
 
-0000d2  0000              DCW      0x0000
-                  |L7.212|
+                  |L6.84|
                           DCD      0x40020400
 
                           AREA ||.bss||, DATA, NOINIT, ALIGN=1
@@ -621,29 +437,31 @@
                   AD7689_Buffer
                           %        16
                   Ad7689_Fit_Imon
-                          %        200
-                  Ad7689_Fit_Imon1
                           %        40
                   Ad7689_Fit_Vmon
-                          %        80
+                          %        40
+
+                          AREA ||area_number.9||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.9||, ||.bss||
+                  Ad7689_Fit_Imon1
+                          %        40
 
                           AREA ||.data||, DATA, ALIGN=0
 
                   I_cont
 000000  00                DCB      0x00
-                  I1_cont
-000001  00                DCB      0x00
                   V_cont
-000002  00                DCB      0x00
+000001  00                DCB      0x00
 
 ;*** Start embedded assembler ***
 
 #line 1 "..\\drive\\AD7689.c"
 	AREA ||.rev16_text||, CODE
 	THUMB
-	EXPORT |__asm___8_AD7689_c_c2a2045a____REV16|
+	EXPORT |__asm___8_AD7689_c_5bab55e0____REV16|
 #line 129 "D:\\Keil_v5\\ARM\\CMSIS\\Include\\core_cmInstr.h"
-|__asm___8_AD7689_c_c2a2045a____REV16| PROC
+|__asm___8_AD7689_c_5bab55e0____REV16| PROC
 #line 130
 
  rev16 r0, r0
@@ -651,9 +469,9 @@
 	ENDP
 	AREA ||.revsh_text||, CODE
 	THUMB
-	EXPORT |__asm___8_AD7689_c_c2a2045a____REVSH|
+	EXPORT |__asm___8_AD7689_c_5bab55e0____REVSH|
 #line 144
-|__asm___8_AD7689_c_c2a2045a____REVSH| PROC
+|__asm___8_AD7689_c_5bab55e0____REVSH| PROC
 #line 145
 
  revsh r0, r0

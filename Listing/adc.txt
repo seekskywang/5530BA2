@@ -5,543 +5,248 @@
                           AREA ||i.ADC1_DMA_Init||, CODE, READONLY, ALIGN=2
 
                   ADC1_DMA_Init PROC
-;;;254    /*****************************************************************/
-;;;255    void ADC1_DMA_Init(void)
+;;;480    /*****************************************************************/
+;;;481    void ADC1_DMA_Init(void)
 000000  b5f0              PUSH     {r4-r7,lr}
-;;;256    {
+;;;482    {
 000002  b09b              SUB      sp,sp,#0x6c
-;;;257      ADC_InitTypeDef       ADC_InitStructure;
-;;;258    	ADC_CommonInitTypeDef ADC_CommonInitStructure;
-;;;259      DMA_InitTypeDef       DMA_InitStructure;
-;;;260    	GPIO_InitTypeDef      GPIO_InitStructure;
-;;;261    	
-;;;262    		/* ADC1 Periph clock enable */
-;;;263    	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+;;;483      ADC_InitTypeDef       ADC_InitStructure;
+;;;484    	ADC_CommonInitTypeDef ADC_CommonInitStructure;
+;;;485      DMA_InitTypeDef       DMA_InitStructure;
+;;;486    	GPIO_InitTypeDef      GPIO_InitStructure;
+;;;487    	
+;;;488    		/* ADC1 Periph clock enable */
+;;;489    	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 000004  2101              MOVS     r1,#1
-000006  020f              LSLS     r7,r1,#8
-000008  4638              MOV      r0,r7
+000006  020d              LSLS     r5,r1,#8
+000008  4628              MOV      r0,r5
 00000a  f7fffffe          BL       RCC_APB2PeriphClockCmd
-;;;264      /* DMA1 clock enable */
-;;;265      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+;;;490      /* DMA1 clock enable */
+;;;491      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 00000e  2101              MOVS     r1,#1
 000010  0588              LSLS     r0,r1,#22
 000012  f7fffffe          BL       RCC_AHB1PeriphClockCmd
-;;;266      /* Configure PA.0  as analog input */
-;;;267    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-000016  2004              MOVS     r0,#4
+;;;492    	
+;;;493    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+000016  2040              MOVS     r0,#0x40
 000018  9000              STR      r0,[sp,#0]
-;;;268      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-00001a  2503              MOVS     r5,#3
-00001c  f88d5004          STRB     r5,[sp,#4]
-;;;269    	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+;;;494      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+00001a  2603              MOVS     r6,#3
+00001c  f88d6004          STRB     r6,[sp,#4]
+;;;495    	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
 000020  2400              MOVS     r4,#0
 000022  f88d4007          STRB     r4,[sp,#7]
-;;;270      GPIO_Init(GPIOA, &GPIO_InitStructure);			// 
-000026  4e3c              LDR      r6,|L1.280|
-000028  4669              MOV      r1,sp
-00002a  4630              MOV      r0,r6
-00002c  f7fffffe          BL       GPIO_Init
-;;;271    	
-;;;272    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-000030  2008              MOVS     r0,#8
-000032  9000              STR      r0,[sp,#0]
-;;;273      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-000034  f88d5004          STRB     r5,[sp,#4]
-;;;274    	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-000038  f88d4007          STRB     r4,[sp,#7]
-;;;275      GPIO_Init(GPIOA, &GPIO_InitStructure);	
-00003c  4669              MOV      r1,sp
-00003e  4630              MOV      r0,r6
-000040  f7fffffe          BL       GPIO_Init
-;;;276    	
-;;;277    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-000044  2040              MOVS     r0,#0x40
-000046  9000              STR      r0,[sp,#0]
-;;;278      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-000048  f88d5004          STRB     r5,[sp,#4]
-;;;279    	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-00004c  f88d4007          STRB     r4,[sp,#7]
-;;;280      GPIO_Init(GPIOA, &GPIO_InitStructure);	
-000050  4669              MOV      r1,sp
-000052  4630              MOV      r0,r6
-000054  f7fffffe          BL       GPIO_Init
-;;;281      
-;;;282      
-;;;283      /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-;;;284    	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-000058  9411              STR      r4,[sp,#0x44]
-;;;285    	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-00005a  9412              STR      r4,[sp,#0x48]
-;;;286    	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-00005c  9413              STR      r4,[sp,#0x4c]
-;;;287    	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-00005e  9414              STR      r4,[sp,#0x50]
-;;;288    	ADC_CommonInit(&ADC_CommonInitStructure);
-000060  a811              ADD      r0,sp,#0x44
-000062  f7fffffe          BL       ADC_CommonInit
-;;;289    	
-;;;290      ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-000066  9415              STR      r4,[sp,#0x54]
-;;;291    	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-000068  2601              MOVS     r6,#1
-00006a  f88d6058          STRB     r6,[sp,#0x58]
-;;;292    	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-00006e  f88d6059          STRB     r6,[sp,#0x59]
-;;;293    	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-000072  9418              STR      r4,[sp,#0x60]
-;;;294    	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-000074  9419              STR      r4,[sp,#0x64]
-;;;295    	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-000076  f88d5068          STRB     r5,[sp,#0x68]
-;;;296    	ADC_Init(ADC1, &ADC_InitStructure);
-00007a  4d28              LDR      r5,|L1.284|
-00007c  a915              ADD      r1,sp,#0x54
-00007e  4628              MOV      r0,r5
-000080  f7fffffe          BL       ADC_Init
-;;;297    	
-;;;298    	/*配置ADC时钟*/
-;;;299    	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-000084  2304              MOVS     r3,#4
-000086  2201              MOVS     r2,#1
-000088  2102              MOVS     r1,#2
-00008a  4628              MOV      r0,r5
-00008c  f7fffffe          BL       ADC_RegularChannelConfig
-;;;300    	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-000090  2300              MOVS     r3,#0
-000092  2202              MOVS     r2,#2
-000094  2103              MOVS     r1,#3
-000096  4628              MOV      r0,r5
-000098  f7fffffe          BL       ADC_RegularChannelConfig
-;;;301    	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-00009c  2300              MOVS     r3,#0
-00009e  2203              MOVS     r2,#3
-0000a0  2106              MOVS     r1,#6
-0000a2  4628              MOV      r0,r5
-0000a4  f7fffffe          BL       ADC_RegularChannelConfig
-;;;302      /* ADC Calibration */
-;;;303      ADC_Cmd(ADC1, ENABLE);//使能ADC
-0000a8  2101              MOVS     r1,#1
-0000aa  4628              MOV      r0,r5
-0000ac  f7fffffe          BL       ADC_Cmd
-;;;304    	ADC_SoftwareStartConv(ADC1);   //开始转换
-0000b0  4628              MOV      r0,r5
-0000b2  f7fffffe          BL       ADC_SoftwareStartConv
-;;;305    	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
-0000b6  2101              MOVS     r1,#1
-0000b8  4628              MOV      r0,r5
-0000ba  f7fffffe          BL       ADC_DMARequestAfterLastTransferCmd
-;;;306    		
-;;;307    	
-;;;308    	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
-;;;309    	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//
-;;;310      /* DMA1 Channel1 Config */
-;;;311      DMA_InitStructure.DMA_Channel = DMA_Channel_0; 
-0000be  9402              STR      r4,[sp,#8]
-;;;312      DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)ADC1_DR_Address;
-0000c0  4816              LDR      r0,|L1.284|
-0000c2  304c              ADDS     r0,r0,#0x4c
-0000c4  9003              STR      r0,[sp,#0xc]
-;;;313      DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
-0000c6  4816              LDR      r0,|L1.288|
-0000c8  9004              STR      r0,[sp,#0x10]
-;;;314      DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-0000ca  9405              STR      r4,[sp,#0x14]
-;;;315      DMA_InitStructure.DMA_BufferSize =150;//连续转换150次
-0000cc  2096              MOVS     r0,#0x96
-0000ce  9006              STR      r0,[sp,#0x18]
-;;;316      DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-0000d0  9407              STR      r4,[sp,#0x1c]
-;;;317      DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-0000d2  1528              ASRS     r0,r5,#20
-0000d4  9008              STR      r0,[sp,#0x20]
-;;;318      DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-0000d6  0040              LSLS     r0,r0,#1
-0000d8  9009              STR      r0,[sp,#0x24]
-;;;319      DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-0000da  0080              LSLS     r0,r0,#2
-0000dc  900a              STR      r0,[sp,#0x28]
-;;;320      DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
-0000de  970b              STR      r7,[sp,#0x2c]
-;;;321      DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-0000e0  0100              LSLS     r0,r0,#4
-0000e2  900c              STR      r0,[sp,#0x30]
-;;;322    	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  	
-0000e4  940d              STR      r4,[sp,#0x34]
-;;;323    	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
-0000e6  960e              STR      r6,[sp,#0x38]
-;;;324    	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
-0000e8  940f              STR      r4,[sp,#0x3c]
-;;;325    	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-0000ea  9410              STR      r4,[sp,#0x40]
-;;;326      DMA_Init(DMA2_Stream0, &DMA_InitStructure);
-0000ec  4c0d              LDR      r4,|L1.292|
-0000ee  a902              ADD      r1,sp,#8
-0000f0  4620              MOV      r0,r4
-0000f2  f7fffffe          BL       DMA_Init
-;;;327      
-;;;328      /* DMA1 Channel1 enable */
-;;;329      DMA_Cmd(DMA2_Stream0, ENABLE);
-0000f6  2101              MOVS     r1,#1
-0000f8  4620              MOV      r0,r4
-0000fa  f7fffffe          BL       DMA_Cmd
-;;;330    	/* 寮�鍚疍AM1閫氶亾1涓柇 */
-;;;331    	DMA_ITConfig(DMA2_Stream0,DMA_IT_TC,ENABLE);
-0000fe  2201              MOVS     r2,#1
-000100  2110              MOVS     r1,#0x10
-000102  4620              MOV      r0,r4
-000104  f7fffffe          BL       DMA_ITConfig
-;;;332      DAM1_ADC_NVIC();//DMA中断配置
-000108  f7fffffe          BL       DAM1_ADC_NVIC
-;;;333      ADC_DMACmd(ADC1, ENABLE);  //使能DMA
-00010c  2101              MOVS     r1,#1
-00010e  4628              MOV      r0,r5
-000110  f7fffffe          BL       ADC_DMACmd
-;;;334      
-;;;335    //   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-;;;336    // 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-;;;337    // 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-;;;338    // 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-;;;339    // 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-;;;340    // 	ADC_CommonInit(&ADC_CommonInitStructure);
-;;;341    // 	
-;;;342    //   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-;;;343    // 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-;;;344    // 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-;;;345    // 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-;;;346    // 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-;;;347    // 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-;;;348    // 	ADC_Init(ADC1, &ADC_InitStructure);
-;;;349    // 	
-;;;350    // 	/*配置ADC时钟*/
-;;;351    // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-;;;352    // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-;;;353    // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-;;;354    //   /* ADC Calibration */
-;;;355    //   ADC_Cmd(ADC1, ENABLE);//使能ADC
-;;;356    // 	ADC_SoftwareStartConv(ADC1);   //开始转换
-;;;357    // 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
-;;;358    }
-000114  b01b              ADD      sp,sp,#0x6c
-000116  bdf0              POP      {r4-r7,pc}
-;;;359    /***************************************************************/
+;;;496      GPIO_Init(GPIOA, &GPIO_InitStructure);	
+000026  4669              MOV      r1,sp
+000028  482b              LDR      r0,|L1.216|
+00002a  f7fffffe          BL       GPIO_Init
+;;;497    		
+;;;498    	
+;;;499    	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
+;;;500    	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//
+;;;501      /* DMA1 Channel1 Config */
+;;;502      DMA_InitStructure.DMA_Channel = DMA_Channel_0; 
+00002e  9402              STR      r4,[sp,#8]
+;;;503      DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)ADC1_DR_Address;
+000030  482a              LDR      r0,|L1.220|
+000032  9003              STR      r0,[sp,#0xc]
+;;;504      DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
+000034  482a              LDR      r0,|L1.224|
+000036  9004              STR      r0,[sp,#0x10]
+;;;505      DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+000038  9405              STR      r4,[sp,#0x14]
+;;;506      DMA_InitStructure.DMA_BufferSize =50;//连续转换150次
+00003a  2032              MOVS     r0,#0x32
+00003c  9006              STR      r0,[sp,#0x18]
+;;;507      DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+00003e  9407              STR      r4,[sp,#0x1c]
+;;;508      DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+000040  00a8              LSLS     r0,r5,#2
+000042  9008              STR      r0,[sp,#0x20]
+;;;509      DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+000044  0040              LSLS     r0,r0,#1
+000046  9009              STR      r0,[sp,#0x24]
+;;;510      DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+000048  0080              LSLS     r0,r0,#2
+00004a  900a              STR      r0,[sp,#0x28]
+;;;511      DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+00004c  950b              STR      r5,[sp,#0x2c]
+;;;512      DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+00004e  0100              LSLS     r0,r0,#4
+000050  900c              STR      r0,[sp,#0x30]
+;;;513    	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  	
+000052  940d              STR      r4,[sp,#0x34]
+;;;514    	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+000054  2501              MOVS     r5,#1
+000056  950e              STR      r5,[sp,#0x38]
+;;;515    	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+000058  940f              STR      r4,[sp,#0x3c]
+;;;516    	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+00005a  9410              STR      r4,[sp,#0x40]
+;;;517      DMA_Init(DMA2_Stream0, &DMA_InitStructure);
+00005c  4f21              LDR      r7,|L1.228|
+00005e  a902              ADD      r1,sp,#8
+000060  4638              MOV      r0,r7
+000062  f7fffffe          BL       DMA_Init
+;;;518      
+;;;519      /* DMA1 Channel1 enable */
+;;;520      DMA_Cmd(DMA2_Stream0, ENABLE);
+000066  2101              MOVS     r1,#1
+000068  4638              MOV      r0,r7
+00006a  f7fffffe          BL       DMA_Cmd
+;;;521    	/* 寮�鍚疍AM1閫氶亾1涓柇 */
+;;;522    	DMA_ITConfig(DMA2_Stream0,DMA_IT_TC,ENABLE);
+00006e  2201              MOVS     r2,#1
+000070  2110              MOVS     r1,#0x10
+000072  4638              MOV      r0,r7
+000074  f7fffffe          BL       DMA_ITConfig
+;;;523      DAM1_ADC_NVIC();//DMA中断配置
+000078  f7fffffe          BL       DAM1_ADC_NVIC
+;;;524      ADC_DMACmd(ADC1, ENABLE);  //使能DMA
+00007c  4f17              LDR      r7,|L1.220|
+00007e  2101              MOVS     r1,#1
+000080  3f4c              SUBS     r7,r7,#0x4c
+000082  4638              MOV      r0,r7
+000084  f7fffffe          BL       ADC_DMACmd
+;;;525      
+;;;526      /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+;;;527    	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+000088  9411              STR      r4,[sp,#0x44]
+;;;528    	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+00008a  9412              STR      r4,[sp,#0x48]
+;;;529    	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+00008c  9413              STR      r4,[sp,#0x4c]
+;;;530    	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+00008e  9414              STR      r4,[sp,#0x50]
+;;;531    	ADC_CommonInit(&ADC_CommonInitStructure);
+000090  a811              ADD      r0,sp,#0x44
+000092  f7fffffe          BL       ADC_CommonInit
+;;;532    	
+;;;533      ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+000096  9415              STR      r4,[sp,#0x54]
+;;;534    	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+000098  f88d5058          STRB     r5,[sp,#0x58]
+;;;535    	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+00009c  f88d5059          STRB     r5,[sp,#0x59]
+;;;536    	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+0000a0  9418              STR      r4,[sp,#0x60]
+;;;537    	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+0000a2  9419              STR      r4,[sp,#0x64]
+;;;538    	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+0000a4  f88d6068          STRB     r6,[sp,#0x68]
+;;;539    	ADC_Init(ADC1, &ADC_InitStructure);
+0000a8  a915              ADD      r1,sp,#0x54
+0000aa  4638              MOV      r0,r7
+0000ac  f7fffffe          BL       ADC_Init
+;;;540    	
+;;;541    	/*配置ADC时钟*/
+;;;542    	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_3Cycles);
+0000b0  2300              MOVS     r3,#0
+0000b2  2201              MOVS     r2,#1
+0000b4  2106              MOVS     r1,#6
+0000b6  4638              MOV      r0,r7
+0000b8  f7fffffe          BL       ADC_RegularChannelConfig
+;;;543      /* ADC Calibration */
+;;;544      ADC_Cmd(ADC1, ENABLE);//使能ADC
+0000bc  2101              MOVS     r1,#1
+0000be  4638              MOV      r0,r7
+0000c0  f7fffffe          BL       ADC_Cmd
+;;;545    	ADC_SoftwareStartConv(ADC1);   //开始转换
+0000c4  4638              MOV      r0,r7
+0000c6  f7fffffe          BL       ADC_SoftwareStartConv
+;;;546    	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+0000ca  2101              MOVS     r1,#1
+0000cc  4638              MOV      r0,r7
+0000ce  f7fffffe          BL       ADC_DMARequestAfterLastTransferCmd
+;;;547    }
+0000d2  b01b              ADD      sp,sp,#0x6c
+0000d4  bdf0              POP      {r4-r7,pc}
+;;;548    /***************************************************************/
                           ENDP
 
-                  |L1.280|
+0000d6  0000              DCW      0x0000
+                  |L1.216|
                           DCD      0x40020000
-                  |L1.284|
-                          DCD      0x40012000
-                  |L1.288|
+                  |L1.220|
+                          DCD      0x4001204c
+                  |L1.224|
                           DCD      ||.bss||
-                  |L1.292|
+                  |L1.228|
                           DCD      0x40026410
 
                           AREA ||i.ADC_CH_Scan||, CODE, READONLY, ALIGN=2
 
                   ADC_CH_Scan PROC
-;;;370    /*******************************************************************/
-;;;371    void ADC_CH_Scan(void)//婊ゆ尝
-000000  e92d41fe          PUSH     {r1-r8,lr}
-;;;372    {
-;;;373    	vu16 i;
-;;;374    	static vu8 a,b,c,d,e,f;
-;;;375    	vu8 count;
-;;;376    	static vu8 t_Filt;
-;;;377    	static vu8 t_dsoI,t_dsoV,t_dsoR,t_dsoI1,t_dsoV1;
-;;;378    	vu32 sum;
-;;;379    	for(i=0;i<150;i++)
-000004  2700              MOVS     r7,#0
-000006  9702              STR      r7,[sp,#8]
-;;;380    	{
-;;;381    		if ((i % 3) == 0)
-;;;382    		{
-;;;383    			ADC_Vmon_Filt[a++]=ADC1_Buffer[i];
-000008  4b6f              LDR      r3,|L2.456|
-00000a  2103              MOVS     r1,#3                 ;381
-00000c  f5037496          ADD      r4,r3,#0x12c
-;;;384    		}
-;;;385    		else if((i % 3) ==2 )
-;;;386    		{
-;;;387    			ADC_NTC_Filt[b++]=ADC1_Buffer[i];
-;;;388    		}
-;;;389    		else if((i % 3) ==1)
-;;;390    		{
-;;;391    			ADC_Rmon_Filt[d++]=ADC1_Buffer[i];
-000010  f50375c8          ADD      r5,r3,#0x190
-000014  4a6d              LDR      r2,|L2.460|
-000016  f50376fa          ADD      r6,r3,#0x1f4          ;387
-00001a  e03e              B        |L2.154|
-                  |L2.28|
-00001c  f8bd0008          LDRH     r0,[sp,#8]            ;381
-000020  fbb0fcf1          UDIV     r12,r0,r1             ;381
-000024  fb01001c          MLS      r0,r1,r12,r0          ;381
-000028  b180              CBZ      r0,|L2.76|
-00002a  f8bd0008          LDRH     r0,[sp,#8]            ;385
-00002e  fbb0fcf1          UDIV     r12,r0,r1             ;385
-000032  fb01001c          MLS      r0,r1,r12,r0          ;385
-000036  2802              CMP      r0,#2                 ;385
-000038  d014              BEQ      |L2.100|
-00003a  f8bd0008          LDRH     r0,[sp,#8]            ;389
-00003e  fbb0fcf1          UDIV     r12,r0,r1             ;389
-000042  fb01001c          MLS      r0,r1,r12,r0          ;389
-000046  2801              CMP      r0,#1                 ;389
-000048  d018              BEQ      |L2.124|
-00004a  e022              B        |L2.146|
-                  |L2.76|
-00004c  f8bd0008          LDRH     r0,[sp,#8]            ;383
-000050  f833c010          LDRH     r12,[r3,r0,LSL #1]    ;383
-000054  7810              LDRB     r0,[r2,#0]            ;383  ; a
-000056  f1000801          ADD      r8,r0,#1              ;383
-00005a  f8828000          STRB     r8,[r2,#0]            ;383
-00005e  f824c010          STRH     r12,[r4,r0,LSL #1]    ;383
-000062  e016              B        |L2.146|
-                  |L2.100|
-000064  f8bd0008          LDRH     r0,[sp,#8]            ;387
-000068  f833c010          LDRH     r12,[r3,r0,LSL #1]    ;387
-00006c  7850              LDRB     r0,[r2,#1]            ;387  ; b
-00006e  f1000801          ADD      r8,r0,#1              ;387
-000072  f8828001          STRB     r8,[r2,#1]            ;387
-000076  f826c010          STRH     r12,[r6,r0,LSL #1]    ;387
-00007a  e00a              B        |L2.146|
-                  |L2.124|
-00007c  f8bd0008          LDRH     r0,[sp,#8]
-000080  f833c010          LDRH     r12,[r3,r0,LSL #1]
-000084  78d0              LDRB     r0,[r2,#3]  ; d
-000086  f1000801          ADD      r8,r0,#1
-00008a  f8828003          STRB     r8,[r2,#3]
-00008e  f825c010          STRH     r12,[r5,r0,LSL #1]
-                  |L2.146|
-000092  f8bd0008          LDRH     r0,[sp,#8]            ;379
-000096  1c40              ADDS     r0,r0,#1              ;379
-000098  9002              STR      r0,[sp,#8]            ;379
-                  |L2.154|
-00009a  f8bd0008          LDRH     r0,[sp,#8]            ;379
-00009e  2896              CMP      r0,#0x96              ;379
-0000a0  d3bc              BCC      |L2.28|
-;;;392    		}	
-;;;393    	}
-;;;394    	a=0;
-0000a2  7017              STRB     r7,[r2,#0]
-;;;395    	b=0;
-0000a4  7057              STRB     r7,[r2,#1]
-;;;396    	c=0;
-0000a6  7097              STRB     r7,[r2,#2]
-;;;397    	d=0;
-0000a8  70d7              STRB     r7,[r2,#3]
-;;;398    	sum=0;
-0000aa  9700              STR      r7,[sp,#0]
-;;;399    /*************VMON**********************/
-;;;400    	for(count=0;count<50;count++)
-0000ac  9701              STR      r7,[sp,#4]
-0000ae  e00a              B        |L2.198|
-                  |L2.176|
-;;;401    	{
-;;;402    		sum +=ADC_Vmon_Filt[count];
-0000b0  f89d0004          LDRB     r0,[sp,#4]
-0000b4  f8340010          LDRH     r0,[r4,r0,LSL #1]
-0000b8  9900              LDR      r1,[sp,#0]
-0000ba  4408              ADD      r0,r0,r1
-0000bc  9000              STR      r0,[sp,#0]
-0000be  f89d0004          LDRB     r0,[sp,#4]            ;400
-0000c2  1c40              ADDS     r0,r0,#1              ;400
-0000c4  9001              STR      r0,[sp,#4]            ;400
-                  |L2.198|
-0000c6  f89d0004          LDRB     r0,[sp,#4]            ;400
-0000ca  2832              CMP      r0,#0x32              ;400
-0000cc  d3f0              BCC      |L2.176|
-;;;403    	}
-;;;404    	if(t_dsoV<20)
-0000ce  7911              LDRB     r1,[r2,#4]  ; t_dsoV
-;;;405    	{
-;;;406    		Vmon_Filt_Doul[t_dsoV]=sum/50;
-;;;407    		sum=0;//
-;;;408    	}
-;;;409    	else
-;;;410    	{
-;;;411    		sum=0;
-;;;412    		for(count=1;count<19;count++)
-0000d0  2401              MOVS     r4,#1
-0000d2  483f              LDR      r0,|L2.464|
-0000d4  2332              MOVS     r3,#0x32              ;406
-0000d6  2914              CMP      r1,#0x14              ;404
-0000d8  d208              BCS      |L2.236|
-0000da  9900              LDR      r1,[sp,#0]            ;406
-0000dc  f892c004          LDRB     r12,[r2,#4]           ;406  ; t_dsoV
-0000e0  fbb1f1f3          UDIV     r1,r1,r3              ;406
-0000e4  f820101c          STRH     r1,[r0,r12,LSL #1]    ;406
-0000e8  9700              STR      r7,[sp,#0]            ;407
-0000ea  e019              B        |L2.288|
-                  |L2.236|
-0000ec  9700              STR      r7,[sp,#0]            ;411
-0000ee  9401              STR      r4,[sp,#4]
-0000f0  e00b              B        |L2.266|
-                  |L2.242|
-;;;413    		{
-;;;414    			sum +=Vmon_Filt_Doul[count];
-0000f2  f89d1004          LDRB     r1,[sp,#4]
-0000f6  f8301011          LDRH     r1,[r0,r1,LSL #1]
-0000fa  f8ddc000          LDR      r12,[sp,#0]
-0000fe  4461              ADD      r1,r1,r12
-000100  9100              STR      r1,[sp,#0]
-000102  f89d1004          LDRB     r1,[sp,#4]            ;412
-000106  1c49              ADDS     r1,r1,#1              ;412
-000108  9101              STR      r1,[sp,#4]            ;412
-                  |L2.266|
-00010a  f89d1004          LDRB     r1,[sp,#4]            ;412
-00010e  2913              CMP      r1,#0x13              ;412
-000110  d3ef              BCC      |L2.242|
-;;;415    		}
-;;;416    		Vmon_value=sum/19;
-000112  9800              LDR      r0,[sp,#0]
-000114  2113              MOVS     r1,#0x13
-000116  fbb0f0f1          UDIV     r0,r0,r1
-00011a  8110              STRH     r0,[r2,#8]
-;;;417    		sum=0;//
-00011c  9700              STR      r7,[sp,#0]
-;;;418    		t_dsoV=0;
-00011e  7117              STRB     r7,[r2,#4]
-                  |L2.288|
-;;;419    	} 
-;;;420    	t_dsoV++;
-000120  7910              LDRB     r0,[r2,#4]  ; t_dsoV
-000122  1c40              ADDS     r0,r0,#1
-000124  7110              STRB     r0,[r2,#4]
-;;;421    /************RMON*********************/
-;;;422    	for(count=0;count<50;count++)
-000126  9701              STR      r7,[sp,#4]
-000128  e00a              B        |L2.320|
-                  |L2.298|
-;;;423    	{
-;;;424    		sum +=ADC_Rmon_Filt[count];
-00012a  f89d0004          LDRB     r0,[sp,#4]
-00012e  f8350010          LDRH     r0,[r5,r0,LSL #1]
-000132  9900              LDR      r1,[sp,#0]
-000134  4408              ADD      r0,r0,r1
-000136  9000              STR      r0,[sp,#0]
-000138  f89d0004          LDRB     r0,[sp,#4]            ;422
-00013c  1c40              ADDS     r0,r0,#1              ;422
-00013e  9001              STR      r0,[sp,#4]            ;422
-                  |L2.320|
-000140  f89d0004          LDRB     r0,[sp,#4]            ;422
-000144  2832              CMP      r0,#0x32              ;422
-000146  d3f0              BCC      |L2.298|
-;;;425    	}
-;;;426    	if(t_dsoR<50)
-000148  7951              LDRB     r1,[r2,#5]  ; t_dsoR
-;;;427    	{
-;;;428    		Rmon_Filt_Doul[t_dsoR]=sum/50;
-00014a  4821              LDR      r0,|L2.464|
-00014c  3028              ADDS     r0,r0,#0x28
-00014e  2932              CMP      r1,#0x32              ;426
-000150  d207              BCS      |L2.354|
-000152  9900              LDR      r1,[sp,#0]
-000154  7954              LDRB     r4,[r2,#5]  ; t_dsoR
-000156  fbb1f1f3          UDIV     r1,r1,r3
-00015a  f8201014          STRH     r1,[r0,r4,LSL #1]
-;;;429    		sum=0;//
-00015e  9700              STR      r7,[sp,#0]
-000160  e017              B        |L2.402|
-                  |L2.354|
-;;;430    	}
-;;;431    	else
-;;;432    	{
-;;;433    		sum=0;
-000162  9700              STR      r7,[sp,#0]
-;;;434    //        Bubble_sort( Rmon_Filt_Doul,50);//排序从大到小
-;;;435    		for(count=1;count<50;count++)
-000164  9401              STR      r4,[sp,#4]
-000166  e00a              B        |L2.382|
-                  |L2.360|
-;;;436    		{
-;;;437    			sum +=Rmon_Filt_Doul[count];
-000168  f89d1004          LDRB     r1,[sp,#4]
-00016c  f8301011          LDRH     r1,[r0,r1,LSL #1]
-000170  9c00              LDR      r4,[sp,#0]
-000172  4421              ADD      r1,r1,r4
-000174  9100              STR      r1,[sp,#0]
-000176  f89d1004          LDRB     r1,[sp,#4]            ;435
-00017a  1c49              ADDS     r1,r1,#1              ;435
-00017c  9101              STR      r1,[sp,#4]            ;435
-                  |L2.382|
-00017e  f89d1004          LDRB     r1,[sp,#4]            ;435
-000182  2932              CMP      r1,#0x32              ;435
-000184  d3f0              BCC      |L2.360|
-;;;438    		}
-;;;439    		Rmon_value=sum/50;
-000186  9800              LDR      r0,[sp,#0]
-000188  fbb0f0f3          UDIV     r0,r0,r3
-00018c  8150              STRH     r0,[r2,#0xa]
-;;;440    		sum=0;//
-00018e  9700              STR      r7,[sp,#0]
-;;;441    		t_dsoR=0;
-000190  7157              STRB     r7,[r2,#5]
-                  |L2.402|
-;;;442    	}
-;;;443    	t_dsoR++;
-000192  7950              LDRB     r0,[r2,#5]  ; t_dsoR
-000194  1c40              ADDS     r0,r0,#1
-000196  7150              STRB     r0,[r2,#5]
-;;;444    /**********NTC**********************/
-;;;445    	for(count=0;count<50;count++)
-000198  9701              STR      r7,[sp,#4]
-00019a  e00a              B        |L2.434|
-                  |L2.412|
-;;;446    	{
-;;;447    		sum +=ADC_NTC_Filt[count];
-00019c  f89d0004          LDRB     r0,[sp,#4]
-0001a0  f8360010          LDRH     r0,[r6,r0,LSL #1]
-0001a4  9900              LDR      r1,[sp,#0]
-0001a6  4408              ADD      r0,r0,r1
-0001a8  9000              STR      r0,[sp,#0]
-0001aa  f89d0004          LDRB     r0,[sp,#4]            ;445
-0001ae  1c40              ADDS     r0,r0,#1              ;445
-0001b0  9001              STR      r0,[sp,#4]            ;445
-                  |L2.434|
-0001b2  f89d0004          LDRB     r0,[sp,#4]            ;445
-0001b6  2832              CMP      r0,#0x32              ;445
-0001b8  d3f0              BCC      |L2.412|
-;;;448    	}
-;;;449    	NTC_value=sum/50;
-0001ba  9800              LDR      r0,[sp,#0]
-0001bc  fbb0f0f3          UDIV     r0,r0,r3
-0001c0  80d0              STRH     r0,[r2,#6]
-;;;450    }
-0001c2  e8bd81fe          POP      {r1-r8,pc}
+;;;559    /*******************************************************************/
+;;;560    void ADC_CH_Scan(void)//滤波
+000000  b50c              PUSH     {r2,r3,lr}
+;;;561    {
+;;;562    	vu8 count;
+;;;563    	vu32 sum;
+;;;564    	sum=0;
+000002  2000              MOVS     r0,#0
+000004  9000              STR      r0,[sp,#0]
+;;;565    	for(count=0;count<50;count++)
+000006  9001              STR      r0,[sp,#4]
+;;;566    	{
+;;;567    		sum +=ADC1_Buffer[count];
+000008  490b              LDR      r1,|L2.56|
+00000a  e00a              B        |L2.34|
+                  |L2.12|
+00000c  f89d0004          LDRB     r0,[sp,#4]
+000010  f8310010          LDRH     r0,[r1,r0,LSL #1]
+000014  9a00              LDR      r2,[sp,#0]
+000016  4410              ADD      r0,r0,r2
+000018  9000              STR      r0,[sp,#0]
+00001a  f89d0004          LDRB     r0,[sp,#4]            ;565
+00001e  1c40              ADDS     r0,r0,#1              ;565
+000020  9001              STR      r0,[sp,#4]            ;565
+                  |L2.34|
+000022  f89d0004          LDRB     r0,[sp,#4]            ;565
+000026  2832              CMP      r0,#0x32              ;565
+000028  d3f0              BCC      |L2.12|
+;;;568    	}
+;;;569    	NTC_value=sum/50;
+00002a  9800              LDR      r0,[sp,#0]
+00002c  2132              MOVS     r1,#0x32
+00002e  fbb0f0f1          UDIV     r0,r0,r1
+000032  4902              LDR      r1,|L2.60|
+000034  8008              STRH     r0,[r1,#0]
+;;;570    }
+000036  bd0c              POP      {r2,r3,pc}
                           ENDP
 
-0001c6  0000              DCW      0x0000
-                  |L2.456|
+                  |L2.56|
                           DCD      ||.bss||
-                  |L2.460|
+                  |L2.60|
                           DCD      ||.data||
-                  |L2.464|
-                          DCD      ||.bss||+0x258
 
                           AREA ||i.DAM1_ADC_NVIC||, CODE, READONLY, ALIGN=1
 
                   DAM1_ADC_NVIC PROC
-;;;359    /***************************************************************/
-;;;360    void DAM1_ADC_NVIC(void)
+;;;548    /***************************************************************/
+;;;549    void DAM1_ADC_NVIC(void)
 000000  b508              PUSH     {r3,lr}
-;;;361    {
-;;;362    	NVIC_InitTypeDef NVIC_InitStructure;
-;;;363    	/* Enable the adc1 Interrupt */
-;;;364    	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;	 
+;;;550    {
+;;;551    	NVIC_InitTypeDef NVIC_InitStructure;
+;;;552    	/* Enable the adc1 Interrupt */
+;;;553    	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;	 
 000002  2038              MOVS     r0,#0x38
 000004  f88d0000          STRB     r0,[sp,#0]
-;;;365    	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+;;;554    	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
 000008  2003              MOVS     r0,#3
 00000a  f88d0001          STRB     r0,[sp,#1]
-;;;366    	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+;;;555    	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
 00000e  f88d0002          STRB     r0,[sp,#2]
-;;;367    	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+;;;556    	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 000012  2001              MOVS     r0,#1
 000014  f88d0003          STRB     r0,[sp,#3]
-;;;368    	NVIC_Init(&NVIC_InitStructure);
+;;;557    	NVIC_Init(&NVIC_InitStructure);
 000018  4668              MOV      r0,sp
 00001a  f7fffffe          BL       NVIC_Init
-;;;369    }
+;;;558    }
 00001e  bd08              POP      {r3,pc}
-;;;370    /*******************************************************************/
+;;;559    /*******************************************************************/
                           ENDP
 
 
@@ -549,71 +254,87 @@
 
                   ADC1_Buffer
                           %        300
+
+                          AREA ||area_number.6||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.6||, ||.bss||
                   ADC_Vmon_Filt
                           %        100
+
+                          AREA ||area_number.7||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.7||, ||.bss||
                   ADC_Rmon_Filt
                           %        100
+
+                          AREA ||area_number.8||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.8||, ||.bss||
                   ADC_NTC_Filt
                           %        100
+
+                          AREA ||area_number.9||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.9||, ||.bss||
                   Vmon_Filt_Doul
                           %        40
+
+                          AREA ||area_number.10||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.10||, ||.bss||
                   Rmon_Filt_Doul
-                          %        100
+                          %        40
 
                           AREA ||.data||, DATA, ALIGN=1
 
-                  a
-000000  00                DCB      0x00
-                  b
-000001  00                DCB      0x00
-                  c
-000002  00                DCB      0x00
-                  d
-000003  00                DCB      0x00
-                  t_dsoV
-000004  00                DCB      0x00
-                  t_dsoR
-000005  00                DCB      0x00
                   NTC_value
-000006  0000              DCB      0x00,0x00
-                  Vmon_value
-000008  0000              DCB      0x00,0x00
-                  Rmon_value
-00000a  0000              DCB      0x00,0x00
-
-                          AREA ||area_number.8||, DATA, ALIGN=1
-
-                          EXPORTAS ||area_number.8||, ||.data||
-                  Imon_value
-000000  0000              DCB      0x00,0x00
-
-                          AREA ||area_number.9||, DATA, ALIGN=2
-
-                          EXPORTAS ||area_number.9||, ||.data||
-                  Imon1_value
-                          DCD      0x00000000
-
-                          AREA ||area_number.10||, DATA, ALIGN=2
-
-                          EXPORTAS ||area_number.10||, ||.data||
-                  Vmon1_value
-                          DCD      0x00000000
-
-                          AREA ||area_number.11||, DATA, ALIGN=1
-
-                          EXPORTAS ||area_number.11||, ||.data||
-                  Contr_Voltage
-000000  0000              DCB      0x00,0x00
-
-                          AREA ||area_number.12||, DATA, ALIGN=1
-
-                          EXPORTAS ||area_number.12||, ||.data||
-                  Contr_Current
 000000  0000              DCB      0x00,0x00
 
                           AREA ||area_number.13||, DATA, ALIGN=1
 
                           EXPORTAS ||area_number.13||, ||.data||
+                  Imon_value
+000000  0000              DCB      0x00,0x00
+
+                          AREA ||area_number.14||, DATA, ALIGN=2
+
+                          EXPORTAS ||area_number.14||, ||.data||
+                  Imon1_value
+                          DCD      0x00000000
+
+                          AREA ||area_number.15||, DATA, ALIGN=1
+
+                          EXPORTAS ||area_number.15||, ||.data||
+                  Vmon_value
+000000  0000              DCB      0x00,0x00
+
+                          AREA ||area_number.16||, DATA, ALIGN=2
+
+                          EXPORTAS ||area_number.16||, ||.data||
+                  Vmon1_value
+                          DCD      0x00000000
+
+                          AREA ||area_number.17||, DATA, ALIGN=1
+
+                          EXPORTAS ||area_number.17||, ||.data||
+                  Rmon_value
+000000  0000              DCB      0x00,0x00
+
+                          AREA ||area_number.18||, DATA, ALIGN=1
+
+                          EXPORTAS ||area_number.18||, ||.data||
+                  Contr_Voltage
+000000  0000              DCB      0x00,0x00
+
+                          AREA ||area_number.19||, DATA, ALIGN=1
+
+                          EXPORTAS ||area_number.19||, ||.data||
+                  Contr_Current
+000000  0000              DCB      0x00,0x00
+
+                          AREA ||area_number.20||, DATA, ALIGN=1
+
+                          EXPORTAS ||area_number.20||, ||.data||
                   Contr_Laod
 000000  0000              DCB      0x00,0x00
 

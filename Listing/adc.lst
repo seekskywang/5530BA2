@@ -1,233 +1,459 @@
 L 1 "..\drive\adc.c"
-N// /******************************************************************/
-N// /* ÂêçÁß∞ÔºöADC0                                                    */
-N// /* ÊïàÊûúÔºö                                                        */
-N// /* ÂÜÖÂÆπÔºö                                                       */
-N// /* ‰ΩúËÄÖÔºözhan                                                  */
-N// /* ËÅîÁ≥ªÊñπÂºèQQ:363116119                                        */
-N// /******************************************************************/
-N// #include "adc.h"
-N// #include "my_register.h"
-N// #include "stm32f4xx_gpio.h"
-N// #include "stm32f4xx_rcc.h"
-N// /*****************************************************************/
-N// #define ADC1_DR_Address       0x4001204C
-N// vu16 NTC_value;//NTC
-N// vu16 Imon_value;//µÁ‘¥µÁ¡˜
-N// vu32 Imon1_value;//∏∫‘ÿµÁ¡˜
-N// vu16 Vmon_value;//µÁ‘¥µÁ—π
-N// vu32 Vmon1_value;//∏∫‘ÿµÁ—π
-N// vu16 Rmon_value;//ƒ⁄◊Ë
-N// vu16 Contr_Voltage;//Œ»—πµÁ‘¥µÁ—πøÿ÷∆DAC
-N// vu16 Contr_Current;//µÁ‘¥µÁ¡˜øÿ÷∆DAC
-N// vu16 Contr_Laod;//∏∫‘ÿDAC
-N// vu16 ADC1_Buffer[150];
-N// vu16 ADC_Vmon_Filt[50];//Œ»—πµÁ‘¥ ‰≥ˆµÁ—π
-N// vu16 ADC_Rmon_Filt[50];//ƒ⁄◊Ë≤‚¡ø
-N// vu16 ADC_NTC_Filt[50];//NTC
-N// vu16 Vmon_Filt_Doul[20];
-N// vu16 Rmon_Filt_Doul[30];
-N// /*****************************************************************/
-N// void ADC1_DMA_Init(void)
-N// {
-N//   ADC_InitTypeDef       ADC_InitStructure;
-N// 	ADC_CommonInitTypeDef ADC_CommonInitStructure;
-N//   DMA_InitTypeDef       DMA_InitStructure;
-N// 	GPIO_InitTypeDef      GPIO_InitStructure;
-N// 	
-N// 		/* ADC1 Periph clock enable */
-N// 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-N//   /* DMA1 clock enable */
-N//   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
-N//   /* Configure PA.0  as analog input */
-N// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-N//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-N// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-N//   GPIO_Init(GPIOA, &GPIO_InitStructure);			// 
-N// 	
-N// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-N//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-N// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-N//   GPIO_Init(GPIOA, &GPIO_InitStructure);	
-N// 	
-N// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-N//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-N// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-N//   GPIO_Init(GPIOA, &GPIO_InitStructure);	
-N//   
-N//   
-N//   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-N// 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-N// 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-N// 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-N// 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-N// 	ADC_CommonInit(&ADC_CommonInitStructure);
-N// 	
-N//   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-N// 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-N// 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-N// 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-N// 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-N// 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-N// 	ADC_Init(ADC1, &ADC_InitStructure);
-N// 	
-N// 	/*≈‰÷√ADC ±÷”*/
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-N//   /* ADC Calibration */
-N//   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
-N// 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
-N// 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
-N// 		
-N// 	
-N// 	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
-N// 	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//
-N//   /* DMA1 Channel1 Config */
-N//   DMA_InitStructure.DMA_Channel = DMA_Channel_0; 
-N//   DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)ADC1_DR_Address;
-N//   DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
-N//   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-N//   DMA_InitStructure.DMA_BufferSize =150;//¡¨–¯◊™ªª150¥Œ
-N//   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-N//   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-N//   DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-N//   DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-N//   DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
-N//   DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-N// 	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  	
-N// 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
-N// 	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
-N// 	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-N//   DMA_Init(DMA2_Stream0, &DMA_InitStructure);
-N//   
-N//   /* DMA1 Channel1 enable */
-N//   DMA_Cmd(DMA2_Stream0, ENABLE);
-N// 	/* ÂºÄÂêØDAM1ÈÄöÈÅì1‰∏≠Êñ≠ */
-N// 	DMA_ITConfig(DMA2_Stream0,DMA_IT_TC,ENABLE);
-N//   DAM1_ADC_NVIC();//DMA÷–∂œ≈‰÷√
-N//   ADC_DMACmd(ADC1, ENABLE);  // πƒ‹DMA
-N//   
-N// //   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-N// // 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-N// // 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-N// // 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-N// // 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-N// // 	ADC_CommonInit(&ADC_CommonInitStructure);
-N// // 	
-N// //   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-N// // 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-N// // 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-N// // 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-N// // 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-N// // 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-N// // 	ADC_Init(ADC1, &ADC_InitStructure);
-N// // 	
-N// // 	/*≈‰÷√ADC ±÷”*/
-N// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-N// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-N// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-N// //   /* ADC Calibration */
-N// //   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
-N// // 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
-N// // 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
-N// }
-N// /***************************************************************/
-N// void DAM1_ADC_NVIC(void)
-N// {
-N// 	NVIC_InitTypeDef NVIC_InitStructure;
-N// 	/* Enable the adc1 Interrupt */
-N// 	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;	 
-N// 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-N// 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-N// 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-N// 	NVIC_Init(&NVIC_InitStructure);
-N// }
-N// /*******************************************************************/
-N// void ADC_CH_Scan(void)//Êª§Ê≥¢
-N// {
-N// 	vu16 i;
-N// 	static vu8 a,b,c,d,e,f;
-N// 	vu8 count;
-N// 	static vu8 t_Filt;
-N// 	static vu8 t_dsoI,t_dsoV,t_dsoR,t_dsoI1,t_dsoV1;
-N// 	vu32 sum;
-N// 	for(i=0;i<150;i++)
-N// 	{
-N// 		if ((i % 3) == 0)
-N// 		{
-N// 			ADC_Vmon_Filt[a++]=ADC1_Buffer[i];
-N// 		}
-N// 		else if((i % 3) ==2 )
-N// 		{
-N// 			ADC_NTC_Filt[b++]=ADC1_Buffer[i];
-N// 		}
-N// 		else if((i % 3) ==1)
-N// 		{
-N// 			ADC_Rmon_Filt[d++]=ADC1_Buffer[i];
-N// 		}	
-N// 	}
-N// 	a=0;
-N// 	b=0;
-N// 	c=0;
-N// 	d=0;
-N// 	sum=0;
-N// /*************VMON**********************/
-N// 	for(count=0;count<50;count++)
-N// 	{
-N// 		sum +=ADC_Vmon_Filt[count];
-N// 	}
-N// 	if(t_dsoV<20)
-N// 	{
-N// 		Vmon_Filt_Doul[t_dsoV]=sum/50;
-N// 		sum=0;//
-N// 	}
-N// 	else
-N// 	{
-N// 		sum=0;
-N// 		for(count=1;count<19;count++)
-N// 		{
-N// 			sum +=Vmon_Filt_Doul[count];
-N// 		}
-N// 		Vmon_value=sum/19;
-N// 		sum=0;//
-N// 		t_dsoV=0;
-N// 	} 
-N// 	t_dsoV++;
-N// /************RMON*********************/
-N// 	for(count=0;count<50;count++)
-N// 	{
-N// 		sum +=ADC_Rmon_Filt[count];
-N// 	}
-N// 	if(t_dsoR<20)
-N// 	{
-N// 		Rmon_Filt_Doul[t_dsoR]=sum/50;
-N// 		sum=0;//
-N// 	}
-N// 	else
-N// 	{
-N// 		sum=0;
-N// 		for(count=1;count<19;count++)
-N// 		{
-N// 			sum +=Rmon_Filt_Doul[count];
-N// 		}
-N// 		Rmon_value=sum/19;
-N// 		sum=0;//
-N// 		t_dsoR=0;
-N// 	}
-N// 	t_dsoR++;
-N// /**********NTC**********************/
-N// 	for(count=0;count<50;count++)
-N// 	{
-N// 		sum +=ADC_NTC_Filt[count];
-N// 	}
-N// 	NTC_value=sum/50;
-N// }
+N//// /******************************************************************/
+N//// /* ÂêçÁß∞ÔºöADC0                                                    */
+N//// /* ÊïàÊûúÔºö                                                        */
+N//// /* ÂÜÖÂÆπÔºö                                                       */
+N//// /* ‰ΩúËÄÖÔºözhan                                                  */
+N//// /* ËÅîÁ≥ªÊñπÂºèQQ:363116119                                        */
+N//// /******************************************************************/
+N//// #include "adc.h"
+N//// #include "my_register.h"
+N//// #include "stm32f4xx_gpio.h"
+N//// #include "stm32f4xx_rcc.h"
+N//// /*****************************************************************/
+N//// #define ADC1_DR_Address       0x4001204C
+N//// vu16 NTC_value;//NTC
+N//// vu16 Imon_value;//µÁ‘¥µÁ¡˜
+N//// vu32 Imon1_value;//∏∫‘ÿµÁ¡˜
+N//// vu16 Vmon_value;//µÁ‘¥µÁ—π
+N//// vu32 Vmon1_value;//∏∫‘ÿµÁ—π
+N//// vu16 Rmon_value;//ƒ⁄◊Ë
+N//// vu16 Contr_Voltage;//Œ»—πµÁ‘¥µÁ—πøÿ÷∆DAC
+N//// vu16 Contr_Current;//µÁ‘¥µÁ¡˜øÿ÷∆DAC
+N//// vu16 Contr_Laod;//∏∫‘ÿDAC
+N//// vu16 ADC1_Buffer[150];
+N//// vu16 ADC_Vmon_Filt[50];//Œ»—πµÁ‘¥ ‰≥ˆµÁ—π
+N//// vu16 ADC_Rmon_Filt[50];//ƒ⁄◊Ë≤‚¡ø
+N//// vu16 ADC_NTC_Filt[50];//NTC
+N//// vu16 Vmon_Filt_Doul[20];
+N//// vu16 Rmon_Filt_Doul[30];
+N//// /*****************************************************************/
+N//// void ADC1_DMA_Init(void)
+N//// {
+N////   ADC_InitTypeDef       ADC_InitStructure;
+N//// 	ADC_CommonInitTypeDef ADC_CommonInitStructure;
+N////   DMA_InitTypeDef       DMA_InitStructure;
+N//// 	GPIO_InitTypeDef      GPIO_InitStructure;
+N//// 	
+N//// 		/* ADC1 Periph clock enable */
+N//// 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+N////   /* DMA1 clock enable */
+N////   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+N////   /* Configure PA.0  as analog input */
+N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+N////   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N////   GPIO_Init(GPIOA, &GPIO_InitStructure);			// 
+N//// 	
+N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+N////   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N////   GPIO_Init(GPIOA, &GPIO_InitStructure);	
+N//// 	
+N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+N////   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//// 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N////   GPIO_Init(GPIOA, &GPIO_InitStructure);	
+N////   
+N////   
+N////   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+N//// 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+N//// 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+N//// 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+N//// 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+N//// 	ADC_CommonInit(&ADC_CommonInitStructure);
+N//// 	
+N////   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+N//// 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+N//// 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+N//// 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+N//// 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+N//// 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+N//// 	ADC_Init(ADC1, &ADC_InitStructure);
+N//// 	
+N//// 	/*≈‰÷√ADC ±÷”*/
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
+N////   /* ADC Calibration */
+N////   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
+N//// 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
+N//// 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+N//// 		
+N//// 	
+N//// 	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
+N//// 	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//
+N////   /* DMA1 Channel1 Config */
+N////   DMA_InitStructure.DMA_Channel = DMA_Channel_0; 
+N////   DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)ADC1_DR_Address;
+N////   DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
+N////   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+N////   DMA_InitStructure.DMA_BufferSize =150;//¡¨–¯◊™ªª150¥Œ
+N////   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+N////   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+N////   DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+N////   DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+N////   DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+N////   DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+N//// 	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  	
+N//// 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+N//// 	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+N//// 	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+N////   DMA_Init(DMA2_Stream0, &DMA_InitStructure);
+N////   
+N////   /* DMA1 Channel1 enable */
+N////   DMA_Cmd(DMA2_Stream0, ENABLE);
+N//// 	/* ÂºÄÂêØDAM1ÈÄöÈÅì1‰∏≠Êñ≠ */
+N//// 	DMA_ITConfig(DMA2_Stream0,DMA_IT_TC,ENABLE);
+N////   DAM1_ADC_NVIC();//DMA÷–∂œ≈‰÷√
+N////   ADC_DMACmd(ADC1, ENABLE);  // πƒ‹DMA
+N////   
+N//// //   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+N//// // 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+N//// // 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+N//// // 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+N//// // 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+N//// // 	ADC_CommonInit(&ADC_CommonInitStructure);
+N//// // 	
+N//// //   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+N//// // 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+N//// // 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+N//// // 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+N//// // 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+N//// // 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+N//// // 	ADC_Init(ADC1, &ADC_InitStructure);
+N//// // 	
+N//// // 	/*≈‰÷√ADC ±÷”*/
+N//// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
+N//// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
+N//// // 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
+N//// //   /* ADC Calibration */
+N//// //   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
+N//// // 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
+N//// // 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+N//// }
+N//// /***************************************************************/
+N//// void DAM1_ADC_NVIC(void)
+N//// {
+N//// 	NVIC_InitTypeDef NVIC_InitStructure;
+N//// 	/* Enable the adc1 Interrupt */
+N//// 	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;	 
+N//// 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+N//// 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+N//// 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+N//// 	NVIC_Init(&NVIC_InitStructure);
+N//// }
+N//// /*******************************************************************/
+N//// void ADC_CH_Scan(void)//Êª§Ê≥¢
+N//// {
+N//// 	vu16 i;
+N//// 	static vu8 a,b,c,d,e,f;
+N//// 	vu8 count;
+N//// 	static vu8 t_Filt;
+N//// 	static vu8 t_dsoI,t_dsoV,t_dsoR,t_dsoI1,t_dsoV1;
+N//// 	vu32 sum;
+N//// 	for(i=0;i<150;i++)
+N//// 	{
+N//// 		if ((i % 3) == 0)
+N//// 		{
+N//// 			ADC_Vmon_Filt[a++]=ADC1_Buffer[i];
+N//// 		}
+N//// 		else if((i % 3) ==2 )
+N//// 		{
+N//// 			ADC_NTC_Filt[b++]=ADC1_Buffer[i];
+N//// 		}
+N//// 		else if((i % 3) ==1)
+N//// 		{
+N//// 			ADC_Rmon_Filt[d++]=ADC1_Buffer[i];
+N//// 		}	
+N//// 	}
+N//// 	a=0;
+N//// 	b=0;
+N//// 	c=0;
+N//// 	d=0;
+N//// 	sum=0;
+N//// /*************VMON**********************/
+N//// 	for(count=0;count<50;count++)
+N//// 	{
+N//// 		sum +=ADC_Vmon_Filt[count];
+N//// 	}
+N//// 	if(t_dsoV<20)
+N//// 	{
+N//// 		Vmon_Filt_Doul[t_dsoV]=sum/50;
+N//// 		sum=0;//
+N//// 	}
+N//// 	else
+N//// 	{
+N//// 		sum=0;
+N//// 		for(count=1;count<19;count++)
+N//// 		{
+N//// 			sum +=Vmon_Filt_Doul[count];
+N//// 		}
+N//// 		Vmon_value=sum/19;
+N//// 		sum=0;//
+N//// 		t_dsoV=0;
+N//// 	} 
+N//// 	t_dsoV++;
+N//// /************RMON*********************/
+N//// 	for(count=0;count<50;count++)
+N//// 	{
+N//// 		sum +=ADC_Rmon_Filt[count];
+N//// 	}
+N//// 	if(t_dsoR<20)
+N//// 	{
+N//// 		Rmon_Filt_Doul[t_dsoR]=sum/50;
+N//// 		sum=0;//
+N//// 	}
+N//// 	else
+N//// 	{
+N//// 		sum=0;
+N//// 		for(count=1;count<19;count++)
+N//// 		{
+N//// 			sum +=Rmon_Filt_Doul[count];
+N//// 		}
+N//// 		Rmon_value=sum/19;
+N//// 		sum=0;//
+N//// 		t_dsoR=0;
+N//// 	}
+N//// 	t_dsoR++;
+N//// /**********NTC**********************/
+N//// 	for(count=0;count<50;count++)
+N//// 	{
+N//// 		sum +=ADC_NTC_Filt[count];
+N//// 	}
+N//// 	NTC_value=sum/50;
+N//// }
+N
+N///******************************************************************/
+N///* ÂêçÁß∞ÔºöADC0                                                    */
+N///* ÊïàÊûúÔº?                                                       */
+N///* ÂÜÖÂÆπÔº?                                                      */
+N///* ‰ΩúËÄÖÔºözhan                                                  */
+N///* ËÅîÁ≥ªÊñπÂºèQQ:363116119                                        */
+N///******************************************************************/
+N//#include "adc.h"
+N//#include "my_register.h"
+N//#include "stm32f4xx_gpio.h"
+N//#include "stm32f4xx_rcc.h"
+N///*****************************************************************/
+N//#define ADC1_DR_Address       0x4001204C
+N//vu16 NTC_value;//NTC
+N//vu16 Imon_value;//µÁ‘¥µÁ¡˜
+N//vu32 Imon1_value;//∏∫‘ÿµÁ¡˜
+N//vu16 Vmon_value;//µÁ‘¥µÁ—π
+N//vu32 Vmon1_value;//∏∫‘ÿµÁ—π
+N//vu16 Rmon_value;//ƒ⁄◊Ë
+N//vu16 Contr_Voltage;//Œ»—πµÁ‘¥µÁ—πøÿ÷∆DAC
+N//vu16 Contr_Current;//µÁ‘¥µÁ¡˜øÿ÷∆DAC
+N//vu16 Contr_Laod;//∏∫‘ÿDAC
+N//vu16 ADC1_Buffer[150];
+N//vu16 ADC_Vmon_Filt[50];//Œ»—πµÁ‘¥ ‰≥ˆµÁ—π
+N//vu16 ADC_Rmon_Filt[50];//ƒ⁄◊Ë≤‚¡ø
+N//vu16 ADC_NTC_Filt[50];//NTC
+N//vu16 Vmon_Filt_Doul[20];
+N//vu16 Rmon_Filt_Doul[50];
+N///*****************************************************************/
+N//void ADC1_DMA_Init(void)
+N//{
+N//  ADC_InitTypeDef       ADC_InitStructure;
+N//	ADC_CommonInitTypeDef ADC_CommonInitStructure;
+N//  DMA_InitTypeDef       DMA_InitStructure;
+N//	GPIO_InitTypeDef      GPIO_InitStructure;
+N//	
+N//		/* ADC1 Periph clock enable */
+N//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+N//  /* DMA1 clock enable */
+N//  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
+N//  /* Configure PA.0  as analog input */
+N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N//  GPIO_Init(GPIOA, &GPIO_InitStructure);			// 
+N//	
+N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N//  GPIO_Init(GPIOA, &GPIO_InitStructure);	
+N//	
+N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+N//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+N//  GPIO_Init(GPIOA, &GPIO_InitStructure);	
+N//  
+N//  
+N//  /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+N//	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+N//	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+N//	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+N//	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+N//	ADC_CommonInit(&ADC_CommonInitStructure);
+N//	
+N//  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+N//	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+N//	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+N//	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+N//	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+N//	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+N//	ADC_Init(ADC1, &ADC_InitStructure);
+N//	
+N//	/*≈‰÷√ADC ±÷”*/
+N//	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
+N//	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
+N//	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
+N//  /* ADC Calibration */
+N//  ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
+N//	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
+N//	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+N//		
+N//	
+N//	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
+N//	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,DISABLE);	//
+N//  /* DMA1 Channel1 Config */
+N//  DMA_InitStructure.DMA_Channel = DMA_Channel_0; 
+N//  DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)ADC1_DR_Address;
+N//  DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
+N//  DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+N//  DMA_InitStructure.DMA_BufferSize =150;//¡¨–¯◊™ªª150¥Œ
+N//  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+N//  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+N//  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+N//  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+N//  DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+N//  DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+N//	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;  	
+N//	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+N//	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+N//	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+N//  DMA_Init(DMA2_Stream0, &DMA_InitStructure);
+N//  
+N//  /* DMA1 Channel1 enable */
+N//  DMA_Cmd(DMA2_Stream0, ENABLE);
+N//	/* ÂºÄÂêØDAM1ÈÄöÈÅì1‰∏≠Êñ≠ */
+N//	DMA_ITConfig(DMA2_Stream0,DMA_IT_TC,ENABLE);
+N//  DAM1_ADC_NVIC();//DMA÷–∂œ≈‰÷√
+N//  ADC_DMACmd(ADC1, ENABLE);  // πƒ‹DMA
+N//  
+N////   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+N//// 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+N//// 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+N//// 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+N//// 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+N//// 	ADC_CommonInit(&ADC_CommonInitStructure);
+N//// 	
+N////   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+N//// 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+N//// 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+N//// 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+N//// 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+N//// 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+N//// 	ADC_Init(ADC1, &ADC_InitStructure);
+N//// 	
+N//// 	/*≈‰÷√ADC ±÷”*/
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
+N//// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
+N////   /* ADC Calibration */
+N////   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
+N//// 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
+N//// 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+N//}
+N///***************************************************************/
+N//void DAM1_ADC_NVIC(void)
+N//{
+N//	NVIC_InitTypeDef NVIC_InitStructure;
+N//	/* Enable the adc1 Interrupt */
+N//	NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream0_IRQn;	 
+N//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+N//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+N//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+N//	NVIC_Init(&NVIC_InitStructure);
+N//}
+N///*******************************************************************/
+N//void ADC_CH_Scan(void)//Êª§Ê≥¢
+N//{
+N//	vu16 i;
+N//	static vu8 a,b,c,d,e,f;
+N//	vu8 count;
+N//	static vu8 t_Filt;
+N//	static vu8 t_dsoI,t_dsoV,t_dsoR,t_dsoI1,t_dsoV1;
+N//	vu32 sum;
+N//	for(i=0;i<150;i++)
+N//	{
+N//		if ((i % 3) == 0)
+N//		{
+N//			ADC_Vmon_Filt[a++]=ADC1_Buffer[i];
+N//		}
+N//		else if((i % 3) ==2 )
+N//		{
+N//			ADC_NTC_Filt[b++]=ADC1_Buffer[i];
+N//		}
+N//		else if((i % 3) ==1)
+N//		{
+N//			ADC_Rmon_Filt[d++]=ADC1_Buffer[i];
+N//		}	
+N//	}
+N//	a=0;
+N//	b=0;
+N//	c=0;
+N//	d=0;
+N//	sum=0;
+N///*************VMON**********************/
+N//	for(count=0;count<50;count++)
+N//	{
+N//		sum +=ADC_Vmon_Filt[count];
+N//	}
+N//	if(t_dsoV<20)
+N//	{
+N//		Vmon_Filt_Doul[t_dsoV]=sum/50;
+N//		sum=0;//
+N//	}
+N//	else
+N//	{
+N//		sum=0;
+N//		for(count=1;count<19;count++)
+N//		{
+N//			sum +=Vmon_Filt_Doul[count];
+N//		}
+N//		Vmon_value=sum/19;
+N//		sum=0;//
+N//		t_dsoV=0;
+N//	} 
+N//	t_dsoV++;
+N///************RMON*********************/
+N//	for(count=0;count<50;count++)
+N//	{
+N//		sum +=ADC_Rmon_Filt[count];
+N//	}
+N//	if(t_dsoR<50)
+N//	{
+N//		Rmon_Filt_Doul[t_dsoR]=sum/50;
+N//		sum=0;//
+N//	}
+N//	else
+N//	{
+N//		sum=0;
+N////        Bubble_sort( Rmon_Filt_Doul,50);//≈≈–Ú¥”¥ÛµΩ–°
+N//		for(count=1;count<50;count++)
+N//		{
+N//			sum +=Rmon_Filt_Doul[count];
+N//		}
+N//		Rmon_value=sum/50;
+N//		sum=0;//
+N//		t_dsoR=0;
+N//	}
+N//	t_dsoR++;
+N///**********NTC**********************/
+N//	for(count=0;count<50;count++)
+N//	{
+N//		sum +=ADC_NTC_Filt[count];
+N//	}
+N//	NTC_value=sum/50;
+N//}
 N
 N/******************************************************************/
 N/* ÂêçÁß∞ÔºöADC0                                                    */
-N/* ÊïàÊûúÔº?                                                       */
-N/* ÂÜÖÂÆπÔº?                                                      */
+N/* ÊïàÊûúÔºö                                                        */
+N/* ÂÜÖÂÆπÔºö                                                       */
 N/* ‰ΩúËÄÖÔºözhan                                                  */
 N/* ËÅîÁ≥ªÊñπÂºèQQ:363116119                                        */
 N/******************************************************************/
@@ -251,7 +477,7 @@ Nvoid DAM1_ADC_NVIC(void);
 Nvoid ADC_CH_Scan(void);//¬À≤®
 N#endif
 N
-L 234 "..\drive\adc.c" 2
+L 460 "..\drive\adc.c" 2
 N#include "my_register.h"
 L 1 "..\Include\my_register.h" 1
 N/******************** (C) COPYRIGHT 2014 KUNKIN********************
@@ -35650,7 +35876,7 @@ N#define Receive_BUFFERSIZE   10
 N//=============================================================================
 N#endif
 N/******************* (C) COPYRIGHT 2015 KUNKIN *****END OF FILE*************************/
-L 235 "..\drive\adc.c" 2
+L 461 "..\drive\adc.c" 2
 N#include "stm32f4xx_gpio.h"
 N#include "stm32f4xx_rcc.h"
 N/*****************************************************************/
@@ -35669,7 +35895,7 @@ Nvu16 ADC_Vmon_Filt[50];//Œ»—πµÁ‘¥ ‰≥ˆµÁ—π
 Nvu16 ADC_Rmon_Filt[50];//ƒ⁄◊Ë≤‚¡ø
 Nvu16 ADC_NTC_Filt[50];//NTC
 Nvu16 Vmon_Filt_Doul[20];
-Nvu16 Rmon_Filt_Doul[50];
+Nvu16 Rmon_Filt_Doul[20];
 N/*****************************************************************/
 Nvoid ADC1_DMA_Init(void)
 N{
@@ -35684,20 +35910,6 @@ X	RCC_APB2PeriphClockCmd(((uint32_t)0x00000100), ENABLE);
 N  /* DMA1 clock enable */
 N  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 X  RCC_AHB1PeriphClockCmd(((uint32_t)0x00400000), ENABLE);
-N  /* Configure PA.0  as analog input */
-N	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-X	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0004);
-N  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-N	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-N  GPIO_Init(GPIOA, &GPIO_InitStructure);			// 
-X  GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)), &GPIO_InitStructure);			
-N	
-N	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-X	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0008);
-N  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-N	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-N  GPIO_Init(GPIOA, &GPIO_InitStructure);	
-X  GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)), &GPIO_InitStructure);	
 N	
 N	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
 X	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0040);
@@ -35705,45 +35917,6 @@ N  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
 N	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
 N  GPIO_Init(GPIOA, &GPIO_InitStructure);	
 X  GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)), &GPIO_InitStructure);	
-N  
-N  
-N  /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-N	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-X	ADC_CommonInitStructure.ADC_Mode = ((uint32_t)0x00000000);
-N	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-X	ADC_CommonInitStructure.ADC_Prescaler = ((uint32_t)0x00000000);
-N	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-X	ADC_CommonInitStructure.ADC_DMAAccessMode = ((uint32_t)0x00000000);
-N	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-X	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ((uint32_t)0x00000000);
-N	ADC_CommonInit(&ADC_CommonInitStructure);
-N	
-N  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-X  ADC_InitStructure.ADC_Resolution = ((uint32_t)0x00000000);			
-N	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-N	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-N	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-X	ADC_InitStructure.ADC_ExternalTrigConv =((uint32_t)0x00000000);	
-N	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-X	ADC_InitStructure.ADC_DataAlign = ((uint32_t)0x00000000); 	
-N	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-N	ADC_Init(ADC1, &ADC_InitStructure);
-X	ADC_Init(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), &ADC_InitStructure);
-N	
-N	/*≈‰÷√ADC ±÷”*/
-N	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-X	ADC_RegularChannelConfig(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ((uint8_t)0x02), 1, ((uint8_t)0x04));
-N	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-X	ADC_RegularChannelConfig(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ((uint8_t)0x03), 2, ((uint8_t)0x00));
-N	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-X	ADC_RegularChannelConfig(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ((uint8_t)0x06), 3, ((uint8_t)0x00));
-N  /* ADC Calibration */
-N  ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
-X  ADC_Cmd(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ENABLE);
-N	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
-X	ADC_SoftwareStartConv(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)));   
-N	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
-X	ADC_DMARequestAfterLastTransferCmd(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)),ENABLE);
 N		
 N	
 N	//RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1,ENABLE);	  //
@@ -35756,7 +35929,7 @@ X  DMA_InitStructure.DMA_PeripheralBaseAddr = (vu32)0x4001204C;
 N  DMA_InitStructure.DMA_Memory0BaseAddr = (vu32)&ADC1_Buffer;
 N  DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
 X  DMA_InitStructure.DMA_DIR = ((uint32_t)0x00000000);
-N  DMA_InitStructure.DMA_BufferSize =150;//¡¨–¯◊™ªª150¥Œ
+N  DMA_InitStructure.DMA_BufferSize =50;//¡¨–¯◊™ªª150¥Œ
 N  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 X  DMA_InitStructure.DMA_PeripheralInc = ((uint32_t)0x00000000);
 N  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
@@ -35790,29 +35963,39 @@ N  DAM1_ADC_NVIC();//DMA÷–∂œ≈‰÷√
 N  ADC_DMACmd(ADC1, ENABLE);  // πƒ‹DMA
 X  ADC_DMACmd(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ENABLE);  
 N  
-N//   /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
-N// 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
-N// 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-N// 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-N// 	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
-N// 	ADC_CommonInit(&ADC_CommonInitStructure);
-N// 	
-N//   ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
-N// 	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
-N// 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
-N// 	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
-N// 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
-N// 	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
-N// 	ADC_Init(ADC1, &ADC_InitStructure);
-N// 	
-N// 	/*≈‰÷√ADC ±÷”*/
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_84Cycles);
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_3Cycles);
-N// 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 3, ADC_SampleTime_3Cycles);
-N//   /* ADC Calibration */
-N//   ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
-N// 	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
-N// 	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+N  /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits  */
+N	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+X	ADC_CommonInitStructure.ADC_Mode = ((uint32_t)0x00000000);
+N	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
+X	ADC_CommonInitStructure.ADC_Prescaler = ((uint32_t)0x00000000);
+N	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+X	ADC_CommonInitStructure.ADC_DMAAccessMode = ((uint32_t)0x00000000);
+N	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
+X	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ((uint32_t)0x00000000);
+N	ADC_CommonInit(&ADC_CommonInitStructure);
+N	
+N  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;			//
+X  ADC_InitStructure.ADC_Resolution = ((uint32_t)0x00000000);			
+N	ADC_InitStructure.ADC_ScanConvMode = ENABLE ; 	 				//
+N	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;			//
+N	ADC_InitStructure.ADC_ExternalTrigConv =ADC_ExternalTrigConvEdge_None;	//
+X	ADC_InitStructure.ADC_ExternalTrigConv =((uint32_t)0x00000000);	
+N	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right; 	//
+X	ADC_InitStructure.ADC_DataAlign = ((uint32_t)0x00000000); 	
+N	ADC_InitStructure.ADC_NbrOfConversion = 3;	 								//
+N	ADC_Init(ADC1, &ADC_InitStructure);
+X	ADC_Init(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), &ADC_InitStructure);
+N	
+N	/*≈‰÷√ADC ±÷”*/
+N	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_3Cycles);
+X	ADC_RegularChannelConfig(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ((uint8_t)0x06), 1, ((uint8_t)0x00));
+N  /* ADC Calibration */
+N  ADC_Cmd(ADC1, ENABLE);// πƒ‹ADC
+X  ADC_Cmd(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)), ENABLE);
+N	ADC_SoftwareStartConv(ADC1);   //ø™ º◊™ªª
+X	ADC_SoftwareStartConv(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)));   
+N	ADC_DMARequestAfterLastTransferCmd(ADC1,ENABLE);
+X	ADC_DMARequestAfterLastTransferCmd(((ADC_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x2000)),ENABLE);
 N}
 N/***************************************************************/
 Nvoid DAM1_ADC_NVIC(void)
@@ -35826,84 +36009,15 @@ N	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 N	NVIC_Init(&NVIC_InitStructure);
 N}
 N/*******************************************************************/
-Nvoid ADC_CH_Scan(void)//Êª§Ê≥¢
+Nvoid ADC_CH_Scan(void)//¬À≤®
 N{
-N	vu16 i;
-N	static vu8 a,b,c,d,e,f;
 N	vu8 count;
-N	static vu8 t_Filt;
-N	static vu8 t_dsoI,t_dsoV,t_dsoR,t_dsoI1,t_dsoV1;
 N	vu32 sum;
-N	for(i=0;i<150;i++)
-N	{
-N		if ((i % 3) == 0)
-N		{
-N			ADC_Vmon_Filt[a++]=ADC1_Buffer[i];
-N		}
-N		else if((i % 3) ==2 )
-N		{
-N			ADC_NTC_Filt[b++]=ADC1_Buffer[i];
-N		}
-N		else if((i % 3) ==1)
-N		{
-N			ADC_Rmon_Filt[d++]=ADC1_Buffer[i];
-N		}	
-N	}
-N	a=0;
-N	b=0;
-N	c=0;
-N	d=0;
 N	sum=0;
-N/*************VMON**********************/
 N	for(count=0;count<50;count++)
 N	{
-N		sum +=ADC_Vmon_Filt[count];
-N	}
-N	if(t_dsoV<20)
-N	{
-N		Vmon_Filt_Doul[t_dsoV]=sum/50;
-N		sum=0;//
-N	}
-N	else
-N	{
-N		sum=0;
-N		for(count=1;count<19;count++)
-N		{
-N			sum +=Vmon_Filt_Doul[count];
-N		}
-N		Vmon_value=sum/19;
-N		sum=0;//
-N		t_dsoV=0;
-N	} 
-N	t_dsoV++;
-N/************RMON*********************/
-N	for(count=0;count<50;count++)
-N	{
-N		sum +=ADC_Rmon_Filt[count];
-N	}
-N	if(t_dsoR<50)
-N	{
-N		Rmon_Filt_Doul[t_dsoR]=sum/50;
-N		sum=0;//
-N	}
-N	else
-N	{
-N		sum=0;
-N//        Bubble_sort( Rmon_Filt_Doul,50);//≈≈–Ú¥”¥ÛµΩ–°
-N		for(count=1;count<50;count++)
-N		{
-N			sum +=Rmon_Filt_Doul[count];
-N		}
-N		Rmon_value=sum/50;
-N		sum=0;//
-N		t_dsoR=0;
-N	}
-N	t_dsoR++;
-N/**********NTC**********************/
-N	for(count=0;count<50;count++)
-N	{
-N		sum +=ADC_NTC_Filt[count];
+N		sum +=ADC1_Buffer[count];
 N	}
 N	NTC_value=sum/50;
-W "..\drive\adc.c" 450 2 last line of file ends without a newline
+W "..\drive\adc.c" 570 2 last line of file ends without a newline
 N}
