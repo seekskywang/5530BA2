@@ -1220,8 +1220,8 @@
 ;;;825                        WM_HWIN hItem;
 ;;;826                        hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
 ;;;827                        TEXT_SetText(hItem,"CV");
-;;;828                        GPIO_SetBits(GPIOC,GPIO_Pin_12);//CV
-;;;829                        flag_Load_CC = 0;
+;;;828    					flag_Load_CC = 0;
+;;;829                        GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV                  
 ;;;830                        load_mode = 0;
 ;;;831                        Write_LOAD();
 ;;;832                        break;
@@ -1231,8 +1231,8 @@
 ;;;836                         WM_HWIN hItem;
 ;;;837                         hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
 ;;;838                         TEXT_SetText(hItem,"CC");
-;;;839                         GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
-;;;840                         flag_Load_CC = 1;
+;;;839    					 flag_Load_CC = 1;
+;;;840                         GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC                     
 ;;;841                         load_mode =1;
 ;;;842                         Write_LOAD();
 ;;;843                         break;
@@ -1646,7 +1646,7 @@
                   |L6.1080|
 000438  4d32              LDR      r5,|L6.1284|
 00043a  f8df80cc          LDR      r8,|L6.1288|
-00043e  f44f5680          MOV      r6,#0x1000            ;828
+00043e  f44f6680          MOV      r6,#0x400             ;829
 000442  7829              LDRB     r1,[r5,#0]            ;821  ; flagD
 000444  f3c113c0          UBFX     r3,r1,#7,#1           ;821
 000448  f640110f          MOV      r1,#0x90f             ;826
@@ -1657,12 +1657,12 @@
 000454  f7fffffe          BL       WM_GetDialogItem
 000458  a12c              ADR      r1,|L6.1292|
 00045a  f7fffffe          BL       TEXT_SetText
-00045e  4631              MOV      r1,r6                 ;828
-000460  4640              MOV      r0,r8                 ;828
-000462  f7fffffe          BL       GPIO_SetBits
-000466  6828              LDR      r0,[r5,#0]            ;829  ; flagD
-000468  f0200080          BIC      r0,r0,#0x80           ;829
-00046c  6028              STR      r0,[r5,#0]            ;829  ; flagD
+00045e  6828              LDR      r0,[r5,#0]            ;828  ; flagD
+000460  f0200080          BIC      r0,r0,#0x80           ;828
+000464  6028              STR      r0,[r5,#0]            ;828  ; flagD
+000466  4631              MOV      r1,r6                 ;829
+000468  4640              MOV      r0,r8                 ;829
+00046a  f7fffffe          BL       GPIO_SetBits
 00046e  70bc              STRB     r4,[r7,#2]            ;830
 000470  f7fffffe          BL       Write_LOAD
 000474  e673              B        |L6.350|
@@ -1671,12 +1671,12 @@
 000478  f7fffffe          BL       WM_GetDialogItem
 00047c  a124              ADR      r1,|L6.1296|
 00047e  f7fffffe          BL       TEXT_SetText
-000482  4631              MOV      r1,r6                 ;839
-000484  4640              MOV      r0,r8                 ;839
-000486  f7fffffe          BL       GPIO_ResetBits
-00048a  6828              LDR      r0,[r5,#0]            ;840  ; flagD
-00048c  f0400080          ORR      r0,r0,#0x80           ;840
-000490  6028              STR      r0,[r5,#0]            ;840  ; flagD
+000482  6828              LDR      r0,[r5,#0]            ;839  ; flagD
+000484  f0400080          ORR      r0,r0,#0x80           ;839
+000488  6028              STR      r0,[r5,#0]            ;839  ; flagD
+00048a  4631              MOV      r1,r6                 ;840
+00048c  4640              MOV      r0,r8                 ;840
+00048e  f7fffffe          BL       GPIO_ResetBits
 000492  70a7              STRB     r7,[r4,#2]            ;841
 000494  f7fffffe          BL       Write_LOAD
 000498  e661              B        |L6.350|
@@ -2165,7 +2165,7 @@
 ;;;441                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 ;;;442                TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
 ;;;443                GUI_UC_SetEncodeUTF8();
-;;;444                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+;;;444                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 ;;;445                TEXT_SetText(hItem,"CC");
 ;;;446                flag_Load_CC = 1;
 ;;;447            }else if(load_mode == 0){
@@ -2173,7 +2173,7 @@
 ;;;449                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 ;;;450                TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
 ;;;451                GUI_UC_SetEncodeUTF8();  
-;;;452                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV            
+;;;452                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV            
 ;;;453                TEXT_SetText(hItem,"CV");
 ;;;454                flag_Load_CC = 0;
 ;;;455            }
@@ -3031,7 +3031,7 @@
 0007cc  f7fffffe          BL       GUI_UC_SetEncodeUTF8
 0007d0  4639              MOV      r1,r7                 ;444
 0007d2  4640              MOV      r0,r8                 ;444
-0007d4  f7fffffe          BL       GPIO_ResetBits
+0007d4  f7fffffe          BL       GPIO_SetBits
 0007d8  a161              ADR      r1,|L8.2400|
 0007da  4650              MOV      r0,r10                ;445
 0007dc  f7fffffe          BL       TEXT_SetText
@@ -3052,7 +3052,7 @@
 000802  f7fffffe          BL       GUI_UC_SetEncodeUTF8
 000806  4639              MOV      r1,r7                 ;452
 000808  4640              MOV      r0,r8                 ;452
-00080a  f7fffffe          BL       GPIO_SetBits
+00080a  f7fffffe          BL       GPIO_ResetBits
 00080e  a155              ADR      r1,|L8.2404|
 000810  4650              MOV      r0,r10                ;453
 000812  f7fffffe          BL       TEXT_SetText

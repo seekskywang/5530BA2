@@ -42,6 +42,7 @@ RCC_ClocksTypeDef rcc;
 vu16 sendload;
 extern vu8 cdc_sw;
 vu8 ocf;
+vu8 vflag;
 static void ee_Delay( vu32 nCount)	 //莶榨謩覔时诏私
 {
 	for(; nCount != 0; nCount--);
@@ -74,12 +75,22 @@ void MainTask(void)
 	SLIDER_SetDefaultSkin(SLIDER_SKIN_FLEX);
 	HEADER_SetDefaultSkin(HEADER_SKIN_FLEX);
 	RADIO_SetDefaultSkin(RADIO_SKIN_FLEX);
-    CreateSTARTER();
-//	CreateR();//开机进入内阻测试界面
-// 	flag_Load_CC=1;//开机负载默认进入CC模式
-// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+	CreateR();//开机进入内阻测试界面
+	flag_Load_CC=1;//开机负载默认进入CC模式
+	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
+	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 	Flag_Swtich_ON=0;
+//    CreateSTARTER();
+////	CreateR();//开机进入内阻测试界面
+//// 	flag_Load_CC=1;//开机负载默认进入CC模式
+//// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+//	flag_Load_CC=1;//开机负载默认进入CC模式
+//	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+//	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
+//	V_SW(1);
+//	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+//	Flag_Swtich_ON=0;
     
 	while (1)
 	{
@@ -135,7 +146,7 @@ void MainTask(void)
 		}
 		
         
-        RCC_GetClocksFreq(&rcc);
+//        RCC_GetClocksFreq(&rcc);
         if(page_sw != face_starter)
         {
             if(scancount == 9)
@@ -190,46 +201,57 @@ void MainTask(void)
   
 }
 
-//缓启动
-void Slow_Start(void)
+void V_SW(u8 i)
 {
-
-    
-    if(page_sw == face_r)
-    {
-		if(step ==6)
-		{
-			DAC8531_Send(Contr_Laod);
-		}else{
-			if(test_start == 1)
-			{
-				if(sendload < 250)
-				{
-					sendload = sendload + 10;
-				}else{
-					sendload = Contr_Laod;
-				}
-				DAC8531_Send(sendload);
-			}else{	
-				sendload = 0;
-				DAC8531_Send(sendload);//加载DAC值
-			}
-		}
-		
-    }else{
-        if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on))
-        {
-            if(sendload < 250)
-            {
-                sendload = sendload + 10;
-            }else{
-                sendload = Contr_Laod;
-            }
-            DAC8531_Send(sendload);
-        }else{
-            sendload = 0;
-            DAC8531_Send(sendload);
-        }
-    }
+	if(i == 0)
+	{
+		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
+		vflag = 0;
+	}else if(i == 1){
+		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
+		vflag = 1;
+	}
 }
+////缓启动
+//void Slow_Start(void)
+//{
+
+//    
+//    if(page_sw == face_r)
+//    {
+//		if(step ==6)
+//		{
+//			DAC8531_Send(Contr_Laod);
+//		}else{
+//			if(test_start == 1)
+//			{
+//				if(sendload < 250)
+//				{
+//					sendload = sendload + 10;
+//				}else{
+//					sendload = Contr_Laod;
+//				}
+//				DAC8531_Send(sendload);
+//			}else{	
+//				sendload = 0;
+//				DAC8531_Send(sendload);//加载DAC值
+//			}
+//		}
+//		
+//    }else{
+//        if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on))
+//        {
+//            if(sendload < 250)
+//            {
+//                sendload = sendload + 10;
+//            }else{
+//                sendload = Contr_Laod;
+//            }
+//            DAC8531_Send(sendload);
+//        }else{
+//            sendload = 0;
+//            DAC8531_Send(sendload);
+//        }
+//    }
+//}
 /***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/

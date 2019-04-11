@@ -38,3 +38,5 @@
 ..\output\ad7689.o: ..\Libraries\FWlib\inc\stm32f4xx_fsmc.h
 ..\output\ad7689.o: ..\Include\GPIO.h
 ..\output\ad7689.o: ..\Include\my_register.h
+..\output\ad7689.o: ..\Include\dma.h
+..\output\ad7689.o: ..\Include\delay.h

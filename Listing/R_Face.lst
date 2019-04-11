@@ -48769,7 +48769,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -48937,6 +48937,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49330,7 +49332,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -49498,6 +49500,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51996,7 +52000,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -52164,6 +52168,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -53550,8 +53556,8 @@ X		if(para_set2 == 0xff)
 N        {
 N			if(oc_mode == 0)
 N            {
-N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                flag_Load_CC = 1;
 X                (flagD . bit7) = 1;
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_132);
@@ -53562,8 +53568,8 @@ N                TEXT_SetFont(hItem,&GUI_Font16_1);//设定文本字体
 N                GUI_UC_SetEncodeUTF8();        
 N                TEXT_SetText(hItem,"CC");
 N            }else if(oc_mode == 1){
-N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
-X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                flag_Load_CC = 0;
 X                (flagD . bit7) = 0;
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_132);
@@ -55037,13 +55043,13 @@ X            TEXT_SetBkColor(hItem,0xFFFFFFF);
 N            TEXT_SetTextColor(hItem, GUI_WHITE);
 X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
 N			if(dot_flag == 0){
-N				gate_v = atoi(set_limit);					
+N				dis_gate_v = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
 N				strncpy(buf,set_limit,dot_flag + 3);
-N				gate_v = atof(buf);
+N				dis_gate_v = atof(buf)*1000;
 N			}
-N//            gate_v = (float)dis_gate_v/1000;
+N            gate_v = (float)dis_gate_v/1000;
 N            sprintf(buf,"%.3f",gate_v);
 N            TEXT_SetText(hItem,buf);
 N            
@@ -56455,8 +56461,8 @@ X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x08
 N//                GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
 N			flag_Load_CC = 1;
 X			(flagD . bit7) = 1;
-N			GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
-X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x1000));
+N			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
 X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N			ocf = 1;

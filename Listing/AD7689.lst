@@ -1,510 +1,4 @@
 L 1 "..\drive\AD7689.c"
-N//// #include "AD7689.h"
-N//// #include "GPIO.h"
-N//// #include "my_register.h" 
-N//// #include "stm32f4xx_gpio.h"
-N//// #include "stm32f4xx_rcc.h"
-N//// #include "stm32f4xx_spi.h"
-N//// #include "stm32f4xx_rcc.h"
-N
-N//// extern struct bitDefine
-N//// {
-N////     unsigned bit0: 1;
-N////     unsigned bit1: 1;
-N////     unsigned bit2: 1;
-N////     unsigned bit3: 1;
-N////     unsigned bit4: 1;
-N////     unsigned bit5: 1;
-N////     unsigned bit6: 1;
-N////     unsigned bit7: 1;
-N//// } flagA, flagB,flagC,flagD,flagE,flagF,flagG;
-N//// // Device operation Macro definition.
-N//// #define AD7689_CNV_0			GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-N//// #define AD7689_CNV_1			GPIO_SetBits(GPIOB,GPIO_Pin_6);
-N//// vu16 AD7689_Buffer[20];
-N//// vu16 Ad7689_Fit_Imon[20];
-N//// vu16 Ad7689_Fit_Imon1[20];
-N//// vu16 Ad7689_Fit_Vmon[20];
-N//// void Bubble_sort(vu16 *D_temp,vu8 num);
-N//// void AD7689_InitializeSPI2(void)
-N//// {
-N//// 	GPIO_InitTypeDef  GPIO_InitStructure;
-N////   //SPI_InitTypeDef  SPI_InitStructure;
-N////   /*!< SD_SPI_CS_GPIO, SD_SPI_MOSI_GPIO, SD_SPI_MISO_GPIO, SD_SPI_DETECT_GPIO 
-N////        and SD_SPI_SCK_GPIO Periph clock enable 
-N//// 	// 	 RCC_AHBPeriphClockCmd(FLASH_CS_PIN_SCK|FLASH_SCK_PIN_SCK|FLASH_MISO_PIN_SCK | FLASH_MOSI_PIN_SCK, ENABLE);
-N////   !< SD_SPI Periph clock enable */
-N//// 	/*RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-N//// 	
-N//// 	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//// 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//inv
-N//// 	GPIO_Init(GPIOA, &GPIO_InitStructure);//
-N////   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3;//PC2~3复用功能输出	
-N////   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-N////   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-N////   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-N////   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-N////   GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
-N//// 	
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PB10复用功能输出	
-N////   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-N////   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-N////   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-N////   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-N////   GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-N//// 	
-N////   GPIO_PinAFConfig(GPIOC,GPIO_PinSource2,GPIO_AF_SPI2); //PC2复用为 SPI2
-N//// 	GPIO_PinAFConfig(GPIOC,GPIO_PinSource3,GPIO_AF_SPI2); //PBC3复用为 SPI2
-N//// 	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_SPI2); //PB13复用为 SPI2
-N//// 	AD7689_CNV_1;
-N//// 	AD7689_Delay();
-N//// 	AD7689_CNV_0;
-N//// 	//这里只针对SPI口初始化
-N////   SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
-N//// 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
-N//// 	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
-N//// 	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
-N//// 	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
-N//// 	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-N//// 	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
-N//// 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
-N//// 	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-N//// 	SPI_Init(SPI2, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
-N//// 	
-N//// 	SPI_Cmd(SPI2, ENABLE);*/ //使能SPI外设*/
-N//// 	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//// 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
-N//// 	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N
-N//// 	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//// 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;//sck,
-N//// 	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//// 	
-N//// 	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//// 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//MOSI
-N//// 	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//// 	
-N//// 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;;
-N//// 	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;;
-N//// 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;//MISO
-N//// 	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//// 	
-N//// 	AD7689_CNV_1;
-N//// 	GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-N//// 	GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//// }
-N
-N//// vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
-N//// {
-N//// 	vu16 AD7689_Config=0;
-N//// 	vu16 AD7689_Data;
-N//// 	vu8 i;
-N//// 	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
-N//// 	AD7689_Config <<=2;
-N//// 	AD7689_CNV_0;
-N//// 	AD7689_Delay();
-N//// 	for(i=0;i<16;i++)
-N//// 	{
-N//// 		if(AD7689_Config&0x8000)
-N//// 		{
-N//// 			GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=1
-N//// 		}
-N//// 		else
-N//// 		{
-N//// 			GPIO_ResetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-N//// 		}
-N//// 		AD7689_Delay();
-N//// 		GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//// 		AD7689_Delay();
-N//// 		AD7689_Config <<= 1;
-N//// 		GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=1
-N//// 		AD7689_Delay();
-N//// 		AD7689_Data <<=1;
-N//// 		if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4))
-N//// 		{
-N//// 			AD7689_Data |=1;
-N//// 		}
-N//// 	}
-N//// 	AD7689_Delay(); 
-N//// 	GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//// 	AD7689_Delay(); 
-N//// 	AD7689_CNV_1;
-N//// 	AD7689_Delay(); 
-N//// 	return AD7689_Data;
-N//// }
-N
-N//// /************************************************************************/
-N//// /* Function Name:	TM7707_TransferByte.								*/
-N//// /* Purpose:			Send of recive a byte.								*/
-N//// /* Resources:		SPI controler.										*/
-N//// /* Params:																*/
-N//// /*	@uiTxData:			The byte data will be sent.						*/
-N//// /* Return:			The byte data recived.						+		*/
-N//// /* Limitation:		None.												*/
-N//// /************************************************************************/
-N//// vu16 AD7689_TransferByte(vu16 uiTxData)
-N//// {
-N//// 	vu8 uiRxData;
-N//// 	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET);
-N//// 	SPI_I2S_SendData(SPI2,uiTxData);
-N//// 	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET);
-N//// 	uiRxData = SPI_I2S_ReceiveData(SPI2);
-N//// 	return uiRxData;
-N//// }
-N//// /************************************************************************/
-N//// /* Function Name:	AD7689_Delay.									*/
-N//// /* Purpose:			Wait for device DRDY signal.						*/
-N//// /* Resources:		DRDY GPIO pin.										*/
-N//// /* Params:			None.												*/
-N//// /* Return:			None.												*/
-N//// /* Limitation:		None.												*/
-N//// /************************************************************************/
-N//// void AD7689_Delay(void)
-N//// {
-N//// 	vu16 count ;
-N////   for(count = 1000; count != 0; count--);
-N//// }
-N//// void AD7689_Delay1(void)
-N//// {
-N//// 	vu16 count ;
-N////   for(count = 3000; count != 0; count--);
-N//// }
-N//// void AD7689_Scan_CH(void)
-N//// {
-N//// 	static vu8 I_cont,I1_cont,V_cont;
-N//// 	vu8 i,f;
-N//// 	vu32 sum1;
-N//// 	vu16 var_chI,var_chV,var_chV1;
-N//// 	for(i=0;i<20;i++)
-N//// 		{
-N//// 			AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
-N//// 			AD7689_Delay1();
-N//// 			var_chI=AD7689_Buffer[3];
-N//// 			var_chV=AD7689_Buffer[2];
-N//// 			var_chV1=AD7689_Buffer[4];
-N//// 		}
-N//// 	/***************电源电流滤波**********************/
-N//// 	Ad7689_Fit_Imon1[I1_cont++]=var_chI;
-N//// 	if(I1_cont==20)
-N//// 	{
-N//// 		I1_cont=0;
-N//// 	}
-N//// //	Bubble_sort( Ad7689_Fit_Imon1,8);//排序从大到小
-N//// 	sum1=0;
-N//// 	for(f=0;f<20;f++)
-N//// 	{
-N//// 		sum1 +=Ad7689_Fit_Imon1[f];
-N//// 	}
-N//// 	Imon_value=sum1/20;
-N//// 	/***************负载电压滤波**********************/
-N//// 	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-N//// 	if(V_cont==20)
-N//// 	{
-N//// 		V_cont=0;
-N//// 	}
-N//// //	Bubble_sort( Ad7689_Fit_Vmon,8);//排序从大到小
-N//// 	sum1=0;
-N//// 	for(f=0;f<20;f++)
-N//// 	{
-N//// 		sum1 +=Ad7689_Fit_Vmon[f];
-N//// 	}
-N//// 	Vmon1_value=sum1/20;
-N//// /***************负载电流滤波**********************/
-N//// 	Ad7689_Fit_Imon[I_cont++]=var_chV1;
-N//// 	if(I_cont==20)
-N//// 	{
-N//// 		I_cont=0;
-N//// 	}
-N//// //	Bubble_sort( Ad7689_Fit_Imon,8);//排序从大到小
-N//// 	sum1=0;
-N//// 	for(f=0;f<20;f++)
-N//// 	{
-N//// 		sum1 +=Ad7689_Fit_Imon[f];
-N//// 	}
-N//// 	Imon1_value=sum1/20;
-N//// }
-N
-N//// /*
-N//// 冒泡排序，最大值在第一位，最小值在最后一位
-N////  */
-N//// void Bubble_sort(vu16 *D_temp,vu8 num)
-N//// {
-N//// 	unsigned int _temp;
-N//// 	unsigned char m,n;
-N//// 	for(m=0;m<num;m++)
-N//// 	{
-N//// 		for(n=m;n<num;n++)
-N//// 		{
-N//// 			if(D_temp[n]>D_temp[m])//最大的值放在第一位
-N//// 			{
-N//// 				_temp = D_temp[m];
-N//// 				D_temp[m] =D_temp[n];
-N//// 				D_temp[n]=_temp;		
-N//// 			}
-N//// 		}	
-N//// 	}
-N//// }
-N//#include "AD7689.h"
-N//#include "GPIO.h"
-N//#include "my_register.h" 
-N//#include "stm32f4xx_gpio.h"
-N//#include "stm32f4xx_rcc.h"
-N//#include "stm32f4xx_spi.h"
-N//#include "stm32f4xx_rcc.h"
-N
-N//extern struct bitDefine
-N//{
-N//    unsigned bit0: 1;
-N//    unsigned bit1: 1;
-N//    unsigned bit2: 1;
-N//    unsigned bit3: 1;
-N//    unsigned bit4: 1;
-N//    unsigned bit5: 1;
-N//    unsigned bit6: 1;
-N//    unsigned bit7: 1;
-N//} flagA, flagB,flagC,flagD,flagE,flagF,flagG;
-N//// Device operation Macro definition.
-N//#define AD7689_CNV_0			GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-N//#define AD7689_CNV_1			GPIO_SetBits(GPIOB,GPIO_Pin_6);
-N//vu16 AD7689_Buffer[8];
-N//vu16 Ad7689_Fit_Imon[100];//璐熻浇鐢垫祦
-N//vu16 Ad7689_Fit_Imon1[20];
-N//vu16 Ad7689_Fit_Vmon[40];
-N//void Bubble_sort(vu16 *D_temp,vu8 num);
-N//void AD7689_InitializeSPI2(void)
-N//{
-N//	GPIO_InitTypeDef  GPIO_InitStructure;
-N//  //SPI_InitTypeDef  SPI_InitStructure;
-N//  /*!< SD_SPI_CS_GPIO, SD_SPI_MOSI_GPIO, SD_SPI_MISO_GPIO, SD_SPI_DETECT_GPIO 
-N//       and SD_SPI_SCK_GPIO Periph clock enable 
-N//	// 	 RCC_AHBPeriphClockCmd(FLASH_CS_PIN_SCK|FLASH_SCK_PIN_SCK|FLASH_MISO_PIN_SCK | FLASH_MOSI_PIN_SCK, ENABLE);
-N//  !< SD_SPI Periph clock enable */
-N//	/*RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-N//	
-N//	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//inv
-N//	GPIO_Init(GPIOA, &GPIO_InitStructure);//
-N//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3;//PC2~3复用功能输出	
-N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-N//  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-N//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-N//  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-N//  GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
-N//	
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PB10复用功能输出	
-N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
-N//  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-N//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-N//  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-N//  GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-N//	
-N//  GPIO_PinAFConfig(GPIOC,GPIO_PinSource2,GPIO_AF_SPI2); //PC2复用为 SPI2
-N//	GPIO_PinAFConfig(GPIOC,GPIO_PinSource3,GPIO_AF_SPI2); //PBC3复用为 SPI2
-N//	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_SPI2); //PB13复用为 SPI2
-N//	AD7689_CNV_1;
-N//	AD7689_Delay();
-N//	AD7689_CNV_0;
-N//	//这里只针对SPI口初始化
-N//  SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
-N//	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
-N//	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
-N//	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
-N//	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
-N//	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-N//	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
-N//	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
-N//	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-N//	SPI_Init(SPI2, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
-N//	
-N//	SPI_Cmd(SPI2, ENABLE);*/ //使能SPI外设*/
-N//	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
-N//	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N
-N//	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;//sck,
-N//	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//	
-N//	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-N//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//MOSI
-N//	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//	
-N//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;;
-N//	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;;
-N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;//MISO
-N//	GPIO_Init(GPIOB, &GPIO_InitStructure);//
-N//	
-N//	AD7689_CNV_1;
-N//	GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-N//	GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//}
-N
-N//vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
-N//{
-N//	vu16 AD7689_Config=0;
-N//	vu16 AD7689_Data;
-N//	vu8 i;
-N//	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
-N//	AD7689_Config <<=2;
-N//	AD7689_CNV_0;
-N//	AD7689_Delay();
-N//	for(i=0;i<16;i++)
-N//	{
-N//		if(AD7689_Config&0x8000)
-N//		{
-N//			GPIO_SetBits(GPIOB,GPIO_Pin_5);//MOSI=1
-N//		}
-N//		else
-N//		{
-N//			GPIO_ResetBits(GPIOB,GPIO_Pin_5);//MOSI=0
-N//		}
-N//		AD7689_Delay();
-N//		GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//		AD7689_Delay();
-N//		AD7689_Config <<= 1;
-N//		GPIO_SetBits(GPIOB,GPIO_Pin_3);//SCK=1
-N//		AD7689_Delay();
-N//		AD7689_Data <<=1;
-N//		if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4))
-N//		{
-N//			AD7689_Data |=1;
-N//		}
-N//	}
-N//	AD7689_Delay(); 
-N//	GPIO_ResetBits(GPIOB,GPIO_Pin_3);//SCK=0
-N//	AD7689_Delay(); 
-N//	AD7689_CNV_1;
-N//	AD7689_Delay(); 
-N//	return AD7689_Data;
-N//}
-N
-N///************************************************************************/
-N///* Function Name:	TM7707_TransferByte.								*/
-N///* Purpose:			Send of recive a byte.								*/
-N///* Resources:		SPI controler.										*/
-N///* Params:																*/
-N///*	@uiTxData:			The byte data will be sent.						*/
-N///* Return:			The byte data recived.						+		*/
-N///* Limitation:		None.												*/
-N///************************************************************************/
-N//vu16 AD7689_TransferByte(vu16 uiTxData)
-N//{
-N//	vu8 uiRxData;
-N//	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET);
-N//	SPI_I2S_SendData(SPI2,uiTxData);
-N//	while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET);
-N//	uiRxData = SPI_I2S_ReceiveData(SPI2);
-N//	return uiRxData;
-N//}
-N///************************************************************************/
-N///* Function Name:	AD7689_Delay.									*/
-N///* Purpose:			Wait for device DRDY signal.						*/
-N///* Resources:		DRDY GPIO pin.										*/
-N///* Params:			None.												*/
-N///* Return:			None.												*/
-N///* Limitation:		None.												*/
-N///************************************************************************/
-N//void AD7689_Delay(void)
-N//{
-N//	vu16 count ;
-N//  for(count = 1000; count != 0; count--);
-N//}
-N//void AD7689_Delay1(void)
-N//{
-N//	vu16 count ;
-N//  for(count = 3000; count != 0; count--);
-N//}
-N//void AD7689_Scan_CH(void)
-N//{
-N//	static vu8 I_cont,I1_cont,V_cont;
-N//	vu8 i,f;
-N//	vu32 sum1;
-N//	vu16 var_chI,var_chV,var_chV1;
-N//	for(i=0;i<8;i++)
-N//		{
-N//			AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
-N//			AD7689_Delay1();
-N//			var_chI=AD7689_Buffer[3];
-N//			var_chV=AD7689_Buffer[2];
-N//			var_chV1=AD7689_Buffer[4];
-N//		}
-N//	/***************电源电流滤波**********************/
-N//	Ad7689_Fit_Imon1[I1_cont++]=var_chI;
-N//	if(I1_cont==20)
-N//	{
-N//		I1_cont=0;
-N//	}
-N//	Bubble_sort( Ad7689_Fit_Imon1,20);//排序从大到小
-N//	sum1=0;
-N//	for(f=2;f<16;f++)
-N//	{
-N//		sum1 +=Ad7689_Fit_Imon1[f];
-N//	}
-N//	Imon_value=sum1/14;
-N//	/***************负载电压滤波**********************/
-N//	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-N//	if(V_cont==20)
-N//	{
-N//		V_cont=0;
-N//	}
-N////	Bubble_sort( Ad7689_Fit_Vmon,20);//排序从大到小
-N//	sum1=0;
-N//	for(f=2;f<16;f++)
-N//	{
-N//		sum1 +=Ad7689_Fit_Vmon[f];
-N//	}
-N//	Vmon1_value=sum1/14;
-N///***************负载电流滤波**********************/
-N//	Ad7689_Fit_Imon[I_cont++]=var_chV1;
-N//	if(I_cont==30)
-N//	{
-N//		I_cont=0;
-N//	}
-N////	Bubble_sort( Ad7689_Fit_Imon,20);//排序从大到小
-N//	sum1=0;
-N//	for(f=0;f<30;f++)
-N//	{
-N//		sum1 +=Ad7689_Fit_Imon[f];
-N//	}
-N//	Imon1_value=sum1/30;
-N//}
-N
-N///*
-N//冒泡排序，最大值在第一位，最小值在最后一位
-N// */
-N//void Bubble_sort(vu16 *D_temp,vu8 num)
-N//{
-N//	unsigned int _temp;
-N//	unsigned char m,n;
-N//	for(m=0;m<num;m++)
-N//	{
-N//		for(n=m;n<num;n++)
-N//		{
-N//			if(D_temp[n]>D_temp[m])//最大的值放在第一位
-N//			{
-N//				_temp = D_temp[m];
-N//				D_temp[m] =D_temp[n];
-N//				D_temp[n]=_temp;		
-N//			}
-N//		}	
-N//	}
-N//}
 N
 N
 N#include "AD7689.h"
@@ -35548,7 +35042,7 @@ N
 N
 N#endif
 N
-L 510 "..\drive\AD7689.c" 2
+L 4 "..\drive\AD7689.c" 2
 N#include "GPIO.h"
 L 1 "..\Include\GPIO.h" 1
 N#ifndef __gpio_H
@@ -35559,7 +35053,7 @@ N
 N
 N#endif /* __gpio_H */
 N
-L 511 "..\drive\AD7689.c" 2
+L 5 "..\drive\AD7689.c" 2
 N#include "my_register.h" 
 L 1 "..\Include\my_register.h" 1
 N/******************** (C) COPYRIGHT 2014 KUNKIN********************
@@ -35611,7 +35105,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35779,6 +35273,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -36115,11 +35611,134 @@ N#define Receive_BUFFERSIZE   10
 N//=============================================================================
 N#endif
 N/******************* (C) COPYRIGHT 2015 KUNKIN *****END OF FILE*************************/
-L 512 "..\drive\AD7689.c" 2
+L 6 "..\drive\AD7689.c" 2
 N#include "stm32f4xx_gpio.h"
 N#include "stm32f4xx_rcc.h"
 N#include "stm32f4xx_spi.h"
 N#include "stm32f4xx_rcc.h"
+N#include "dma.h"																	   	  
+L 1 "..\Include\dma.h" 1
+N#ifndef __DMA_H
+N#define	__DMA_H	   
+N#include "sys.h"
+N//////////////////////////////////////////////////////////////////////////////////	 
+N//本程序只供学习使用，未经作者许可，不得用于其它任何用途
+N//ALIENTEK STM32F407开发板
+N//DMA 驱动代码	   
+N//正点原子@ALIENTEK
+N//技术论坛:www.openedv.com
+N//创建日期:2014/5/6
+N//版本：V1.0
+N//版权所有，盗版必究。
+N//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
+N//All rights reserved									  
+N////////////////////////////////////////////////////////////////////////////////// 	 
+N 
+N
+Nvoid MYDMA_Config(void);//配置DMAx_CHx
+Nvoid MYDMA_Enable(DMA_Stream_TypeDef *DMA_Streamx,u16 ndtr);	//使能一次DMA传输		   
+N#endif
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+L 11 "..\drive\AD7689.c" 2
+N#include "delay.h"	
+L 1 "..\Include\delay.h" 1
+N#ifndef __DELAY_H
+N#define __DELAY_H 			   
+N#include "sys.h"
+N//////////////////////////////////////////////////////////////////////////////////	 
+N//本程序只供学习使用，未经作者许可，不得用于其它任何用途
+N//ALIENTEK STM32开发板
+N//使用SysTick的普通计数模式对延迟进行管理
+N//包括delay_us,delay_ms
+N//正点原子@ALIENTEK
+N//技术论坛:www.openedv.com
+N//修改日期:2012/9/2
+N//版本：V1.5
+N//版权所有，盗版必究。
+N//Copyright(C) 广州市星翼电子科技有限公司 2009-2019
+N//All rights reserved
+N//********************************************************************************
+N//V1.2修改说明
+N//修正了中断中调用出现死循环的错误
+N//防止延时不准确,采用do while结构!
+N
+N//V1.3修改说明
+N//增加了对UCOSII延时的支持.
+N//如果使用ucosII,delay_init会自动设置SYSTICK的值,使之与ucos的TICKS_PER_SEC对应.
+N//delay_ms和delay_us也进行了针对ucos的改造.
+N//delay_us可以在ucos下使用,而且准确度很高,更重要的是没有占用额外的定时器.
+N//delay_ms在ucos下,可以当成OSTimeDly来用,在未启动ucos时,它采用delay_us实现,从而准确延时
+N//可以用来初始化外设,在启动了ucos之后delay_ms根据延时的长短,选择OSTimeDly实现或者delay_us实现.
+N
+N//V1.4修改说明 20110929
+N//修改了使用ucos,但是ucos未启动的时候,delay_ms中中断无法响应的bug.
+N//V1.5修改说明 20120902
+N//在delay_us加入ucos上锁，防止由于ucos打断delay_us的执行，可能导致的延时不准。
+N////////////////////////////////////////////////////////////////////////////////// 	 
+Nvoid delay_init(void);
+Nvoid delay_ms(u16 nms);
+Nvoid delay_us(u32 nus);
+N
+N#endif
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+L 12 "..\drive\AD7689.c" 2
 N
 Nextern struct bitDefine
 N{
@@ -36135,9 +35754,11 @@ N} flagA, flagB,flagC,flagD,flagE,flagF,flagG;
 N#define AD7689_CNV_0			GPIO_ResetBits(GPIOB,GPIO_Pin_6);
 N#define AD7689_CNV_1			GPIO_SetBits(GPIOB,GPIO_Pin_6);
 Nvu16 AD7689_Buffer[8];
-Nvu16 Ad7689_Fit_Imon[20];
-Nvu16 Ad7689_Fit_Imon1[20];
-Nvu16 Ad7689_Fit_Vmon[20];
+Nvu16 DMA_Buffer[8];
+Nvu16 Ad7689_Fit_Imon[60];
+Nvu16 Ad7689_Fit_Imon1[60];
+Nvu16 Ad7689_Fit_Vmon[60];
+Nvu16 Ad7689_Fit_Rmon[40];
 Nvoid Bubble_sort(vu16 *D_temp,vu8 num);
 Nvoid AD7689_InitializeSPI1(void)
 N{
@@ -36202,6 +35823,177 @@ N	SPI_Cmd(SPI1, ENABLE); //使能SPI外设*/
 X	SPI_Cmd(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), ENABLE); 
 N}
 N
+N//DMAx的各通道配置
+N//这里的传输形式是固定的,这点要根据不同的情况来修改
+N//从存储器->外设模式/8位数据宽度/存储器增量模式
+N//DMA_Streamx:DMA数据流,DMA1_Stream0~7/DMA2_Stream0~7
+N//chx:DMA通道选择,@ref DMA_channel DMA_Channel_0~DMA_Channel_7
+N//par:外设地址
+N//mar:存储器地址
+N//ndtr:数据传输量  
+Nvoid MYDMA_Config(void)
+N{ 
+N 
+N	DMA_InitTypeDef  DMA_InitStructure;
+N	
+N//	if((u32)DMA_Streamx>(u32)DMA2)//得到当前stream是属于DMA2还是DMA1
+N//	{
+N	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2,ENABLE);//DMA2时钟使能 
+X	  RCC_AHB1PeriphClockCmd(((uint32_t)0x00400000),ENABLE);
+N		
+N//	}else 
+N//	{
+N//	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);//DMA1时钟使能 
+N//	}
+N  DMA_DeInit(DMA2_Stream0);
+X  DMA_DeInit(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)));
+N	
+N	while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE){}//等待DMA可配置 
+X	while (DMA_GetCmdStatus(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010))) != DISABLE){}
+N	
+N  /* 配置 DMA Stream */
+N  DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+X  DMA_InitStructure.DMA_Channel = ((uint32_t)0x06000000);  
+N  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&SPI1->DR;//DMA外设地址
+X  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000))->DR;
+N  DMA_InitStructure.DMA_Memory0BaseAddr = (u32)AD7689_Buffer;//DMA 存储器0地址
+N  DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+X  DMA_InitStructure.DMA_DIR = ((uint32_t)0x00000040);
+N  DMA_InitStructure.DMA_BufferSize = 8;//数据传输量 
+N  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//外设非增量模式
+X  DMA_InitStructure.DMA_PeripheralInc = ((uint32_t)0x00000000);
+N  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//存储器增量模式
+X  DMA_InitStructure.DMA_MemoryInc = ((uint32_t)0x00000400);
+N  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//外设数据长度:8位
+X  DMA_InitStructure.DMA_PeripheralDataSize = ((uint32_t)0x00000000);
+N  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;//存储器数据长度:8位
+X  DMA_InitStructure.DMA_MemoryDataSize = ((uint32_t)0x00000000);
+N  DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;// 使用普通模式 
+X  DMA_InitStructure.DMA_Mode = ((uint32_t)0x00000000);
+N  DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+X  DMA_InitStructure.DMA_Priority = ((uint32_t)0x00020000);
+N  DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
+X  DMA_InitStructure.DMA_FIFOMode = ((uint32_t)0x00000000);         
+N  DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+X  DMA_InitStructure.DMA_FIFOThreshold = ((uint32_t)0x00000003);
+N  DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//存储器突发单次传输
+X  DMA_InitStructure.DMA_MemoryBurst = ((uint32_t)0x00000000);
+N  DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//外设突发单次传输
+X  DMA_InitStructure.DMA_PeripheralBurst = ((uint32_t)0x00000000);
+N  DMA_Init(DMA2_Stream0, &DMA_InitStructure);//初始化DMA Stream
+X  DMA_Init(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)), &DMA_InitStructure);
+N	
+N//	DMA_DeInit(DMA2_Stream3);	
+N//	while (DMA_GetCmdStatus(DMA2_Stream3) != DISABLE){}//等待DMA可配置 
+N////	DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+N////	DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+N////	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+N////	DMA_Init(DMA2_Stream3, &DMA_InitStructure);//初始化DMA Stream
+N//		
+N//  DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+N//  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&SPI1->DR;//DMA外设地址
+N//  DMA_InitStructure.DMA_Memory0BaseAddr = (u32)0;//DMA 存储器0地址
+N//  DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+N//  DMA_InitStructure.DMA_BufferSize = 0;//数据传输量 
+N//  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//外设非增量模式
+N//  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//存储器增量模式
+N//  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//外设数据长度:8位
+N//  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;//存储器数据长度:8位
+N//  DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;// 使用普通模式 
+N//  DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+N//  DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
+N//  DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+N//  DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//存储器突发单次传输
+N//  DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//外设突发单次传输
+N//  DMA_Init(DMA2_Stream3, &DMA_InitStructure);//初始化DMA Stream
+N		
+N	SPI_I2S_DMACmd(SPI1,SPI_I2S_DMAReq_Rx,ENABLE);
+X	SPI_I2S_DMACmd(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)),((uint16_t)0x0001),ENABLE);
+N//	SPI_I2S_DMACmd(SPI1,SPI_I2S_DMAReq_Tx,ENABLE);
+N}
+N
+N//开启一次DMA传输
+N//DMA_Streamx:DMA数据流,DMA1_Stream0~7/DMA2_Stream0~7 
+N//ndtr:数据传输量  
+Nvoid MYDMA_Enable(DMA_Stream_TypeDef *DMA_Streamx,u16 ndtr)
+N{
+N	SPI_InitTypeDef  SPI_InitStructure;
+N	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_RxOnly;
+X	SPI_InitStructure.SPI_Direction = ((uint16_t)0x0400);
+N	SPI_Init(SPI1, &SPI_InitStructure);//只读
+X	SPI_Init(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), &SPI_InitStructure);
+N	DMA_Cmd(DMA_Streamx, DISABLE);                      //关闭DMA传输 
+N	
+N	while (DMA_GetCmdStatus(DMA_Streamx) != DISABLE){}	//确保DMA可以被设置  
+N		
+N	DMA_SetCurrDataCounter(DMA_Streamx,ndtr);          //数据传输量  
+N 
+N	DMA_Cmd(DMA_Streamx, ENABLE);                      //开启DMA传输
+N	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+X	SPI_InitStructure.SPI_Direction = ((uint16_t)0x0000);
+N	SPI_Init(SPI1, &SPI_InitStructure);//恢复双全工
+X	SPI_Init(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), &SPI_InitStructure);
+N	
+N}	  
+N//DMA发送
+Nvoid dma_send(vu16 buf,u16 ndtr)
+N{
+N	DMA_Cmd(DMA2_Stream3,DISABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),DISABLE);
+N	while (DMA_GetCmdStatus(DMA2_Stream3) != DISABLE){}//等待DMA可配置
+X	while (DMA_GetCmdStatus(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058))) != DISABLE){}
+N	DMA2_Stream3->NDTR=ndtr;
+X	((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058))->NDTR=ndtr;
+N	DMA2_Stream3->M0AR=(u32)buf;
+X	((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058))->M0AR=(u32)buf;
+N	DMA_ClearFlag(DMA2_Stream3,DMA_FLAG_TCIF3|DMA_FLAG_HTIF3|DMA_FLAG_TEIF3|DMA_FLAG_DMEIF3|DMA_FLAG_FEIF3);
+X	DMA_ClearFlag(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),((uint32_t)0x18000000)|((uint32_t)0x14000000)|((uint32_t)0x12000000)|((uint32_t)0x11000000)|((uint32_t)0x10400000));
+N	SPI1->DR;
+X	((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000))->DR;
+N	DMA_Cmd(DMA2_Stream3,ENABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),ENABLE);
+N	while(!DMA_GetFlagStatus(DMA2_Stream3,DMA_FLAG_TCIF3));
+X	while(!DMA_GetFlagStatus(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),((uint32_t)0x18000000)));
+N	DMA_Cmd(DMA2_Stream3,DISABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),DISABLE);
+N	DMA_ClearFlag(DMA2_Stream3,DMA_FLAG_TCIF3);
+X	DMA_ClearFlag(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x058)),((uint32_t)0x18000000));
+N}
+N//DMA接收
+Nvoid dma_rec(vu16 buf,u16 ndtr)
+N{
+N	SPI_InitTypeDef  SPI_InitStructure;
+N	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_RxOnly;
+X	SPI_InitStructure.SPI_Direction = ((uint16_t)0x0400);
+N	SPI_Init(SPI1, &SPI_InitStructure);//只读
+X	SPI_Init(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), &SPI_InitStructure);
+N	DMA_Cmd(DMA2_Stream0,DISABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),DISABLE);
+N	while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE){}//等待DMA可配置
+X	while (DMA_GetCmdStatus(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010))) != DISABLE){}
+N	DMA2_Stream0->NDTR=ndtr;
+X	((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010))->NDTR=ndtr;
+N	DMA2_Stream0->M0AR=(u32)buf;
+X	((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010))->M0AR=(u32)buf;
+N	DMA_ClearFlag(DMA2_Stream0,DMA_FLAG_TCIF0|DMA_FLAG_HTIF0|DMA_FLAG_TEIF0|DMA_FLAG_DMEIF0|DMA_FLAG_FEIF0);
+X	DMA_ClearFlag(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),((uint32_t)0x10000020)|((uint32_t)0x10000010)|((uint32_t)0x10000008)|((uint32_t)0x10800004)|((uint32_t)0x10800001));
+N	SPI1->DR;
+X	((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000))->DR;
+N	DMA_Cmd(DMA2_Stream0,ENABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),ENABLE);
+N	while(!DMA_GetFlagStatus(DMA2_Stream0,DMA_FLAG_TCIF0));
+X	while(!DMA_GetFlagStatus(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),((uint32_t)0x10000020)));
+N	DMA_Cmd(DMA2_Stream0,DISABLE);
+X	DMA_Cmd(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),DISABLE);
+N	DMA_ClearFlag(DMA2_Stream0,DMA_FLAG_TCIF0);
+X	DMA_ClearFlag(((DMA_Stream_TypeDef *) (((((uint32_t)0x40000000) + 0x00020000) + 0x6400) + 0x010)),((uint32_t)0x10000020));
+N		
+N	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+X	SPI_InitStructure.SPI_Direction = ((uint16_t)0x0000);
+N	SPI_Init(SPI1, &SPI_InitStructure);//恢复双全工
+X	SPI_Init(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), &SPI_InitStructure);
+N}
+N
 Nvu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
 N{
 N	vu16 AD7689_Config=0;
@@ -36215,7 +36007,7 @@ X	GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x04
 N	AD7689_Data=AD7689_TransferByte(AD7689_Config);
 N	AD7689_CNV_1;
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400)),((uint16_t)0x0040));;
-N	AD7689_Delay(); 
+N	AD7689_Delay();
 N	return AD7689_Data;
 N}
 N
@@ -36233,10 +36025,12 @@ N{
 N	vu16 uiRxData;
 N	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 X	while (SPI_I2S_GetFlagStatus(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), ((uint16_t)0x0002)) == RESET);
+N//	dma_send(uiTxData,1);
 N	SPI_I2S_SendData(SPI1,uiTxData);
 X	SPI_I2S_SendData(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)),uiTxData);
 N	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 X	while (SPI_I2S_GetFlagStatus(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)), ((uint16_t)0x0001)) == RESET);
+N//	dma_rec(uiRxData,1);
 N	uiRxData = SPI_I2S_ReceiveData(SPI1);
 X	uiRxData = SPI_I2S_ReceiveData(((SPI_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x3000)));
 N	return uiRxData;
@@ -36261,10 +36055,10 @@ N  for(count = 3000; count != 0; count--);
 N}
 Nvoid AD7689_Scan_CH(void)
 N{
-N	static vu8 I_cont,I1_cont,V_cont;
+N	static vu8 I_cont,I1_cont,V_cont,R_cont;
 N	vu8 i,f;
 N	vu32 sum1;
-N	vu16 var_chI,var_chV,var_chV1;
+N	vu16 var_chI,var_chV,var_chV1,var_chR;
 N	for(i=0;i<8;i++)
 N	{
 N		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
@@ -36272,30 +36066,41 @@ N		var_chV=AD7689_Buffer[2];
 N		var_chI=AD7689_Buffer[3];
 N		Imon_value=AD7689_Buffer[5];
 N		Vmon_value=AD7689_Buffer[6];
-N		Rmon_value=AD7689_Buffer[7];
+N		var_chR=AD7689_Buffer[7];
 N	}
 N	Ad7689_Fit_Imon[I_cont++]=var_chI;
-N	if(I_cont==20)
+N	if(I_cont==60)
 N	{
 N		I_cont=0;
 N		sum1=0;
-N		for(f=0;f<20;f++)
+N		for(f=0;f<60;f++)
 N		{
 N			sum1 +=Ad7689_Fit_Imon[f];
 N		}
-N		Imon1_value=sum1/20;
+N		Imon1_value=sum1/60;
 N	}
 N	
 N	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-N	if(V_cont==20)
+N	if(V_cont==60)
 N	{
 N		V_cont=0;
 N		sum1=0;
-N		for(f=0;f<20;f++)
+N		for(f=0;f<60;f++)
 N		{
 N			sum1 +=Ad7689_Fit_Vmon[f];
 N		}
-N		Vmon1_value=sum1/20;
+N		Vmon1_value=sum1/60;
 N	}
-W "..\drive\AD7689.c" 664 2 last line of file ends without a newline
+N	Ad7689_Fit_Rmon[R_cont++]=var_chR;
+N	if(R_cont==40)
+N	{
+N		R_cont=0;
+N		sum1=0;
+N		for(f=0;f<40;f++)
+N		{
+N			sum1 +=Ad7689_Fit_Rmon[f];
+N		}
+N		Rmon_value=sum1/40;
+N	}
+W "..\drive\AD7689.c" 300 2 last line of file ends without a newline
 N}

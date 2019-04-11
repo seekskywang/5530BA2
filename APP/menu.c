@@ -474,7 +474,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 }
 
 WM_HWIN CreateWindow(void) {
-  if(page_sw == face_graph)
+  if(page_sw == face_graph || page_sw == face_menu)
   {      
   }else{
 	  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
@@ -482,6 +482,7 @@ WM_HWIN CreateWindow(void) {
 	  Delay_ms(500);
 	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 //      IO_OFF();
+	  
   }
   page_sw = face_menu;
   track = face_menu;

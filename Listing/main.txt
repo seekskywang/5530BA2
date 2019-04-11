@@ -7,7 +7,7 @@
                   main PROC
 ;;;57     
 ;;;58     int main(void)
-000000  b570              PUSH     {r4-r6,lr}
+000000  b510              PUSH     {r4,lr}
 ;;;59     {
 ;;;60     	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);//开启CRC时钟，STEMWIN授权使用
 000002  2101              MOVS     r1,#1
@@ -46,46 +46,38 @@
 000048  f7fffffe          BL       USART3_Configuration
 ;;;73     	i2c_CfgGpio();//24C01引脚初始化
 00004c  f7fffffe          BL       i2c_CfgGpio
-;;;74     	TM1650_GPIO_INT();		/*TM1650引脚初始化 */
+;;;74     	TM1650_GPIO_INT();		/*TM1650引脚初始化 */  
 000050  f7fffffe          BL       TM1650_GPIO_INT
-;;;75         EEPROM_READ_Coeff();//读取校准参数
-000054  f7fffffe          BL       EEPROM_READ_Coeff
-;;;76     	DAC8531_GPIOCoing();//DAC初始化
-000058  f7fffffe          BL       DAC8531_GPIOCoing
-;;;77     	AD7689_InitializeSPI1();//AD7689初始化
-00005c  f7fffffe          BL       AD7689_InitializeSPI1
-;;;78     	LCD_Initializtion();//液晶屏初始化	
-000060  f7fffffe          BL       LCD_Initializtion
+;;;75     	DAC8531_GPIOCoing();//DAC初始化
+000054  f7fffffe          BL       DAC8531_GPIOCoing
+;;;76     	AD7689_InitializeSPI1();//AD7689初始化
+000058  f7fffffe          BL       AD7689_InitializeSPI1
+;;;77     	LCD_Initializtion();//液晶屏初始化	
+00005c  f7fffffe          BL       LCD_Initializtion
+;;;78     	EEPROM_READ_Coeff();//读取校准参数
+000060  f7fffffe          BL       EEPROM_READ_Coeff
 ;;;79     	//IWDG_Inte();
 ;;;80     	Flash_Read16BitDatas(FLASH_USER_START_ADDR,20,InFlashSave);
-000064  4a09              LDR      r2,|L1.140|
+000064  4a04              LDR      r2,|L1.120|
 000066  2114              MOVS     r1,#0x14
-000068  4809              LDR      r0,|L1.144|
+000068  4804              LDR      r0,|L1.124|
 00006a  f7fffffe          BL       Flash_Read16BitDatas
-;;;81         GPIO_ResetBits(GPIOC,GPIO_Pin_13);
-00006e  4d09              LDR      r5,|L1.148|
-000070  f44f5400          MOV      r4,#0x2000
-000074  4621              MOV      r1,r4
-000076  4628              MOV      r0,r5
-000078  f7fffffe          BL       GPIO_ResetBits
-;;;82         GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
-00007c  4621              MOV      r1,r4
-00007e  4628              MOV      r0,r5
-000080  f7fffffe          BL       GPIO_SetBits
-;;;83     	MainTask();
-000084  f7fffffe          BL       MainTask
-;;;84     }
-000088  2000              MOVS     r0,#0
-00008a  bd70              POP      {r4-r6,pc}
-;;;85     
+;;;81     //	MYDMA_Config();
+;;;82     //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
+;;;83     //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
+;;;84     	MainTask();
+00006e  f7fffffe          BL       MainTask
+;;;85     }
+000072  2000              MOVS     r0,#0
+000074  bd10              POP      {r4,pc}
+;;;86     
                           ENDP
 
-                  |L1.140|
+000076  0000              DCW      0x0000
+                  |L1.120|
                           DCD      InFlashSave
-                  |L1.144|
+                  |L1.124|
                           DCD      0x080e0000
-                  |L1.148|
-                          DCD      0x40020800
 
                           AREA ||.data||, DATA, ALIGN=2
 

@@ -48817,7 +48817,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -48985,6 +48985,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49407,7 +49409,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -49575,6 +49577,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -49984,7 +49988,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -50152,6 +50156,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50564,7 +50570,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -50732,6 +50738,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51144,7 +51152,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -51312,6 +51320,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51883,6 +51893,7 @@ NRCC_ClocksTypeDef rcc;
 Nvu16 sendload;
 Nextern vu8 cdc_sw;
 Nvu8 ocf;
+Nvu8 vflag;
 Nstatic void ee_Delay( vu32 nCount)	 //莶榨謩覔时诏私
 N{
 N	for(; nCount != 0; nCount--);
@@ -51927,15 +51938,27 @@ N	HEADER_SetDefaultSkin(HEADER_SKIN_FLEX);
 X	HEADER_SetDefaultSkin(HEADER_DrawSkinFlex);
 N	RADIO_SetDefaultSkin(RADIO_SKIN_FLEX);
 X	RADIO_SetDefaultSkin(RADIO_DrawSkinFlex);
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 77 5 function "CreateSTARTER" declared implicitly
-N    CreateSTARTER();
-N//	CreateR();//开机进入内阻测试界面
-N// 	flag_Load_CC=1;//开机负载默认进入CC模式
-N// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+N	CreateR();//开机进入内阻测试界面
+N	flag_Load_CC=1;//开机负载默认进入CC模式
+X	(flagD . bit7)=1;
+N	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x0800));
 N	Flag_Swtich_ON=0;
 X	(flagA . bit6)=0;
+N//    CreateSTARTER();
+N////	CreateR();//开机进入内阻测试界面
+N//// 	flag_Load_CC=1;//开机负载默认进入CC模式
+N//// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+N//	flag_Load_CC=1;//开机负载默认进入CC模式
+N//	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+N//	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
+N//	V_SW(1);
+N//	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+N//	Flag_Swtich_ON=0;
 N    
 N	while (1)
 N	{
@@ -51995,7 +52018,7 @@ N			}
 N		}
 N		
 N        
-N        RCC_GetClocksFreq(&rcc);
+N//        RCC_GetClocksFreq(&rcc);
 N        if(page_sw != face_starter)
 X        if(page_sw != 6)
 N        {
@@ -52057,48 +52080,59 @@ N	}
 N  
 N}
 N
-N//缓启动
-Nvoid Slow_Start(void)
+Nvoid V_SW(u8 i)
 N{
-N
-N    
-N    if(page_sw == face_r)
-X    if(page_sw == 3)
-N    {
-N		if(step ==6)
-N		{
-N			DAC8531_Send(Contr_Laod);
-N		}else{
-N			if(test_start == 1)
-N			{
-N				if(sendload < 250)
-N				{
-N					sendload = sendload + 10;
-N				}else{
-N					sendload = Contr_Laod;
-N				}
-N				DAC8531_Send(sendload);
-N			}else{	
-N				sendload = 0;
-N				DAC8531_Send(sendload);//加载DAC值
-N			}
-N		}
-N		
-N    }else{
-N        if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on))
-X        if(load_sw == 1 || (mode_sw == 2 && cdc_sw == 1))
-N        {
-N            if(sendload < 250)
-N            {
-N                sendload = sendload + 10;
-N            }else{
-N                sendload = Contr_Laod;
-N            }
-N            DAC8531_Send(sendload);
-N        }else{
-N            sendload = 0;
-N            DAC8531_Send(sendload);
-N        }
-N    }
+N	if(i == 0)
+N	{
+N		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
+X		GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x1000));
+N		vflag = 0;
+N	}else if(i == 1){
+N		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
+X		GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x1000));
+N		vflag = 1;
+N	}
 N}
+N////缓启动
+N//void Slow_Start(void)
+N//{
+N
+N//    
+N//    if(page_sw == face_r)
+N//    {
+N//		if(step ==6)
+N//		{
+N//			DAC8531_Send(Contr_Laod);
+N//		}else{
+N//			if(test_start == 1)
+N//			{
+N//				if(sendload < 250)
+N//				{
+N//					sendload = sendload + 10;
+N//				}else{
+N//					sendload = Contr_Laod;
+N//				}
+N//				DAC8531_Send(sendload);
+N//			}else{	
+N//				sendload = 0;
+N//				DAC8531_Send(sendload);//加载DAC值
+N//			}
+N//		}
+N//		
+N//    }else{
+N//        if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on))
+N//        {
+N//            if(sendload < 250)
+N//            {
+N//                sendload = sendload + 10;
+N//            }else{
+N//                sendload = Contr_Laod;
+N//            }
+N//            DAC8531_Send(sendload);
+N//        }else{
+N//            sendload = 0;
+N//            DAC8531_Send(sendload);
+N//        }
+N//    }
+N//}
 N/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/

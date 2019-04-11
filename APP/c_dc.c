@@ -584,7 +584,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					SET_Current_Laod = cdc_dc;
 //                     Mode_SW_CONT(0x02);//切换至负载模�?
 //                     GPIO_ResetBits(GPIOC,GPIO_Pin_1);//开启负�?
-                    GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                    GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                      GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
                     mode_sw = mode_load;
                 }

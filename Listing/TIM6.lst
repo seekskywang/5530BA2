@@ -34900,7 +34900,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35068,6 +35068,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49347,7 +49349,7 @@ Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-S
+Svoid V_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -49515,6 +49517,8 @@ Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
 Sextern int16_t InFlashSave[20];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50039,8 +50043,8 @@ N					SET_Current_Laod = set_static_lc;
 X					Run_Control[4] = Run_Control[44];
 N					flag_Load_CC = 1;
 X					(flagD . bit7) = 1;
-N					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X					GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N					static_lv = DISS_Voltage;
@@ -50102,10 +50106,10 @@ N					OC_ADD();
 N					stepcount = 0;
 N				}
 N			 }else if(step == 5){
-N				if(powcount < 1000)
+N				if(powcount < 2000)
 N				{
-N					SET_Voltage = 3000;
-X					Run_Control[1] = 3000;
+N					SET_Voltage = (int)v*100+200;
+X					Run_Control[1] = (int)v*100+200;
 N					SET_Current = 1000;
 X					Run_Control[2] = 1000;
 N					GPIO_SetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOFF
@@ -50132,12 +50136,10 @@ X				if((flagD . bit7) == 1)
 N				{
 N					SET_Current_Laod = (int)(oc_data*1000)+8000; 
 X					Run_Control[4] = (int)(oc_data*1000)+8000; 
-N					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N					flag_Load_CC = 1;                              
 X					(flagD . bit7) = 1;                              
-N					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X					GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				}else if(flag_Load_CC == 0){
@@ -50151,11 +50153,10 @@ X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				}
-W "..\drive\TIM6.c" 240 30 single-precision operand implicitly converted to double-precision
-W "..\drive\TIM6.c" 240 41 single-precision operand implicitly converted to double-precision
-N				if(((v - DISS_Voltage) > v*0.6) || (DISS_Current < 0.05))
+W "..\drive\TIM6.c" 239 30 single-precision operand implicitly converted to double-precision
+N				if(((v - DISS_Voltage) > v*0.6)/* || (DISS_Current < 0.05)*/)
 N				{
-W "..\drive\TIM6.c" 242 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 241 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					step = 7;
 N				}else{
@@ -50164,8 +50165,8 @@ N				}
 N			 }else if(step == 7){
 N				 if(powcount < 4000)
 N				{
-N					SET_Voltage =3000;
-X					Run_Control[1] =3000;
+N					SET_Voltage =(int)v*100+200;
+X					Run_Control[1] =(int)v*100+200;
 N					SET_Current = 1000;
 X					Run_Control[2] = 1000;
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_13);//’≤ﬂ™÷ß‘¥À§‘∂›å÷ß«∑
@@ -50177,7 +50178,7 @@ N	//                 shortv = DISS_Voltage;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 258 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 257 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50188,7 +50189,7 @@ N				}
 N			 }else if(step == 0)
 N			 {
 N				 powcount = 0;
-W "..\drive\TIM6.c" 267 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 266 6 function "IO_OFF" declared implicitly
 N				 IO_OFF();
 N			 }
 N		}
@@ -50201,16 +50202,18 @@ N            if(flag_Load_CC == 1)
 X            if((flagD . bit7) == 1)
 N            {   
 N//				load_sw = load_on;
-N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N				flag_Load_CC = 1;
+X				(flagD . bit7) = 1;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }else if(flag_Load_CC == 0){
 X            }else if((flagD . bit7) == 0){
 N                SET_Voltage_Laod = 0;
 X                Run_Control[3] = 0;
-N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
-X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                flag_Load_CC = 0;
 X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
@@ -50284,12 +50287,12 @@ X            if((flagD . bit7) == 1)
 N            {
 N                SET_Current_Laod = (int)(oc_data*1000)+5000; 
 X                Run_Control[4] = (int)(oc_data*1000)+5000; 
-N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                flag_Load_CC = 1;                              
 X                (flagD . bit7) = 1;                              
-N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
-X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }else if(flag_Load_CC == 0){
@@ -50352,36 +50355,74 @@ W "..\drive\TIM6.c" 111 16 variable "scrc"  was declared but never referenced
 W "..\drive\TIM6.c" 113 8 variable "i"  was declared but never referenced
 N}
 N
+N//void TIM6_Config(void)
+N//{
+N//	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+N//	/* TIM3 ??? ---------------------------------------------------
+N//   TIM3 ????(TIM3CLK) ??? APB2 ?? (PCLK2)    
+X
+N//    => TIM3CLK = PCLK2 = SystemCoreClock
+N//   TIM3CLK = SystemCoreClock, Prescaler = 0, TIM3 counter clock = SystemCoreClock
+N//   SystemCoreClock ?48 MHz */
+N//  /* TIM16 ???? */
+N//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6,ENABLE);
+N//	
+N//  /* Time ??????*/
+N//  TIM_TimeBaseStructure.TIM_Prescaler = 4800-1;//?????
+N//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
+N//  TIM_TimeBaseStructure.TIM_Period = 5000;
+N//  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+N////  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+N
+N//  TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
+N//	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//??????ß‰??
+N//	TIM_SetAutoreload(TIM6, 0xFF);//??PWM??®∫
+N//	TIM6_NVIC_Config();
+N//  /* TIM3 ?????*/
+N//  TIM_Cmd(TIM6, ENABLE);
+N//}
+N///***********************************************************************/
+N//static void TIM6_NVIC_Config(void)
+N//{
+N//	NVIC_InitTypeDef NVIC_InitStructure; 
+N//	
+N//	/* Enable the USART1 Interrupt */
+N//	NVIC_InitStructure.NVIC_IRQChannel = TIM6_DAC_IRQn;	 
+N//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;
+N//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;
+N//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+N//	NVIC_Init(&NVIC_InitStructure);
+N//}
+N/*****************************************************************/
+N/*****************************************************************/
 Nvoid TIM6_Config(void)
 N{
 N	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-N	/* TIM3 ??? ---------------------------------------------------
-N   TIM3 ????(TIM3CLK) ??? APB2 ?? (PCLK2)    
-X
+N	/* TIM3 µƒ≈‰÷√ ---------------------------------------------------
+N   TIM3  ‰»Î ±÷”(TIM3CLK) …Ë÷√Œ™ APB2  ±÷” (PCLK2)    
 N    => TIM3CLK = PCLK2 = SystemCoreClock
 N   TIM3CLK = SystemCoreClock, Prescaler = 0, TIM3 counter clock = SystemCoreClock
-N   SystemCoreClock ?48 MHz */
-N  /* TIM16 ???? */
+N   SystemCoreClock Œ™48 MHz */
+N  /* TIM16  ±÷” πƒ‹ */
 N  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6,ENABLE);
 X  RCC_APB1PeriphClockCmd(((uint32_t)0x00000010),ENABLE);
 N	
-N  /* Time ??????*/
-N  TIM_TimeBaseStructure.TIM_Prescaler = 4800-1;//?????
-N  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
+N  /* Time ∂® ±ª˘¥°…Ë÷√*/
+N  TIM_TimeBaseStructure.TIM_Prescaler = 2;// ±÷”‘§∑÷∆µ
+N  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ∂® ±…Ë÷√Œ™…œ…˝—ÿº∆À„ƒ£ Ω*/
 X  TIM_TimeBaseStructure.TIM_CounterMode = ((uint16_t)0x0000);   
-N  TIM_TimeBaseStructure.TIM_Period = 5000;
-N  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-X  TIM_TimeBaseStructure.TIM_ClockDivision = ((uint16_t)0x0000);
-N//  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+N  TIM_TimeBaseStructure.TIM_Period = 0;
+N  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+N  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 N
 N  TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
 X  TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x1000)),&TIM_TimeBaseStructure);
-N	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//??????ß‰??
+N	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//ø™∆Ù∂® ±∆˜∏¸–¬÷–∂œ
 X	TIM_ITConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x1000)),((uint16_t)0x0001),ENABLE);
-N	TIM_SetAutoreload(TIM6, 0xFF);//??PWM??®∫
+N	TIM_SetAutoreload(TIM6, 0xFF);//…Ë÷√PWM∑÷±Ê¬ 
 X	TIM_SetAutoreload(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x1000)), 0xFF);
 N	TIM6_NVIC_Config();
-N  /* TIM3 ?????*/
+N  /* TIM3 º∆À„∆˜ πƒ‹*/
 N  TIM_Cmd(TIM6, ENABLE);
 X  TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x1000)), ENABLE);
 N}
@@ -50392,12 +50433,11 @@ N	NVIC_InitTypeDef NVIC_InitStructure;
 N	
 N	/* Enable the USART1 Interrupt */
 N	NVIC_InitStructure.NVIC_IRQChannel = TIM6_DAC_IRQn;	 
-N	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;
-N	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;
+N	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+N	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 N	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 N	NVIC_Init(&NVIC_InitStructure);
 N}
-N
 N//????? 3 ?????
 N//arr®≤?????c psc®≤??????
 N//???????????:Tout=((arr+1)*(psc+1))/Ft us.
@@ -50707,7 +50747,7 @@ N
 N	/* ÂàÜÊûêÂ∫îÁî®Â±ÇÂçèËÆ?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 696 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 734 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -50722,7 +50762,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* ÂøÖÈ°ªÊ∏ÖÈõ∂ËÆ°Êï∞Âô®ÔºåÊñπ‰æø‰∏ãÊ¨°Â∏ßÂêåÊ≠?*/
-W "..\drive\TIM6.c" 631 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 632 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 669 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 670 18 variable "crc1"  was declared but never referenced
 N}
 N

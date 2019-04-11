@@ -47,7 +47,7 @@ uint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 void RecHandle(void);
 void MODS_Poll(void);
 void MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-
+void V_SW(u8 i);
 //=============================================================================
 #define NOP   __nop();	  //???
 
@@ -215,6 +215,8 @@ extern vu8 lock;
 extern vu32 Run_Control[49];	
 extern u8 lockstat1,lockstat2;
 extern int16_t InFlashSave[20];
+extern vu8 vflag;
+void dma_rec(vu16 buf,u16 ndtr);
 #define set_max_lv						InFlashSave[0]
 #define set_min_lv						InFlashSave[1]
 #define set_max_pc						InFlashSave[2]

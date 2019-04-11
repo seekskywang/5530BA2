@@ -753,102 +753,89 @@ void Transformation_ADC(void)
     static u8 rcount;
 	vu32 var32;
 	vu32 var32a;
+	static u16 i;
 /*****************************ƒ⁄◊Ë≤‚¡øµÁ—π◊™ªª*******************************************/
-	if(r_raly == 1)
-    {
-        var32 = Vmon1_value;
-    }else if(r_raly == 0){
-        var32 = Vmon1_value - 5;
-    }
-	var32 = var32 * REG_CorrectionV;  
-	if ((Polar & 0x01) == 0x01)		  
-	{
-		if (var32 < REG_ReadV_Offset) 
+//	if(r_raly == 1)
+//    {
+//        var32 = Vmon1_value;
+//    }else if(r_raly == 0){
+//        var32 = Vmon1_value - 5;
+//    }
+	if(Vmon1_value < 4300)
+	{		
+		V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
+		DISS_Voltage = 0;
+		i=0;
+	}else{					
+		
+			
+		if(DISS_Voltage > 12)
 		{
-			var32 = 0;
+			V_SW(1);//ÁîµÂéãÈ´òÊ°£‰Ωç
+			var32 = Vmon1_value;
+			var32 = var32 * REG_CorrectionV;  
+			if ((Polar & 0x01) == 0x01)		  
+			{
+				if (var32 < REG_ReadV_Offset) 
+				{
+					var32 = 0;
+				}
+				else var32 = var32 - REG_ReadV_Offset;
+			}
+			else var32 = var32 + REG_ReadV_Offset;
+			var32 = var32 >> 12;
+			if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+			Voltage = var32;
+			DISS_Voltage=Voltage;
+			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
+		}else{
+			V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
+			var32 = Vmon1_value;
+			var32 = var32 * REG_CorrectionV1;  
+			if ((Polar & 0x01) == 0x01)		  
+			{
+				if (var32 < REG_ReadV_Offset1) 
+				{
+					var32 = 0;
+				}
+				else var32 = var32 - REG_ReadV_Offset1;
+			}
+			else var32 = var32 + REG_ReadV_Offset1;
+			var32 = var32 >> 12;
+			if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+			Voltage = var32;
+			DISS_Voltage=Voltage;
+			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
+			i=0;
 		}
-		else var32 = var32 - REG_ReadV_Offset;
 	}
-	else var32 = var32 + REG_ReadV_Offset;
-	var32 = var32 >> 12;
-	if (var32 < 30) var32 = 0;				  //40mV“‘œ¬«Â¡„
-	Voltage = var32;
-	DISS_Voltage=Voltage;
-	DISS_Voltage=DISS_Voltage/1000;//º∆À„œ‘ æµÁ—π
-    if(DISS_Voltage < 0.5)
-    {
-//         if(r_raly == 1)
-//         {
-//             var32 = Vmon1_value;
-//         }else if(r_raly == 0){
-//             var32 = Vmon1_value + 85;
-//         }
-        var32 = Vmon1_value;
-        var32 = var32 * REG_CorrectionV;  
-        if ((Polar & 0x01) == 0x01)		  
-        {
-            if (var32 < REG_ReadV_Offset) 
-            {
-                var32 = 0;
-            }
-            else var32 = var32 - REG_ReadV_Offset;
-        }
-        else var32 = var32 + REG_ReadV_Offset;
-        var32 = var32 >> 12;
-        if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
-        Voltage = var32;
-        DISS_Voltage=Voltage;
-        DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
-    }
-    if(DISS_Voltage >= 10)
-    {
-        if(r_raly == 1)
-        {
-            var32 = Vmon1_value;
-        }else if(r_raly == 0){
-            var32 = Vmon1_value - 5;
-        }
-        var32 = var32 * REG_CorrectionV1;  
-        if ((Polar & 0x01) == 0x01)		  
-        {
-            if (var32 < REG_ReadV_Offset1) 
-            {
-                var32 = 0;
-            }
-            else var32 = var32 - REG_ReadV_Offset1;
-        }
-        else var32 = var32 + REG_ReadV_Offset1;
-        var32 = var32 >> 12;
-        if (var32 < 30) var32 = 0;				  //40mV“‘œ¬«Â¡„
-        Voltage = var32;
-        DISS_Voltage=Voltage;
-        DISS_Voltage=DISS_Voltage/1000;//º∆À„œ‘ æµÁ—π
-    }
-    if(DISS_Voltage >= 30)
-    {
-        if(r_raly == 1)
-        {
-            var32 = Vmon1_value;
-        }else if(r_raly == 0){
-            var32 = Vmon1_value - 5;
-        }
-        var32 = var32 * REG_CorrectionV2;  
-        if ((Polar & 0x01) == 0x01)		  
-        {
-            if (var32 < REG_ReadV_Offset2) 
-            {
-                var32 = 0;
-            }
-            else var32 = var32 - REG_ReadV_Offset2;
-        }
-        else var32 = var32 + REG_ReadV_Offset2;
-        var32 = var32 >> 12;
-        if (var32 < 30) var32 = 0;				  //40mV“‘œ¬«Â¡„
-        Voltage = var32;
-        DISS_Voltage=Voltage;
-        DISS_Voltage=DISS_Voltage/1000;//º∆À„œ‘ æµÁ—π
-    }
 	var32 = 0;
+//		if(DISS_Voltage >= 30)
+//		{
+//	//        if(r_raly == 1)
+//	//        {
+//	//            var32 = Vmon1_value;
+//	//        }else if(r_raly == 0){
+//	//            var32 = Vmon1_value - 5;
+//	//        }
+//			var32 = var32 * REG_CorrectionV2;  
+//			if ((Polar & 0x01) == 0x01)		  
+//			{
+//				if (var32 < REG_ReadV_Offset2) 
+//				{
+//					var32 = 0;
+//				}
+//				else var32 = var32 - REG_ReadV_Offset2;
+//			}
+//			else var32 = var32 + REG_ReadV_Offset2;
+//			var32 = var32 >> 12;
+//			if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+//			Voltage = var32;
+//			DISS_Voltage=Voltage;
+//			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
+//		}
+		
+	
 	/*******************∏∫‘ÿ≤‚¡øµÁ¡˜◊™ªª**************************************/
 	var32 = Imon1_value;
 	var32 = var32 * REG_Load_A;  
@@ -925,7 +912,7 @@ void Transformation_ADC(void)
 //             else var32 = var32 - REG_ReadR_Offset;
 //         }
 //        else
-            var32 = var32 - REG_ReadR_Offset;
+        var32 = var32 - REG_ReadR_Offset;
         var32 = var32 >> 12;
         if (var32 < 1)
         {
@@ -1068,8 +1055,8 @@ void Transformation_ADC(void)
 	}
 /**************************Œ»—πµÁ‘¥…Ë÷√µÁ—π◊™ªª******************************************/
 	var32 = SET_Voltage;
-    if(SET_Voltage < 1000)
-    {
+//    if(SET_Voltage < 1000)
+//    {
         var32=var32<<14;   
 //         if ((Polar5 & 0x04) == 0)			   
 //         {
@@ -1085,39 +1072,39 @@ void Transformation_ADC(void)
         {
             Contr_Voltage=0;
         }
-    }else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
-        var32=var32<<14;   
-//         if ((Polar5 & 0x04) == 0)			   
-//         {
-//             if (var32 < SET_POWERV_Offset1) var32 = 0;
-//             else var32 = var32 - SET_POWERV_Offset1;
-//         }
-//         else 
-            var32 = var32 + SET_POWERV_Offset1;
-        var32 = var32/SET_POWERV1;
-        var32=var32>>1;
-        Contr_Voltage = var32;
-        if(SET_Voltage==0)
-        {
-            Contr_Voltage=0;
-        }
-    }else if(SET_Voltage >= 3000){
-        var32=var32<<14;   
-//         if ((Polar5 & 0x04) == 0)			   
-//         {
-//             if (var32 < SET_POWERV_Offset2) var32 = 0;
-//             else var32 = var32 - SET_POWERV_Offset2;
-//         }
-//         else 
-            var32 = var32 + SET_POWERV_Offset2;
-        var32 = var32/SET_POWERV2;
-        var32=var32>>1;
-        Contr_Voltage = var32;
-        if(SET_Voltage==0)
-        {
-            Contr_Voltage=0;
-        }
-    }
+//    }else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
+//        var32=var32<<14;   
+////         if ((Polar5 & 0x04) == 0)			   
+////         {
+////             if (var32 < SET_POWERV_Offset1) var32 = 0;
+////             else var32 = var32 - SET_POWERV_Offset1;
+////         }
+////         else 
+//            var32 = var32 + SET_POWERV_Offset1;
+//        var32 = var32/SET_POWERV1;
+//        var32=var32>>1;
+//        Contr_Voltage = var32;
+//        if(SET_Voltage==0)
+//        {
+//            Contr_Voltage=0;
+//        }
+//    }else if(SET_Voltage >= 3000){
+//        var32=var32<<14;   
+////         if ((Polar5 & 0x04) == 0)			   
+////         {
+////             if (var32 < SET_POWERV_Offset2) var32 = 0;
+////             else var32 = var32 - SET_POWERV_Offset2;
+////         }
+////         else 
+//            var32 = var32 + SET_POWERV_Offset2;
+//        var32 = var32/SET_POWERV2;
+//        var32=var32>>1;
+//        Contr_Voltage = var32;
+//        if(SET_Voltage==0)
+//        {
+//            Contr_Voltage=0;
+//        }
+//    }
 	
 	var32 = 0;
 /**************************Œ»—πµÁ‘¥…Ë÷√µÁ¡˜◊™ªª**************************************/

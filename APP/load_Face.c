@@ -441,7 +441,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
             TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
             TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
             GUI_UC_SetEncodeUTF8();
-            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
             TEXT_SetText(hItem,"CC");
             flag_Load_CC = 1;
         }else if(load_mode == 0){
@@ -449,7 +449,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
             TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
             TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
             GUI_UC_SetEncodeUTF8();  
-            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV            
+            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV            
             TEXT_SetText(hItem,"CV");
             flag_Load_CC = 0;
         }
@@ -825,8 +825,8 @@ void LOAD_SET(void) {
                     WM_HWIN hItem;
                     hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
                     TEXT_SetText(hItem,"CV");
-                    GPIO_SetBits(GPIOC,GPIO_Pin_12);//CV
-                    flag_Load_CC = 0;
+					flag_Load_CC = 0;
+                    GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV                  
                     load_mode = 0;
                     Write_LOAD();
                     break;
@@ -836,8 +836,8 @@ void LOAD_SET(void) {
                      WM_HWIN hItem;
                      hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
                      TEXT_SetText(hItem,"CC");
-                     GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
-                     flag_Load_CC = 1;
+					 flag_Load_CC = 1;
+                     GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC                     
                      load_mode =1;
                      Write_LOAD();
                      break;

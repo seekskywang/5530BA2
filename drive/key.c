@@ -316,7 +316,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
                                 SET_Current_Laod = 1000;
-                                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鐢靛瓙璐熻浇On
                                 calstep = 1;
@@ -410,7 +410,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
                                 SET_Current_Laod = 5000;
-                                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鐢靛瓙璐熻浇On
                                 calstep = 2;
@@ -798,7 +798,7 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(7);
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_12);//鐢靛帇妗ｄ綅鍒囨崲
                             }else if(calmode == mode_pow){
                                 
                             }else if(calmode == mode_r ){
@@ -867,7 +867,7 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(8);
+                                GPIO_SetBits(GPIOA,GPIO_Pin_12);//鐢靛帇妗ｄ綅鍒囨崲
                             }else if(calmode == mode_pow){
                                 
                             }else if(calmode == mode_r ){
@@ -1572,7 +1572,7 @@ void Key_Funtion(void)
                             if(pow_sw==pow_on)
                             {
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
-								Delay_ms(500);
+								Delay_ms(1000);
                                 GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
                                 mode_sw = 0;
                                 pow_sw = pow_off;
@@ -1598,6 +1598,7 @@ void Key_Funtion(void)
                                
                                charge_step = 1;
                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+							   Delay_ms(500);
                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                mode_sw = mode_pow;
                                cdc_sw = cdc_on;

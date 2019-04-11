@@ -1,4 +1,107 @@
 L 1 "..\drive\TIM2.c"
+N///******************************************************************/
+N///* Ãû³Æ£HTIM2 PWM                                                */
+N///* Ð§¹û£º                                                        */
+N///* ÄÚÈÝ£º²úÉúÒ»¸ö200HZ ÕýÕ¼¿Õ±È£º60.9% ¸ºÕ¼¿Õ±È£º30.9%µÄPWM      */
+N///* ×÷Õß£ºÀîÕñ                                                    */
+N///* ÁªÏµ·½Ê½£ºQQ:363116119                                        */
+N///******************************************************************/
+N//#include "my_register.h"
+N//#include "stm32f4xx_gpio.h"
+N//#include "stm32f4xx_tim.h"
+N//#include "stm32f4xx_rcc.h"
+N///*****************************************************************/
+N//extern struct bitDefine
+N//{
+N//	unsigned bit0: 1;
+N//	unsigned bit1: 1;
+N//	unsigned bit2: 1;
+N//	unsigned bit3: 1;
+N//	unsigned bit4: 1;
+N//	unsigned bit5: 1;
+N//	unsigned bit6: 1;
+N//	unsigned bit7: 1;
+N//} flagA,flagB,flagC,flagD;
+N
+N//vu16 TEMP_OFFSET;//ÎÂ¶È²¹³¥Öµ
+N///*****************************************************************/
+N//void TIM2_Config(void)
+N//{
+N//	GPIO_InitTypeDef GPIO_InitStructure;//µ÷ÓÃGPIO½á¹¹Ìå
+N//  /* ÅäÖÃGPIO¹Ü½Å¸´ÓÃ*/
+N//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource0,GPIO_AF_TIM2);
+N//	GPIO_PinAFConfig(GPIOA,GPIO_PinSource1,GPIO_AF_TIM2);
+N//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+N//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+N//  GPIO_Init(GPIOA, &GPIO_InitStructure);//½«ÉèÖÃÊäÈëº¯Êý
+N//  
+N//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+N//  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+N//  GPIO_Init(GPIOA, &GPIO_InitStructure);//½«ÉèÖÃÊäÈëº¯Êý
+N//}
+N///*****************************************************************/
+N//void TIM2_PWM_Config(void)
+N//{
+N//	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+N//	TIM_OCInitTypeDef  TIM_OCInitStructure;
+N//	/* TIM3 µÄÅäÖÃ ---------------------------------------------------
+N//   TIM3 ÊäÈëÊ±ÖÓ(TIM3CLK) ÉèÖÃÎª APB2 Ê±ÖÓ (PCLK2)    
+N//    => TIM3CLK = PCLK2 = SystemCoreClock
+N//   TIM3CLK = SystemCoreClock, Prescaler = 0, TIM3 counter clock = SystemCoreClock
+N//   SystemCoreClock Îª48 MHz */
+N//  /* TIM14 Ê±ÖÓÊ¹ÄÜ */
+N//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+N//	TIM2_Config();
+N
+N//  /* Time ¶¨Ê±»ù´¡ÉèÖÃ*/
+N//  TIM_TimeBaseStructure.TIM_Prescaler = 6;//Ê±ÖÓÔ¤·ÖÆµ
+N//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ¶¨Ê±ÉèÖÃÎªÉÏÉýÑØ¼ÆËãÄ£Ê½*/
+N//  TIM_TimeBaseStructure.TIM_Period = 0;
+N//  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+N//  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+N
+N//  TIM_TimeBaseInit(TIM2,&TIM_TimeBaseStructure);
+N
+N//  /* ÆµµÀ1µÄPWM Ä£Ê½ÉèÖÃ */
+N//  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
+N//  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+N//  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
+N//  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+N//  TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
+N//  TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
+N//  TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Reset;
+N//	TIM_OCInitStructure.TIM_Pulse = 0x0f;//Ê¹ÄÜÆµµÀ1ÅäÖÃ
+N//  TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+N//	
+N//	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);
+N//	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
+N//	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
+N//	TIM_SetAutoreload(TIM2, 0x7530);//è®¾ç½®PWMåˆ†è¾¨çŽ‡ 
+N//	TIM_ARRPreloadConfig(TIM2, ENABLE);
+N//  /* TIM14 ä½¿èƒ½*/
+N//  TIM_Cmd(TIM2, ENABLE);
+N//	
+N//  /* TIM14 å¼€å§‹è¾“å‡º */
+N//  TIM_CtrlPWMOutputs(TIM2, ENABLE);	
+N//}
+N///**************************************************************************************/
+N//void Temp_Comapre(void)	  //ÎÂ¶ÈÀ´¿ØÖÆ·çÉÈ
+N//{
+N//	if(NTC_value<=1800)
+N//	{
+N//		GPIO_SetBits(GPIOE,GPIO_Pin_6);//¿ªÆô·çÉÈ
+N//		flag_FAN_ON=1;
+N//	}
+N//	else if(NTC_value>=2000)
+N//	{
+N//		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//¹Ø±Õ·çÉÈ
+N//		flag_FAN_ON=0;
+N//	}
+N//}
 N/******************************************************************/
 N/* Ãû³Æ£HTIM2 PWM                                                */
 N/* Ð§¹û£º                                                        */
@@ -34900,7 +35003,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35068,6 +35171,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35404,7 +35509,7 @@ N#define Receive_BUFFERSIZE   10
 N//=============================================================================
 N#endif
 N/******************* (C) COPYRIGHT 2015 KUNKIN *****END OF FILE*************************/
-L 9 "..\drive\TIM2.c" 2
+L 112 "..\drive\TIM2.c" 2
 N#include "stm32f4xx_gpio.h"
 N#include "stm32f4xx_tim.h"
 N#include "stm32f4xx_rcc.h"
@@ -35476,8 +35581,8 @@ N  TIM_TimeBaseInit(TIM2,&TIM_TimeBaseStructure);
 X  TIM_TimeBaseInit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),&TIM_TimeBaseStructure);
 N
 N  /* ÆµµÀ1µÄPWM Ä£Ê½ÉèÖÃ */
-N  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
-X  TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0070);
+N  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+X  TIM_OCInitStructure.TIM_OCMode = ((uint16_t)0x0060);
 N  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 X  TIM_OCInitStructure.TIM_OutputState = ((uint16_t)0x0001);
 N  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable;
@@ -35500,7 +35605,7 @@ N	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
 X	TIM_OC2Init(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), &TIM_OCInitStructure);
 N	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
 X	TIM_OC2PreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ((uint16_t)0x0008));
-N	TIM_SetAutoreload(TIM2, 0x7530);//è®¾ç½®PWMåˆ†è¾¨çŽ‡ 
+N	TIM_SetAutoreload(TIM2, 0x7530);//è®¾ç½®PWMåˆ†è¾¨çŽ?
 X	TIM_SetAutoreload(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), 0x7530);
 N	TIM_ARRPreloadConfig(TIM2, ENABLE);
 X	TIM_ARRPreloadConfig(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
@@ -35508,25 +35613,26 @@ N  /* TIM14 ä½¿èƒ½*/
 N  TIM_Cmd(TIM2, ENABLE);
 X  TIM_Cmd(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);
 N	
-N  /* TIM14 å¼€å§‹è¾“å‡º */
+N  /* TIM14 å¼€å§‹è¾“å‡?*/
 N  TIM_CtrlPWMOutputs(TIM2, ENABLE);	
 X  TIM_CtrlPWMOutputs(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)), ENABLE);	
 N}
 N/**************************************************************************************/
 Nvoid Temp_Comapre(void)	  //ÎÂ¶ÈÀ´¿ØÖÆ·çÉÈ
 N{
-N	if(NTC_value<=1900)
+N	if(NTC_value<=1600)
 N	{
 N		GPIO_SetBits(GPIOE,GPIO_Pin_6);//¿ªÆô·çÉÈ
 X		GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)),((uint16_t)0x0040));
 N		flag_FAN_ON=1;
 X		(flagG . bit5)=1;
 N	}
-N	else if(NTC_value>=2000)
+N	else if(NTC_value>=1800)
 N	{
 N		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//¹Ø±Õ·çÉÈ
 X		GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)),((uint16_t)0x0040));
 N		flag_FAN_ON=0;
 X		(flagG . bit5)=0;
 N	}
+W "..\drive\TIM2.c" 206 2 last line of file ends without a newline
 N}

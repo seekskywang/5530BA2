@@ -1,11 +1,11 @@
 L 1 "..\drive\DAC8531.c"
 N/******************** (C) COPYRIGHT 2015 AVER ********************
-N * ÎÄ¼şÃû  £ºDAC8531.C
-N * ×÷Õß    £ºÀîÕñ
-N * ÃèÊö    £º¿âº¯Êı°æ
-N * ÄÚÈİ    £ºÍâÖÃ16BIT DAC
-N * Ó²¼şÁ¬½Ó£º
-N * ĞŞ¸ÄÈÕÆÚ£º2015-8-18
+N * æ–‡ä»¶å  ï¼šDAC8531.C
+N * ä½œè€…    ï¼šææŒ¯
+N * æè¿°    ï¼šåº“å‡½æ•°ç‰ˆ
+N * å†…å®¹    ï¼šå¤–ç½®16BIT DAC
+N * ç¡¬ä»¶è¿æ¥ï¼š
+N * ä¿®æ”¹æ—¥æœŸï¼š2015-8-18
 N*********************************************************************/
 N#include "my_register.h"
 L 1 "..\Include\my_register.h" 1
@@ -34901,7 +34901,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35069,6 +35069,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35419,10 +35421,10 @@ N
 N#define DAC_SDA_LOW   GPIO_ResetBits(GPIOE, GPIO_Pin_4);
 N#define DAC_SDA_HIGH  GPIO_SetBits(GPIOE, GPIO_Pin_4); 
 N/**********************************************************************************************************
-N*	º¯ Êı Ãû: DAC8531_GPIOCoing
-N*	¹¦ÄÜËµÃ÷: Òı½Å³õÊ¼»¯
-N*	ĞÎ    ²Î£º
-N*	·µ »Ø Öµ: ÎŞ
+N*	å‡½ æ•° å: DAC8531_GPIOCoing
+N*	åŠŸèƒ½è¯´æ˜: å¼•è„šåˆå§‹åŒ–
+N*	å½¢    å‚ï¼š
+N*	è¿” å› å€¼: æ— 
 N**********************************************************************************************************/
 Nvoid DAC8531_GPIOCoing(void)
 N{
@@ -35437,17 +35439,17 @@ N	GPIO_Init(GPIOE, &GPIO_InitStructure);//
 X	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), &GPIO_InitStructure);
 N}
 N/**********************************************************************************************************
-N*	º¯ Êı Ãû: DAC8531_GPIOCoing
-N*	¹¦ÄÜËµÃ÷: Òı½Å³õÊ¼»¯
-N*	ĞÎ    ²Î£º
-N*	·µ »Ø Öµ: ÎŞ
+N*	å‡½ æ•° å: DAC8531_GPIOCoing
+N*	åŠŸèƒ½è¯´æ˜: å¼•è„šåˆå§‹åŒ–
+N*	å½¢    å‚ï¼š
+N*	è¿” å› å€¼: æ— 
 N**********************************************************************************************************/
 Nvoid DAC8531_Send(vu16 date)
 N{
 N	vu8 cont;
-N	DAC_SYNC_LOW;//SYNCÖÃµÍ
+N	DAC_SYNC_LOW;//SYNCç½®ä½
 X	GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0004));;
-N	DAC_SCK_HIGH;//SCKÖÃ¸ß
+N	DAC_SCK_HIGH;//SCKç½®é«˜
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0008));;
 N	NOP;
 X	__nop();;
@@ -35457,19 +35459,19 @@ N	NOP;
 X	__nop();;
 N	NOP;
 X	__nop();;
-N	DAC_SYNC_HIGH;//SYNCÖÃ¸ß
+N	DAC_SYNC_HIGH;//SYNCç½®é«˜
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0004));;
 N	NOP;
 X	__nop();;
-N	DAC_SCK_HIGH;//SCKÖÃ¸ß
+N	DAC_SCK_HIGH;//SCKç½®é«˜
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0008));;
-N	DAC_SYNC_LOW;//SYNCÖÃµÍ
+N	DAC_SYNC_LOW;//SYNCç½®ä½
 X	GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0004));;
 N	for(cont = 0; cont < 24; cont++)
 N	{
 N		if(cont>7)
 N		{
-N			if(date & 0x8000)		// ÏÈ´«¸ßÎ»
+N			if(date & 0x8000)		// å…ˆä¼ é«˜ä½
 N			{
 N				DAC_SDA_HIGH;
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0010));;
@@ -35481,12 +35483,12 @@ X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0
 N			}
 N			date=date<<1;
 N		}
-N		else//Ç°8Î»ÖĞ×îÇ°6Î»ÎªÎŞĞ§Î»£¬ºó2Î»Îª¹¤×÷Ä£Ê½Éè¶¨£¬´Ë´¦Îª00ÉèÖÃÎªÕı³£¹¤×÷Ä£Ê½¡£
+N		else//å‰8ä½ä¸­æœ€å‰6ä½ä¸ºæ— æ•ˆä½ï¼Œå2ä½ä¸ºå·¥ä½œæ¨¡å¼è®¾å®šï¼Œæ­¤å¤„ä¸º00è®¾ç½®ä¸ºæ­£å¸¸å·¥ä½œæ¨¡å¼ã€‚
 N		{
 N			DAC_SDA_LOW;
 X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0010));;
 N		}
-N		DAC_SCK_LOW;//SCKÖÃµÍ
+N		DAC_SCK_LOW;//SCKç½®ä½
 X		GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0008));;
 N		NOP;
 X		__nop();;
@@ -35494,14 +35496,15 @@ N		NOP;
 X		__nop();;
 N		NOP;
 X		__nop();;
-N		DAC_SCK_HIGH;//SCKÖÃ¸ß
+N		DAC_SCK_HIGH;//SCKç½®é«˜
 X		GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0008));;
 N	}
-N	DAC_SYNC_HIGH;//SYNCÖÃ¸ß
+N	DAC_SYNC_HIGH;//SYNCç½®é«˜
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0004));;
-N	DAC_SCK_HIGH;//SCKÖÃ¸ß
+N	DAC_SCK_HIGH;//SCKç½®é«˜
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x1000)), ((uint16_t)0x0008));;
 N}
 N	
-W "..\drive\DAC8531.c" 84 2 last line of file ends without a newline
 N	
+W "..\drive\DAC8531.c" 85 3 last line of file ends without a newline
+N		

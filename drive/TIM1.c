@@ -48,6 +48,7 @@ void TIM1_PWM_Config(void)
   TIM_TimeBaseStructure.TIM_Period = 0;
   TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
   TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+
   TIM_TimeBaseInit(TIM1,&TIM_TimeBaseStructure);
 
   /* 频道1的PWM 模式设置 */

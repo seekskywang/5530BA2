@@ -5,12 +5,12 @@
                           AREA ||i.AD7689_Delay||, CODE, READONLY, ALIGN=1
 
                   AD7689_Delay PROC
-;;;615    /************************************************************************/
-;;;616    void AD7689_Delay(void)
+;;;240    /************************************************************************/
+;;;241    void AD7689_Delay(void)
 000000  b508              PUSH     {r3,lr}
-;;;617    {
-;;;618    	vu16 count ;
-;;;619      for(count = 1000; count != 0; count--);
+;;;242    {
+;;;243    	vu16 count ;
+;;;244      for(count = 1000; count != 0; count--);
 000002  f44f707a          MOV      r0,#0x3e8
 000006  9000              STR      r0,[sp,#0]
 000008  e003              B        |L1.18|
@@ -22,21 +22,21 @@
 000012  f8bd0000          LDRH     r0,[sp,#0]
 000016  2800              CMP      r0,#0
 000018  d1f7              BNE      |L1.10|
-;;;620    }
+;;;245    }
 00001a  bd08              POP      {r3,pc}
-;;;621    void AD7689_Delay1(void)
+;;;246    void AD7689_Delay1(void)
                           ENDP
 
 
                           AREA ||i.AD7689_Delay1||, CODE, READONLY, ALIGN=1
 
                   AD7689_Delay1 PROC
-;;;620    }
-;;;621    void AD7689_Delay1(void)
+;;;245    }
+;;;246    void AD7689_Delay1(void)
 000000  b508              PUSH     {r3,lr}
-;;;622    {
-;;;623    	vu16 count ;
-;;;624      for(count = 3000; count != 0; count--);
+;;;247    {
+;;;248    	vu16 count ;
+;;;249      for(count = 3000; count != 0; count--);
 000002  f64030b8          MOV      r0,#0xbb8
 000006  9000              STR      r0,[sp,#0]
 000008  e003              B        |L2.18|
@@ -48,125 +48,125 @@
 000012  f8bd0000          LDRH     r0,[sp,#0]
 000016  2800              CMP      r0,#0
 000018  d1f7              BNE      |L2.10|
-;;;625    }
+;;;250    }
 00001a  bd08              POP      {r3,pc}
-;;;626    void AD7689_Scan_CH(void)
+;;;251    void AD7689_Scan_CH(void)
                           ENDP
 
 
                           AREA ||i.AD7689_InitializeSPI1||, CODE, READONLY, ALIGN=2
 
                   AD7689_InitializeSPI1 PROC
-;;;534    void Bubble_sort(vu16 *D_temp,vu8 num);
-;;;535    void AD7689_InitializeSPI1(void)
+;;;32     void Bubble_sort(vu16 *D_temp,vu8 num);
+;;;33     void AD7689_InitializeSPI1(void)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;536    {
+;;;34     {
 000004  b088              SUB      sp,sp,#0x20
-;;;537    	GPIO_InitTypeDef  GPIO_InitStructure;
-;;;538      SPI_InitTypeDef  SPI_InitStructure;
-;;;539    	
-;;;540    	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+;;;35     	GPIO_InitTypeDef  GPIO_InitStructure;
+;;;36       SPI_InitTypeDef  SPI_InitStructure;
+;;;37     	
+;;;38     	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
 000006  2101              MOVS     r1,#1
 000008  0308              LSLS     r0,r1,#12
 00000a  f7fffffe          BL       RCC_APB2PeriphClockCmd
-;;;541    	
-;;;542    	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
+;;;39     	
+;;;40     	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
 00000e  2702              MOVS     r7,#2
 000010  f88d701d          STRB     r7,[sp,#0x1d]
-;;;543    	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+;;;41     	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 000014  2601              MOVS     r6,#1
 000016  f88d601c          STRB     r6,[sp,#0x1c]
-;;;544    	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+;;;42     	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 00001a  2400              MOVS     r4,#0
 00001c  f88d401e          STRB     r4,[sp,#0x1e]
-;;;545    	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
+;;;43     	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;//inv
 000020  2040              MOVS     r0,#0x40
 000022  9006              STR      r0,[sp,#0x18]
-;;;546    	GPIO_Init(GPIOB, &GPIO_InitStructure);//
+;;;44     	GPIO_Init(GPIOB, &GPIO_InitStructure);//
 000024  f8df80a0          LDR      r8,|L3.200|
 000028  a906              ADD      r1,sp,#0x18
 00002a  4640              MOV      r0,r8
 00002c  f7fffffe          BL       GPIO_Init
-;;;547    	
-;;;548      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5;//PB3~5复用功能输出	
+;;;45     	
+;;;46       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5;//PB3~5复用功能输出	
 000030  2538              MOVS     r5,#0x38
 000032  9506              STR      r5,[sp,#0x18]
-;;;549      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
+;;;47       GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
 000034  f88d701c          STRB     r7,[sp,#0x1c]
-;;;550      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+;;;48       GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
 000038  f88d401e          STRB     r4,[sp,#0x1e]
-;;;551      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
+;;;49       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
 00003c  2003              MOVS     r0,#3
 00003e  f88d001d          STRB     r0,[sp,#0x1d]
-;;;552      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
+;;;50       GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
 000042  f88d601f          STRB     r6,[sp,#0x1f]
-;;;553      GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
+;;;51       GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
 000046  a906              ADD      r1,sp,#0x18
 000048  4640              MOV      r0,r8
 00004a  f7fffffe          BL       GPIO_Init
-;;;554    
-;;;555      GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1); //PCB3复用为 SPI1
+;;;52     
+;;;53       GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1); //PCB3复用为 SPI1
 00004e  2205              MOVS     r2,#5
 000050  2103              MOVS     r1,#3
 000052  4640              MOV      r0,r8
 000054  f7fffffe          BL       GPIO_PinAFConfig
-;;;556    	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1); //PBB4复用为 SPI1
+;;;54     	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1); //PBB4复用为 SPI1
 000058  2205              MOVS     r2,#5
 00005a  2104              MOVS     r1,#4
 00005c  4640              MOV      r0,r8
 00005e  f7fffffe          BL       GPIO_PinAFConfig
-;;;557    	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1); //PB5复用为 SPI1
+;;;55     	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1); //PB5复用为 SPI1
 000062  2205              MOVS     r2,#5
 000064  4611              MOV      r1,r2
 000066  4640              MOV      r0,r8
 000068  f7fffffe          BL       GPIO_PinAFConfig
-;;;558    	AD7689_CNV_1;
+;;;56     	AD7689_CNV_1;
 00006c  2140              MOVS     r1,#0x40
 00006e  4640              MOV      r0,r8
 000070  f7fffffe          BL       GPIO_SetBits
-;;;559    	AD7689_Delay();
+;;;57     	AD7689_Delay();
 000074  f7fffffe          BL       AD7689_Delay
-;;;560    	AD7689_CNV_0;
+;;;58     	AD7689_CNV_0;
 000078  2140              MOVS     r1,#0x40
 00007a  4640              MOV      r0,r8
 00007c  f7fffffe          BL       GPIO_ResetBits
-;;;561    	//这里只针对SPI口初始化
-;;;562      SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
+;;;59     	//这里只针对SPI口初始化
+;;;60       SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
 000080  f8ad4004          STRH     r4,[sp,#4]
-;;;563    	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
+;;;61     	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
 000084  f44f7082          MOV      r0,#0x104
 000088  f8ad0006          STRH     r0,[sp,#6]
-;;;564    	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
+;;;62     	SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;		//设置SPI的数据大小:SPI发送接收16位帧结构
 00008c  02f0              LSLS     r0,r6,#11
 00008e  f8ad0008          STRH     r0,[sp,#8]
-;;;565    	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
+;;;63     	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
 000092  f8ad400a          STRH     r4,[sp,#0xa]
-;;;566    	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
+;;;64     	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
 000096  f8ad400c          STRH     r4,[sp,#0xc]
-;;;567    	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
+;;;65     	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
 00009a  1080              ASRS     r0,r0,#2
 00009c  f8ad000e          STRH     r0,[sp,#0xe]
-;;;568    	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
+;;;66     	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;		//定义波特率预分频的值:波特率预分频值为256
 0000a0  f8ad5010          STRH     r5,[sp,#0x10]
-;;;569    	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
+;;;67     	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
 0000a4  f8ad4012          STRH     r4,[sp,#0x12]
-;;;570    	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
+;;;68     	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
 0000a8  2007              MOVS     r0,#7
 0000aa  f8ad0014          STRH     r0,[sp,#0x14]
-;;;571    	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
+;;;69     	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
 0000ae  4c07              LDR      r4,|L3.204|
 0000b0  a901              ADD      r1,sp,#4
 0000b2  4620              MOV      r0,r4
 0000b4  f7fffffe          BL       SPI_Init
-;;;572    	
-;;;573    	SPI_Cmd(SPI1, ENABLE); //使能SPI外设*/
+;;;70     	
+;;;71     	SPI_Cmd(SPI1, ENABLE); //使能SPI外设*/
 0000b8  2101              MOVS     r1,#1
 0000ba  4620              MOV      r0,r4
 0000bc  f7fffffe          BL       SPI_Cmd
-;;;574    }
+;;;72     }
 0000c0  b008              ADD      sp,sp,#0x20
 0000c2  e8bd81f0          POP      {r4-r8,pc}
-;;;575    
+;;;73     
                           ENDP
 
 0000c6  0000              DCW      0x0000
@@ -178,175 +178,221 @@
                           AREA ||i.AD7689_Scan_CH||, CODE, READONLY, ALIGN=2
 
                   AD7689_Scan_CH PROC
-;;;625    }
-;;;626    void AD7689_Scan_CH(void)
-000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;627    {
-000004  b086              SUB      sp,sp,#0x18
-;;;628    	static vu8 I_cont,I1_cont,V_cont;
-;;;629    	vu8 i,f;
-;;;630    	vu32 sum1;
-;;;631    	vu16 var_chI,var_chV,var_chV1;
-;;;632    	for(i=0;i<8;i++)
-000006  2600              MOVS     r6,#0
-000008  9605              STR      r6,[sp,#0x14]
-;;;633    	{
-;;;634    		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
-00000a  4c37              LDR      r4,|L4.232|
-;;;635    		var_chV=AD7689_Buffer[2];
-;;;636    		var_chI=AD7689_Buffer[3];
-;;;637    		Imon_value=AD7689_Buffer[5];
-00000c  4d37              LDR      r5,|L4.236|
-;;;638    		Vmon_value=AD7689_Buffer[6];
-00000e  4f38              LDR      r7,|L4.240|
-;;;639    		Rmon_value=AD7689_Buffer[7];
-000010  f8df80e0          LDR      r8,|L4.244|
-000014  e017              B        |L4.70|
-                  |L4.22|
-000016  f89d1014          LDRB     r1,[sp,#0x14]         ;634
-00001a  2001              MOVS     r0,#1                 ;634
-00001c  f7fffffe          BL       SPI_AD7689_Read
-000020  f89d1014          LDRB     r1,[sp,#0x14]         ;634
-000024  f8240011          STRH     r0,[r4,r1,LSL #1]     ;634
-000028  88a0              LDRH     r0,[r4,#4]            ;635  ; AD7689_Buffer
-00002a  9001              STR      r0,[sp,#4]            ;635
-00002c  88e0              LDRH     r0,[r4,#6]            ;636  ; AD7689_Buffer
-00002e  9002              STR      r0,[sp,#8]            ;636
-000030  8960              LDRH     r0,[r4,#0xa]          ;637  ; AD7689_Buffer
-000032  8028              STRH     r0,[r5,#0]            ;637
-000034  89a0              LDRH     r0,[r4,#0xc]          ;638  ; AD7689_Buffer
-000036  8038              STRH     r0,[r7,#0]            ;638
-000038  89e0              LDRH     r0,[r4,#0xe]  ; AD7689_Buffer
-00003a  f8a80000          STRH     r0,[r8,#0]
-00003e  f89d0014          LDRB     r0,[sp,#0x14]         ;632
-000042  1c40              ADDS     r0,r0,#1              ;632
-000044  9005              STR      r0,[sp,#0x14]         ;632
-                  |L4.70|
-000046  f89d0014          LDRB     r0,[sp,#0x14]         ;632
-00004a  2808              CMP      r0,#8                 ;632
-00004c  d3e3              BCC      |L4.22|
-;;;640    	}
-;;;641    	Ad7689_Fit_Imon[I_cont++]=var_chI;
-00004e  f8bd2008          LDRH     r2,[sp,#8]
-000052  4c29              LDR      r4,|L4.248|
-000054  7820              LDRB     r0,[r4,#0]  ; I_cont
-000056  1c41              ADDS     r1,r0,#1
-000058  7021              STRB     r1,[r4,#0]
-00005a  0041              LSLS     r1,r0,#1
-00005c  4822              LDR      r0,|L4.232|
-00005e  3010              ADDS     r0,r0,#0x10
-000060  5242              STRH     r2,[r0,r1]
-;;;642    	if(I_cont==20)
-000062  7821              LDRB     r1,[r4,#0]  ; I_cont
-;;;643    	{
-;;;644    		I_cont=0;
-;;;645    		sum1=0;
-;;;646    		for(f=0;f<20;f++)
-;;;647    		{
-;;;648    			sum1 +=Ad7689_Fit_Imon[f];
-;;;649    		}
-;;;650    		Imon1_value=sum1/20;
-000064  2314              MOVS     r3,#0x14
-000066  2914              CMP      r1,#0x14              ;642
-000068  d117              BNE      |L4.154|
-00006a  7026              STRB     r6,[r4,#0]            ;644
-00006c  9603              STR      r6,[sp,#0xc]          ;645
-00006e  9604              STR      r6,[sp,#0x10]         ;646
-000070  e00a              B        |L4.136|
-                  |L4.114|
-000072  f89d1010          LDRB     r1,[sp,#0x10]         ;648
-000076  f8301011          LDRH     r1,[r0,r1,LSL #1]     ;648
-00007a  9a03              LDR      r2,[sp,#0xc]          ;648
-00007c  4411              ADD      r1,r1,r2              ;648
-00007e  9103              STR      r1,[sp,#0xc]          ;648
-000080  f89d1010          LDRB     r1,[sp,#0x10]         ;646
-000084  1c49              ADDS     r1,r1,#1              ;646
-000086  9104              STR      r1,[sp,#0x10]         ;646
-                  |L4.136|
-000088  f89d1010          LDRB     r1,[sp,#0x10]         ;646
-00008c  2914              CMP      r1,#0x14              ;646
-00008e  d3f0              BCC      |L4.114|
-000090  9803              LDR      r0,[sp,#0xc]
-000092  491a              LDR      r1,|L4.252|
-000094  fbb0f0f3          UDIV     r0,r0,r3
-000098  6008              STR      r0,[r1,#0]  ; Imon1_value
-                  |L4.154|
-;;;651    	}
-;;;652    	
-;;;653    	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-00009a  f8bd2004          LDRH     r2,[sp,#4]
-00009e  7860              LDRB     r0,[r4,#1]  ; V_cont
-0000a0  1c41              ADDS     r1,r0,#1
-0000a2  7061              STRB     r1,[r4,#1]
-0000a4  0041              LSLS     r1,r0,#1
-0000a6  4810              LDR      r0,|L4.232|
-0000a8  3038              ADDS     r0,r0,#0x38
-0000aa  5242              STRH     r2,[r0,r1]
-;;;654    	if(V_cont==20)
-0000ac  7861              LDRB     r1,[r4,#1]  ; V_cont
-0000ae  2914              CMP      r1,#0x14
-0000b0  d117              BNE      |L4.226|
-;;;655    	{
-;;;656    		V_cont=0;
-0000b2  7066              STRB     r6,[r4,#1]
-;;;657    		sum1=0;
-0000b4  9603              STR      r6,[sp,#0xc]
-;;;658    		for(f=0;f<20;f++)
-0000b6  9604              STR      r6,[sp,#0x10]
-0000b8  e00a              B        |L4.208|
-                  |L4.186|
-;;;659    		{
-;;;660    			sum1 +=Ad7689_Fit_Vmon[f];
-0000ba  f89d1010          LDRB     r1,[sp,#0x10]
-0000be  f8301011          LDRH     r1,[r0,r1,LSL #1]
-0000c2  9a03              LDR      r2,[sp,#0xc]
-0000c4  4411              ADD      r1,r1,r2
-0000c6  9103              STR      r1,[sp,#0xc]
-0000c8  f89d1010          LDRB     r1,[sp,#0x10]         ;658
-0000cc  1c49              ADDS     r1,r1,#1              ;658
-0000ce  9104              STR      r1,[sp,#0x10]         ;658
-                  |L4.208|
-0000d0  f89d1010          LDRB     r1,[sp,#0x10]         ;658
-0000d4  2914              CMP      r1,#0x14              ;658
-0000d6  d3f0              BCC      |L4.186|
-;;;661    		}
-;;;662    		Vmon1_value=sum1/20;
-0000d8  9803              LDR      r0,[sp,#0xc]
-0000da  4909              LDR      r1,|L4.256|
-0000dc  fbb0f0f3          UDIV     r0,r0,r3
-0000e0  6008              STR      r0,[r1,#0]  ; Vmon1_value
-                  |L4.226|
-;;;663    	}
-;;;664    }
-0000e2  b006              ADD      sp,sp,#0x18
-0000e4  e8bd81f0          POP      {r4-r8,pc}
+;;;250    }
+;;;251    void AD7689_Scan_CH(void)
+000000  b5f0              PUSH     {r4-r7,lr}
+;;;252    {
+000002  b087              SUB      sp,sp,#0x1c
+;;;253    	static vu8 I_cont,I1_cont,V_cont,R_cont;
+;;;254    	vu8 i,f;
+;;;255    	vu32 sum1;
+;;;256    	vu16 var_chI,var_chV,var_chV1,var_chR;
+;;;257    	for(i=0;i<8;i++)
+000004  2500              MOVS     r5,#0
+000006  9506              STR      r5,[sp,#0x18]
+;;;258    	{
+;;;259    		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
+000008  4c47              LDR      r4,|L4.296|
+;;;260    		var_chV=AD7689_Buffer[2];
+;;;261    		var_chI=AD7689_Buffer[3];
+;;;262    		Imon_value=AD7689_Buffer[5];
+00000a  4f48              LDR      r7,|L4.300|
+;;;263    		Vmon_value=AD7689_Buffer[6];
+00000c  4e48              LDR      r6,|L4.304|
+00000e  e016              B        |L4.62|
+                  |L4.16|
+000010  f89d1018          LDRB     r1,[sp,#0x18]         ;259
+000014  2001              MOVS     r0,#1                 ;259
+000016  f7fffffe          BL       SPI_AD7689_Read
+00001a  f89d1018          LDRB     r1,[sp,#0x18]         ;259
+00001e  f8240011          STRH     r0,[r4,r1,LSL #1]     ;259
+000022  88a0              LDRH     r0,[r4,#4]            ;260  ; AD7689_Buffer
+000024  9002              STR      r0,[sp,#8]            ;260
+000026  88e0              LDRH     r0,[r4,#6]            ;261  ; AD7689_Buffer
+000028  9003              STR      r0,[sp,#0xc]          ;261
+00002a  8960              LDRH     r0,[r4,#0xa]          ;262  ; AD7689_Buffer
+00002c  8038              STRH     r0,[r7,#0]            ;262
+00002e  89a0              LDRH     r0,[r4,#0xc]  ; AD7689_Buffer
+000030  8030              STRH     r0,[r6,#0]
+;;;264    		var_chR=AD7689_Buffer[7];
+000032  89e0              LDRH     r0,[r4,#0xe]  ; AD7689_Buffer
+000034  9001              STR      r0,[sp,#4]
+000036  f89d0018          LDRB     r0,[sp,#0x18]         ;257
+00003a  1c40              ADDS     r0,r0,#1              ;257
+00003c  9006              STR      r0,[sp,#0x18]         ;257
+                  |L4.62|
+00003e  f89d0018          LDRB     r0,[sp,#0x18]         ;257
+000042  2808              CMP      r0,#8                 ;257
+000044  d3e4              BCC      |L4.16|
+;;;265    	}
+;;;266    	Ad7689_Fit_Imon[I_cont++]=var_chI;
+000046  f8bd200c          LDRH     r2,[sp,#0xc]
+00004a  4b3a              LDR      r3,|L4.308|
+00004c  7818              LDRB     r0,[r3,#0]  ; I_cont
+00004e  1c41              ADDS     r1,r0,#1
+000050  7019              STRB     r1,[r3,#0]
+000052  0041              LSLS     r1,r0,#1
+000054  4834              LDR      r0,|L4.296|
+000056  3010              ADDS     r0,r0,#0x10
+000058  5242              STRH     r2,[r0,r1]
+;;;267    	if(I_cont==60)
+00005a  7819              LDRB     r1,[r3,#0]  ; I_cont
+;;;268    	{
+;;;269    		I_cont=0;
+;;;270    		sum1=0;
+;;;271    		for(f=0;f<60;f++)
+;;;272    		{
+;;;273    			sum1 +=Ad7689_Fit_Imon[f];
+;;;274    		}
+;;;275    		Imon1_value=sum1/60;
+00005c  243c              MOVS     r4,#0x3c
+00005e  293c              CMP      r1,#0x3c              ;267
+000060  d117              BNE      |L4.146|
+000062  701d              STRB     r5,[r3,#0]            ;269
+000064  9504              STR      r5,[sp,#0x10]         ;270
+000066  9505              STR      r5,[sp,#0x14]         ;271
+000068  e00a              B        |L4.128|
+                  |L4.106|
+00006a  f89d1014          LDRB     r1,[sp,#0x14]         ;273
+00006e  f8301011          LDRH     r1,[r0,r1,LSL #1]     ;273
+000072  9a04              LDR      r2,[sp,#0x10]         ;273
+000074  4411              ADD      r1,r1,r2              ;273
+000076  9104              STR      r1,[sp,#0x10]         ;273
+000078  f89d1014          LDRB     r1,[sp,#0x14]         ;271
+00007c  1c49              ADDS     r1,r1,#1              ;271
+00007e  9105              STR      r1,[sp,#0x14]         ;271
+                  |L4.128|
+000080  f89d1014          LDRB     r1,[sp,#0x14]         ;271
+000084  293c              CMP      r1,#0x3c              ;271
+000086  d3f0              BCC      |L4.106|
+000088  9804              LDR      r0,[sp,#0x10]
+00008a  492b              LDR      r1,|L4.312|
+00008c  fbb0f0f4          UDIV     r0,r0,r4
+000090  6008              STR      r0,[r1,#0]  ; Imon1_value
+                  |L4.146|
+;;;276    	}
+;;;277    	
+;;;278    	Ad7689_Fit_Vmon[V_cont++]=var_chV;
+000092  f8bd2008          LDRH     r2,[sp,#8]
+000096  7858              LDRB     r0,[r3,#1]  ; V_cont
+000098  1c41              ADDS     r1,r0,#1
+00009a  7059              STRB     r1,[r3,#1]
+00009c  0041              LSLS     r1,r0,#1
+00009e  4822              LDR      r0,|L4.296|
+0000a0  3088              ADDS     r0,r0,#0x88
+0000a2  5242              STRH     r2,[r0,r1]
+;;;279    	if(V_cont==60)
+0000a4  7859              LDRB     r1,[r3,#1]  ; V_cont
+0000a6  293c              CMP      r1,#0x3c
+0000a8  d117              BNE      |L4.218|
+;;;280    	{
+;;;281    		V_cont=0;
+0000aa  705d              STRB     r5,[r3,#1]
+;;;282    		sum1=0;
+0000ac  9504              STR      r5,[sp,#0x10]
+;;;283    		for(f=0;f<60;f++)
+0000ae  9505              STR      r5,[sp,#0x14]
+0000b0  e00a              B        |L4.200|
+                  |L4.178|
+;;;284    		{
+;;;285    			sum1 +=Ad7689_Fit_Vmon[f];
+0000b2  f89d1014          LDRB     r1,[sp,#0x14]
+0000b6  f8301011          LDRH     r1,[r0,r1,LSL #1]
+0000ba  9a04              LDR      r2,[sp,#0x10]
+0000bc  4411              ADD      r1,r1,r2
+0000be  9104              STR      r1,[sp,#0x10]
+0000c0  f89d1014          LDRB     r1,[sp,#0x14]         ;283
+0000c4  1c49              ADDS     r1,r1,#1              ;283
+0000c6  9105              STR      r1,[sp,#0x14]         ;283
+                  |L4.200|
+0000c8  f89d1014          LDRB     r1,[sp,#0x14]         ;283
+0000cc  293c              CMP      r1,#0x3c              ;283
+0000ce  d3f0              BCC      |L4.178|
+;;;286    		}
+;;;287    		Vmon1_value=sum1/60;
+0000d0  9804              LDR      r0,[sp,#0x10]
+0000d2  491a              LDR      r1,|L4.316|
+0000d4  fbb0f0f4          UDIV     r0,r0,r4
+0000d8  6008              STR      r0,[r1,#0]  ; Vmon1_value
+                  |L4.218|
+;;;288    	}
+;;;289    	Ad7689_Fit_Rmon[R_cont++]=var_chR;
+0000da  f8bd2004          LDRH     r2,[sp,#4]
+0000de  7898              LDRB     r0,[r3,#2]  ; R_cont
+0000e0  1c41              ADDS     r1,r0,#1
+0000e2  7099              STRB     r1,[r3,#2]
+0000e4  0041              LSLS     r1,r0,#1
+0000e6  4816              LDR      r0,|L4.320|
+0000e8  5242              STRH     r2,[r0,r1]
+;;;290    	if(R_cont==40)
+0000ea  7899              LDRB     r1,[r3,#2]  ; R_cont
+0000ec  2928              CMP      r1,#0x28
+0000ee  d118              BNE      |L4.290|
+;;;291    	{
+;;;292    		R_cont=0;
+0000f0  709d              STRB     r5,[r3,#2]
+;;;293    		sum1=0;
+0000f2  9504              STR      r5,[sp,#0x10]
+;;;294    		for(f=0;f<40;f++)
+0000f4  9505              STR      r5,[sp,#0x14]
+0000f6  e00a              B        |L4.270|
+                  |L4.248|
+;;;295    		{
+;;;296    			sum1 +=Ad7689_Fit_Rmon[f];
+0000f8  f89d1014          LDRB     r1,[sp,#0x14]
+0000fc  f8301011          LDRH     r1,[r0,r1,LSL #1]
+000100  9a04              LDR      r2,[sp,#0x10]
+000102  4411              ADD      r1,r1,r2
+000104  9104              STR      r1,[sp,#0x10]
+000106  f89d1014          LDRB     r1,[sp,#0x14]         ;294
+00010a  1c49              ADDS     r1,r1,#1              ;294
+00010c  9105              STR      r1,[sp,#0x14]         ;294
+                  |L4.270|
+00010e  f89d1014          LDRB     r1,[sp,#0x14]         ;294
+000112  2928              CMP      r1,#0x28              ;294
+000114  d3f0              BCC      |L4.248|
+;;;297    		}
+;;;298    		Rmon_value=sum1/40;
+000116  9804              LDR      r0,[sp,#0x10]
+000118  2128              MOVS     r1,#0x28
+00011a  fbb0f0f1          UDIV     r0,r0,r1
+00011e  4909              LDR      r1,|L4.324|
+000120  8008              STRH     r0,[r1,#0]
+                  |L4.290|
+;;;299    	}
+;;;300    }
+000122  b007              ADD      sp,sp,#0x1c
+000124  bdf0              POP      {r4-r7,pc}
                           ENDP
 
-                  |L4.232|
+000126  0000              DCW      0x0000
+                  |L4.296|
                           DCD      ||.bss||
-                  |L4.236|
+                  |L4.300|
                           DCD      Imon_value
-                  |L4.240|
+                  |L4.304|
                           DCD      Vmon_value
-                  |L4.244|
-                          DCD      Rmon_value
-                  |L4.248|
+                  |L4.308|
                           DCD      ||.data||
-                  |L4.252|
+                  |L4.312|
                           DCD      Imon1_value
-                  |L4.256|
+                  |L4.316|
                           DCD      Vmon1_value
+                  |L4.320|
+                          DCD      ||.bss||+0x100
+                  |L4.324|
+                          DCD      Rmon_value
 
                           AREA ||i.AD7689_TransferByte||, CODE, READONLY, ALIGN=2
 
                   AD7689_TransferByte PROC
-;;;598    /************************************************************************/
-;;;599    vu16 AD7689_TransferByte(vu16 uiTxData)
+;;;221    /************************************************************************/
+;;;222    vu16 AD7689_TransferByte(vu16 uiTxData)
 000000  b511              PUSH     {r0,r4,lr}
-;;;600    {
+;;;223    {
 000002  b081              SUB      sp,sp,#4
-;;;601    	vu16 uiRxData;
-;;;602    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+;;;224    	vu16 uiRxData;
+;;;225    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
 000004  4c0c              LDR      r4,|L5.56|
                   |L5.6|
 000006  2102              MOVS     r1,#2
@@ -354,46 +400,230 @@
 00000a  f7fffffe          BL       SPI_I2S_GetFlagStatus
 00000e  2800              CMP      r0,#0
 000010  d0f9              BEQ      |L5.6|
-;;;603    	SPI_I2S_SendData(SPI1,uiTxData);
+;;;226    //	dma_send(uiTxData,1);
+;;;227    	SPI_I2S_SendData(SPI1,uiTxData);
 000012  f8bd1004          LDRH     r1,[sp,#4]
 000016  4620              MOV      r0,r4
 000018  f7fffffe          BL       SPI_I2S_SendData
                   |L5.28|
-;;;604    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+;;;228    	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
 00001c  2101              MOVS     r1,#1
 00001e  4620              MOV      r0,r4
 000020  f7fffffe          BL       SPI_I2S_GetFlagStatus
 000024  2800              CMP      r0,#0
 000026  d0f9              BEQ      |L5.28|
-;;;605    	uiRxData = SPI_I2S_ReceiveData(SPI1);
+;;;229    //	dma_rec(uiRxData,1);
+;;;230    	uiRxData = SPI_I2S_ReceiveData(SPI1);
 000028  4620              MOV      r0,r4
 00002a  f7fffffe          BL       SPI_I2S_ReceiveData
 00002e  9000              STR      r0,[sp,#0]
-;;;606    	return uiRxData;
+;;;231    	return uiRxData;
 000030  f8bd0000          LDRH     r0,[sp,#0]
-;;;607    }
+;;;232    }
 000034  bd1c              POP      {r2-r4,pc}
-;;;608    /************************************************************************/
+;;;233    /************************************************************************/
                           ENDP
 
 000036  0000              DCW      0x0000
                   |L5.56|
                           DCD      0x40013000
 
+                          AREA ||i.MYDMA_Config||, CODE, READONLY, ALIGN=2
+
+                  MYDMA_Config PROC
+;;;81     //ndtr:数据传输量  
+;;;82     void MYDMA_Config(void)
+000000  b510              PUSH     {r4,lr}
+;;;83     { 
+000002  b090              SUB      sp,sp,#0x40
+;;;84      
+;;;85     	DMA_InitTypeDef  DMA_InitStructure;
+;;;86     	
+;;;87     //	if((u32)DMA_Streamx>(u32)DMA2)//得到当前stream是属于DMA2还是DMA1
+;;;88     //	{
+;;;89     	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2,ENABLE);//DMA2时钟使能 
+000004  2101              MOVS     r1,#1
+000006  0588              LSLS     r0,r1,#22
+000008  f7fffffe          BL       RCC_AHB1PeriphClockCmd
+;;;90     		
+;;;91     //	}else 
+;;;92     //	{
+;;;93     //	  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);//DMA1时钟使能 
+;;;94     //	}
+;;;95       DMA_DeInit(DMA2_Stream0);
+00000c  4c17              LDR      r4,|L6.108|
+00000e  4620              MOV      r0,r4
+000010  f7fffffe          BL       DMA_DeInit
+                  |L6.20|
+;;;96     	
+;;;97     	while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE){}//等待DMA可配置 
+000014  4620              MOV      r0,r4
+000016  f7fffffe          BL       DMA_GetCmdStatus
+00001a  2800              CMP      r0,#0
+00001c  d1fa              BNE      |L6.20|
+;;;98     	
+;;;99       /* 配置 DMA Stream */
+;;;100      DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+00001e  f04f60c0          MOV      r0,#0x6000000
+000022  9001              STR      r0,[sp,#4]
+;;;101      DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&SPI1->DR;//DMA外设地址
+000024  4812              LDR      r0,|L6.112|
+000026  9002              STR      r0,[sp,#8]
+;;;102      DMA_InitStructure.DMA_Memory0BaseAddr = (u32)AD7689_Buffer;//DMA 存储器0地址
+000028  4812              LDR      r0,|L6.116|
+00002a  9003              STR      r0,[sp,#0xc]
+;;;103      DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+00002c  2040              MOVS     r0,#0x40
+00002e  9004              STR      r0,[sp,#0x10]
+;;;104      DMA_InitStructure.DMA_BufferSize = 8;//数据传输量 
+000030  2008              MOVS     r0,#8
+000032  9005              STR      r0,[sp,#0x14]
+;;;105      DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//外设非增量模式
+000034  2000              MOVS     r0,#0
+000036  9006              STR      r0,[sp,#0x18]
+;;;106      DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//存储器增量模式
+000038  f44f6180          MOV      r1,#0x400
+00003c  9107              STR      r1,[sp,#0x1c]
+;;;107      DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//外设数据长度:8位
+00003e  9008              STR      r0,[sp,#0x20]
+;;;108      DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;//存储器数据长度:8位
+000040  9009              STR      r0,[sp,#0x24]
+;;;109      DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;// 使用普通模式 
+000042  900a              STR      r0,[sp,#0x28]
+;;;110      DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+000044  01c9              LSLS     r1,r1,#7
+000046  910b              STR      r1,[sp,#0x2c]
+;;;111      DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
+000048  900c              STR      r0,[sp,#0x30]
+;;;112      DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+00004a  2103              MOVS     r1,#3
+00004c  910d              STR      r1,[sp,#0x34]
+;;;113      DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//存储器突发单次传输
+00004e  900e              STR      r0,[sp,#0x38]
+;;;114      DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//外设突发单次传输
+000050  900f              STR      r0,[sp,#0x3c]
+;;;115      DMA_Init(DMA2_Stream0, &DMA_InitStructure);//初始化DMA Stream
+000052  a901              ADD      r1,sp,#4
+000054  4620              MOV      r0,r4
+000056  f7fffffe          BL       DMA_Init
+;;;116    	
+;;;117    //	DMA_DeInit(DMA2_Stream3);	
+;;;118    //	while (DMA_GetCmdStatus(DMA2_Stream3) != DISABLE){}//等待DMA可配置 
+;;;119    ////	DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+;;;120    ////	DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+;;;121    ////	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+;;;122    ////	DMA_Init(DMA2_Stream3, &DMA_InitStructure);//初始化DMA Stream
+;;;123    //		
+;;;124    //  DMA_InitStructure.DMA_Channel = DMA_Channel_3;  //通道选择
+;;;125    //  DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&SPI1->DR;//DMA外设地址
+;;;126    //  DMA_InitStructure.DMA_Memory0BaseAddr = (u32)0;//DMA 存储器0地址
+;;;127    //  DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;//存储器到外设模式
+;;;128    //  DMA_InitStructure.DMA_BufferSize = 0;//数据传输量 
+;;;129    //  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//外设非增量模式
+;;;130    //  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//存储器增量模式
+;;;131    //  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//外设数据长度:8位
+;;;132    //  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;//存储器数据长度:8位
+;;;133    //  DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;// 使用普通模式 
+;;;134    //  DMA_InitStructure.DMA_Priority = DMA_Priority_High;//高优先级
+;;;135    //  DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
+;;;136    //  DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+;;;137    //  DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//存储器突发单次传输
+;;;138    //  DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//外设突发单次传输
+;;;139    //  DMA_Init(DMA2_Stream3, &DMA_InitStructure);//初始化DMA Stream
+;;;140    		
+;;;141    	SPI_I2S_DMACmd(SPI1,SPI_I2S_DMAReq_Rx,ENABLE);
+00005a  4805              LDR      r0,|L6.112|
+00005c  2201              MOVS     r2,#1
+00005e  4611              MOV      r1,r2
+000060  380c              SUBS     r0,r0,#0xc
+000062  f7fffffe          BL       SPI_I2S_DMACmd
+;;;142    //	SPI_I2S_DMACmd(SPI1,SPI_I2S_DMAReq_Tx,ENABLE);
+;;;143    }
+000066  b010              ADD      sp,sp,#0x40
+000068  bd10              POP      {r4,pc}
+;;;144    
+                          ENDP
+
+00006a  0000              DCW      0x0000
+                  |L6.108|
+                          DCD      0x40026410
+                  |L6.112|
+                          DCD      0x4001300c
+                  |L6.116|
+                          DCD      ||.bss||
+
+                          AREA ||i.MYDMA_Enable||, CODE, READONLY, ALIGN=2
+
+                  MYDMA_Enable PROC
+;;;147    //ndtr:数据传输量  
+;;;148    void MYDMA_Enable(DMA_Stream_TypeDef *DMA_Streamx,u16 ndtr)
+000000  b570              PUSH     {r4-r6,lr}
+;;;149    {
+000002  b086              SUB      sp,sp,#0x18
+000004  4605              MOV      r5,r0
+000006  460e              MOV      r6,r1
+;;;150    	SPI_InitTypeDef  SPI_InitStructure;
+;;;151    	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_RxOnly;
+000008  f44f6080          MOV      r0,#0x400
+00000c  f8ad0004          STRH     r0,[sp,#4]
+;;;152    	SPI_Init(SPI1, &SPI_InitStructure);//只读
+000010  4c0f              LDR      r4,|L7.80|
+000012  a901              ADD      r1,sp,#4
+000014  4620              MOV      r0,r4
+000016  f7fffffe          BL       SPI_Init
+;;;153    	DMA_Cmd(DMA_Streamx, DISABLE);                      //关闭DMA传输 
+00001a  2100              MOVS     r1,#0
+00001c  4628              MOV      r0,r5
+00001e  f7fffffe          BL       DMA_Cmd
+                  |L7.34|
+;;;154    	
+;;;155    	while (DMA_GetCmdStatus(DMA_Streamx) != DISABLE){}	//确保DMA可以被设置  
+000022  4628              MOV      r0,r5
+000024  f7fffffe          BL       DMA_GetCmdStatus
+000028  2800              CMP      r0,#0
+00002a  d1fa              BNE      |L7.34|
+;;;156    		
+;;;157    	DMA_SetCurrDataCounter(DMA_Streamx,ndtr);          //数据传输量  
+00002c  4631              MOV      r1,r6
+00002e  4628              MOV      r0,r5
+000030  f7fffffe          BL       DMA_SetCurrDataCounter
+;;;158     
+;;;159    	DMA_Cmd(DMA_Streamx, ENABLE);                      //开启DMA传输
+000034  2101              MOVS     r1,#1
+000036  4628              MOV      r0,r5
+000038  f7fffffe          BL       DMA_Cmd
+;;;160    	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+00003c  2000              MOVS     r0,#0
+00003e  f8ad0004          STRH     r0,[sp,#4]
+;;;161    	SPI_Init(SPI1, &SPI_InitStructure);//恢复双全工
+000042  a901              ADD      r1,sp,#4
+000044  4620              MOV      r0,r4
+000046  f7fffffe          BL       SPI_Init
+;;;162    	
+;;;163    }	  
+00004a  b006              ADD      sp,sp,#0x18
+00004c  bd70              POP      {r4-r6,pc}
+;;;164    //DMA发送
+                          ENDP
+
+00004e  0000              DCW      0x0000
+                  |L7.80|
+                          DCD      0x40013000
+
                           AREA ||i.SPI_AD7689_Read||, CODE, READONLY, ALIGN=2
 
                   SPI_AD7689_Read PROC
-;;;575    
-;;;576    vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
+;;;198    
+;;;199    vu16 SPI_AD7689_Read(vu16 AD7689_CFG, vu16 AD7689_INx)
 000000  b513              PUSH     {r0,r1,r4,lr}
-;;;577    {
+;;;200    {
 000002  b082              SUB      sp,sp,#8
-;;;578    	vu16 AD7689_Config=0;
+;;;201    	vu16 AD7689_Config=0;
 000004  2000              MOVS     r0,#0
 000006  9001              STR      r0,[sp,#4]
-;;;579    	vu16 AD7689_Data;
-;;;580    	vu8 i;
-;;;581    	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
+;;;202    	vu16 AD7689_Data;
+;;;203    	vu8 i;
+;;;204    	AD7689_Config = AD7689_CFG<<13|AD7689_INCC<<10|AD7689_INx<<7|AD7689_BW<<6|AD7689_REF<<3|AD7689_SEQ<<1|AD7689_RB;//写入配置参数
 000008  f8bd0008          LDRH     r0,[sp,#8]
 00000c  f8bd100c          LDRH     r1,[sp,#0xc]
 000010  0340              LSLS     r0,r0,#13
@@ -401,51 +631,213 @@
 000016  f6414159          MOV      r1,#0x1c59
 00001a  4308              ORRS     r0,r0,r1
 00001c  9001              STR      r0,[sp,#4]
-;;;582    	AD7689_Config <<=2;
+;;;205    	AD7689_Config <<=2;
 00001e  f8bd0004          LDRH     r0,[sp,#4]
 000022  f64f71ff          MOV      r1,#0xffff
 000026  ea010080          AND      r0,r1,r0,LSL #2
 00002a  9001              STR      r0,[sp,#4]
-;;;583    	AD7689_CNV_0;
-00002c  4c09              LDR      r4,|L6.84|
+;;;206    	AD7689_CNV_0;
+00002c  4c09              LDR      r4,|L8.84|
 00002e  2140              MOVS     r1,#0x40
 000030  4620              MOV      r0,r4
 000032  f7fffffe          BL       GPIO_ResetBits
-;;;584    	AD7689_Data=AD7689_TransferByte(AD7689_Config);
+;;;207    	AD7689_Data=AD7689_TransferByte(AD7689_Config);
 000036  f8bd0004          LDRH     r0,[sp,#4]
 00003a  f7fffffe          BL       AD7689_TransferByte
 00003e  9000              STR      r0,[sp,#0]
-;;;585    	AD7689_CNV_1;
+;;;208    	AD7689_CNV_1;
 000040  2140              MOVS     r1,#0x40
 000042  4620              MOV      r0,r4
 000044  f7fffffe          BL       GPIO_SetBits
-;;;586    	AD7689_Delay(); 
+;;;209    	AD7689_Delay();
 000048  f7fffffe          BL       AD7689_Delay
-;;;587    	return AD7689_Data;
+;;;210    	return AD7689_Data;
 00004c  f8bd0000          LDRH     r0,[sp,#0]
-;;;588    }
+;;;211    }
 000050  b004              ADD      sp,sp,#0x10
 000052  bd10              POP      {r4,pc}
-;;;589    
+;;;212    
                           ENDP
 
-                  |L6.84|
+                  |L8.84|
                           DCD      0x40020400
+
+                          AREA ||i.dma_rec||, CODE, READONLY, ALIGN=2
+
+                  dma_rec PROC
+;;;178    //DMA接收
+;;;179    void dma_rec(vu16 buf,u16 ndtr)
+000000  b573              PUSH     {r0,r1,r4-r6,lr}
+;;;180    {
+000002  b086              SUB      sp,sp,#0x18
+000004  460c              MOV      r4,r1
+;;;181    	SPI_InitTypeDef  SPI_InitStructure;
+;;;182    	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_RxOnly;
+000006  f44f6080          MOV      r0,#0x400
+00000a  f8ad0004          STRH     r0,[sp,#4]
+;;;183    	SPI_Init(SPI1, &SPI_InitStructure);//只读
+00000e  4e1c              LDR      r6,|L9.128|
+000010  a901              ADD      r1,sp,#4
+000012  4630              MOV      r0,r6
+000014  f7fffffe          BL       SPI_Init
+;;;184    	DMA_Cmd(DMA2_Stream0,DISABLE);
+000018  4d1a              LDR      r5,|L9.132|
+00001a  2100              MOVS     r1,#0
+00001c  4628              MOV      r0,r5
+00001e  f7fffffe          BL       DMA_Cmd
+                  |L9.34|
+;;;185    	while (DMA_GetCmdStatus(DMA2_Stream0) != DISABLE){}//等待DMA可配置
+000022  4628              MOV      r0,r5
+000024  f7fffffe          BL       DMA_GetCmdStatus
+000028  2800              CMP      r0,#0
+00002a  d1fa              BNE      |L9.34|
+;;;186    	DMA2_Stream0->NDTR=ndtr;
+00002c  4815              LDR      r0,|L9.132|
+00002e  1d00              ADDS     r0,r0,#4
+000030  6004              STR      r4,[r0,#0]
+;;;187    	DMA2_Stream0->M0AR=(u32)buf;
+000032  f8bd0018          LDRH     r0,[sp,#0x18]
+000036  4913              LDR      r1,|L9.132|
+000038  310c              ADDS     r1,r1,#0xc
+00003a  6008              STR      r0,[r1,#0]
+;;;188    	DMA_ClearFlag(DMA2_Stream0,DMA_FLAG_TCIF0|DMA_FLAG_HTIF0|DMA_FLAG_TEIF0|DMA_FLAG_DMEIF0|DMA_FLAG_FEIF0);
+00003c  4912              LDR      r1,|L9.136|
+00003e  4628              MOV      r0,r5
+000040  f7fffffe          BL       DMA_ClearFlag
+;;;189    	SPI1->DR;
+000044  89b0              LDRH     r0,[r6,#0xc]
+000046  4634              MOV      r4,r6
+;;;190    	DMA_Cmd(DMA2_Stream0,ENABLE);
+000048  2101              MOVS     r1,#1
+00004a  4628              MOV      r0,r5
+00004c  f7fffffe          BL       DMA_Cmd
+;;;191    	while(!DMA_GetFlagStatus(DMA2_Stream0,DMA_FLAG_TCIF0));
+000050  4e0e              LDR      r6,|L9.140|
+                  |L9.82|
+000052  4628              MOV      r0,r5
+000054  4631              MOV      r1,r6
+000056  f7fffffe          BL       DMA_GetFlagStatus
+00005a  2800              CMP      r0,#0
+00005c  d0f9              BEQ      |L9.82|
+;;;192    	DMA_Cmd(DMA2_Stream0,DISABLE);
+00005e  2100              MOVS     r1,#0
+000060  4628              MOV      r0,r5
+000062  f7fffffe          BL       DMA_Cmd
+;;;193    	DMA_ClearFlag(DMA2_Stream0,DMA_FLAG_TCIF0);
+000066  4631              MOV      r1,r6
+000068  4628              MOV      r0,r5
+00006a  f7fffffe          BL       DMA_ClearFlag
+;;;194    		
+;;;195    	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+00006e  2000              MOVS     r0,#0
+000070  f8ad0004          STRH     r0,[sp,#4]
+;;;196    	SPI_Init(SPI1, &SPI_InitStructure);//恢复双全工
+000074  a901              ADD      r1,sp,#4
+000076  4620              MOV      r0,r4
+000078  f7fffffe          BL       SPI_Init
+;;;197    }
+00007c  b008              ADD      sp,sp,#0x20
+00007e  bd70              POP      {r4-r6,pc}
+;;;198    
+                          ENDP
+
+                  |L9.128|
+                          DCD      0x40013000
+                  |L9.132|
+                          DCD      0x40026410
+                  |L9.136|
+                          DCD      0x1080003d
+                  |L9.140|
+                          DCD      0x10000020
+
+                          AREA ||i.dma_send||, CODE, READONLY, ALIGN=2
+
+                  dma_send PROC
+;;;164    //DMA发送
+;;;165    void dma_send(vu16 buf,u16 ndtr)
+000000  b573              PUSH     {r0,r1,r4-r6,lr}
+;;;166    {
+000002  460c              MOV      r4,r1
+;;;167    	DMA_Cmd(DMA2_Stream3,DISABLE);
+000004  4d17              LDR      r5,|L10.100|
+000006  2100              MOVS     r1,#0
+000008  4628              MOV      r0,r5
+00000a  f7fffffe          BL       DMA_Cmd
+                  |L10.14|
+;;;168    	while (DMA_GetCmdStatus(DMA2_Stream3) != DISABLE){}//等待DMA可配置
+00000e  4628              MOV      r0,r5
+000010  f7fffffe          BL       DMA_GetCmdStatus
+000014  2800              CMP      r0,#0
+000016  d1fa              BNE      |L10.14|
+;;;169    	DMA2_Stream3->NDTR=ndtr;
+000018  4812              LDR      r0,|L10.100|
+00001a  1d00              ADDS     r0,r0,#4
+00001c  6004              STR      r4,[r0,#0]
+;;;170    	DMA2_Stream3->M0AR=(u32)buf;
+00001e  f8bd0000          LDRH     r0,[sp,#0]
+000022  4910              LDR      r1,|L10.100|
+000024  310c              ADDS     r1,r1,#0xc
+000026  6008              STR      r0,[r1,#0]
+;;;171    	DMA_ClearFlag(DMA2_Stream3,DMA_FLAG_TCIF3|DMA_FLAG_HTIF3|DMA_FLAG_TEIF3|DMA_FLAG_DMEIF3|DMA_FLAG_FEIF3);
+000028  462c              MOV      r4,r5
+00002a  f04f51fa          MOV      r1,#0x1f400000
+00002e  4620              MOV      r0,r4
+000030  f7fffffe          BL       DMA_ClearFlag
+;;;172    	SPI1->DR;
+000034  490c              LDR      r1,|L10.104|
+000036  8988              LDRH     r0,[r1,#0xc]
+;;;173    	DMA_Cmd(DMA2_Stream3,ENABLE);
+000038  2101              MOVS     r1,#1
+00003a  4620              MOV      r0,r4
+00003c  f7fffffe          BL       DMA_Cmd
+;;;174    	while(!DMA_GetFlagStatus(DMA2_Stream3,DMA_FLAG_TCIF3));
+000040  f04f55c0          MOV      r5,#0x18000000
+                  |L10.68|
+000044  4629              MOV      r1,r5
+000046  4620              MOV      r0,r4
+000048  f7fffffe          BL       DMA_GetFlagStatus
+00004c  2800              CMP      r0,#0
+00004e  d0f9              BEQ      |L10.68|
+;;;175    	DMA_Cmd(DMA2_Stream3,DISABLE);
+000050  2100              MOVS     r1,#0
+000052  4620              MOV      r0,r4
+000054  f7fffffe          BL       DMA_Cmd
+;;;176    	DMA_ClearFlag(DMA2_Stream3,DMA_FLAG_TCIF3);
+000058  4629              MOV      r1,r5
+00005a  4620              MOV      r0,r4
+00005c  e8bd407c          POP      {r2-r6,lr}
+000060  f7ffbffe          B.W      DMA_ClearFlag
+;;;177    }
+;;;178    //DMA接收
+                          ENDP
+
+                  |L10.100|
+                          DCD      0x40026458
+                  |L10.104|
+                          DCD      0x40013000
 
                           AREA ||.bss||, DATA, NOINIT, ALIGN=1
 
                   AD7689_Buffer
                           %        16
                   Ad7689_Fit_Imon
-                          %        40
+                          %        120
                   Ad7689_Fit_Vmon
-                          %        40
+                          %        120
+                  Ad7689_Fit_Rmon
+                          %        80
 
-                          AREA ||area_number.9||, DATA, NOINIT, ALIGN=1
+                          AREA ||area_number.13||, DATA, NOINIT, ALIGN=1
 
-                          EXPORTAS ||area_number.9||, ||.bss||
+                          EXPORTAS ||area_number.13||, ||.bss||
+                  DMA_Buffer
+                          %        16
+
+                          AREA ||area_number.14||, DATA, NOINIT, ALIGN=1
+
+                          EXPORTAS ||area_number.14||, ||.bss||
                   Ad7689_Fit_Imon1
-                          %        40
+                          %        120
 
                           AREA ||.data||, DATA, ALIGN=0
 
@@ -453,6 +845,8 @@
 000000  00                DCB      0x00
                   V_cont
 000001  00                DCB      0x00
+                  R_cont
+000002  00                DCB      0x00
 
 ;*** Start embedded assembler ***
 

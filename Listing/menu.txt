@@ -8,261 +8,264 @@
 ;;;475    
 ;;;476    WM_HWIN CreateWindow(void) {
 000000  b57c              PUSH     {r2-r6,lr}
-;;;477      if(page_sw == face_graph)
-000002  4c27              LDR      r4,|L1.160|
+;;;477      if(page_sw == face_graph || page_sw == face_menu)
+000002  4c28              LDR      r4,|L1.164|
 000004  7820              LDRB     r0,[r4,#0]  ; page_sw
 000006  2800              CMP      r0,#0
-000008  d012              BEQ      |L1.48|
+000008  d015              BEQ      |L1.54|
+00000a  7820              LDRB     r0,[r4,#0]  ; page_sw
+00000c  2802              CMP      r0,#2
+00000e  d012              BEQ      |L1.54|
 ;;;478      {      
 ;;;479      }else{
 ;;;480    	  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
-00000a  f44f4100          MOV      r1,#0x8000
-00000e  4825              LDR      r0,|L1.164|
-000010  f7fffffe          BL       GPIO_SetBits
+000010  f44f4100          MOV      r1,#0x8000
+000014  4824              LDR      r0,|L1.168|
+000016  f7fffffe          BL       GPIO_SetBits
 ;;;481    	  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
-000014  4d24              LDR      r5,|L1.168|
-000016  2102              MOVS     r1,#2
-000018  4628              MOV      r0,r5
-00001a  f7fffffe          BL       GPIO_ResetBits
+00001a  4d24              LDR      r5,|L1.172|
+00001c  2102              MOVS     r1,#2
+00001e  4628              MOV      r0,r5
+000020  f7fffffe          BL       GPIO_ResetBits
 ;;;482    	  Delay_ms(500);
-00001e  f44f70fa          MOV      r0,#0x1f4
-000022  f7fffffe          BL       Delay_ms
+000024  f44f70fa          MOV      r0,#0x1f4
+000028  f7fffffe          BL       Delay_ms
 ;;;483    	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
-000026  f44f5100          MOV      r1,#0x2000
-00002a  4628              MOV      r0,r5
-00002c  f7fffffe          BL       GPIO_SetBits
-                  |L1.48|
+00002c  f44f5100          MOV      r1,#0x2000
+000030  4628              MOV      r0,r5
+000032  f7fffffe          BL       GPIO_SetBits
+                  |L1.54|
 ;;;484    //      IO_OFF();
-;;;485      }
-;;;486      page_sw = face_menu;
-000030  2002              MOVS     r0,#2
-000032  7020              STRB     r0,[r4,#0]
-;;;487      track = face_menu;
-000034  491d              LDR      r1,|L1.172|
-000036  7008              STRB     r0,[r1,#0]
-;;;488      set_sw = set_10;
-000038  491d              LDR      r1,|L1.176|
-00003a  2009              MOVS     r0,#9
+;;;485    	  
+;;;486      }
+;;;487      page_sw = face_menu;
+000036  2002              MOVS     r0,#2
+000038  7020              STRB     r0,[r4,#0]
+;;;488      track = face_menu;
+00003a  491d              LDR      r1,|L1.176|
 00003c  7008              STRB     r0,[r1,#0]
-;;;489      SET_Voltage = pow_v;
-00003e  481d              LDR      r0,|L1.180|
-000040  f8d01098          LDR      r1,[r0,#0x98]  ; Run_Control
-000044  6041              STR      r1,[r0,#4]  ; Run_Control
-;;;490      SET_Current = pow_c;
-000046  f8d010a0          LDR      r1,[r0,#0xa0]  ; Run_Control
-00004a  6081              STR      r1,[r0,#8]  ; Run_Control
-;;;491      pow_cutoffc = (float)set_pow_cutoffc/1000;
-00004c  481a              LDR      r0,|L1.184|
-00004e  eddf0a1b          VLDR     s1,|L1.188|
-000052  4d1b              LDR      r5,|L1.192|
-000054  f9b0000a          LDRSH    r0,[r0,#0xa]  ; InFlashSave
-000058  ee000a10          VMOV     s0,r0
-00005c  eeb80ac0          VCVT.F32.S32 s0,s0
-000060  ee801a20          VDIV.F32 s2,s0,s1
-000064  ed851a02          VSTR     s2,[r5,#8]
-;;;492      pass = 0;
-000068  4816              LDR      r0,|L1.196|
-00006a  2400              MOVS     r4,#0
-00006c  7004              STRB     r4,[r0,#0]
-;;;493      mode_sw = mode_pow;
-00006e  4916              LDR      r1,|L1.200|
-000070  2003              MOVS     r0,#3
-000072  7008              STRB     r0,[r1,#0]
-;;;494    //  USART_SendData(USART3,1);//连接电源
-;;;495      TM1650_SET_LED(0x68,0x70);
-000074  2170              MOVS     r1,#0x70
-000076  2068              MOVS     r0,#0x68
-000078  f7fffffe          BL       TM1650_SET_LED
-;;;496      GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
-00007c  f44f5180          MOV      r1,#0x1000
-000080  4812              LDR      r0,|L1.204|
-000082  f7fffffe          BL       GPIO_ResetBits
-;;;497      hWinWind = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_HBKWIN, 0, 0);
-000086  f7fffffe          BL       WM_GetDesktopWindow
-00008a  4603              MOV      r3,r0
-00008c  9400              STR      r4,[sp,#0]
-00008e  4a10              LDR      r2,|L1.208|
-000090  2115              MOVS     r1,#0x15
-000092  4810              LDR      r0,|L1.212|
-000094  9401              STR      r4,[sp,#4]
-000096  f7fffffe          BL       GUI_CreateDialogBox
-00009a  6068              STR      r0,[r5,#4]  ; hWinWind
-;;;498      return hWinWind;
-;;;499    }
-00009c  bd7c              POP      {r2-r6,pc}
-;;;500    
+;;;489      set_sw = set_10;
+00003e  491d              LDR      r1,|L1.180|
+000040  2009              MOVS     r0,#9
+000042  7008              STRB     r0,[r1,#0]
+;;;490      SET_Voltage = pow_v;
+000044  481c              LDR      r0,|L1.184|
+000046  f8d01098          LDR      r1,[r0,#0x98]  ; Run_Control
+00004a  6041              STR      r1,[r0,#4]  ; Run_Control
+;;;491      SET_Current = pow_c;
+00004c  f8d010a0          LDR      r1,[r0,#0xa0]  ; Run_Control
+000050  6081              STR      r1,[r0,#8]  ; Run_Control
+;;;492      pow_cutoffc = (float)set_pow_cutoffc/1000;
+000052  481a              LDR      r0,|L1.188|
+000054  eddf0a1a          VLDR     s1,|L1.192|
+000058  4d1a              LDR      r5,|L1.196|
+00005a  f9b0000a          LDRSH    r0,[r0,#0xa]  ; InFlashSave
+00005e  ee000a10          VMOV     s0,r0
+000062  eeb80ac0          VCVT.F32.S32 s0,s0
+000066  ee801a20          VDIV.F32 s2,s0,s1
+00006a  ed851a02          VSTR     s2,[r5,#8]
+;;;493      pass = 0;
+00006e  4816              LDR      r0,|L1.200|
+000070  2400              MOVS     r4,#0
+000072  7004              STRB     r4,[r0,#0]
+;;;494      mode_sw = mode_pow;
+000074  4915              LDR      r1,|L1.204|
+000076  2003              MOVS     r0,#3
+000078  7008              STRB     r0,[r1,#0]
+;;;495    //  USART_SendData(USART3,1);//连接电源
+;;;496      TM1650_SET_LED(0x68,0x70);
+00007a  2170              MOVS     r1,#0x70
+00007c  2068              MOVS     r0,#0x68
+00007e  f7fffffe          BL       TM1650_SET_LED
+;;;497      GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
+000082  f44f5180          MOV      r1,#0x1000
+000086  4812              LDR      r0,|L1.208|
+000088  f7fffffe          BL       GPIO_ResetBits
+;;;498      hWinWind = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_HBKWIN, 0, 0);
+00008c  f7fffffe          BL       WM_GetDesktopWindow
+000090  4603              MOV      r3,r0
+000092  9400              STR      r4,[sp,#0]
+000094  4a0f              LDR      r2,|L1.212|
+000096  2115              MOVS     r1,#0x15
+000098  480f              LDR      r0,|L1.216|
+00009a  9401              STR      r4,[sp,#4]
+00009c  f7fffffe          BL       GUI_CreateDialogBox
+0000a0  6068              STR      r0,[r5,#4]  ; hWinWind
+;;;499      return hWinWind;
+;;;500    }
+0000a2  bd7c              POP      {r2-r6,pc}
+;;;501    
                           ENDP
 
-00009e  0000              DCW      0x0000
-                  |L1.160|
-                          DCD      page_sw
                   |L1.164|
-                          DCD      0x40020000
+                          DCD      page_sw
                   |L1.168|
-                          DCD      0x40020800
+                          DCD      0x40020000
                   |L1.172|
-                          DCD      track
+                          DCD      0x40020800
                   |L1.176|
-                          DCD      set_sw
+                          DCD      track
                   |L1.180|
-                          DCD      Run_Control
+                          DCD      set_sw
                   |L1.184|
-                          DCD      InFlashSave
+                          DCD      Run_Control
                   |L1.188|
-0000bc  447a0000          DCFS     0x447a0000 ; 1000
+                          DCD      InFlashSave
                   |L1.192|
-                          DCD      ||.data||
+0000c0  447a0000          DCFS     0x447a0000 ; 1000
                   |L1.196|
-                          DCD      pass
+                          DCD      ||.data||
                   |L1.200|
-                          DCD      mode_sw
+                          DCD      pass
                   |L1.204|
-                          DCD      0x40020c00
+                          DCD      mode_sw
                   |L1.208|
-                          DCD      _cbDialog
+                          DCD      0x40020c00
                   |L1.212|
+                          DCD      _cbDialog
+                  |L1.216|
                           DCD      ||.constdata||
 
                           AREA ||i.DEL_POW||, CODE, READONLY, ALIGN=2
 
                   DEL_POW PROC
-;;;772    }
-;;;773    void DEL_POW(void)
+;;;773    }
+;;;774    void DEL_POW(void)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;774    {
-;;;775    	switch(set_sw){
+;;;775    {
+;;;776    	switch(set_sw){
 000004  482b              LDR      r0,|L2.180|
 000006  7801              LDRB     r1,[r0,#0]  ; set_sw
-;;;776    		case set_18:
-;;;777            {
-;;;778    			WM_HWIN hItem;
-;;;779    //            WM_InvalidateWindow(hWinWind);
-;;;780                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
+;;;777    		case set_18:
+;;;778            {
+;;;779    			WM_HWIN hItem;
+;;;780    //            WM_InvalidateWindow(hWinWind);
+;;;781                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
 000008  482b              LDR      r0,|L2.184|
-;;;781    			if(bit > 1)
-;;;782    			{
-;;;783    				bit --;
-;;;784    				set_limit[bit-1] = '\0';
+;;;782    			if(bit > 1)
+;;;783    			{
+;;;784    				bit --;
+;;;785    				set_limit[bit-1] = '\0';
 00000a  4f2c              LDR      r7,|L2.188|
-00000c  2400              MOVS     r4,#0                 ;780
-00000e  6840              LDR      r0,[r0,#4]            ;780
+00000c  2400              MOVS     r4,#0                 ;781
+00000e  6840              LDR      r0,[r0,#4]            ;781
 000010  4d2b              LDR      r5,|L2.192|
-;;;785    			}
-;;;786    			if(bit == dot_flag)
+;;;786    			}
+;;;787    			if(bit == dot_flag)
 000012  4e2c              LDR      r6,|L2.196|
-000014  2911              CMP      r1,#0x11              ;775
+000014  2911              CMP      r1,#0x11              ;776
 000016  d01b              BEQ      |L2.80|
-000018  2912              CMP      r1,#0x12              ;775
+000018  2912              CMP      r1,#0x12              ;776
 00001a  d031              BEQ      |L2.128|
-00001c  2958              CMP      r1,#0x58              ;775
+00001c  2958              CMP      r1,#0x58              ;776
 00001e  d147              BNE      |L2.176|
-;;;787    			{
-;;;788    				dot_flag = 0;
-;;;789    			}
-;;;790    			TEXT_SetText(hItem,set_limit);
-;;;791    		}break;
-;;;792    		case set_19:
-;;;793            {
-;;;794    			WM_HWIN hItem;
-;;;795    //            WM_InvalidateWindow(hWinWind);
-;;;796                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-;;;797    			if(bit > 1)
-;;;798    			{
-;;;799    				bit --;
-;;;800    				set_limit[bit-1] = '\0';
-;;;801    			}
-;;;802    			if(bit == dot_flag)
-;;;803    			{
-;;;804    				dot_flag = 0;
-;;;805    			}
-;;;806    			TEXT_SetText(hItem,set_limit);
-;;;807    		}break;
-;;;808    		case set_89:
-;;;809            {
-;;;810                WM_HWIN hItem;
-;;;811    //            WM_InvalidateWindow(hWinWind);
-;;;812                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
+;;;788    			{
+;;;789    				dot_flag = 0;
+;;;790    			}
+;;;791    			TEXT_SetText(hItem,set_limit);
+;;;792    		}break;
+;;;793    		case set_19:
+;;;794            {
+;;;795    			WM_HWIN hItem;
+;;;796    //            WM_InvalidateWindow(hWinWind);
+;;;797                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
+;;;798    			if(bit > 1)
+;;;799    			{
+;;;800    				bit --;
+;;;801    				set_limit[bit-1] = '\0';
+;;;802    			}
+;;;803    			if(bit == dot_flag)
+;;;804    			{
+;;;805    				dot_flag = 0;
+;;;806    			}
+;;;807    			TEXT_SetText(hItem,set_limit);
+;;;808    		}break;
+;;;809    		case set_89:
+;;;810            {
+;;;811                WM_HWIN hItem;
+;;;812    //            WM_InvalidateWindow(hWinWind);
+;;;813                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
 000020  f640112e          MOV      r1,#0x92e
 000024  f7fffffe          BL       WM_GetDialogItem
-;;;813    			if(bit > 1)
+;;;814    			if(bit > 1)
 000028  7829              LDRB     r1,[r5,#0]  ; bit
 00002a  2901              CMP      r1,#1
 00002c  d906              BLS      |L2.60|
-;;;814    			{
-;;;815    				bit --;
+;;;815    			{
+;;;816    				bit --;
 00002e  7829              LDRB     r1,[r5,#0]  ; bit
 000030  1e49              SUBS     r1,r1,#1
 000032  7029              STRB     r1,[r5,#0]
-;;;816    				set_limit[bit-1] = '\0';
+;;;817    				set_limit[bit-1] = '\0';
 000034  7829              LDRB     r1,[r5,#0]  ; bit
 000036  4439              ADD      r1,r1,r7
 000038  f8014c01          STRB     r4,[r1,#-1]
                   |L2.60|
-;;;817    			}
-;;;818    			if(bit == dot_flag)
+;;;818    			}
+;;;819    			if(bit == dot_flag)
 00003c  7829              LDRB     r1,[r5,#0]  ; bit
 00003e  7832              LDRB     r2,[r6,#0]  ; dot_flag
 000040  4291              CMP      r1,r2
 000042  d100              BNE      |L2.70|
-;;;819    			{
-;;;820    				dot_flag = 0;
+;;;820    			{
+;;;821    				dot_flag = 0;
 000044  7034              STRB     r4,[r6,#0]
                   |L2.70|
-;;;821    			}
-;;;822    			TEXT_SetText(hItem,set_limit);
+;;;822    			}
+;;;823    			TEXT_SetText(hItem,set_limit);
 000046  e8bd41f0          POP      {r4-r8,lr}
 00004a  491c              LDR      r1,|L2.188|
 00004c  f7ffbffe          B.W      TEXT_SetText
                   |L2.80|
-000050  f6400166          MOV      r1,#0x866             ;780
+000050  f6400166          MOV      r1,#0x866             ;781
 000054  f7fffffe          BL       WM_GetDialogItem
-000058  7829              LDRB     r1,[r5,#0]            ;781  ; bit
-00005a  2901              CMP      r1,#1                 ;781
+000058  7829              LDRB     r1,[r5,#0]            ;782  ; bit
+00005a  2901              CMP      r1,#1                 ;782
 00005c  d906              BLS      |L2.108|
-00005e  7829              LDRB     r1,[r5,#0]            ;783  ; bit
-000060  1e49              SUBS     r1,r1,#1              ;783
-000062  7029              STRB     r1,[r5,#0]            ;783
-000064  7829              LDRB     r1,[r5,#0]            ;784  ; bit
-000066  4439              ADD      r1,r1,r7              ;784
-000068  f8014c01          STRB     r4,[r1,#-1]           ;784
+00005e  7829              LDRB     r1,[r5,#0]            ;784  ; bit
+000060  1e49              SUBS     r1,r1,#1              ;784
+000062  7029              STRB     r1,[r5,#0]            ;784
+000064  7829              LDRB     r1,[r5,#0]            ;785  ; bit
+000066  4439              ADD      r1,r1,r7              ;785
+000068  f8014c01          STRB     r4,[r1,#-1]           ;785
                   |L2.108|
-00006c  7829              LDRB     r1,[r5,#0]            ;786  ; bit
-00006e  7832              LDRB     r2,[r6,#0]            ;786  ; dot_flag
-000070  4291              CMP      r1,r2                 ;786
+00006c  7829              LDRB     r1,[r5,#0]            ;787  ; bit
+00006e  7832              LDRB     r2,[r6,#0]            ;787  ; dot_flag
+000070  4291              CMP      r1,r2                 ;787
 000072  d100              BNE      |L2.118|
-000074  7034              STRB     r4,[r6,#0]            ;788
+000074  7034              STRB     r4,[r6,#0]            ;789
                   |L2.118|
-000076  e8bd41f0          POP      {r4-r8,lr}            ;790
+000076  e8bd41f0          POP      {r4-r8,lr}            ;791
 00007a  4910              LDR      r1,|L2.188|
 00007c  f7ffbffe          B.W      TEXT_SetText
                   |L2.128|
-000080  f6400167          MOV      r1,#0x867             ;796
+000080  f6400167          MOV      r1,#0x867             ;797
 000084  f7fffffe          BL       WM_GetDialogItem
-000088  7829              LDRB     r1,[r5,#0]            ;797  ; bit
-00008a  2901              CMP      r1,#1                 ;797
+000088  7829              LDRB     r1,[r5,#0]            ;798  ; bit
+00008a  2901              CMP      r1,#1                 ;798
 00008c  d906              BLS      |L2.156|
-00008e  7829              LDRB     r1,[r5,#0]            ;799  ; bit
-000090  1e49              SUBS     r1,r1,#1              ;799
-000092  7029              STRB     r1,[r5,#0]            ;799
-000094  7829              LDRB     r1,[r5,#0]            ;800  ; bit
-000096  4439              ADD      r1,r1,r7              ;800
-000098  f8014c01          STRB     r4,[r1,#-1]           ;800
+00008e  7829              LDRB     r1,[r5,#0]            ;800  ; bit
+000090  1e49              SUBS     r1,r1,#1              ;800
+000092  7029              STRB     r1,[r5,#0]            ;800
+000094  7829              LDRB     r1,[r5,#0]            ;801  ; bit
+000096  4439              ADD      r1,r1,r7              ;801
+000098  f8014c01          STRB     r4,[r1,#-1]           ;801
                   |L2.156|
-00009c  7829              LDRB     r1,[r5,#0]            ;802  ; bit
-00009e  7832              LDRB     r2,[r6,#0]            ;802  ; dot_flag
-0000a0  4291              CMP      r1,r2                 ;802
+00009c  7829              LDRB     r1,[r5,#0]            ;803  ; bit
+00009e  7832              LDRB     r2,[r6,#0]            ;803  ; dot_flag
+0000a0  4291              CMP      r1,r2                 ;803
 0000a2  d100              BNE      |L2.166|
-0000a4  7034              STRB     r4,[r6,#0]            ;804
+0000a4  7034              STRB     r4,[r6,#0]            ;805
                   |L2.166|
-0000a6  e8bd41f0          POP      {r4-r8,lr}            ;806
+0000a6  e8bd41f0          POP      {r4-r8,lr}            ;807
 0000aa  4904              LDR      r1,|L2.188|
 0000ac  f7ffbffe          B.W      TEXT_SetText
                   |L2.176|
-;;;823    		}break;
-;;;824    	}
-;;;825    }
+;;;824    		}break;
+;;;825    	}
+;;;826    }
 0000b0  e8bd81f0          POP      {r4-r8,pc}
-;;;826    
+;;;827    
                           ENDP
 
                   |L2.180|
@@ -279,286 +282,286 @@
                           AREA ||i.INPUT_POW||, CODE, READONLY, ALIGN=2
 
                   INPUT_POW PROC
-;;;829    void INPUT_POW(char* num);            
-;;;830    void INPUT_POW(char* num){ 
+;;;830    void INPUT_POW(char* num);            
+;;;831    void INPUT_POW(char* num){ 
 000000  e92d41f0          PUSH     {r4-r8,lr}
 000004  4606              MOV      r6,r0
-;;;831    	u8 i;
-;;;832        switch(set_sw){
+;;;832    	u8 i;
+;;;833        switch(set_sw){
 000006  4840              LDR      r0,|L3.264|
 000008  7802              LDRB     r2,[r0,#0]  ; set_sw
-;;;833    		case set_18:
-;;;834            {
-;;;835                WM_HWIN hItem;
-;;;836    //            WM_InvalidateWindow(hWinWind);
-;;;837                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
+;;;834    		case set_18:
+;;;835            {
+;;;836                WM_HWIN hItem;
+;;;837    //            WM_InvalidateWindow(hWinWind);
+;;;838                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
 00000a  4840              LDR      r0,|L3.268|
-;;;838    			if(bit < 6)
-;;;839    			{
-;;;840    				strcat(set_limit,num);
-;;;841    			}
-;;;842    			if(dot_flag != 0 && strcmp(num,".") == 0)
+;;;839    			if(bit < 6)
+;;;840    			{
+;;;841    				strcat(set_limit,num);
+;;;842    			}
+;;;843    			if(dot_flag != 0 && strcmp(num,".") == 0)
 00000c  4c40              LDR      r4,|L3.272|
 00000e  4d41              LDR      r5,|L3.276|
-000010  6840              LDR      r0,[r0,#4]            ;837
-000012  2a11              CMP      r2,#0x11              ;832
+000010  6840              LDR      r0,[r0,#4]            ;838
+000012  2a11              CMP      r2,#0x11              ;833
 000014  d01b              BEQ      |L3.78|
-000016  2a12              CMP      r2,#0x12              ;832
+000016  2a12              CMP      r2,#0x12              ;833
 000018  d03e              BEQ      |L3.152|
-00001a  2a58              CMP      r2,#0x58              ;832
+00001a  2a58              CMP      r2,#0x58              ;833
 00001c  d171              BNE      |L3.258|
-;;;843    			{
-;;;844    				
-;;;845    			}else{			
-;;;846    				
-;;;847    				if(dot_flag == 0 && strcmp(num,".") == 0)
-;;;848    				{
-;;;849    					dot_flag = bit;
-;;;850    				}
-;;;851    				bit ++;
-;;;852    			}
-;;;853    			TEXT_SetText(hItem,set_limit);
-;;;854    //            switch(bit){
-;;;855    //                case 1:
-;;;856    //                {
-;;;857    //					for(i=0;i<6;i++)
-;;;858    //					{
-;;;859    //						set_limit[i] = '\0';
-;;;860    //					}
-;;;861    //                    pow_v = atoi(num) * 100;
-;;;862    //                    strcat(set_limit,num);            
-;;;863    //                    TEXT_SetText(hItem,set_limit);
-;;;864    //                    bit = 2;
-;;;865    //                    break;
-;;;866    //                }
-;;;867    //                case 2:
-;;;868    //                {
-;;;869    //                    strcat(set_limit,num);
-;;;870    //					if(set_limit[bit-1] == 0x62){
-;;;871    //						set_limit[bit-1] = '\0';
-;;;872    //						set_limit[bit-2] = '\0';
-;;;873    //						bit -= 1;
-;;;874    //						pow_v = pow_v - atoi(num) * 100;
-;;;875    //						TEXT_SetText(hItem,set_limit);
-;;;876    //						break;
-;;;877    //					}
-;;;878    //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
-;;;879    //                    {
-;;;880    //                        dot_flag = 1;
-;;;881    //                    }else{
-;;;882    //                        pow_v = pow_v * 10 + atoi(num) * 100;
-;;;883    //                    }           
-;;;884    //                    TEXT_SetText(hItem,set_limit);
-;;;885    //                    bit = 3;
-;;;886    //                    break;
-;;;887    //                }
-;;;888    //                case 3:
-;;;889    //                {
-;;;890    //                    strcat(set_limit,num);
-;;;891    //					if(set_limit[bit-1] == 0x62){
-;;;892    //						set_limit[bit-1] = '\0';
-;;;893    //						set_limit[bit-2] = '\0';
-;;;894    //						bit -= 1;
-;;;895    //						TEXT_SetText(hItem,set_limit);
-;;;896    //						break;
-;;;897    //					}
-;;;898    //                    if(dot_flag == 0)
-;;;899    //                    {
-;;;900    //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
-;;;901    //                        {                            
-;;;902    //                            dot_flag = 2;
-;;;903    //                        }else{
-;;;904    //                            pow_v = /*3000*/ 6200;
-;;;905    //                        }
-;;;906    //                    }else{
-;;;907    //						pow_v = pow_v + atoi(num) * 10;
-;;;908    //                    }
-;;;909    //                    TEXT_SetText(hItem,set_limit);                  
-;;;910    //                    bit = 4;
-;;;911    //                    break;
-;;;912    //                }
-;;;913    //                case 4:
-;;;914    //                {
-;;;915    //                    strcat(set_limit,num);
-;;;916    //					if(set_limit[bit-1] == 0x62){
-;;;917    //						set_limit[bit-1] = '\0';
-;;;918    //						set_limit[bit-2] = '\0';
-;;;919    //						bit -= 1;
-;;;920    //						TEXT_SetText(hItem,set_limit);
-;;;921    //						pow_v = pow_v - atoi(num) * 10;
-;;;922    //						break;
-;;;923    //					}
-;;;924    //                    if(dot_flag == 0)
-;;;925    //                    {
-;;;926    //                        pow_v = /*3000*/ 6200;
-;;;927    //                    }else if(dot_flag == 2){
-;;;928    //                        pow_v = pow_v + atoi(num) * 10;
-;;;929    //                    }else{
-;;;930    //                        pow_v = pow_v + atoi(num);
-;;;931    //                    }
-;;;932    //                    TEXT_SetText(hItem,set_limit);                   
-;;;933    //                    bit = 5;
-;;;934    //                    break;
-;;;935    //                }
-;;;936    //                case 5:
-;;;937    //                {
-;;;938    //                    strcat(set_limit,num);
-;;;939    //					if(set_limit[bit-1] == 0x62){
-;;;940    //						set_limit[bit-1] = '\0';
-;;;941    //						set_limit[bit-2] = '\0';
-;;;942    //						bit -= 1;
-;;;943    //						TEXT_SetText(hItem,set_limit);
-;;;944    //						break;
-;;;945    //					}
-;;;946    //                    if(dot_flag == 0)
-;;;947    //                    {
-;;;948    //                        pow_v = /*3000*/ 6200;
-;;;949    //                    }else if(dot_flag == 1){
-;;;950    //                        pow_v = pow_v;
-;;;951    //                    }else{
-;;;952    //                        pow_v = pow_v + atoi(num);
-;;;953    //                    }
-;;;954    //                    TEXT_SetText(hItem,set_limit);                   
-;;;955    //                    bit = 1;
-;;;956    //                    break;
-;;;957    //                }
-;;;958    //            }
-;;;959                break;
-;;;960            }
-;;;961            case set_19:
-;;;962            {
-;;;963                WM_HWIN hItem;
-;;;964    //            WM_InvalidateWindow(hWinWind);
-;;;965                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-;;;966    			if(bit < 7)
-;;;967    			{
-;;;968    				strcat(set_limit,num);
-;;;969    			}
-;;;970    			if(dot_flag != 0 && strcmp(num,".") == 0)
-;;;971    			{
-;;;972    				
-;;;973    			}else{			
-;;;974    				
-;;;975    				if(dot_flag == 0 && strcmp(num,".") == 0)
-;;;976    				{
-;;;977    					dot_flag = bit;
-;;;978    				}
-;;;979    				bit ++;
-;;;980    			}
-;;;981    			TEXT_SetText(hItem,set_limit);
-;;;982    //            switch(bit){
-;;;983    //                case 1:
-;;;984    //                {
-;;;985    //					for(i=0;i<6;i++)
-;;;986    //					{
-;;;987    //						set_limit[i] = '\0';
-;;;988    //					}
-;;;989    //                    pow_c = atoi(num) * 1000;
-;;;990    //                    strcat(set_limit,num);            
-;;;991    //                    TEXT_SetText(hItem,set_limit);
-;;;992    //                    bit = 2;
-;;;993    //                    break;
-;;;994    //                }
-;;;995    //                case 2:
-;;;996    //                {
-;;;997    //                    strcat(set_limit,num);            
-;;;998    //                    TEXT_SetText(hItem,set_limit);
-;;;999    //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
-;;;1000   //                    {
-;;;1001   //                        dot_flag = 1;
-;;;1002   //                    }else{
-;;;1003   //                        pow_c = pow_c * 10 + atoi(num) * 1000;
-;;;1004   //                    }
-;;;1005   //                    bit = 3;
-;;;1006   //                    break;
-;;;1007   //                }
-;;;1008   //                case 3:
-;;;1009   //                {
-;;;1010   //                    strcat(set_limit,num);
-;;;1011   //                    TEXT_SetText(hItem,set_limit);
-;;;1012   //                    if(dot_flag == 0)
-;;;1013   //                    {
-;;;1014   //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
-;;;1015   //                        {                            
-;;;1016   //                            dot_flag = 2;
-;;;1017   //                        }else{
-;;;1018   //                            pow_c = 5000;
-;;;1019   //                        }
-;;;1020   //                    }else{
-;;;1021   //                        pow_c = pow_c + atoi(num) * 100;
-;;;1022   //                    }
-;;;1023   //                                       
-;;;1024   //                    bit = 4;
-;;;1025   //                    break;
-;;;1026   //                }
-;;;1027   //                case 4:
-;;;1028   //                {
-;;;1029   //                    strcat(set_limit,num);
-;;;1030   //                    TEXT_SetText(hItem,set_limit);
-;;;1031   //                    if(dot_flag == 0)
-;;;1032   //                    {
-;;;1033   //                        pow_c = 5000;
-;;;1034   //                    }else if(dot_flag == 2){
-;;;1035   //                        pow_c = pow_c + atoi(num) * 100;
-;;;1036   //                    }else{
-;;;1037   //                        pow_c = pow_c + atoi(num) * 10;
-;;;1038   //                    }
-;;;1039   //                                       
-;;;1040   //                    bit = 5;
-;;;1041   //                    break;
-;;;1042   //                }
-;;;1043   //                case 5:
-;;;1044   //                {
-;;;1045   //                    strcat(set_limit,num);
-;;;1046   //                    TEXT_SetText(hItem,set_limit);
-;;;1047   //                    if(dot_flag == 0)
-;;;1048   //                    {
-;;;1049   //                        pow_c = 5000;
-;;;1050   //                    }else if(dot_flag == 1){
-;;;1051   //                        pow_c = pow_c + atoi(num);
-;;;1052   //                    }else{
-;;;1053   //                        pow_c = pow_c + atoi(num) * 10;
-;;;1054   //                    }
-;;;1055   //                                       
-;;;1056   //                    bit = 6;
-;;;1057   //                    break;
-;;;1058   //                }
-;;;1059   //                case 6:
-;;;1060   //                {
-;;;1061   //                    strcat(set_limit,num);
-;;;1062   //                    TEXT_SetText(hItem,set_limit);
-;;;1063   //                    if(dot_flag == 0)
-;;;1064   //                    {
-;;;1065   //                        pow_c = 0;
-;;;1066   //                    }else if(dot_flag == 2){
-;;;1067   //                        pow_c = pow_c + atoi(num);
-;;;1068   //                    }                 
-;;;1069   //                    bit = 1;
-;;;1070   //                    break;
-;;;1071   //                }
-;;;1072   //            }
-;;;1073           }
-;;;1074           break;
-;;;1075   		case set_89:
-;;;1076           {
-;;;1077               WM_HWIN hItem;
-;;;1078   //            WM_InvalidateWindow(hWinWind);
-;;;1079               hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
+;;;844    			{
+;;;845    				
+;;;846    			}else{			
+;;;847    				
+;;;848    				if(dot_flag == 0 && strcmp(num,".") == 0)
+;;;849    				{
+;;;850    					dot_flag = bit;
+;;;851    				}
+;;;852    				bit ++;
+;;;853    			}
+;;;854    			TEXT_SetText(hItem,set_limit);
+;;;855    //            switch(bit){
+;;;856    //                case 1:
+;;;857    //                {
+;;;858    //					for(i=0;i<6;i++)
+;;;859    //					{
+;;;860    //						set_limit[i] = '\0';
+;;;861    //					}
+;;;862    //                    pow_v = atoi(num) * 100;
+;;;863    //                    strcat(set_limit,num);            
+;;;864    //                    TEXT_SetText(hItem,set_limit);
+;;;865    //                    bit = 2;
+;;;866    //                    break;
+;;;867    //                }
+;;;868    //                case 2:
+;;;869    //                {
+;;;870    //                    strcat(set_limit,num);
+;;;871    //					if(set_limit[bit-1] == 0x62){
+;;;872    //						set_limit[bit-1] = '\0';
+;;;873    //						set_limit[bit-2] = '\0';
+;;;874    //						bit -= 1;
+;;;875    //						pow_v = pow_v - atoi(num) * 100;
+;;;876    //						TEXT_SetText(hItem,set_limit);
+;;;877    //						break;
+;;;878    //					}
+;;;879    //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
+;;;880    //                    {
+;;;881    //                        dot_flag = 1;
+;;;882    //                    }else{
+;;;883    //                        pow_v = pow_v * 10 + atoi(num) * 100;
+;;;884    //                    }           
+;;;885    //                    TEXT_SetText(hItem,set_limit);
+;;;886    //                    bit = 3;
+;;;887    //                    break;
+;;;888    //                }
+;;;889    //                case 3:
+;;;890    //                {
+;;;891    //                    strcat(set_limit,num);
+;;;892    //					if(set_limit[bit-1] == 0x62){
+;;;893    //						set_limit[bit-1] = '\0';
+;;;894    //						set_limit[bit-2] = '\0';
+;;;895    //						bit -= 1;
+;;;896    //						TEXT_SetText(hItem,set_limit);
+;;;897    //						break;
+;;;898    //					}
+;;;899    //                    if(dot_flag == 0)
+;;;900    //                    {
+;;;901    //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
+;;;902    //                        {                            
+;;;903    //                            dot_flag = 2;
+;;;904    //                        }else{
+;;;905    //                            pow_v = /*3000*/ 6200;
+;;;906    //                        }
+;;;907    //                    }else{
+;;;908    //						pow_v = pow_v + atoi(num) * 10;
+;;;909    //                    }
+;;;910    //                    TEXT_SetText(hItem,set_limit);                  
+;;;911    //                    bit = 4;
+;;;912    //                    break;
+;;;913    //                }
+;;;914    //                case 4:
+;;;915    //                {
+;;;916    //                    strcat(set_limit,num);
+;;;917    //					if(set_limit[bit-1] == 0x62){
+;;;918    //						set_limit[bit-1] = '\0';
+;;;919    //						set_limit[bit-2] = '\0';
+;;;920    //						bit -= 1;
+;;;921    //						TEXT_SetText(hItem,set_limit);
+;;;922    //						pow_v = pow_v - atoi(num) * 10;
+;;;923    //						break;
+;;;924    //					}
+;;;925    //                    if(dot_flag == 0)
+;;;926    //                    {
+;;;927    //                        pow_v = /*3000*/ 6200;
+;;;928    //                    }else if(dot_flag == 2){
+;;;929    //                        pow_v = pow_v + atoi(num) * 10;
+;;;930    //                    }else{
+;;;931    //                        pow_v = pow_v + atoi(num);
+;;;932    //                    }
+;;;933    //                    TEXT_SetText(hItem,set_limit);                   
+;;;934    //                    bit = 5;
+;;;935    //                    break;
+;;;936    //                }
+;;;937    //                case 5:
+;;;938    //                {
+;;;939    //                    strcat(set_limit,num);
+;;;940    //					if(set_limit[bit-1] == 0x62){
+;;;941    //						set_limit[bit-1] = '\0';
+;;;942    //						set_limit[bit-2] = '\0';
+;;;943    //						bit -= 1;
+;;;944    //						TEXT_SetText(hItem,set_limit);
+;;;945    //						break;
+;;;946    //					}
+;;;947    //                    if(dot_flag == 0)
+;;;948    //                    {
+;;;949    //                        pow_v = /*3000*/ 6200;
+;;;950    //                    }else if(dot_flag == 1){
+;;;951    //                        pow_v = pow_v;
+;;;952    //                    }else{
+;;;953    //                        pow_v = pow_v + atoi(num);
+;;;954    //                    }
+;;;955    //                    TEXT_SetText(hItem,set_limit);                   
+;;;956    //                    bit = 1;
+;;;957    //                    break;
+;;;958    //                }
+;;;959    //            }
+;;;960                break;
+;;;961            }
+;;;962            case set_19:
+;;;963            {
+;;;964                WM_HWIN hItem;
+;;;965    //            WM_InvalidateWindow(hWinWind);
+;;;966                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
+;;;967    			if(bit < 7)
+;;;968    			{
+;;;969    				strcat(set_limit,num);
+;;;970    			}
+;;;971    			if(dot_flag != 0 && strcmp(num,".") == 0)
+;;;972    			{
+;;;973    				
+;;;974    			}else{			
+;;;975    				
+;;;976    				if(dot_flag == 0 && strcmp(num,".") == 0)
+;;;977    				{
+;;;978    					dot_flag = bit;
+;;;979    				}
+;;;980    				bit ++;
+;;;981    			}
+;;;982    			TEXT_SetText(hItem,set_limit);
+;;;983    //            switch(bit){
+;;;984    //                case 1:
+;;;985    //                {
+;;;986    //					for(i=0;i<6;i++)
+;;;987    //					{
+;;;988    //						set_limit[i] = '\0';
+;;;989    //					}
+;;;990    //                    pow_c = atoi(num) * 1000;
+;;;991    //                    strcat(set_limit,num);            
+;;;992    //                    TEXT_SetText(hItem,set_limit);
+;;;993    //                    bit = 2;
+;;;994    //                    break;
+;;;995    //                }
+;;;996    //                case 2:
+;;;997    //                {
+;;;998    //                    strcat(set_limit,num);            
+;;;999    //                    TEXT_SetText(hItem,set_limit);
+;;;1000   //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
+;;;1001   //                    {
+;;;1002   //                        dot_flag = 1;
+;;;1003   //                    }else{
+;;;1004   //                        pow_c = pow_c * 10 + atoi(num) * 1000;
+;;;1005   //                    }
+;;;1006   //                    bit = 3;
+;;;1007   //                    break;
+;;;1008   //                }
+;;;1009   //                case 3:
+;;;1010   //                {
+;;;1011   //                    strcat(set_limit,num);
+;;;1012   //                    TEXT_SetText(hItem,set_limit);
+;;;1013   //                    if(dot_flag == 0)
+;;;1014   //                    {
+;;;1015   //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
+;;;1016   //                        {                            
+;;;1017   //                            dot_flag = 2;
+;;;1018   //                        }else{
+;;;1019   //                            pow_c = 5000;
+;;;1020   //                        }
+;;;1021   //                    }else{
+;;;1022   //                        pow_c = pow_c + atoi(num) * 100;
+;;;1023   //                    }
+;;;1024   //                                       
+;;;1025   //                    bit = 4;
+;;;1026   //                    break;
+;;;1027   //                }
+;;;1028   //                case 4:
+;;;1029   //                {
+;;;1030   //                    strcat(set_limit,num);
+;;;1031   //                    TEXT_SetText(hItem,set_limit);
+;;;1032   //                    if(dot_flag == 0)
+;;;1033   //                    {
+;;;1034   //                        pow_c = 5000;
+;;;1035   //                    }else if(dot_flag == 2){
+;;;1036   //                        pow_c = pow_c + atoi(num) * 100;
+;;;1037   //                    }else{
+;;;1038   //                        pow_c = pow_c + atoi(num) * 10;
+;;;1039   //                    }
+;;;1040   //                                       
+;;;1041   //                    bit = 5;
+;;;1042   //                    break;
+;;;1043   //                }
+;;;1044   //                case 5:
+;;;1045   //                {
+;;;1046   //                    strcat(set_limit,num);
+;;;1047   //                    TEXT_SetText(hItem,set_limit);
+;;;1048   //                    if(dot_flag == 0)
+;;;1049   //                    {
+;;;1050   //                        pow_c = 5000;
+;;;1051   //                    }else if(dot_flag == 1){
+;;;1052   //                        pow_c = pow_c + atoi(num);
+;;;1053   //                    }else{
+;;;1054   //                        pow_c = pow_c + atoi(num) * 10;
+;;;1055   //                    }
+;;;1056   //                                       
+;;;1057   //                    bit = 6;
+;;;1058   //                    break;
+;;;1059   //                }
+;;;1060   //                case 6:
+;;;1061   //                {
+;;;1062   //                    strcat(set_limit,num);
+;;;1063   //                    TEXT_SetText(hItem,set_limit);
+;;;1064   //                    if(dot_flag == 0)
+;;;1065   //                    {
+;;;1066   //                        pow_c = 0;
+;;;1067   //                    }else if(dot_flag == 2){
+;;;1068   //                        pow_c = pow_c + atoi(num);
+;;;1069   //                    }                 
+;;;1070   //                    bit = 1;
+;;;1071   //                    break;
+;;;1072   //                }
+;;;1073   //            }
+;;;1074           }
+;;;1075           break;
+;;;1076   		case set_89:
+;;;1077           {
+;;;1078               WM_HWIN hItem;
+;;;1079   //            WM_InvalidateWindow(hWinWind);
+;;;1080               hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
 00001e  f640112e          MOV      r1,#0x92e
 000022  f7fffffe          BL       WM_GetDialogItem
 000026  4607              MOV      r7,r0
-;;;1080   			if(bit < 7)
+;;;1081   			if(bit < 7)
 000028  7828              LDRB     r0,[r5,#0]  ; bit
 00002a  2807              CMP      r0,#7
 00002c  d203              BCS      |L3.54|
-;;;1081   			{
-;;;1082   				strcat(set_limit,num);
+;;;1082   			{
+;;;1083   				strcat(set_limit,num);
 00002e  4631              MOV      r1,r6
 000030  4839              LDR      r0,|L3.280|
 000032  f7fffffe          BL       strcat
                   |L3.54|
-;;;1083   			}
-;;;1084   			if(dot_flag != 0 && strcmp(num,".") == 0)
+;;;1084   			}
+;;;1085   			if(dot_flag != 0 && strcmp(num,".") == 0)
 000036  7820              LDRB     r0,[r4,#0]  ; dot_flag
 000038  b128              CBZ      r0,|L3.70|
 00003a  a138              ADR      r1,|L3.284|
@@ -567,83 +570,83 @@
 000042  2800              CMP      r0,#0
 000044  d057              BEQ      |L3.246|
                   |L3.70|
-;;;1085   			{
-;;;1086   				
-;;;1087   			}else{			
-;;;1088   				
-;;;1089   				if(dot_flag == 0 && strcmp(num,".") == 0)
+;;;1086   			{
+;;;1087   				
+;;;1088   			}else{			
+;;;1089   				
+;;;1090   				if(dot_flag == 0 && strcmp(num,".") == 0)
 000046  7820              LDRB     r0,[r4,#0]  ; dot_flag
 000048  2800              CMP      r0,#0
 00004a  d04a              BEQ      |L3.226|
 00004c  e050              B        |L3.240|
                   |L3.78|
-00004e  f6400166          MOV      r1,#0x866             ;837
+00004e  f6400166          MOV      r1,#0x866             ;838
 000052  f7fffffe          BL       WM_GetDialogItem
-000056  4607              MOV      r7,r0                 ;837
-000058  7828              LDRB     r0,[r5,#0]            ;838  ; bit
-00005a  2806              CMP      r0,#6                 ;838
+000056  4607              MOV      r7,r0                 ;838
+000058  7828              LDRB     r0,[r5,#0]            ;839  ; bit
+00005a  2806              CMP      r0,#6                 ;839
 00005c  d203              BCS      |L3.102|
-00005e  4631              MOV      r1,r6                 ;840
+00005e  4631              MOV      r1,r6                 ;841
 000060  482d              LDR      r0,|L3.280|
 000062  f7fffffe          BL       strcat
                   |L3.102|
-000066  7820              LDRB     r0,[r4,#0]            ;842  ; dot_flag
+000066  7820              LDRB     r0,[r4,#0]            ;843  ; dot_flag
 000068  b120              CBZ      r0,|L3.116|
 00006a  a12c              ADR      r1,|L3.284|
-00006c  4630              MOV      r0,r6                 ;842
+00006c  4630              MOV      r0,r6                 ;843
 00006e  f7fffffe          BL       strcmp
 000072  b158              CBZ      r0,|L3.140|
                   |L3.116|
-000074  7820              LDRB     r0,[r4,#0]            ;847  ; dot_flag
+000074  7820              LDRB     r0,[r4,#0]            ;848  ; dot_flag
 000076  b930              CBNZ     r0,|L3.134|
 000078  a128              ADR      r1,|L3.284|
-00007a  4630              MOV      r0,r6                 ;847
+00007a  4630              MOV      r0,r6                 ;848
 00007c  f7fffffe          BL       strcmp
 000080  b908              CBNZ     r0,|L3.134|
-000082  7828              LDRB     r0,[r5,#0]            ;849  ; bit
-000084  7020              STRB     r0,[r4,#0]            ;849
+000082  7828              LDRB     r0,[r5,#0]            ;850  ; bit
+000084  7020              STRB     r0,[r4,#0]            ;850
                   |L3.134|
-000086  7828              LDRB     r0,[r5,#0]            ;851  ; bit
-000088  1c40              ADDS     r0,r0,#1              ;851
-00008a  7028              STRB     r0,[r5,#0]            ;851
+000086  7828              LDRB     r0,[r5,#0]            ;852  ; bit
+000088  1c40              ADDS     r0,r0,#1              ;852
+00008a  7028              STRB     r0,[r5,#0]            ;852
                   |L3.140|
-00008c  4638              MOV      r0,r7                 ;853
-00008e  e8bd41f0          POP      {r4-r8,lr}            ;853
+00008c  4638              MOV      r0,r7                 ;854
+00008e  e8bd41f0          POP      {r4-r8,lr}            ;854
 000092  4921              LDR      r1,|L3.280|
 000094  f7ffbffe          B.W      TEXT_SetText
                   |L3.152|
-000098  f6400167          MOV      r1,#0x867             ;965
+000098  f6400167          MOV      r1,#0x867             ;966
 00009c  f7fffffe          BL       WM_GetDialogItem
-0000a0  4607              MOV      r7,r0                 ;965
-0000a2  7828              LDRB     r0,[r5,#0]            ;966  ; bit
-0000a4  2807              CMP      r0,#7                 ;966
+0000a0  4607              MOV      r7,r0                 ;966
+0000a2  7828              LDRB     r0,[r5,#0]            ;967  ; bit
+0000a4  2807              CMP      r0,#7                 ;967
 0000a6  d203              BCS      |L3.176|
-0000a8  4631              MOV      r1,r6                 ;968
+0000a8  4631              MOV      r1,r6                 ;969
 0000aa  481b              LDR      r0,|L3.280|
 0000ac  f7fffffe          BL       strcat
                   |L3.176|
-0000b0  7820              LDRB     r0,[r4,#0]            ;970  ; dot_flag
+0000b0  7820              LDRB     r0,[r4,#0]            ;971  ; dot_flag
 0000b2  b120              CBZ      r0,|L3.190|
 0000b4  a119              ADR      r1,|L3.284|
-0000b6  4630              MOV      r0,r6                 ;970
+0000b6  4630              MOV      r0,r6                 ;971
 0000b8  f7fffffe          BL       strcmp
 0000bc  b158              CBZ      r0,|L3.214|
                   |L3.190|
-0000be  7820              LDRB     r0,[r4,#0]            ;975  ; dot_flag
+0000be  7820              LDRB     r0,[r4,#0]            ;976  ; dot_flag
 0000c0  b930              CBNZ     r0,|L3.208|
 0000c2  a116              ADR      r1,|L3.284|
-0000c4  4630              MOV      r0,r6                 ;975
+0000c4  4630              MOV      r0,r6                 ;976
 0000c6  f7fffffe          BL       strcmp
 0000ca  b908              CBNZ     r0,|L3.208|
-0000cc  7828              LDRB     r0,[r5,#0]            ;977  ; bit
-0000ce  7020              STRB     r0,[r4,#0]            ;977
+0000cc  7828              LDRB     r0,[r5,#0]            ;978  ; bit
+0000ce  7020              STRB     r0,[r4,#0]            ;978
                   |L3.208|
-0000d0  7828              LDRB     r0,[r5,#0]            ;979  ; bit
-0000d2  1c40              ADDS     r0,r0,#1              ;979
-0000d4  7028              STRB     r0,[r5,#0]            ;979
+0000d0  7828              LDRB     r0,[r5,#0]            ;980  ; bit
+0000d2  1c40              ADDS     r0,r0,#1              ;980
+0000d4  7028              STRB     r0,[r5,#0]            ;980
                   |L3.214|
-0000d6  4638              MOV      r0,r7                 ;981
-0000d8  e8bd41f0          POP      {r4-r8,lr}            ;981
+0000d6  4638              MOV      r0,r7                 ;982
+0000d8  e8bd41f0          POP      {r4-r8,lr}            ;982
 0000dc  490e              LDR      r1,|L3.280|
 0000de  f7ffbffe          B.W      TEXT_SetText
                   |L3.226|
@@ -651,121 +654,121 @@
 0000e4  4630              MOV      r0,r6
 0000e6  f7fffffe          BL       strcmp
 0000ea  b908              CBNZ     r0,|L3.240|
-;;;1090   				{
-;;;1091   					dot_flag = bit;
+;;;1091   				{
+;;;1092   					dot_flag = bit;
 0000ec  7828              LDRB     r0,[r5,#0]  ; bit
 0000ee  7020              STRB     r0,[r4,#0]
                   |L3.240|
-;;;1092   				}
-;;;1093   				bit ++;
+;;;1093   				}
+;;;1094   				bit ++;
 0000f0  7828              LDRB     r0,[r5,#0]  ; bit
 0000f2  1c40              ADDS     r0,r0,#1
 0000f4  7028              STRB     r0,[r5,#0]
                   |L3.246|
-;;;1094   			}
-;;;1095   			TEXT_SetText(hItem,set_limit);
+;;;1095   			}
+;;;1096   			TEXT_SetText(hItem,set_limit);
 0000f6  4638              MOV      r0,r7
 0000f8  e8bd41f0          POP      {r4-r8,lr}
 0000fc  4906              LDR      r1,|L3.280|
 0000fe  f7ffbffe          B.W      TEXT_SetText
                   |L3.258|
-;;;1096   //            switch(bit){
-;;;1097   //                case 1:
-;;;1098   //                {
-;;;1099   //					for(i=0;i<6;i++)
-;;;1100   //					{
-;;;1101   //						set_limit[i] = '\0';
-;;;1102   //					}
-;;;1103   //                    set_pow_cutoffc = atoi(num) * 1000;
-;;;1104   //                    strcat(set_limit,num);            
-;;;1105   //                    TEXT_SetText(hItem,set_limit);
-;;;1106   //                    bit = 2;
-;;;1107   //                    break;
-;;;1108   //                }
-;;;1109   //                case 2:
-;;;1110   //                {
-;;;1111   //                    strcat(set_limit,num);            
-;;;1112   //                    TEXT_SetText(hItem,set_limit);
-;;;1113   //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
-;;;1114   //                    {
-;;;1115   //                        dot_flag = 1;
-;;;1116   //                    }else{
-;;;1117   //                        set_pow_cutoffc = set_pow_cutoffc * 10 + atoi(num) * 1000;
-;;;1118   //                    }
-;;;1119   //                    bit = 3;
-;;;1120   //                    break;
-;;;1121   //                }
-;;;1122   //                case 3:
-;;;1123   //                {
-;;;1124   //                    strcat(set_limit,num);
-;;;1125   //                    TEXT_SetText(hItem,set_limit);
-;;;1126   //                    if(dot_flag == 0)
-;;;1127   //                    {
-;;;1128   //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
-;;;1129   //                        {                            
-;;;1130   //                            dot_flag = 2;
-;;;1131   //                        }else{
-;;;1132   //                            set_pow_cutoffc = 5000;
-;;;1133   //                        }
-;;;1134   //                    }else{
-;;;1135   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 100;
-;;;1136   //                    }
-;;;1137   //                                       
-;;;1138   //                    bit = 4;
-;;;1139   //                    break;
-;;;1140   //                }
-;;;1141   //                case 4:
-;;;1142   //                {
-;;;1143   //                    strcat(set_limit,num);
-;;;1144   //                    TEXT_SetText(hItem,set_limit);
-;;;1145   //                    if(dot_flag == 0)
-;;;1146   //                    {
-;;;1147   //                        set_pow_cutoffc = 5000;
-;;;1148   //                    }else if(dot_flag == 2){
-;;;1149   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 100;
-;;;1150   //                    }else{
-;;;1151   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 10;
-;;;1152   //                    }
-;;;1153   //                                       
-;;;1154   //                    bit = 5;
-;;;1155   //                    break;
-;;;1156   //                }
-;;;1157   //                case 5:
-;;;1158   //                {
-;;;1159   //                    strcat(set_limit,num);
-;;;1160   //                    TEXT_SetText(hItem,set_limit);
-;;;1161   //                    if(dot_flag == 0)
-;;;1162   //                    {
-;;;1163   //                        set_pow_cutoffc = 5000;
-;;;1164   //                    }else if(dot_flag == 1){
-;;;1165   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
-;;;1166   //                    }else{
-;;;1167   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 10;
-;;;1168   //                    }
-;;;1169   //                                       
-;;;1170   //                    bit = 6;
-;;;1171   //                    break;
-;;;1172   //                }
-;;;1173   //                case 6:
-;;;1174   //                {
-;;;1175   //                    strcat(set_limit,num);
-;;;1176   //                    TEXT_SetText(hItem,set_limit);
-;;;1177   //                    if(dot_flag == 0)
-;;;1178   //                    {
-;;;1179   //                        set_pow_cutoffc = 0;
-;;;1180   //                    }else if(dot_flag == 2){
-;;;1181   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
-;;;1182   //                    }                 
-;;;1183   //                    bit = 1;
-;;;1184   //                    break;
-;;;1185   //                }
-;;;1186   //            }
-;;;1187           }
-;;;1188           break;
-;;;1189       }    
-;;;1190   }
+;;;1097   //            switch(bit){
+;;;1098   //                case 1:
+;;;1099   //                {
+;;;1100   //					for(i=0;i<6;i++)
+;;;1101   //					{
+;;;1102   //						set_limit[i] = '\0';
+;;;1103   //					}
+;;;1104   //                    set_pow_cutoffc = atoi(num) * 1000;
+;;;1105   //                    strcat(set_limit,num);            
+;;;1106   //                    TEXT_SetText(hItem,set_limit);
+;;;1107   //                    bit = 2;
+;;;1108   //                    break;
+;;;1109   //                }
+;;;1110   //                case 2:
+;;;1111   //                {
+;;;1112   //                    strcat(set_limit,num);            
+;;;1113   //                    TEXT_SetText(hItem,set_limit);
+;;;1114   //                    if(set_limit[1] == 0x2e)//判断输入是否为小数点
+;;;1115   //                    {
+;;;1116   //                        dot_flag = 1;
+;;;1117   //                    }else{
+;;;1118   //                        set_pow_cutoffc = set_pow_cutoffc * 10 + atoi(num) * 1000;
+;;;1119   //                    }
+;;;1120   //                    bit = 3;
+;;;1121   //                    break;
+;;;1122   //                }
+;;;1123   //                case 3:
+;;;1124   //                {
+;;;1125   //                    strcat(set_limit,num);
+;;;1126   //                    TEXT_SetText(hItem,set_limit);
+;;;1127   //                    if(dot_flag == 0)
+;;;1128   //                    {
+;;;1129   //                        if(set_limit[2] == 0x2e)//判断输入是否为小数点
+;;;1130   //                        {                            
+;;;1131   //                            dot_flag = 2;
+;;;1132   //                        }else{
+;;;1133   //                            set_pow_cutoffc = 5000;
+;;;1134   //                        }
+;;;1135   //                    }else{
+;;;1136   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 100;
+;;;1137   //                    }
+;;;1138   //                                       
+;;;1139   //                    bit = 4;
+;;;1140   //                    break;
+;;;1141   //                }
+;;;1142   //                case 4:
+;;;1143   //                {
+;;;1144   //                    strcat(set_limit,num);
+;;;1145   //                    TEXT_SetText(hItem,set_limit);
+;;;1146   //                    if(dot_flag == 0)
+;;;1147   //                    {
+;;;1148   //                        set_pow_cutoffc = 5000;
+;;;1149   //                    }else if(dot_flag == 2){
+;;;1150   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 100;
+;;;1151   //                    }else{
+;;;1152   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 10;
+;;;1153   //                    }
+;;;1154   //                                       
+;;;1155   //                    bit = 5;
+;;;1156   //                    break;
+;;;1157   //                }
+;;;1158   //                case 5:
+;;;1159   //                {
+;;;1160   //                    strcat(set_limit,num);
+;;;1161   //                    TEXT_SetText(hItem,set_limit);
+;;;1162   //                    if(dot_flag == 0)
+;;;1163   //                    {
+;;;1164   //                        set_pow_cutoffc = 5000;
+;;;1165   //                    }else if(dot_flag == 1){
+;;;1166   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
+;;;1167   //                    }else{
+;;;1168   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num) * 10;
+;;;1169   //                    }
+;;;1170   //                                       
+;;;1171   //                    bit = 6;
+;;;1172   //                    break;
+;;;1173   //                }
+;;;1174   //                case 6:
+;;;1175   //                {
+;;;1176   //                    strcat(set_limit,num);
+;;;1177   //                    TEXT_SetText(hItem,set_limit);
+;;;1178   //                    if(dot_flag == 0)
+;;;1179   //                    {
+;;;1180   //                        set_pow_cutoffc = 0;
+;;;1181   //                    }else if(dot_flag == 2){
+;;;1182   //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
+;;;1183   //                    }                 
+;;;1184   //                    bit = 1;
+;;;1185   //                    break;
+;;;1186   //                }
+;;;1187   //            }
+;;;1188           }
+;;;1189           break;
+;;;1190       }    
+;;;1191   }
 000102  e8bd81f0          POP      {r4-r8,pc}
-;;;1191   
+;;;1192   
                           ENDP
 
 000106  0000              DCW      0x0000
@@ -787,103 +790,103 @@
                           AREA ||i.MENU_OP_DOWN||, CODE, READONLY, ALIGN=2
 
                   MENU_OP_DOWN PROC
-;;;508    void MENU_OP_DOWN(void);
-;;;509    void MENU_OP_DOWN(void)
+;;;509    void MENU_OP_DOWN(void);
+;;;510    void MENU_OP_DOWN(void)
 000000  e92d47f0          PUSH     {r4-r10,lr}
-;;;510    {
-;;;511        switch(set_sw)
+;;;511    {
+;;;512        switch(set_sw)
 000004  4d24              LDR      r5,|L4.152|
 000006  782a              LDRB     r2,[r5,#0]  ; set_sw
-;;;512        {
-;;;513            case set_10:
-;;;514            {
-;;;515                WM_HWIN hItem;
-;;;516                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
+;;;513        {
+;;;514            case set_10:
+;;;515            {
+;;;516                WM_HWIN hItem;
+;;;517                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
 000008  4c24              LDR      r4,|L4.156|
-;;;517                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;518                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
 00000a  f06f4670          MVN      r6,#0xf0000000
-;;;518                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;519                TEXT_SetTextColor(hItem, GUI_WHITE);
 00000e  1137              ASRS     r7,r6,#4
-;;;519                
-;;;520                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
-;;;521                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;520                
+;;;521                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;522                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
 000010  f8df908c          LDR      r9,|L4.160|
-000014  6860              LDR      r0,[r4,#4]            ;511
-000016  f640083e          MOV      r8,#0x83e             ;520
-00001a  2a09              CMP      r2,#9                 ;511
+000014  6860              LDR      r0,[r4,#4]            ;512
+000016  f640083e          MOV      r8,#0x83e             ;521
+00001a  2a09              CMP      r2,#9                 ;512
 00001c  d01f              BEQ      |L4.94|
-00001e  2a0a              CMP      r2,#0xa               ;511
+00001e  2a0a              CMP      r2,#0xa               ;512
 000020  d11b              BNE      |L4.90|
-;;;522                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;523    
-;;;524                set_sw = set_11;
-;;;525                break;
-;;;526            }
-;;;527            case set_11:
-;;;528            {
-;;;529                WM_HWIN hItem;
-;;;530    //            WM_InvalidateWindow(hWinWind);
-;;;531                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;523                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;524    
+;;;525                set_sw = set_11;
+;;;526                break;
+;;;527            }
+;;;528            case set_11:
+;;;529            {
+;;;530                WM_HWIN hItem;
+;;;531    //            WM_InvalidateWindow(hWinWind);
+;;;532                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
 000022  4641              MOV      r1,r8
 000024  f7fffffe          BL       WM_GetDialogItem
 000028  4680              MOV      r8,r0
-;;;532                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;533                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
 00002a  4631              MOV      r1,r6
 00002c  4640              MOV      r0,r8
 00002e  f7fffffe          BL       TEXT_SetBkColor
-;;;533                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;534                TEXT_SetTextColor(hItem, GUI_WHITE);
 000032  4639              MOV      r1,r7
 000034  4640              MOV      r0,r8
 000036  f7fffffe          BL       TEXT_SetTextColor
-;;;534                
-;;;535                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
+;;;535                
+;;;536                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
 00003a  f640113a          MOV      r1,#0x93a
 00003e  6860              LDR      r0,[r4,#4]  ; hWinWind
 000040  f7fffffe          BL       WM_GetDialogItem
 000044  4604              MOV      r4,r0
-;;;536                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;537                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
 000046  4649              MOV      r1,r9
 000048  4620              MOV      r0,r4
 00004a  f7fffffe          BL       TEXT_SetBkColor
-;;;537                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;538                TEXT_SetTextColor(hItem, GUI_BLACK);
 00004e  2100              MOVS     r1,#0
 000050  4620              MOV      r0,r4
 000052  f7fffffe          BL       TEXT_SetTextColor
-;;;538    
-;;;539                set_sw = set_88;
+;;;539    
+;;;540                set_sw = set_88;
 000056  2057              MOVS     r0,#0x57
 000058  7028              STRB     r0,[r5,#0]
                   |L4.90|
-;;;540                break;
-;;;541            }                     
-;;;542            default: break;
-;;;543        }
-;;;544    }
+;;;541                break;
+;;;542            }                     
+;;;543            default: break;
+;;;544        }
+;;;545    }
 00005a  e8bd87f0          POP      {r4-r10,pc}
                   |L4.94|
-00005e  f640013d          MOV      r1,#0x83d             ;516
+00005e  f640013d          MOV      r1,#0x83d             ;517
 000062  f7fffffe          BL       WM_GetDialogItem
-000066  4682              MOV      r10,r0                ;516
-000068  4631              MOV      r1,r6                 ;517
-00006a  4650              MOV      r0,r10                ;517
+000066  4682              MOV      r10,r0                ;517
+000068  4631              MOV      r1,r6                 ;518
+00006a  4650              MOV      r0,r10                ;518
 00006c  f7fffffe          BL       TEXT_SetBkColor
-000070  4639              MOV      r1,r7                 ;518
-000072  4650              MOV      r0,r10                ;518
+000070  4639              MOV      r1,r7                 ;519
+000072  4650              MOV      r0,r10                ;519
 000074  f7fffffe          BL       TEXT_SetTextColor
-000078  4641              MOV      r1,r8                 ;520
-00007a  6860              LDR      r0,[r4,#4]            ;520  ; hWinWind
+000078  4641              MOV      r1,r8                 ;521
+00007a  6860              LDR      r0,[r4,#4]            ;521  ; hWinWind
 00007c  f7fffffe          BL       WM_GetDialogItem
-000080  4604              MOV      r4,r0                 ;520
-000082  4649              MOV      r1,r9                 ;521
-000084  4620              MOV      r0,r4                 ;521
+000080  4604              MOV      r4,r0                 ;521
+000082  4649              MOV      r1,r9                 ;522
+000084  4620              MOV      r0,r4                 ;522
 000086  f7fffffe          BL       TEXT_SetBkColor
-00008a  2100              MOVS     r1,#0                 ;522
-00008c  4620              MOV      r0,r4                 ;522
+00008a  2100              MOVS     r1,#0                 ;523
+00008c  4620              MOV      r0,r4                 ;523
 00008e  f7fffffe          BL       TEXT_SetTextColor
-000092  200a              MOVS     r0,#0xa               ;524
-000094  7028              STRB     r0,[r5,#0]            ;524
+000092  200a              MOVS     r0,#0xa               ;525
+000094  7028              STRB     r0,[r5,#0]            ;525
 000096  e7e0              B        |L4.90|
-;;;545    
+;;;546    
                           ENDP
 
                   |L4.152|
@@ -896,104 +899,104 @@
                           AREA ||i.MENU_OP_UP||, CODE, READONLY, ALIGN=2
 
                   MENU_OP_UP PROC
-;;;546    void MENU_OP_UP(void);
-;;;547    void MENU_OP_UP(void)
+;;;547    void MENU_OP_UP(void);
+;;;548    void MENU_OP_UP(void)
 000000  e92d47f0          PUSH     {r4-r10,lr}
-;;;548    {
-;;;549        switch(set_sw)
+;;;549    {
+;;;550        switch(set_sw)
 000004  4d25              LDR      r5,|L5.156|
 000006  782a              LDRB     r2,[r5,#0]  ; set_sw
-;;;550        {
-;;;551            case set_11:
-;;;552    		{
-;;;553    			 WM_HWIN hItem;
-;;;554    //                 WM_InvalidateWindow(hWinWind);
-;;;555    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;551        {
+;;;552            case set_11:
+;;;553    		{
+;;;554    			 WM_HWIN hItem;
+;;;555    //                 WM_InvalidateWindow(hWinWind);
+;;;556    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
 000008  4c25              LDR      r4,|L5.160|
-;;;556    			 TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;557    			 TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;558    		   
-;;;559    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
-;;;560    			 TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;557    			 TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;558    			 TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;559    		   
+;;;560    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
+;;;561    			 TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
 00000a  f8df9098          LDR      r9,|L5.164|
-00000e  f640063e          MOV      r6,#0x83e             ;555
-000012  6860              LDR      r0,[r4,#4]            ;549
-000014  f06f4770          MVN      r7,#0xf0000000        ;556
-000018  f06f487f          MVN      r8,#0xff000000        ;557
-00001c  2a0a              CMP      r2,#0xa               ;549
+00000e  f640063e          MOV      r6,#0x83e             ;556
+000012  6860              LDR      r0,[r4,#4]            ;550
+000014  f06f4770          MVN      r7,#0xf0000000        ;557
+000018  f06f487f          MVN      r8,#0xff000000        ;558
+00001c  2a0a              CMP      r2,#0xa               ;550
 00001e  d01f              BEQ      |L5.96|
-000020  2a57              CMP      r2,#0x57              ;549
+000020  2a57              CMP      r2,#0x57              ;550
 000022  d11b              BNE      |L5.92|
-;;;561    			 TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;562    
-;;;563    			 set_sw = set_10;
-;;;564    			 break;
-;;;565    		 } 
-;;;566    		case set_88:
-;;;567    		{
-;;;568    			 WM_HWIN hItem;
-;;;569    //                 WM_InvalidateWindow(hWinWind);
-;;;570    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
+;;;562    			 TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;563    
+;;;564    			 set_sw = set_10;
+;;;565    			 break;
+;;;566    		 } 
+;;;567    		case set_88:
+;;;568    		{
+;;;569    			 WM_HWIN hItem;
+;;;570    //                 WM_InvalidateWindow(hWinWind);
+;;;571    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
 000024  f640113a          MOV      r1,#0x93a
 000028  f7fffffe          BL       WM_GetDialogItem
 00002c  4682              MOV      r10,r0
-;;;571    			 TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;572    			 TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
 00002e  4639              MOV      r1,r7
 000030  4650              MOV      r0,r10
 000032  f7fffffe          BL       TEXT_SetBkColor
-;;;572    			 TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;573    			 TEXT_SetTextColor(hItem, GUI_WHITE);
 000036  4641              MOV      r1,r8
 000038  4650              MOV      r0,r10
 00003a  f7fffffe          BL       TEXT_SetTextColor
-;;;573    		   
-;;;574    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;574    		   
+;;;575    			 hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
 00003e  4631              MOV      r1,r6
 000040  6860              LDR      r0,[r4,#4]  ; hWinWind
 000042  f7fffffe          BL       WM_GetDialogItem
 000046  4604              MOV      r4,r0
-;;;575    			 TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;576    			 TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
 000048  4649              MOV      r1,r9
 00004a  4620              MOV      r0,r4
 00004c  f7fffffe          BL       TEXT_SetBkColor
-;;;576    			 TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;577    			 TEXT_SetTextColor(hItem, GUI_BLACK);
 000050  2100              MOVS     r1,#0
 000052  4620              MOV      r0,r4
 000054  f7fffffe          BL       TEXT_SetTextColor
-;;;577    
-;;;578    			 set_sw = set_11;
+;;;578    
+;;;579    			 set_sw = set_11;
 000058  200a              MOVS     r0,#0xa
 00005a  7028              STRB     r0,[r5,#0]
                   |L5.92|
-;;;579    			 break;
-;;;580    		 }                     
-;;;581    		 default: break;
-;;;582        }
-;;;583    }
+;;;580    			 break;
+;;;581    		 }                     
+;;;582    		 default: break;
+;;;583        }
+;;;584    }
 00005c  e8bd87f0          POP      {r4-r10,pc}
                   |L5.96|
-000060  4631              MOV      r1,r6                 ;555
+000060  4631              MOV      r1,r6                 ;556
 000062  f7fffffe          BL       WM_GetDialogItem
-000066  4606              MOV      r6,r0                 ;555
-000068  4639              MOV      r1,r7                 ;556
-00006a  4630              MOV      r0,r6                 ;556
+000066  4606              MOV      r6,r0                 ;556
+000068  4639              MOV      r1,r7                 ;557
+00006a  4630              MOV      r0,r6                 ;557
 00006c  f7fffffe          BL       TEXT_SetBkColor
-000070  4641              MOV      r1,r8                 ;557
-000072  4630              MOV      r0,r6                 ;557
+000070  4641              MOV      r1,r8                 ;558
+000072  4630              MOV      r0,r6                 ;558
 000074  f7fffffe          BL       TEXT_SetTextColor
-000078  f640013d          MOV      r1,#0x83d             ;559
-00007c  6860              LDR      r0,[r4,#4]            ;559  ; hWinWind
+000078  f640013d          MOV      r1,#0x83d             ;560
+00007c  6860              LDR      r0,[r4,#4]            ;560  ; hWinWind
 00007e  f7fffffe          BL       WM_GetDialogItem
-000082  4604              MOV      r4,r0                 ;559
-000084  4649              MOV      r1,r9                 ;560
-000086  4620              MOV      r0,r4                 ;560
+000082  4604              MOV      r4,r0                 ;560
+000084  4649              MOV      r1,r9                 ;561
+000086  4620              MOV      r0,r4                 ;561
 000088  f7fffffe          BL       TEXT_SetBkColor
-00008c  2100              MOVS     r1,#0                 ;561
-00008e  4620              MOV      r0,r4                 ;561
+00008c  2100              MOVS     r1,#0                 ;562
+00008e  4620              MOV      r0,r4                 ;562
 000090  f7fffffe          BL       TEXT_SetTextColor
-000094  2009              MOVS     r0,#9                 ;563
-000096  7028              STRB     r0,[r5,#0]            ;563
+000094  2009              MOVS     r0,#9                 ;564
+000096  7028              STRB     r0,[r5,#0]            ;564
 000098  e7e0              B        |L5.92|
-;;;584    
+;;;585    
                           ENDP
 
 00009a  0000              DCW      0x0000
@@ -1011,309 +1014,309 @@
                           REQUIRE _printf_f
                           REQUIRE _printf_fp_dec
                   MENU_SET PROC
-;;;586    void MENU_SET(void);
-;;;587    void MENU_SET(void)
+;;;587    void MENU_SET(void);
+;;;588    void MENU_SET(void)
 000000  e92d4ff0          PUSH     {r4-r11,lr}
-;;;588    {
+;;;589    {
 000004  ed2d8b04          VPUSH    {d8-d9}
 000008  b083              SUB      sp,sp,#0xc
-;;;589        vu8 i;
-;;;590        char buf[6];    
-;;;591    
-;;;592        float dis_output_v;
-;;;593        float dis_output_c; 
-;;;594        
-;;;595        if(SET_Voltage > /*3000*/ 6200)
+;;;590        vu8 i;
+;;;591        char buf[6];    
+;;;592    
+;;;593        float dis_output_v;
+;;;594        float dis_output_c; 
+;;;595        
+;;;596        if(SET_Voltage > /*3000*/ 6200)
 00000a  f8df8418          LDR      r8,|L6.1060|
 00000e  f8d80004          LDR      r0,[r8,#4]  ; Run_Control
 000012  f6410b38          MOV      r11,#0x1838
 000016  4558              CMP      r0,r11
 000018  d901              BLS      |L6.30|
-;;;596        {
-;;;597          SET_Voltage = /*3000*/ 6200;
+;;;597        {
+;;;598          SET_Voltage = /*3000*/ 6200;
 00001a  f8c8b004          STR      r11,[r8,#4]  ; Run_Control
                   |L6.30|
-;;;598        }
-;;;599        if(SET_Current > 10000)
+;;;599        }
+;;;600        if(SET_Current > 10000)
 00001e  f8d80008          LDR      r0,[r8,#8]  ; Run_Control
 000022  f2427610          MOV      r6,#0x2710
 000026  42b0              CMP      r0,r6
 000028  d901              BLS      |L6.46|
-;;;600        {
-;;;601          SET_Current = 10000;
+;;;601        {
+;;;602          SET_Current = 10000;
 00002a  f8c86008          STR      r6,[r8,#8]  ; Run_Control
                   |L6.46|
-;;;602        }
-;;;603        switch(set_sw){
+;;;603        }
+;;;604        switch(set_sw){
 00002e  4dfe              LDR      r5,|L6.1064|
 000030  7829              LDRB     r1,[r5,#0]  ; set_sw
-;;;604            case set_10:
-;;;605            {
-;;;606                WM_HWIN hItem;
-;;;607    //            WM_InvalidateWindow(hWinWind);
-;;;608                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
-;;;609                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;610                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;611                       
-;;;612                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
-;;;613                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;614                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;615                for(i=0;i<6;i++)
-;;;616                {
-;;;617                    set_limit[i] = '\0';
-;;;618                }
-;;;619    
-;;;620                set_sw = set_18;
-;;;621                break;                        
-;;;622            }
-;;;623            case set_18:
-;;;624            {           
-;;;625                WM_HWIN hItem;
-;;;626    //            WM_InvalidateWindow(hWinWind);
-;;;627                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
-;;;628                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;629                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;630    			if(dot_flag == 0){
-;;;631    				pow_v = atoi(set_limit)*100;					
-;;;632    			}else if(dot_flag != 0){
-;;;633    				memset(buf, '\0', sizeof(buf));
-;;;634    				strncpy(buf,set_limit,dot_flag + 2);
-;;;635    				pow_v = atof(buf)*100;
-;;;636    			}
-;;;637    			if(pow_v > 6200)
-;;;638    			{
-;;;639    				pow_v = 6200;
-;;;640    			}
-;;;641                SET_Voltage = pow_v;
-;;;642                if(SET_Voltage/100 * SET_Current/1000 > 250)
-;;;643                {
-;;;644                    SET_Voltage = 0;
-;;;645                }
-;;;646                dis_output_v = (float)SET_Voltage/100;
-;;;647                
-;;;648                sprintf(buf,"%.2f",dis_output_v);
-;;;649                TEXT_SetText(hItem,buf);
-;;;650                
-;;;651                                                                         
-;;;652                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
-;;;653                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;654                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;655                                
-;;;656                Write_Limits();
-;;;657                set_sw = set_10;
-;;;658                bit = 1;
+;;;605            case set_10:
+;;;606            {
+;;;607                WM_HWIN hItem;
+;;;608    //            WM_InvalidateWindow(hWinWind);
+;;;609                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
+;;;610                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;611                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;612                       
+;;;613                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
+;;;614                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;615                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;616                for(i=0;i<6;i++)
+;;;617                {
+;;;618                    set_limit[i] = '\0';
+;;;619                }
+;;;620    
+;;;621                set_sw = set_18;
+;;;622                break;                        
+;;;623            }
+;;;624            case set_18:
+;;;625            {           
+;;;626                WM_HWIN hItem;
+;;;627    //            WM_InvalidateWindow(hWinWind);
+;;;628                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
+;;;629                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;630                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;631    			if(dot_flag == 0){
+;;;632    				pow_v = atoi(set_limit)*100;					
+;;;633    			}else if(dot_flag != 0){
+;;;634    				memset(buf, '\0', sizeof(buf));
+;;;635    				strncpy(buf,set_limit,dot_flag + 2);
+;;;636    				pow_v = atof(buf)*100;
+;;;637    			}
+;;;638    			if(pow_v > 6200)
+;;;639    			{
+;;;640    				pow_v = 6200;
+;;;641    			}
+;;;642                SET_Voltage = pow_v;
+;;;643                if(SET_Voltage/100 * SET_Current/1000 > 250)
+;;;644                {
+;;;645                    SET_Voltage = 0;
+;;;646                }
+;;;647                dis_output_v = (float)SET_Voltage/100;
+;;;648                
+;;;649                sprintf(buf,"%.2f",dis_output_v);
+;;;650                TEXT_SetText(hItem,buf);
+;;;651                
+;;;652                                                                         
+;;;653                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_33);
+;;;654                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;655                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;656                                
+;;;657                Write_Limits();
+;;;658                set_sw = set_10;
+;;;659                bit = 1;
 000032  f04f0901          MOV      r9,#1
-;;;659                dot_flag = 0;
-;;;660                break; 
-;;;661             }
-;;;662             case set_11:
-;;;663             {
-;;;664                WM_HWIN hItem;
-;;;665    //            WM_InvalidateWindow(hWinWind);
-;;;666                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
-;;;667                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;668                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;669                                    
-;;;670                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-;;;671                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;672                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;673                for(i=0;i<6;i++)
-;;;674                {
-;;;675                    set_limit[i] = '\0';
-;;;676                }
-;;;677    
-;;;678                set_sw = set_19;
-;;;679                break;                        
-;;;680             }
-;;;681             case set_19:
-;;;682             {           
-;;;683                WM_HWIN hItem;
-;;;684    //            WM_InvalidateWindow(hWinWind);
-;;;685                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-;;;686                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;687                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;688    			if(dot_flag == 0){
-;;;689    				pow_c = atoi(set_limit)*1000;					
-;;;690    			}else if(dot_flag != 0){
-;;;691    				memset(buf, '\0', sizeof(buf));
-;;;692    				strncpy(buf,set_limit,dot_flag + 3);
-;;;693    				pow_c = atof(buf)*1000;
+;;;660                dot_flag = 0;
+;;;661                break; 
+;;;662             }
+;;;663             case set_11:
+;;;664             {
+;;;665                WM_HWIN hItem;
+;;;666    //            WM_InvalidateWindow(hWinWind);
+;;;667                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;668                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;669                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;670                                    
+;;;671                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
+;;;672                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;673                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;674                for(i=0;i<6;i++)
+;;;675                {
+;;;676                    set_limit[i] = '\0';
+;;;677                }
+;;;678    
+;;;679                set_sw = set_19;
+;;;680                break;                        
+;;;681             }
+;;;682             case set_19:
+;;;683             {           
+;;;684                WM_HWIN hItem;
+;;;685    //            WM_InvalidateWindow(hWinWind);
+;;;686                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
+;;;687                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;688                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;689    			if(dot_flag == 0){
+;;;690    				pow_c = atoi(set_limit)*1000;					
+;;;691    			}else if(dot_flag != 0){
+;;;692    				memset(buf, '\0', sizeof(buf));
+;;;693    				strncpy(buf,set_limit,dot_flag + 3);
+;;;694    				pow_c = atof(buf)*1000;
 000036  ed9f8bfd          VLDR     d8,|L6.1068|
-;;;694    			}
-;;;695                  
-;;;696                if(pow_c > 10000)
-;;;697                {
-;;;698                    pow_c = 10000;               
-;;;699                }
-;;;700    			SET_Current = pow_c;
-;;;701                if(SET_Voltage/100 * SET_Current/1000 > 250)
-;;;702                {
-;;;703                    SET_Current = 0;
-;;;704                }
-;;;705                dis_output_c = (float)SET_Current/1000;
+;;;695    			}
+;;;696                  
+;;;697                if(pow_c > 10000)
+;;;698                {
+;;;699                    pow_c = 10000;               
+;;;700                }
+;;;701    			SET_Current = pow_c;
+;;;702                if(SET_Voltage/100 * SET_Current/1000 > 250)
+;;;703                {
+;;;704                    SET_Current = 0;
+;;;705                }
+;;;706                dis_output_c = (float)SET_Current/1000;
 00003a  ed9f9afe          VLDR     s18,|L6.1076|
 00003e  4afe              LDR      r2,|L6.1080|
 000040  f8dfa3f8          LDR      r10,|L6.1084|
-000044  2400              MOVS     r4,#0                 ;617
+000044  2400              MOVS     r4,#0                 ;618
 000046  4ffe              LDR      r7,|L6.1088|
-000048  6850              LDR      r0,[r2,#4]            ;603
-00004a  2912              CMP      r1,#0x12              ;603
+000048  6850              LDR      r0,[r2,#4]            ;604
+00004a  2912              CMP      r1,#0x12              ;604
 00004c  d07d              BEQ      |L6.330|
 00004e  dc7d              BGT      |L6.332|
-000050  f6400666          MOV      r6,#0x866             ;612
-000054  2909              CMP      r1,#9                 ;603
+000050  f6400666          MOV      r6,#0x866             ;613
+000054  2909              CMP      r1,#9                 ;604
 000056  d07a              BEQ      |L6.334|
-000058  290a              CMP      r1,#0xa               ;603
+000058  290a              CMP      r1,#0xa               ;604
 00005a  d079              BEQ      |L6.336|
-00005c  2911              CMP      r1,#0x11              ;603
+00005c  2911              CMP      r1,#0x11              ;604
 00005e  d172              BNE      |L6.326|
-000060  4631              MOV      r1,r6                 ;627
-000062  4692              MOV      r10,r2                ;627
+000060  4631              MOV      r1,r6                 ;628
+000062  4692              MOV      r10,r2                ;628
 000064  f7fffffe          BL       WM_GetDialogItem
-000068  4606              MOV      r6,r0                 ;627
-00006a  f06f4170          MVN      r1,#0xf0000000        ;628
-00006e  4630              MOV      r0,r6                 ;628
+000068  4606              MOV      r6,r0                 ;628
+00006a  f06f4170          MVN      r1,#0xf0000000        ;629
+00006e  4630              MOV      r0,r6                 ;629
 000070  f7fffffe          BL       TEXT_SetBkColor
-000074  f06f417f          MVN      r1,#0xff000000        ;629
-000078  4630              MOV      r0,r6                 ;629
+000074  f06f417f          MVN      r1,#0xff000000        ;630
+000078  4630              MOV      r0,r6                 ;630
 00007a  f7fffffe          BL       TEXT_SetTextColor
-00007e  7838              LDRB     r0,[r7,#0]            ;630  ; dot_flag
-000080  2800              CMP      r0,#0                 ;630
+00007e  7838              LDRB     r0,[r7,#0]            ;631  ; dot_flag
+000080  2800              CMP      r0,#0                 ;631
 000082  d066              BEQ      |L6.338|
-000084  7838              LDRB     r0,[r7,#0]            ;632  ; dot_flag
+000084  7838              LDRB     r0,[r7,#0]            ;633  ; dot_flag
 000086  b1b0              CBZ      r0,|L6.182|
-000088  9400              STR      r4,[sp,#0]            ;633
-00008a  9401              STR      r4,[sp,#4]            ;633
-00008c  783a              LDRB     r2,[r7,#0]            ;634  ; dot_flag
+000088  9400              STR      r4,[sp,#0]            ;634
+00008a  9401              STR      r4,[sp,#4]            ;634
+00008c  783a              LDRB     r2,[r7,#0]            ;635  ; dot_flag
 00008e  49eb              LDR      r1,|L6.1084|
-000090  1c92              ADDS     r2,r2,#2              ;634
-000092  4668              MOV      r0,sp                 ;634
+000090  1c92              ADDS     r2,r2,#2              ;635
+000092  4668              MOV      r0,sp                 ;635
 000094  f7fffffe          BL       strncpy
-000098  4668              MOV      r0,sp                 ;635
+000098  4668              MOV      r0,sp                 ;636
 00009a  f7fffffe          BL       __hardfp_atof
 00009e  ed9f1be9          VLDR     d1,|L6.1092|
-0000a2  ec510b10          VMOV     r0,r1,d0              ;635
-0000a6  ec532b11          VMOV     r2,r3,d1              ;635
+0000a2  ec510b10          VMOV     r0,r1,d0              ;636
+0000a6  ec532b11          VMOV     r2,r3,d1              ;636
 0000aa  f7fffffe          BL       __aeabi_dmul
 0000ae  f7fffffe          BL       __aeabi_d2uiz
-0000b2  f8c80098          STR      r0,[r8,#0x98]         ;635  ; Run_Control
+0000b2  f8c80098          STR      r0,[r8,#0x98]         ;636  ; Run_Control
                   |L6.182|
-0000b6  f8d80098          LDR      r0,[r8,#0x98]         ;637  ; Run_Control
-0000ba  4558              CMP      r0,r11                ;637
+0000b6  f8d80098          LDR      r0,[r8,#0x98]         ;638  ; Run_Control
+0000ba  4558              CMP      r0,r11                ;638
 0000bc  d901              BLS      |L6.194|
-0000be  f8c8b098          STR      r11,[r8,#0x98]        ;639  ; Run_Control
+0000be  f8c8b098          STR      r11,[r8,#0x98]        ;640  ; Run_Control
                   |L6.194|
-0000c2  f8d80098          LDR      r0,[r8,#0x98]         ;641  ; Run_Control
-0000c6  f8c80004          STR      r0,[r8,#4]            ;641  ; Run_Control
-0000ca  f8d81004          LDR      r1,[r8,#4]            ;642  ; Run_Control
-0000ce  2064              MOVS     r0,#0x64              ;642
-0000d0  fbb1f0f0          UDIV     r0,r1,r0              ;642
-0000d4  f8d81008          LDR      r1,[r8,#8]            ;642  ; Run_Control
-0000d8  4348              MULS     r0,r1,r0              ;642
+0000c2  f8d80098          LDR      r0,[r8,#0x98]         ;642  ; Run_Control
+0000c6  f8c80004          STR      r0,[r8,#4]            ;642  ; Run_Control
+0000ca  f8d81004          LDR      r1,[r8,#4]            ;643  ; Run_Control
+0000ce  2064              MOVS     r0,#0x64              ;643
+0000d0  fbb1f0f0          UDIV     r0,r1,r0              ;643
+0000d4  f8d81008          LDR      r1,[r8,#8]            ;643  ; Run_Control
+0000d8  4348              MULS     r0,r1,r0              ;643
 0000da  49dc              LDR      r1,|L6.1100|
-0000dc  4288              CMP      r0,r1                 ;642
+0000dc  4288              CMP      r0,r1                 ;643
 0000de  d901              BLS      |L6.228|
-0000e0  f8c84004          STR      r4,[r8,#4]            ;644  ; Run_Control
+0000e0  f8c84004          STR      r4,[r8,#4]            ;645  ; Run_Control
                   |L6.228|
-0000e4  f8d80004          LDR      r0,[r8,#4]            ;646  ; Run_Control
-0000e8  ee000a10          VMOV     s0,r0                 ;646
-0000ec  eef80a40          VCVT.F32.U32 s1,s0                 ;646
+0000e4  f8d80004          LDR      r0,[r8,#4]            ;647  ; Run_Control
+0000e8  ee000a10          VMOV     s0,r0                 ;647
+0000ec  eef80a40          VCVT.F32.U32 s1,s0                 ;647
 0000f0  ed9f1ad7          VLDR     s2,|L6.1104|
-0000f4  ee800a81          VDIV.F32 s0,s1,s2              ;646
-0000f8  ee100a10          VMOV     r0,s0                 ;648
+0000f4  ee800a81          VDIV.F32 s0,s1,s2              ;647
+0000f8  ee100a10          VMOV     r0,s0                 ;649
 0000fc  f7fffffe          BL       __aeabi_f2d
-000100  ec410b10          VMOV     d0,r0,r1              ;648
+000100  ec410b10          VMOV     d0,r0,r1              ;649
 000104  a1d3              ADR      r1,|L6.1108|
-000106  ec532b10          VMOV     r2,r3,d0              ;648
-00010a  4668              MOV      r0,sp                 ;648
+000106  ec532b10          VMOV     r2,r3,d0              ;649
+00010a  4668              MOV      r0,sp                 ;649
 00010c  f7fffffe          BL       __2sprintf
-000110  4669              MOV      r1,sp                 ;649
-000112  4630              MOV      r0,r6                 ;649
+000110  4669              MOV      r1,sp                 ;650
+000112  4630              MOV      r0,r6                 ;650
 000114  f7fffffe          BL       TEXT_SetText
-000118  f640013d          MOV      r1,#0x83d             ;652
-00011c  f8da0004          LDR      r0,[r10,#4]           ;652  ; hWinWind
+000118  f640013d          MOV      r1,#0x83d             ;653
+00011c  f8da0004          LDR      r0,[r10,#4]           ;653  ; hWinWind
 000120  f7fffffe          BL       WM_GetDialogItem
-000124  4606              MOV      r6,r0                 ;652
+000124  4606              MOV      r6,r0                 ;653
 000126  49cd              LDR      r1,|L6.1116|
-000128  4630              MOV      r0,r6                 ;653
+000128  4630              MOV      r0,r6                 ;654
 00012a  f7fffffe          BL       TEXT_SetBkColor
-00012e  2100              MOVS     r1,#0                 ;654
-000130  4630              MOV      r0,r6                 ;654
+00012e  2100              MOVS     r1,#0                 ;655
+000130  4630              MOV      r0,r6                 ;655
 000132  f7fffffe          BL       TEXT_SetTextColor
 000136  f7fffffe          BL       Write_Limits
-00013a  2009              MOVS     r0,#9                 ;657
-00013c  7028              STRB     r0,[r5,#0]            ;657
+00013a  2009              MOVS     r0,#9                 ;658
+00013c  7028              STRB     r0,[r5,#0]            ;658
 00013e  48c8              LDR      r0,|L6.1120|
-000140  f8809000          STRB     r9,[r0,#0]            ;658
-000144  703c              STRB     r4,[r7,#0]            ;659
+000140  f8809000          STRB     r9,[r0,#0]            ;659
+000144  703c              STRB     r4,[r7,#0]            ;660
                   |L6.326|
-;;;706                sprintf(buf,"%.3f",dis_output_c);
-;;;707                TEXT_SetText(hItem,buf);            
-;;;708                       
-;;;709                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
-;;;710                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;711                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;712                                                     
-;;;713                Write_Limits();
-;;;714                set_sw = set_11;
-;;;715                bit = 1;
-;;;716                dot_flag = 0;
-;;;717                break; 
-;;;718             }
-;;;719    		 case set_88:
-;;;720             {
-;;;721                WM_HWIN hItem;
-;;;722    //            WM_InvalidateWindow(hWinWind);
-;;;723                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
-;;;724                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;725                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;726                                    
-;;;727                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
-;;;728                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;729                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;730                for(i=0;i<6;i++)
-;;;731                {
-;;;732                    set_limit[i] = '\0';
-;;;733                }
-;;;734    
-;;;735                set_sw = set_89;
-;;;736                break;                        
-;;;737             }
-;;;738             case set_89:
-;;;739             {           
-;;;740                WM_HWIN hItem;
-;;;741    //            WM_InvalidateWindow(hWinWind);
-;;;742                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
-;;;743                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
-;;;744                TEXT_SetTextColor(hItem, GUI_WHITE);
-;;;745    			if(dot_flag == 0){
-;;;746    				set_pow_cutoffc = atoi(set_limit)*1000;					
-;;;747    			}else if(dot_flag != 0){
-;;;748    				memset(buf, '\0', sizeof(buf));
-;;;749    				strncpy(buf,set_limit,dot_flag + 3);
-;;;750    				set_pow_cutoffc = atof(buf)*1000;
-;;;751    			}
-;;;752                if(set_pow_cutoffc > 10000)
-;;;753                {
-;;;754                    set_pow_cutoffc = 10000;               
-;;;755                }
-;;;756                pow_cutoffc = (float)set_pow_cutoffc/1000;
-;;;757                sprintf(buf,"%.3f",pow_cutoffc);
-;;;758                TEXT_SetText(hItem,buf);            
-;;;759                       
-;;;760                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
-;;;761                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
-;;;762                TEXT_SetTextColor(hItem, GUI_BLACK);
-;;;763                                                     
-;;;764                Flash_Write16BitDatas(FLASH_USER_START_ADDR,20, InFlashSave);
-;;;765                set_sw = set_88;
-;;;766                bit = 1;
-;;;767                dot_flag = 0;
-;;;768                break; 
-;;;769             }
-;;;770             default:break;
-;;;771         }
-;;;772    }
+;;;707                sprintf(buf,"%.3f",dis_output_c);
+;;;708                TEXT_SetText(hItem,buf);            
+;;;709                       
+;;;710                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_34);
+;;;711                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;712                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;713                                                     
+;;;714                Write_Limits();
+;;;715                set_sw = set_11;
+;;;716                bit = 1;
+;;;717                dot_flag = 0;
+;;;718                break; 
+;;;719             }
+;;;720    		 case set_88:
+;;;721             {
+;;;722                WM_HWIN hItem;
+;;;723    //            WM_InvalidateWindow(hWinWind);
+;;;724                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
+;;;725                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;726                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;727                                    
+;;;728                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
+;;;729                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;730                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;731                for(i=0;i<6;i++)
+;;;732                {
+;;;733                    set_limit[i] = '\0';
+;;;734                }
+;;;735    
+;;;736                set_sw = set_89;
+;;;737                break;                        
+;;;738             }
+;;;739             case set_89:
+;;;740             {           
+;;;741                WM_HWIN hItem;
+;;;742    //            WM_InvalidateWindow(hWinWind);
+;;;743                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
+;;;744                TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+;;;745                TEXT_SetTextColor(hItem, GUI_WHITE);
+;;;746    			if(dot_flag == 0){
+;;;747    				set_pow_cutoffc = atoi(set_limit)*1000;					
+;;;748    			}else if(dot_flag != 0){
+;;;749    				memset(buf, '\0', sizeof(buf));
+;;;750    				strncpy(buf,set_limit,dot_flag + 3);
+;;;751    				set_pow_cutoffc = atof(buf)*1000;
+;;;752    			}
+;;;753                if(set_pow_cutoffc > 10000)
+;;;754                {
+;;;755                    set_pow_cutoffc = 10000;               
+;;;756                }
+;;;757                pow_cutoffc = (float)set_pow_cutoffc/1000;
+;;;758                sprintf(buf,"%.3f",pow_cutoffc);
+;;;759                TEXT_SetText(hItem,buf);            
+;;;760                       
+;;;761                hItem = WM_GetDialogItem(hWinWind, ID_TEXT_159);
+;;;762                TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+;;;763                TEXT_SetTextColor(hItem, GUI_BLACK);
+;;;764                                                     
+;;;765                Flash_Write16BitDatas(FLASH_USER_START_ADDR,20, InFlashSave);
+;;;766                set_sw = set_88;
+;;;767                bit = 1;
+;;;768                dot_flag = 0;
+;;;769                break; 
+;;;770             }
+;;;771             default:break;
+;;;772         }
+;;;773    }
 000146  b003              ADD      sp,sp,#0xc
 000148  e004              B        |L6.340|
                   |L6.330|
@@ -1330,97 +1333,97 @@
 000154  ecbd8b04          VPOP     {d8-d9}
 000158  e8bd8ff0          POP      {r4-r11,pc}
                   |L6.348|
-00015c  f640182e          MOV      r8,#0x92e             ;727
-000160  2957              CMP      r1,#0x57              ;603
+00015c  f640182e          MOV      r8,#0x92e             ;728
+000160  2957              CMP      r1,#0x57              ;604
 000162  d07d              BEQ      |L6.608|
-000164  2958              CMP      r1,#0x58              ;603
+000164  2958              CMP      r1,#0x58              ;604
 000166  d1ee              BNE      |L6.326|
-000168  4641              MOV      r1,r8                 ;742
-00016a  4692              MOV      r10,r2                ;742
+000168  4641              MOV      r1,r8                 ;743
+00016a  4692              MOV      r10,r2                ;743
 00016c  f7fffffe          BL       WM_GetDialogItem
-000170  4683              MOV      r11,r0                ;742
-000172  f06f4170          MVN      r1,#0xf0000000        ;743
-000176  4658              MOV      r0,r11                ;743
+000170  4683              MOV      r11,r0                ;743
+000172  f06f4170          MVN      r1,#0xf0000000        ;744
+000176  4658              MOV      r0,r11                ;744
 000178  f7fffffe          BL       TEXT_SetBkColor
-00017c  f06f417f          MVN      r1,#0xff000000        ;744
-000180  4658              MOV      r0,r11                ;744
+00017c  f06f417f          MVN      r1,#0xff000000        ;745
+000180  4658              MOV      r0,r11                ;745
 000182  f7fffffe          BL       TEXT_SetTextColor
-000186  7838              LDRB     r0,[r7,#0]            ;745  ; dot_flag
+000186  7838              LDRB     r0,[r7,#0]            ;746  ; dot_flag
 000188  f8df82d8          LDR      r8,|L6.1124|
-00018c  2800              CMP      r0,#0                 ;745
+00018c  2800              CMP      r0,#0                 ;746
 00018e  d068              BEQ      |L6.610|
-000190  7838              LDRB     r0,[r7,#0]            ;747  ; dot_flag
+000190  7838              LDRB     r0,[r7,#0]            ;748  ; dot_flag
 000192  b1a0              CBZ      r0,|L6.446|
-000194  9400              STR      r4,[sp,#0]            ;748
-000196  9401              STR      r4,[sp,#4]            ;748
-000198  783a              LDRB     r2,[r7,#0]            ;749  ; dot_flag
+000194  9400              STR      r4,[sp,#0]            ;749
+000196  9401              STR      r4,[sp,#4]            ;749
+000198  783a              LDRB     r2,[r7,#0]            ;750  ; dot_flag
 00019a  49a8              LDR      r1,|L6.1084|
-00019c  1cd2              ADDS     r2,r2,#3              ;749
-00019e  4668              MOV      r0,sp                 ;749
+00019c  1cd2              ADDS     r2,r2,#3              ;750
+00019e  4668              MOV      r0,sp                 ;750
 0001a0  f7fffffe          BL       strncpy
-0001a4  4668              MOV      r0,sp                 ;750
+0001a4  4668              MOV      r0,sp                 ;751
 0001a6  f7fffffe          BL       __hardfp_atof
-0001aa  ec532b18          VMOV     r2,r3,d8              ;750
-0001ae  ec510b10          VMOV     r0,r1,d0              ;750
+0001aa  ec532b18          VMOV     r2,r3,d8              ;751
+0001ae  ec510b10          VMOV     r0,r1,d0              ;751
 0001b2  f7fffffe          BL       __aeabi_dmul
 0001b6  f7fffffe          BL       __aeabi_d2iz
-0001ba  f8a8000a          STRH     r0,[r8,#0xa]          ;750
+0001ba  f8a8000a          STRH     r0,[r8,#0xa]          ;751
                   |L6.446|
-0001be  f9b8000a          LDRSH    r0,[r8,#0xa]          ;752  ; InFlashSave
-0001c2  42b0              CMP      r0,r6                 ;752
+0001be  f9b8000a          LDRSH    r0,[r8,#0xa]          ;753  ; InFlashSave
+0001c2  42b0              CMP      r0,r6                 ;753
 0001c4  dd01              BLE      |L6.458|
-0001c6  f8a8600a          STRH     r6,[r8,#0xa]          ;754
+0001c6  f8a8600a          STRH     r6,[r8,#0xa]          ;755
                   |L6.458|
-0001ca  f9b8000a          LDRSH    r0,[r8,#0xa]          ;756  ; InFlashSave
-0001ce  ee000a10          VMOV     s0,r0                 ;756
-0001d2  eef80ac0          VCVT.F32.S32 s1,s0                 ;756
-0001d6  ee800a89          VDIV.F32 s0,s1,s18             ;756
-0001da  ed8a0a02          VSTR     s0,[r10,#8]           ;756
-0001de  ee100a10          VMOV     r0,s0                 ;757
+0001ca  f9b8000a          LDRSH    r0,[r8,#0xa]          ;757  ; InFlashSave
+0001ce  ee000a10          VMOV     s0,r0                 ;757
+0001d2  eef80ac0          VCVT.F32.S32 s1,s0                 ;757
+0001d6  ee800a89          VDIV.F32 s0,s1,s18             ;757
+0001da  ed8a0a02          VSTR     s0,[r10,#8]           ;757
+0001de  ee100a10          VMOV     r0,s0                 ;758
 0001e2  f7fffffe          BL       __aeabi_f2d
-0001e6  ec410b10          VMOV     d0,r0,r1              ;757
+0001e6  ec410b10          VMOV     d0,r0,r1              ;758
 0001ea  a19f              ADR      r1,|L6.1128|
-0001ec  ec532b10          VMOV     r2,r3,d0              ;757
-0001f0  4668              MOV      r0,sp                 ;757
+0001ec  ec532b10          VMOV     r2,r3,d0              ;758
+0001f0  4668              MOV      r0,sp                 ;758
 0001f2  f7fffffe          BL       __2sprintf
-0001f6  4669              MOV      r1,sp                 ;758
-0001f8  4658              MOV      r0,r11                ;758
+0001f6  4669              MOV      r1,sp                 ;759
+0001f8  4658              MOV      r0,r11                ;759
 0001fa  f7fffffe          BL       TEXT_SetText
-0001fe  f640113a          MOV      r1,#0x93a             ;760
-000202  f8da0004          LDR      r0,[r10,#4]           ;760  ; hWinWind
+0001fe  f640113a          MOV      r1,#0x93a             ;761
+000202  f8da0004          LDR      r0,[r10,#4]           ;761  ; hWinWind
 000206  f7fffffe          BL       WM_GetDialogItem
-00020a  4606              MOV      r6,r0                 ;760
+00020a  4606              MOV      r6,r0                 ;761
 00020c  4993              LDR      r1,|L6.1116|
-00020e  4630              MOV      r0,r6                 ;761
+00020e  4630              MOV      r0,r6                 ;762
 000210  f7fffffe          BL       TEXT_SetBkColor
-000214  2100              MOVS     r1,#0                 ;762
-000216  4630              MOV      r0,r6                 ;762
+000214  2100              MOVS     r1,#0                 ;763
+000216  4630              MOV      r0,r6                 ;763
 000218  f7fffffe          BL       TEXT_SetTextColor
 00021c  4a91              LDR      r2,|L6.1124|
-00021e  2114              MOVS     r1,#0x14              ;764
+00021e  2114              MOVS     r1,#0x14              ;765
 000220  4893              LDR      r0,|L6.1136|
 000222  f7fffffe          BL       Flash_Write16BitDatas
-000226  2057              MOVS     r0,#0x57              ;765
-000228  7028              STRB     r0,[r5,#0]            ;765
+000226  2057              MOVS     r0,#0x57              ;766
+000228  7028              STRB     r0,[r5,#0]            ;766
 00022a  488d              LDR      r0,|L6.1120|
-00022c  f8809000          STRB     r9,[r0,#0]            ;766
-000230  703c              STRB     r4,[r7,#0]            ;767
+00022c  f8809000          STRB     r9,[r0,#0]            ;767
+000230  703c              STRB     r4,[r7,#0]            ;768
 000232  e788              B        |L6.326|
                   |L6.564|
-000234  f640013d          MOV      r1,#0x83d             ;608
-000238  4617              MOV      r7,r2                 ;608
+000234  f640013d          MOV      r1,#0x83d             ;609
+000238  4617              MOV      r7,r2                 ;609
 00023a  f7fffffe          BL       WM_GetDialogItem
-00023e  4680              MOV      r8,r0                 ;608
-000240  f06f4170          MVN      r1,#0xf0000000        ;609
-000244  4640              MOV      r0,r8                 ;609
+00023e  4680              MOV      r8,r0                 ;609
+000240  f06f4170          MVN      r1,#0xf0000000        ;610
+000244  4640              MOV      r0,r8                 ;610
 000246  f7fffffe          BL       TEXT_SetBkColor
-00024a  f06f417f          MVN      r1,#0xff000000        ;610
-00024e  4640              MOV      r0,r8                 ;610
+00024a  f06f417f          MVN      r1,#0xff000000        ;611
+00024e  4640              MOV      r0,r8                 ;611
 000250  f7fffffe          BL       TEXT_SetTextColor
-000254  4631              MOV      r1,r6                 ;612
-000256  6878              LDR      r0,[r7,#4]            ;612  ; hWinWind
+000254  4631              MOV      r1,r6                 ;613
+000256  6878              LDR      r0,[r7,#4]            ;613  ; hWinWind
 000258  f7fffffe          BL       WM_GetDialogItem
-00025c  4606              MOV      r6,r0                 ;612
+00025c  4606              MOV      r6,r0                 ;613
 00025e  e001              B        |L6.612|
                   |L6.608|
 000260  e0cb              B        |L6.1018|
@@ -1428,171 +1431,171 @@
 000262  e121              B        |L6.1192|
                   |L6.612|
 000264  497d              LDR      r1,|L6.1116|
-000266  4630              MOV      r0,r6                 ;613
+000266  4630              MOV      r0,r6                 ;614
 000268  f7fffffe          BL       TEXT_SetBkColor
-00026c  2100              MOVS     r1,#0                 ;614
-00026e  4630              MOV      r0,r6                 ;614
+00026c  2100              MOVS     r1,#0                 ;615
+00026e  4630              MOV      r0,r6                 ;615
 000270  f7fffffe          BL       TEXT_SetTextColor
-000274  9402              STR      r4,[sp,#8]            ;615
+000274  9402              STR      r4,[sp,#8]            ;616
 000276  e007              B        |L6.648|
                   |L6.632|
-000278  f89d0008          LDRB     r0,[sp,#8]            ;617
-00027c  f80a4000          STRB     r4,[r10,r0]           ;617
-000280  f89d0008          LDRB     r0,[sp,#8]            ;615
-000284  1c40              ADDS     r0,r0,#1              ;615
-000286  9002              STR      r0,[sp,#8]            ;615
+000278  f89d0008          LDRB     r0,[sp,#8]            ;618
+00027c  f80a4000          STRB     r4,[r10,r0]           ;618
+000280  f89d0008          LDRB     r0,[sp,#8]            ;616
+000284  1c40              ADDS     r0,r0,#1              ;616
+000286  9002              STR      r0,[sp,#8]            ;616
                   |L6.648|
-000288  f89d0008          LDRB     r0,[sp,#8]            ;615
-00028c  2806              CMP      r0,#6                 ;615
+000288  f89d0008          LDRB     r0,[sp,#8]            ;616
+00028c  2806              CMP      r0,#6                 ;616
 00028e  d3f3              BCC      |L6.632|
-000290  2011              MOVS     r0,#0x11              ;620
-000292  7028              STRB     r0,[r5,#0]            ;620
+000290  2011              MOVS     r0,#0x11              ;621
+000292  7028              STRB     r0,[r5,#0]            ;621
 000294  e757              B        |L6.326|
                   |L6.662|
 000296  4869              LDR      r0,|L6.1084|
 000298  f7fffffe          BL       atoi
-00029c  2164              MOVS     r1,#0x64              ;631
-00029e  4348              MULS     r0,r1,r0              ;631
-0002a0  f8c80098          STR      r0,[r8,#0x98]         ;631  ; Run_Control
+00029c  2164              MOVS     r1,#0x64              ;632
+00029e  4348              MULS     r0,r1,r0              ;632
+0002a0  f8c80098          STR      r0,[r8,#0x98]         ;632  ; Run_Control
 0002a4  e707              B        |L6.182|
                   |L6.678|
-0002a6  f640013e          MOV      r1,#0x83e             ;666
-0002aa  4616              MOV      r6,r2                 ;666
+0002a6  f640013e          MOV      r1,#0x83e             ;667
+0002aa  4616              MOV      r6,r2                 ;667
 0002ac  f7fffffe          BL       WM_GetDialogItem
-0002b0  4607              MOV      r7,r0                 ;666
-0002b2  f06f4170          MVN      r1,#0xf0000000        ;667
-0002b6  4638              MOV      r0,r7                 ;667
+0002b0  4607              MOV      r7,r0                 ;667
+0002b2  f06f4170          MVN      r1,#0xf0000000        ;668
+0002b6  4638              MOV      r0,r7                 ;668
 0002b8  f7fffffe          BL       TEXT_SetBkColor
-0002bc  f06f417f          MVN      r1,#0xff000000        ;668
-0002c0  4638              MOV      r0,r7                 ;668
+0002bc  f06f417f          MVN      r1,#0xff000000        ;669
+0002c0  4638              MOV      r0,r7                 ;669
 0002c2  f7fffffe          BL       TEXT_SetTextColor
-0002c6  f6400167          MOV      r1,#0x867             ;670
-0002ca  6870              LDR      r0,[r6,#4]            ;670  ; hWinWind
+0002c6  f6400167          MOV      r1,#0x867             ;671
+0002ca  6870              LDR      r0,[r6,#4]            ;671  ; hWinWind
 0002cc  f7fffffe          BL       WM_GetDialogItem
-0002d0  4606              MOV      r6,r0                 ;670
+0002d0  4606              MOV      r6,r0                 ;671
 0002d2  4962              LDR      r1,|L6.1116|
-0002d4  4630              MOV      r0,r6                 ;671
+0002d4  4630              MOV      r0,r6                 ;672
 0002d6  f7fffffe          BL       TEXT_SetBkColor
-0002da  2100              MOVS     r1,#0                 ;672
-0002dc  4630              MOV      r0,r6                 ;672
+0002da  2100              MOVS     r1,#0                 ;673
+0002dc  4630              MOV      r0,r6                 ;673
 0002de  f7fffffe          BL       TEXT_SetTextColor
-0002e2  9402              STR      r4,[sp,#8]            ;673
+0002e2  9402              STR      r4,[sp,#8]            ;674
 0002e4  e007              B        |L6.758|
                   |L6.742|
-0002e6  f89d0008          LDRB     r0,[sp,#8]            ;675
-0002ea  f80a4000          STRB     r4,[r10,r0]           ;675
-0002ee  f89d0008          LDRB     r0,[sp,#8]            ;673
-0002f2  1c40              ADDS     r0,r0,#1              ;673
-0002f4  9002              STR      r0,[sp,#8]            ;673
+0002e6  f89d0008          LDRB     r0,[sp,#8]            ;676
+0002ea  f80a4000          STRB     r4,[r10,r0]           ;676
+0002ee  f89d0008          LDRB     r0,[sp,#8]            ;674
+0002f2  1c40              ADDS     r0,r0,#1              ;674
+0002f4  9002              STR      r0,[sp,#8]            ;674
                   |L6.758|
-0002f6  f89d0008          LDRB     r0,[sp,#8]            ;673
-0002fa  2806              CMP      r0,#6                 ;673
+0002f6  f89d0008          LDRB     r0,[sp,#8]            ;674
+0002fa  2806              CMP      r0,#6                 ;674
 0002fc  d3f3              BCC      |L6.742|
-0002fe  2012              MOVS     r0,#0x12              ;678
-000300  7028              STRB     r0,[r5,#0]            ;678
+0002fe  2012              MOVS     r0,#0x12              ;679
+000300  7028              STRB     r0,[r5,#0]            ;679
 000302  e720              B        |L6.326|
                   |L6.772|
-000304  f6400167          MOV      r1,#0x867             ;685
-000308  4692              MOV      r10,r2                ;685
+000304  f6400167          MOV      r1,#0x867             ;686
+000308  4692              MOV      r10,r2                ;686
 00030a  f7fffffe          BL       WM_GetDialogItem
-00030e  4683              MOV      r11,r0                ;685
-000310  f06f4170          MVN      r1,#0xf0000000        ;686
-000314  4658              MOV      r0,r11                ;686
+00030e  4683              MOV      r11,r0                ;686
+000310  f06f4170          MVN      r1,#0xf0000000        ;687
+000314  4658              MOV      r0,r11                ;687
 000316  f7fffffe          BL       TEXT_SetBkColor
-00031a  f06f417f          MVN      r1,#0xff000000        ;687
-00031e  4658              MOV      r0,r11                ;687
+00031a  f06f417f          MVN      r1,#0xff000000        ;688
+00031e  4658              MOV      r0,r11                ;688
 000320  f7fffffe          BL       TEXT_SetTextColor
-000324  7838              LDRB     r0,[r7,#0]            ;688  ; dot_flag
+000324  7838              LDRB     r0,[r7,#0]            ;689  ; dot_flag
 000326  b3e0              CBZ      r0,|L6.930|
-000328  7838              LDRB     r0,[r7,#0]            ;690  ; dot_flag
+000328  7838              LDRB     r0,[r7,#0]            ;691  ; dot_flag
 00032a  b1a0              CBZ      r0,|L6.854|
-00032c  9400              STR      r4,[sp,#0]            ;691
-00032e  9401              STR      r4,[sp,#4]            ;691
-000330  783a              LDRB     r2,[r7,#0]            ;692  ; dot_flag
+00032c  9400              STR      r4,[sp,#0]            ;692
+00032e  9401              STR      r4,[sp,#4]            ;692
+000330  783a              LDRB     r2,[r7,#0]            ;693  ; dot_flag
 000332  4942              LDR      r1,|L6.1084|
-000334  1cd2              ADDS     r2,r2,#3              ;692
-000336  4668              MOV      r0,sp                 ;692
+000334  1cd2              ADDS     r2,r2,#3              ;693
+000336  4668              MOV      r0,sp                 ;693
 000338  f7fffffe          BL       strncpy
-00033c  4668              MOV      r0,sp                 ;693
+00033c  4668              MOV      r0,sp                 ;694
 00033e  f7fffffe          BL       __hardfp_atof
-000342  ec532b18          VMOV     r2,r3,d8              ;693
-000346  ec510b10          VMOV     r0,r1,d0              ;693
+000342  ec532b18          VMOV     r2,r3,d8              ;694
+000346  ec510b10          VMOV     r0,r1,d0              ;694
 00034a  f7fffffe          BL       __aeabi_dmul
 00034e  f7fffffe          BL       __aeabi_d2uiz
-000352  f8c800a0          STR      r0,[r8,#0xa0]         ;693  ; Run_Control
+000352  f8c800a0          STR      r0,[r8,#0xa0]         ;694  ; Run_Control
                   |L6.854|
-000356  f8d800a0          LDR      r0,[r8,#0xa0]         ;696  ; Run_Control
-00035a  42b0              CMP      r0,r6                 ;696
+000356  f8d800a0          LDR      r0,[r8,#0xa0]         ;697  ; Run_Control
+00035a  42b0              CMP      r0,r6                 ;697
 00035c  d901              BLS      |L6.866|
-00035e  f8c860a0          STR      r6,[r8,#0xa0]         ;698  ; Run_Control
+00035e  f8c860a0          STR      r6,[r8,#0xa0]         ;699  ; Run_Control
                   |L6.866|
-000362  f8d800a0          LDR      r0,[r8,#0xa0]         ;700  ; Run_Control
-000366  f8c80008          STR      r0,[r8,#8]            ;700  ; Run_Control
-00036a  f8d81004          LDR      r1,[r8,#4]            ;701  ; Run_Control
-00036e  2064              MOVS     r0,#0x64              ;701
-000370  fbb1f0f0          UDIV     r0,r1,r0              ;701
-000374  f8d81008          LDR      r1,[r8,#8]            ;701  ; Run_Control
-000378  4348              MULS     r0,r1,r0              ;701
+000362  f8d800a0          LDR      r0,[r8,#0xa0]         ;701  ; Run_Control
+000366  f8c80008          STR      r0,[r8,#8]            ;701  ; Run_Control
+00036a  f8d81004          LDR      r1,[r8,#4]            ;702  ; Run_Control
+00036e  2064              MOVS     r0,#0x64              ;702
+000370  fbb1f0f0          UDIV     r0,r1,r0              ;702
+000374  f8d81008          LDR      r1,[r8,#8]            ;702  ; Run_Control
+000378  4348              MULS     r0,r1,r0              ;702
 00037a  4934              LDR      r1,|L6.1100|
-00037c  4288              CMP      r0,r1                 ;701
+00037c  4288              CMP      r0,r1                 ;702
 00037e  d901              BLS      |L6.900|
-000380  f8c84008          STR      r4,[r8,#8]            ;703  ; Run_Control
+000380  f8c84008          STR      r4,[r8,#8]            ;704  ; Run_Control
                   |L6.900|
-000384  f8d80008          LDR      r0,[r8,#8]            ;705  ; Run_Control
-000388  ee000a10          VMOV     s0,r0                 ;705
-00038c  eef80a40          VCVT.F32.U32 s1,s0                 ;705
-000390  ee800a89          VDIV.F32 s0,s1,s18             ;705
-000394  ee100a10          VMOV     r0,s0                 ;706
+000384  f8d80008          LDR      r0,[r8,#8]            ;706  ; Run_Control
+000388  ee000a10          VMOV     s0,r0                 ;706
+00038c  eef80a40          VCVT.F32.U32 s1,s0                 ;706
+000390  ee800a89          VDIV.F32 s0,s1,s18             ;706
+000394  ee100a10          VMOV     r0,s0                 ;707
 000398  f7fffffe          BL       __aeabi_f2d
-00039c  ec410b10          VMOV     d0,r0,r1              ;706
+00039c  ec410b10          VMOV     d0,r0,r1              ;707
 0003a0  e000              B        |L6.932|
                   |L6.930|
 0003a2  e021              B        |L6.1000|
                   |L6.932|
-0003a4  ec532b10          VMOV     r2,r3,d0              ;706
+0003a4  ec532b10          VMOV     r2,r3,d0              ;707
 0003a8  a12f              ADR      r1,|L6.1128|
-0003aa  4668              MOV      r0,sp                 ;706
+0003aa  4668              MOV      r0,sp                 ;707
 0003ac  f7fffffe          BL       __2sprintf
-0003b0  4669              MOV      r1,sp                 ;707
-0003b2  4658              MOV      r0,r11                ;707
+0003b0  4669              MOV      r1,sp                 ;708
+0003b2  4658              MOV      r0,r11                ;708
 0003b4  f7fffffe          BL       TEXT_SetText
-0003b8  f640013e          MOV      r1,#0x83e             ;709
-0003bc  f8da0004          LDR      r0,[r10,#4]           ;709  ; hWinWind
+0003b8  f640013e          MOV      r1,#0x83e             ;710
+0003bc  f8da0004          LDR      r0,[r10,#4]           ;710  ; hWinWind
 0003c0  f7fffffe          BL       WM_GetDialogItem
-0003c4  4606              MOV      r6,r0                 ;709
+0003c4  4606              MOV      r6,r0                 ;710
 0003c6  4925              LDR      r1,|L6.1116|
-0003c8  4630              MOV      r0,r6                 ;710
+0003c8  4630              MOV      r0,r6                 ;711
 0003ca  f7fffffe          BL       TEXT_SetBkColor
-0003ce  2100              MOVS     r1,#0                 ;711
-0003d0  4630              MOV      r0,r6                 ;711
+0003ce  2100              MOVS     r1,#0                 ;712
+0003d0  4630              MOV      r0,r6                 ;712
 0003d2  f7fffffe          BL       TEXT_SetTextColor
 0003d6  f7fffffe          BL       Write_Limits
-0003da  200a              MOVS     r0,#0xa               ;714
-0003dc  7028              STRB     r0,[r5,#0]            ;714
+0003da  200a              MOVS     r0,#0xa               ;715
+0003dc  7028              STRB     r0,[r5,#0]            ;715
 0003de  4820              LDR      r0,|L6.1120|
-0003e0  f8809000          STRB     r9,[r0,#0]            ;715
-0003e4  703c              STRB     r4,[r7,#0]            ;716
+0003e0  f8809000          STRB     r9,[r0,#0]            ;716
+0003e4  703c              STRB     r4,[r7,#0]            ;717
 0003e6  e6ae              B        |L6.326|
                   |L6.1000|
 0003e8  4814              LDR      r0,|L6.1084|
 0003ea  f7fffffe          BL       atoi
-0003ee  f44f717a          MOV      r1,#0x3e8             ;689
-0003f2  4348              MULS     r0,r1,r0              ;689
-0003f4  f8c800a0          STR      r0,[r8,#0xa0]         ;689  ; Run_Control
+0003ee  f44f717a          MOV      r1,#0x3e8             ;690
+0003f2  4348              MULS     r0,r1,r0              ;690
+0003f4  f8c800a0          STR      r0,[r8,#0xa0]         ;690  ; Run_Control
 0003f8  e7ad              B        |L6.854|
                   |L6.1018|
-0003fa  f640113a          MOV      r1,#0x93a             ;723
-0003fe  4616              MOV      r6,r2                 ;723
+0003fa  f640113a          MOV      r1,#0x93a             ;724
+0003fe  4616              MOV      r6,r2                 ;724
 000400  f7fffffe          BL       WM_GetDialogItem
-000404  4607              MOV      r7,r0                 ;723
-000406  f06f4170          MVN      r1,#0xf0000000        ;724
-00040a  4638              MOV      r0,r7                 ;724
+000404  4607              MOV      r7,r0                 ;724
+000406  f06f4170          MVN      r1,#0xf0000000        ;725
+00040a  4638              MOV      r0,r7                 ;725
 00040c  f7fffffe          BL       TEXT_SetBkColor
-000410  f06f417f          MVN      r1,#0xff000000        ;725
-000414  4638              MOV      r0,r7                 ;725
+000410  f06f417f          MVN      r1,#0xff000000        ;726
+000414  4638              MOV      r0,r7                 ;726
 000416  f7fffffe          BL       TEXT_SetTextColor
-00041a  4641              MOV      r1,r8                 ;727
-00041c  6870              LDR      r0,[r6,#4]            ;727  ; hWinWind
+00041a  4641              MOV      r1,r8                 ;728
+00041c  6870              LDR      r0,[r6,#4]            ;728  ; hWinWind
 00041e  f7fffffe          BL       WM_GetDialogItem
 000422  e027              B        |L6.1140|
                   |L6.1060|
@@ -1638,36 +1641,36 @@
                   |L6.1136|
                           DCD      0x080e0000
                   |L6.1140|
-000474  4606              MOV      r6,r0                 ;727
+000474  4606              MOV      r6,r0                 ;728
 000476  4911              LDR      r1,|L6.1212|
-000478  4630              MOV      r0,r6                 ;728
+000478  4630              MOV      r0,r6                 ;729
 00047a  f7fffffe          BL       TEXT_SetBkColor
-00047e  2100              MOVS     r1,#0                 ;729
-000480  4630              MOV      r0,r6                 ;729
+00047e  2100              MOVS     r1,#0                 ;730
+000480  4630              MOV      r0,r6                 ;730
 000482  f7fffffe          BL       TEXT_SetTextColor
-000486  9402              STR      r4,[sp,#8]            ;730
+000486  9402              STR      r4,[sp,#8]            ;731
 000488  e007              B        |L6.1178|
                   |L6.1162|
-00048a  f89d0008          LDRB     r0,[sp,#8]            ;732
-00048e  f80a4000          STRB     r4,[r10,r0]           ;732
-000492  f89d0008          LDRB     r0,[sp,#8]            ;730
-000496  1c40              ADDS     r0,r0,#1              ;730
-000498  9002              STR      r0,[sp,#8]            ;730
+00048a  f89d0008          LDRB     r0,[sp,#8]            ;733
+00048e  f80a4000          STRB     r4,[r10,r0]           ;733
+000492  f89d0008          LDRB     r0,[sp,#8]            ;731
+000496  1c40              ADDS     r0,r0,#1              ;731
+000498  9002              STR      r0,[sp,#8]            ;731
                   |L6.1178|
-00049a  f89d0008          LDRB     r0,[sp,#8]            ;730
-00049e  2806              CMP      r0,#6                 ;730
+00049a  f89d0008          LDRB     r0,[sp,#8]            ;731
+00049e  2806              CMP      r0,#6                 ;731
 0004a0  d3f3              BCC      |L6.1162|
-0004a2  2058              MOVS     r0,#0x58              ;735
-0004a4  7028              STRB     r0,[r5,#0]            ;735
+0004a2  2058              MOVS     r0,#0x58              ;736
+0004a4  7028              STRB     r0,[r5,#0]            ;736
 0004a6  e64e              B        |L6.326|
                   |L6.1192|
 0004a8  4805              LDR      r0,|L6.1216|
 0004aa  f7fffffe          BL       atoi
-0004ae  f44f717a          MOV      r1,#0x3e8             ;746
-0004b2  4348              MULS     r0,r1,r0              ;746
-0004b4  f8a8000a          STRH     r0,[r8,#0xa]          ;746
+0004ae  f44f717a          MOV      r1,#0x3e8             ;747
+0004b2  4348              MULS     r0,r1,r0              ;747
+0004b4  f8a8000a          STRH     r0,[r8,#0xa]          ;747
 0004b8  e681              B        |L6.446|
-;;;773    void DEL_POW(void)
+;;;774    void DEL_POW(void)
                           ENDP
 
 0004ba  0000              DCW      0x0000
@@ -1679,10 +1682,10 @@
                           AREA ||i.ResetPow||, CODE, READONLY, ALIGN=2
 
                   ResetPow PROC
-;;;500    
-;;;501    WM_HWIN ResetPow(void) {
+;;;501    
+;;;502    WM_HWIN ResetPow(void) {
 000000  b51c              PUSH     {r2-r4,lr}
-;;;502        hWinWind = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_HBKWIN, 0, 0);
+;;;503        hWinWind = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_HBKWIN, 0, 0);
 000002  f7fffffe          BL       WM_GetDesktopWindow
 000006  4603              MOV      r3,r0
 000008  2000              MOVS     r0,#0
@@ -1694,11 +1697,11 @@
 000014  f7fffffe          BL       GUI_CreateDialogBox
 000018  4903              LDR      r1,|L7.40|
 00001a  6048              STR      r0,[r1,#4]  ; hWinWind
-;;;503    //    WM_InvalidateWindow(hWinWind);
-;;;504        return hWinWind;
-;;;505    }
+;;;504    //    WM_InvalidateWindow(hWinWind);
+;;;505        return hWinWind;
+;;;506    }
 00001c  bd1c              POP      {r2-r4,pc}
-;;;506    
+;;;507    
                           ENDP
 
 00001e  0000              DCW      0x0000
@@ -2933,43 +2936,43 @@
                           AREA ||i.test_pow||, CODE, READONLY, ALIGN=2
 
                   test_pow PROC
-;;;1191   
-;;;1192   void test_pow(void)
+;;;1192   
+;;;1193   void test_pow(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;1193   {
-;;;1194   
-;;;1195       if(pow_sw == pow_on && para_set1 == set_1_on)
+;;;1194   {
+;;;1195   
+;;;1196       if(pow_sw == pow_on && para_set1 == set_1_on)
 000002  4834              LDR      r0,|L9.212|
 000004  7800              LDRB     r0,[r0,#0]  ; pow_sw
-;;;1196       {
-;;;1197           if(DISS_POW_Voltage*100 > set_max_v || DISS_POW_Voltage*100 < set_min_v || DISS_POW_Current * 100 > set_max_c || DISS_POW_Current * 100 < set_min_c)
-;;;1198           {
-;;;1199               if(para_set4 == set_4_on){
-;;;1200                   BEEP_Tiggr();
-;;;1201               }
-;;;1202               TM1650_SET_LED(0x68,0x70);//FAIL灯
-;;;1203               GPIO_SetBits(GPIOD,GPIO_Pin_12);//            
+;;;1197       {
+;;;1198           if(DISS_POW_Voltage*100 > set_max_v || DISS_POW_Voltage*100 < set_min_v || DISS_POW_Current * 100 > set_max_c || DISS_POW_Current * 100 < set_min_c)
+;;;1199           {
+;;;1200               if(para_set4 == set_4_on){
+;;;1201                   BEEP_Tiggr();
+;;;1202               }
+;;;1203               TM1650_SET_LED(0x68,0x70);//FAIL灯
+;;;1204               GPIO_SetBits(GPIOD,GPIO_Pin_12);//            
 000006  4d34              LDR      r5,|L9.216|
 000008  f44f5480          MOV      r4,#0x1000
-00000c  2801              CMP      r0,#1                 ;1195
+00000c  2801              CMP      r0,#1                 ;1196
 00000e  d103              BNE      |L9.24|
 000010  4832              LDR      r0,|L9.220|
-000012  7800              LDRB     r0,[r0,#0]            ;1195  ; para_set1
-000014  28ff              CMP      r0,#0xff              ;1195
+000012  7800              LDRB     r0,[r0,#0]            ;1196  ; para_set1
+000014  28ff              CMP      r0,#0xff              ;1196
 000016  d009              BEQ      |L9.44|
                   |L9.24|
-;;;1204           }else{
-;;;1205               GPIO_ResetBits(GPIOD,GPIO_Pin_12);
-;;;1206               TM1650_SET_LED(0x48,0x71);
-;;;1207               TM1650_SET_LED(0x68,0xF2);//PASS灯
-;;;1208           }        
-;;;1209       }else
-;;;1210       {
-;;;1211           TM1650_SET_LED(0x68,0x70);
+;;;1205           }else{
+;;;1206               GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+;;;1207               TM1650_SET_LED(0x48,0x71);
+;;;1208               TM1650_SET_LED(0x68,0xF2);//PASS灯
+;;;1209           }        
+;;;1210       }else
+;;;1211       {
+;;;1212           TM1650_SET_LED(0x68,0x70);
 000018  2170              MOVS     r1,#0x70
 00001a  2068              MOVS     r0,#0x68
 00001c  f7fffffe          BL       TM1650_SET_LED
-;;;1212           GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
+;;;1213           GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
 000020  4621              MOV      r1,r4
 000022  4628              MOV      r0,r5
 000024  e8bd4070          POP      {r4-r6,lr}
@@ -2978,63 +2981,63 @@
 00002c  482c              LDR      r0,|L9.224|
 00002e  eddf0a2d          VLDR     s1,|L9.228|
 000032  4a2d              LDR      r2,|L9.232|
-000034  ed900a00          VLDR     s0,[r0,#0]            ;1197
-000038  6b93              LDR      r3,[r2,#0x38]         ;1197  ; Run_Control
-00003a  ee200a20          VMUL.F32 s0,s0,s1              ;1197
-00003e  ee013a10          VMOV     s2,r3                 ;1197
-000042  eeb81a41          VCVT.F32.U32 s2,s2                 ;1197
-000046  eeb40ac1          VCMPE.F32 s0,s2                 ;1197
-00004a  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1197
+000034  ed900a00          VLDR     s0,[r0,#0]            ;1198
+000038  6b93              LDR      r3,[r2,#0x38]         ;1198  ; Run_Control
+00003a  ee200a20          VMUL.F32 s0,s0,s1              ;1198
+00003e  ee013a10          VMOV     s2,r3                 ;1198
+000042  eeb81a41          VCVT.F32.U32 s2,s2                 ;1198
+000046  eeb40ac1          VCMPE.F32 s0,s2                 ;1198
+00004a  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1198
 00004e  dc22              BGT      |L9.150|
-000050  6bd3              LDR      r3,[r2,#0x3c]         ;1197  ; Run_Control
-000052  ee013a10          VMOV     s2,r3                 ;1197
-000056  eeb81a41          VCVT.F32.U32 s2,s2                 ;1197
-00005a  eeb40ac1          VCMPE.F32 s0,s2                 ;1197
-00005e  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1197
+000050  6bd3              LDR      r3,[r2,#0x3c]         ;1198  ; Run_Control
+000052  ee013a10          VMOV     s2,r3                 ;1198
+000056  eeb81a41          VCVT.F32.U32 s2,s2                 ;1198
+00005a  eeb40ac1          VCMPE.F32 s0,s2                 ;1198
+00005e  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1198
 000062  d318              BCC      |L9.150|
 000064  4821              LDR      r0,|L9.236|
-000066  ed900a00          VLDR     s0,[r0,#0]            ;1197
-00006a  6c90              LDR      r0,[r2,#0x48]         ;1197  ; Run_Control
-00006c  ee200a20          VMUL.F32 s0,s0,s1              ;1197
-000070  ee000a90          VMOV     s1,r0                 ;1197
-000074  eef80a60          VCVT.F32.U32 s1,s1                 ;1197
-000078  eeb40ae0          VCMPE.F32 s0,s1                 ;1197
-00007c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1197
+000066  ed900a00          VLDR     s0,[r0,#0]            ;1198
+00006a  6c90              LDR      r0,[r2,#0x48]         ;1198  ; Run_Control
+00006c  ee200a20          VMUL.F32 s0,s0,s1              ;1198
+000070  ee000a90          VMOV     s1,r0                 ;1198
+000074  eef80a60          VCVT.F32.U32 s1,s1                 ;1198
+000078  eeb40ae0          VCMPE.F32 s0,s1                 ;1198
+00007c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1198
 000080  dc09              BGT      |L9.150|
-000082  6cd0              LDR      r0,[r2,#0x4c]         ;1197  ; Run_Control
-000084  ee000a90          VMOV     s1,r0                 ;1197
-000088  eef80a60          VCVT.F32.U32 s1,s1                 ;1197
-00008c  eeb40ae0          VCMPE.F32 s0,s1                 ;1197
-000090  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1197
+000082  6cd0              LDR      r0,[r2,#0x4c]         ;1198  ; Run_Control
+000084  ee000a90          VMOV     s1,r0                 ;1198
+000088  eef80a60          VCVT.F32.U32 s1,s1                 ;1198
+00008c  eeb40ae0          VCMPE.F32 s0,s1                 ;1198
+000090  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;1198
 000094  d20f              BCS      |L9.182|
                   |L9.150|
 000096  4816              LDR      r0,|L9.240|
-000098  7800              LDRB     r0,[r0,#0]            ;1199  ; para_set4
-00009a  28ff              CMP      r0,#0xff              ;1199
+000098  7800              LDRB     r0,[r0,#0]            ;1200  ; para_set4
+00009a  28ff              CMP      r0,#0xff              ;1200
 00009c  d101              BNE      |L9.162|
 00009e  f7fffffe          BL       BEEP_Tiggr
                   |L9.162|
-0000a2  2170              MOVS     r1,#0x70              ;1202
-0000a4  2068              MOVS     r0,#0x68              ;1202
+0000a2  2170              MOVS     r1,#0x70              ;1203
+0000a4  2068              MOVS     r0,#0x68              ;1203
 0000a6  f7fffffe          BL       TM1650_SET_LED
-0000aa  4621              MOV      r1,r4                 ;1203
-0000ac  4628              MOV      r0,r5                 ;1203
-0000ae  e8bd4070          POP      {r4-r6,lr}            ;1203
+0000aa  4621              MOV      r1,r4                 ;1204
+0000ac  4628              MOV      r0,r5                 ;1204
+0000ae  e8bd4070          POP      {r4-r6,lr}            ;1204
 0000b2  f7ffbffe          B.W      GPIO_SetBits
                   |L9.182|
-0000b6  4621              MOV      r1,r4                 ;1205
-0000b8  4628              MOV      r0,r5                 ;1205
+0000b6  4621              MOV      r1,r4                 ;1206
+0000b8  4628              MOV      r0,r5                 ;1206
 0000ba  f7fffffe          BL       GPIO_ResetBits
-0000be  2171              MOVS     r1,#0x71              ;1206
-0000c0  2048              MOVS     r0,#0x48              ;1206
+0000be  2171              MOVS     r1,#0x71              ;1207
+0000c0  2048              MOVS     r0,#0x48              ;1207
 0000c2  f7fffffe          BL       TM1650_SET_LED
-0000c6  e8bd4070          POP      {r4-r6,lr}            ;1207
-0000ca  21f2              MOVS     r1,#0xf2              ;1207
-0000cc  2068              MOVS     r0,#0x68              ;1207
+0000c6  e8bd4070          POP      {r4-r6,lr}            ;1208
+0000ca  21f2              MOVS     r1,#0xf2              ;1208
+0000cc  2068              MOVS     r0,#0x68              ;1208
 0000ce  f7ffbffe          B.W      TM1650_SET_LED
-;;;1213       }
-;;;1214   }
-;;;1215   
+;;;1214       }
+;;;1215   }
+;;;1216   
                           ENDP
 
 0000d2  0000              DCW      0x0000

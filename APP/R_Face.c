@@ -396,7 +396,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
 			if(oc_mode == 0)
             {
-                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                 flag_Load_CC = 1;
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_132);
                 TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
@@ -404,7 +404,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 GUI_UC_SetEncodeUTF8();        
                 TEXT_SetText(hItem,"CC");
             }else if(oc_mode == 1){
-                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
+                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
                 flag_Load_CC = 0;
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_132);
                 TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
@@ -1498,13 +1498,13 @@ void OC_SET(void) {
             TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
             TEXT_SetTextColor(hItem, GUI_WHITE);
 			if(dot_flag == 0){
-				gate_v = atoi(set_limit);					
+				dis_gate_v = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
 				strncpy(buf,set_limit,dot_flag + 3);
-				gate_v = atof(buf);
+				dis_gate_v = atof(buf)*1000;
 			}
-//            gate_v = (float)dis_gate_v/1000;
+            gate_v = (float)dis_gate_v/1000;
             sprintf(buf,"%.3f",gate_v);
             TEXT_SetText(hItem,buf);
             
@@ -2761,7 +2761,7 @@ void OC_ADD(void){
 			GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
 //                GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
 			flag_Load_CC = 1;
-			GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
+			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
 			ocf = 1;
             SET_Current_Laod = SET_Current_Laod + set_sbs_c;

@@ -34900,7 +34900,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35068,6 +35068,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35458,6 +35460,7 @@ N  TIM_TimeBaseStructure.TIM_Period = 0;
 N  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
 X  TIM_TimeBaseStructure.TIM_ClockDivision = ((uint16_t)0x0200);
 N  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+N
 N  TIM_TimeBaseInit(TIM1,&TIM_TimeBaseStructure);
 X  TIM_TimeBaseInit(((TIM_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x0000)),&TIM_TimeBaseStructure);
 N
@@ -35496,4 +35499,5 @@ N  TIM_CtrlPWMOutputs(TIM1, ENABLE);
 X  TIM_CtrlPWMOutputs(((TIM_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x0000)), ENABLE);	
 N	TIM_SetCompare1(TIM1,PWM_FI/2);
 X	TIM_SetCompare1(((TIM_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x0000)),PWM_FI/2);
+W "..\drive\TIM1.c" 75 2 last line of file ends without a newline
 N}

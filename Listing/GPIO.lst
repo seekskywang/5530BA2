@@ -34912,7 +34912,7 @@ Nuint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
 Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
-N
+Nvoid V_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35080,6 +35080,8 @@ Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
 Nextern int16_t InFlashSave[20];
+Nextern vu8 vflag;
+Nvoid dma_rec(vu16 buf,u16 ndtr);
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35431,8 +35433,8 @@ N	GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
 X	GPIO_InitStructure.GPIO_Speed =GPIO_Fast_Speed;
 N	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 N	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-N	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;//ON/OFF
-X	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x8000);
+N	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_12|GPIO_Pin_15;//I_SW  V_SW  ON/OFF
+X	GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0800)|((uint16_t)0x1000)|((uint16_t)0x8000);
 N	GPIO_Init(GPIOA, &GPIO_InitStructure);//
 X	GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)), &GPIO_InitStructure);
 N	

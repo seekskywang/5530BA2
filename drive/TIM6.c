@@ -157,7 +157,7 @@ void TIM4_IRQHandler(void)
 				{
 					SET_Current_Laod = set_static_lc;
 					flag_Load_CC = 1;
-					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
 					static_lv = DISS_Voltage;
 					powcount++;																		
@@ -207,9 +207,9 @@ void TIM4_IRQHandler(void)
 					stepcount = 0;
 				}
 			 }else if(step == 5){
-				if(powcount < 1000)
+				if(powcount < 2000)
 				{
-					SET_Voltage = 3000;
+					SET_Voltage = (int)v*100+200;
 					SET_Current = 1000;
 					GPIO_SetBits(GPIOA,GPIO_Pin_15);//支負睾諛OFF
 					GPIO_ResetBits(GPIOC,GPIO_Pin_13);//詹擢支源摔远輰支欠
@@ -227,9 +227,8 @@ void TIM4_IRQHandler(void)
 				if(flag_Load_CC == 1)
 				{
 					SET_Current_Laod = (int)(oc_data*1000)+8000; 
-					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
 					flag_Load_CC = 1;                              
-					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
 				}else if(flag_Load_CC == 0){
 					SET_Voltage_Laod = 0;
@@ -237,7 +236,7 @@ void TIM4_IRQHandler(void)
 					flag_Load_CC = 0;
 					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
 				}
-				if(((v - DISS_Voltage) > v*0.6) || (DISS_Current < 0.05))
+				if(((v - DISS_Voltage) > v*0.6)/* || (DISS_Current < 0.05)*/)
 				{
 					IO_OFF();
 					step = 7;
@@ -247,7 +246,7 @@ void TIM4_IRQHandler(void)
 			 }else if(step == 7){
 				 if(powcount < 4000)
 				{
-					SET_Voltage =3000;
+					SET_Voltage =(int)v*100+200;
 					SET_Current = 1000;
 					GPIO_ResetBits(GPIOC,GPIO_Pin_13);//詹擢支源摔远輰支欠
 					GPIO_SetBits(GPIOC,GPIO_Pin_1);//詹擢支源摔远
@@ -275,11 +274,12 @@ void TIM4_IRQHandler(void)
             if(flag_Load_CC == 1)
             {   
 //				load_sw = load_on;
-                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+				flag_Load_CC = 1;
                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
             }else if(flag_Load_CC == 0){
                 SET_Voltage_Laod = 0;
-                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
+                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
                 flag_Load_CC = 0;
                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
             }
@@ -337,9 +337,9 @@ void TIM4_IRQHandler(void)
             if(flag_Load_CC == 1)
             {
                 SET_Current_Laod = (int)(oc_data*1000)+5000; 
-                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                 flag_Load_CC = 1;                              
-                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
             }else if(flag_Load_CC == 0){
                 SET_Voltage_Laod = 0;
@@ -380,29 +380,68 @@ void TIM4_IRQHandler(void)
     }    
 }
 
+//void TIM6_Config(void)
+//{
+//	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+//	/* TIM3 ??? ---------------------------------------------------
+//   TIM3 ????(TIM3CLK) ??? APB2 ?? (PCLK2)    
+//    => TIM3CLK = PCLK2 = SystemCoreClock
+//   TIM3CLK = SystemCoreClock, Prescaler = 0, TIM3 counter clock = SystemCoreClock
+//   SystemCoreClock ?48 MHz */
+//  /* TIM16 ???? */
+//  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6,ENABLE);
+//	
+//  /* Time ??????*/
+//  TIM_TimeBaseStructure.TIM_Prescaler = 4800-1;//?????
+//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
+//  TIM_TimeBaseStructure.TIM_Period = 5000;
+//  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+////  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+
+//  TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
+//	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//??????т??
+//	TIM_SetAutoreload(TIM6, 0xFF);//??PWM??ê
+//	TIM6_NVIC_Config();
+//  /* TIM3 ?????*/
+//  TIM_Cmd(TIM6, ENABLE);
+//}
+///***********************************************************************/
+//static void TIM6_NVIC_Config(void)
+//{
+//	NVIC_InitTypeDef NVIC_InitStructure; 
+//	
+//	/* Enable the USART1 Interrupt */
+//	NVIC_InitStructure.NVIC_IRQChannel = TIM6_DAC_IRQn;	 
+//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//	NVIC_Init(&NVIC_InitStructure);
+//}
+/*****************************************************************/
+/*****************************************************************/
 void TIM6_Config(void)
 {
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	/* TIM3 ??? ---------------------------------------------------
-   TIM3 ????(TIM3CLK) ??? APB2 ?? (PCLK2)    
+	/* TIM3 的配置 ---------------------------------------------------
+   TIM3 输入时钟(TIM3CLK) 设置为 APB2 时钟 (PCLK2)    
     => TIM3CLK = PCLK2 = SystemCoreClock
    TIM3CLK = SystemCoreClock, Prescaler = 0, TIM3 counter clock = SystemCoreClock
-   SystemCoreClock ?48 MHz */
-  /* TIM16 ???? */
+   SystemCoreClock 为48 MHz */
+  /* TIM16 时钟使能 */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6,ENABLE);
 	
-  /* Time ??????*/
-  TIM_TimeBaseStructure.TIM_Prescaler = 4800-1;//?????
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time ????????????*/
-  TIM_TimeBaseStructure.TIM_Period = 5000;
-  TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-//  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+  /* Time 定时基础设置*/
+  TIM_TimeBaseStructure.TIM_Prescaler = 2;//时钟预分频
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  /* Time 定时设置为上升沿计算模式*/
+  TIM_TimeBaseStructure.TIM_Period = 0;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 
   TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
-	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//??????т??
-	TIM_SetAutoreload(TIM6, 0xFF);//??PWM??ê
+	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);//开启定时器更新中断
+	TIM_SetAutoreload(TIM6, 0xFF);//设置PWM分辨率
 	TIM6_NVIC_Config();
-  /* TIM3 ?????*/
+  /* TIM3 计算器使能*/
   TIM_Cmd(TIM6, ENABLE);
 }
 /***********************************************************************/
@@ -412,12 +451,11 @@ static void TIM6_NVIC_Config(void)
 	
 	/* Enable the USART1 Interrupt */
 	NVIC_InitStructure.NVIC_IRQChannel = TIM6_DAC_IRQn;	 
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x03;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
-
 //????? 3 ?????
 //arrú?????c pscú??????
 //???????????:Tout=((arr+1)*(psc+1))/Ft us.

@@ -609,10 +609,10 @@ static void MODS_06H(void)
     {
         if(value == 00)
         {
-            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
+            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
             flag_Load_CC = 1;
         }else if(value == 01){
-            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
+            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
             flag_Load_CC = 0;
         }
     }
