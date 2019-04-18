@@ -34902,6 +34902,7 @@ Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Nvoid V_SW(u8 i);
+Nvoid C_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35068,15 +35069,39 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int16_t InFlashSave[20];
+Nextern int32_t InFlashSave[40];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
+Nextern float disloadv;
+Nextern u16 disrvalue;
+Nextern vu8 cflag;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
 N#define set_min_pc						InFlashSave[3]
 N#define set_load_cutoffv				InFlashSave[4]
 N#define set_pow_cutoffc					InFlashSave[5]
+N#define REG_Load_A1			   			InFlashSave[6]
+N#define SET_LoadA1			   			InFlashSave[7]
+N#define REG_LoadA_Offset1   			InFlashSave[8]
+N#define SET_LoadA_Offset1   			InFlashSave[9]
+N#define REG_Load_A2			   			InFlashSave[10]
+N#define SET_LoadA2			   			InFlashSave[11]
+N#define REG_LoadA_Offset2   			InFlashSave[12]
+N#define SET_LoadA_Offset2   			InFlashSave[13]
+N#define REG_Load_AH			   			InFlashSave[14]
+N#define SET_LoadAH			   			InFlashSave[15]
+N#define REG_LoadA_OffsetH   			InFlashSave[16]
+N#define SET_LoadA_OffsetH   			InFlashSave[17]
+N#define REG_Load_AH1			   		InFlashSave[18]
+N#define SET_LoadAH1			   			InFlashSave[19]
+N#define REG_LoadA_OffsetH1   			InFlashSave[20]
+N#define SET_LoadA_OffsetH1   			InFlashSave[21]
+N#define REG_POWERA1			   			InFlashSave[22]//??CC???°§???
+N#define SET_POWERA1			   			InFlashSave[23]//??CC???°§?????
+N#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???°§???
+N#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???°§?????
+N
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35328,8 +35353,7 @@ N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???°§???
 N#define  SET_LoadA			   Correct_Parametet[2]//??CC?????°§??
-N#define  REG_Load_A1			   Correct_Parametet[17]//??CC???d???
-N#define  SET_LoadA1			   Correct_Parametet[18]//??CC?????d??
+N
 N#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
 N#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
 N
@@ -35363,8 +35387,7 @@ N#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
 N#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
 N#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???°§???
 N#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????°§??
-N#define  REG_LoadA_Offset1   Correct_Strong[17]//??CC???d???
-N#define  SET_LoadA_Offset1   Correct_Strong[18]//??CC?????d??
+N
 N#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
 N#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
 N
@@ -35520,6 +35543,7 @@ Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
+Svoid C_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -35686,15 +35710,39 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int16_t InFlashSave[20];
+Sextern int32_t InFlashSave[40];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
+Sextern float disloadv;
+Sextern u16 disrvalue;
+Sextern vu8 cflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
 S#define set_min_pc						InFlashSave[3]
 S#define set_load_cutoffv				InFlashSave[4]
 S#define set_pow_cutoffc					InFlashSave[5]
+S#define REG_Load_A1			   			InFlashSave[6]
+S#define SET_LoadA1			   			InFlashSave[7]
+S#define REG_LoadA_Offset1   			InFlashSave[8]
+S#define SET_LoadA_Offset1   			InFlashSave[9]
+S#define REG_Load_A2			   			InFlashSave[10]
+S#define SET_LoadA2			   			InFlashSave[11]
+S#define REG_LoadA_Offset2   			InFlashSave[12]
+S#define SET_LoadA_Offset2   			InFlashSave[13]
+S#define REG_Load_AH			   			InFlashSave[14]
+S#define SET_LoadAH			   			InFlashSave[15]
+S#define REG_LoadA_OffsetH   			InFlashSave[16]
+S#define SET_LoadA_OffsetH   			InFlashSave[17]
+S#define REG_Load_AH1			   		InFlashSave[18]
+S#define SET_LoadAH1			   			InFlashSave[19]
+S#define REG_LoadA_OffsetH1   			InFlashSave[20]
+S#define SET_LoadA_OffsetH1   			InFlashSave[21]
+S#define REG_POWERA1			   			InFlashSave[22]//??CC???°§???
+S#define SET_POWERA1			   			InFlashSave[23]//??CC???°§?????
+S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???°§???
+S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???°§?????
+S
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35946,8 +35994,7 @@ S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???°§???
 S#define  SET_LoadA			   Correct_Parametet[2]//??CC?????°§??
-S#define  REG_Load_A1			   Correct_Parametet[17]//??CC???d???
-S#define  SET_LoadA1			   Correct_Parametet[18]//??CC?????d??
+S
 S#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
 S#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
 S
@@ -35981,8 +36028,7 @@ S#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
 S#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
 S#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???°§???
 S#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????°§??
-S#define  REG_LoadA_Offset1   Correct_Strong[17]//??CC???d???
-S#define  SET_LoadA_Offset1   Correct_Strong[18]//??CC?????d??
+S
 S#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
 S#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
 S
@@ -36056,6 +36102,65 @@ N/******************* (C) COPYRIGHT 2015 AVER *****END OF FILE******************
 N
 L 13 "..\drive\modbus.c" 2
 N#include "stm32f4xx_gpio.h"
+N#include "internalflash.h"
+L 1 "..\Include\internalflash.h" 1
+N#ifndef __INTERNALFLASH_H__
+N#define __INTERNALFLASH_H__
+N
+N#include "stm32f4xx.h"
+N
+N/* Base address of the Flash sectors */
+N#define ADDR_FLASH_SECTOR_0     ((uint32_t)0x08000000) /* Base @ of Sector 0, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_1     ((uint32_t)0x08004000) /* Base @ of Sector 1, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_2     ((uint32_t)0x08008000) /* Base @ of Sector 2, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_3     ((uint32_t)0x0800C000) /* Base @ of Sector 3, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_4     ((uint32_t)0x08010000) /* Base @ of Sector 4, 64 Kbytes */
+N#define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000) /* Base @ of Sector 5, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000) /* Base @ of Sector 6, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000) /* Base @ of Sector 7, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000) /* Base @ of Sector 8, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_9     ((uint32_t)0x080A0000) /* Base @ of Sector 9, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base @ of Sector 10, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
+N
+N#define FLASH_USER_START_ADDR ADDR_FLASH_SECTOR_11	//”√ªß∆ ºµÿ÷∑£¨‘›∂®Œ™µ⁄ Æ∏ˆ…»«¯µƒ∆ ºµÿ÷∑
+N
+N//”√ªß∏˘æ›◊‘º∫µƒ–Ë“™…Ë÷√
+N#define STM32_FLASH_SIZE 1024 	 		//À˘—°STM32µƒFLASH»›¡ø¥Û–°(µ•ŒªŒ™K)
+N#define STM32_FLASH_WREN 1              // πƒ‹FLASH–¥»Î(0£¨≤ª «ƒ‹;1£¨ πƒ‹)
+N//////////////////////////////////////////////////////////////////////////////////////////////////////
+N
+N//FLASH∆ ºµÿ÷∑
+N#define STM32_FLASH_BASE 0x08000000 	//STM32 FLASHµƒ∆ ºµÿ÷∑
+N//FLASHΩ‚À¯º¸÷µ
+N 
+N
+Nu16 STMFLASH_ReadHalfWord(u32 faddr);		  //∂¡≥ˆ∞Î◊÷  
+Nvoid STMFLASH_WriteLenByte(u32 WriteAddr,u32 DataToWrite,u16 Len);	//÷∏∂®µÿ÷∑ø™ º–¥»Î÷∏∂®≥§∂»µƒ ˝æ›
+Nu32 STMFLASH_ReadLenByte(u32 ReadAddr,u16 Len);						//÷∏∂®µÿ÷∑ø™ º∂¡»°÷∏∂®≥§∂» ˝æ›
+Nvoid STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//¥”÷∏∂®µÿ÷∑ø™ º–¥»Î÷∏∂®≥§∂»µƒ ˝æ›
+Nvoid STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//¥”÷∏∂®µÿ÷∑ø™ º∂¡≥ˆ÷∏∂®≥§∂»µƒ ˝æ›
+N
+N//≤‚ ‘–¥»Î
+Nvoid Test_Write(u32 WriteAddr,u16 WriteData);	
+N
+N//API
+Nuint16_t Flash_GetSector(uint32_t Address);
+Nvoid Flash_EraseSector(uint16_t SectorNum);
+N
+Nvoid Flash_Write32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+Nvoid Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+N
+Nvoid Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+Nvoid Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+N
+Nvoid Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+Nvoid Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+N
+N
+W "..\Include\internalflash.h" 55 7 last line of file ends without a newline
+N#endif
+L 15 "..\drive\modbus.c" 2
 N//===================================================================//
 Nextern struct bitDefine
 N{
@@ -36893,6 +36998,445 @@ N			Flash_Write_all ();
 N			Flag_DAC_OFF=0;
 X			(flagB . bit3)=0;
 N		}
+N/************************************Ë¥üËΩΩÁîµÊµÅ‰ΩéÊ°£‰ΩçÈ´ò1-3*****************************************************************/
+N		if (g_tModS.RxBuf[1] == 0x26)			   //CC??«µ?
+N		{
+N			Modify_A_READ = Imon1_value;//
+N			Modify_C_READ = Contr_Laod;//
+N			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			Flag_DAC_OFF=1;//
+X			(flagB . bit3)=1;
+N		}
+N
+N		if (g_tModS.RxBuf[1] == 0x27)			   //
+N		{
+N			vu32 var16;
+N			vu32 var32a;
+N			vu32 var32b;
+N			
+N			vu32 var16a;
+N			vu32 var32c;
+N			vu32 var32d;
+N			
+N			Modify_B_READ = Imon1_value;
+N			Modify_D_READ = Contr_Laod;
+N			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			
+N			var32a = Modify_B_ACT;
+N			var32a = var32a - Modify_A_ACT;
+N			var32a = var32a << 12;
+N			var16 = Modify_B_READ - Modify_A_READ;
+N			var32a = var32a / var16;
+N			REG_Load_A1 = var32a;
+X			InFlashSave[6] = var32a;
+N			var32a = Modify_B_ACT;
+N			var32a = var32a << 12;
+N			var32b = Modify_B_READ;
+N			var32b = var32b * REG_Load_A1;
+X			var32b = var32b * InFlashSave[6];
+N			if (var32a < var32b)
+N			{
+N				var32b = var32b - var32a;
+N				REG_LoadA_Offset1 = var32b;
+X				InFlashSave[8] = var32b;
+N				Polar1 |= 0x01;
+X				correct_por[1] |= 0x01;
+N			}
+N			else 
+N			{
+N				var32a = var32a - var32b;
+N				REG_LoadA_Offset1 = var32a;
+X				InFlashSave[8] = var32a;
+N				Polar1 &= ~0x01;					
+X				correct_por[1] &= ~0x01;					
+N			}
+N//---------------------------------------------------------------------------------//
+N			var32c = Modify_B_ACT; 
+N			var32c = var32c - Modify_A_ACT;
+N			var32c = var32c << 12;
+N			var16a=Modify_D_READ-Modify_C_READ;
+N			var16a=var16a*2;
+N			var32c=var32c/var16a;
+N			SET_LoadA1 = var32c;
+X			InFlashSave[7] = var32c;
+N			var32c = Modify_B_ACT;
+N			var32c = var32c << 12;
+N			var32d = SET_LoadA1;
+X			var32d = InFlashSave[7];
+N			var32d = var32d * (Modify_D_READ*2);
+N			if (var32c < var32d)
+N			{
+N				var32d = var32d - var32c;
+N				SET_LoadA_Offset1 = var32d;
+X				InFlashSave[9] = var32d;
+N				Polar1 |= 0x04;
+X				correct_por[1] |= 0x04;
+N			}
+N			else 
+N			{
+N				var32c = var32c - var32d;
+N				SET_LoadA_Offset1 = var32c;
+X				InFlashSave[9] = var32c;
+N				Polar1 &= ~0x04;
+X				correct_por[1] &= ~0x04;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N			Flag_DAC_OFF =0;
+X			(flagB . bit3) =0;
+N		}
+N/************************************Ë¥üËΩΩÁîµÊµÅ‰ΩéÊ°£‰ΩçÈ´ò1-3*****************************************************************/
+N		if (g_tModS.RxBuf[1] == 0x28)			   //CC??«µ?
+N		{
+N			Modify_A_READ = Imon1_value;//
+N			Modify_C_READ = Contr_Laod;//
+N			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			Flag_DAC_OFF=1;//
+X			(flagB . bit3)=1;
+N		}
+N
+N		if (g_tModS.RxBuf[1] == 0x29)			   //
+N		{
+N			vu32 var16;
+N			vu32 var32a;
+N			vu32 var32b;
+N			
+N			vu32 var16a;
+N			vu32 var32c;
+N			vu32 var32d;
+N			
+N			Modify_B_READ = Imon1_value;
+N			Modify_D_READ = Contr_Laod;
+N			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			
+N			var32a = Modify_B_ACT;
+N			var32a = var32a - Modify_A_ACT;
+N			var32a = var32a << 12;
+N			var16 = Modify_B_READ - Modify_A_READ;
+N			var32a = var32a / var16;
+N			REG_Load_A2 = var32a;
+X			InFlashSave[10] = var32a;
+N			var32a = Modify_B_ACT;
+N			var32a = var32a << 12;
+N			var32b = Modify_B_READ;
+N			var32b = var32b * REG_Load_A2;
+X			var32b = var32b * InFlashSave[10];
+N			if (var32a < var32b)
+N			{
+N				var32b = var32b - var32a;
+N				REG_LoadA_Offset2 = var32b;
+X				InFlashSave[12] = var32b;
+N				Polar1 |= 0x01;
+X				correct_por[1] |= 0x01;
+N			}
+N			else 
+N			{
+N				var32a = var32a - var32b;
+N				REG_LoadA_Offset2 = var32a;
+X				InFlashSave[12] = var32a;
+N				Polar1 &= ~0x01;					
+X				correct_por[1] &= ~0x01;					
+N			}
+N//---------------------------------------------------------------------------------//
+N			var32c = Modify_B_ACT; 
+N			var32c = var32c - Modify_A_ACT;
+N			var32c = var32c << 12;
+N			var16a=Modify_D_READ-Modify_C_READ;
+N			var16a=var16a*2;
+N			var32c=var32c/var16a;
+N			SET_LoadA2 = var32c;
+X			InFlashSave[11] = var32c;
+N			var32c = Modify_B_ACT;
+N			var32c = var32c << 12;
+N			var32d = SET_LoadA2;
+X			var32d = InFlashSave[11];
+N			var32d = var32d * (Modify_D_READ*2);
+N			if (var32c < var32d)
+N			{
+N				var32d = var32d - var32c;
+N				SET_LoadA_Offset2 = var32d;
+X				InFlashSave[13] = var32d;
+N				Polar1 |= 0x04;
+X				correct_por[1] |= 0x04;
+N			}
+N			else 
+N			{
+N				var32c = var32c - var32d;
+N				SET_LoadA_Offset2 = var32c;
+X				InFlashSave[13] = var32c;
+N				Polar1 &= ~0x04;
+X				correct_por[1] &= ~0x04;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N			Flag_DAC_OFF =0;
+X			(flagB . bit3) =0;
+N		}
+N/************************************Ë¥üËΩΩÁîµÊµÅ‰ΩéÊ°£‰ΩçÈ´ò1-3*****************************************************************/
+N		if (g_tModS.RxBuf[1] == 0x2A)			   //CC??«µ?
+N		{
+N			Modify_A_READ = Imon1_value;//
+N			Modify_C_READ = Contr_Laod;//
+N			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			Flag_DAC_OFF=1;//
+X			(flagB . bit3)=1;
+N		}
+N
+N		if (g_tModS.RxBuf[1] == 0x2B)			   //
+N		{
+N			vu32 var16;
+N			vu32 var32a;
+N			vu32 var32b;
+N			
+N			vu32 var16a;
+N			vu32 var32c;
+N			vu32 var32d;
+N			
+N			Modify_B_READ = Imon1_value;
+N			Modify_D_READ = Contr_Laod;
+N			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			
+N			var32a = Modify_B_ACT;
+N			var32a = var32a - Modify_A_ACT;
+N			var32a = var32a << 12;
+N			var16 = Modify_B_READ - Modify_A_READ;
+N			var32a = var32a / var16;
+N			REG_Load_AH = var32a;
+X			InFlashSave[14] = var32a;
+N			var32a = Modify_B_ACT;
+N			var32a = var32a << 12;
+N			var32b = Modify_B_READ;
+N			var32b = var32b * REG_Load_AH;
+X			var32b = var32b * InFlashSave[14];
+N			if (var32a < var32b)
+N			{
+N				var32b = var32b - var32a;
+N				REG_LoadA_OffsetH = var32b;
+X				InFlashSave[16] = var32b;
+N				Polar1 |= 0x01;
+X				correct_por[1] |= 0x01;
+N			}
+N			else 
+N			{
+N				var32a = var32a - var32b;
+N				REG_LoadA_OffsetH = var32a;
+X				InFlashSave[16] = var32a;
+N				Polar1 &= ~0x01;					
+X				correct_por[1] &= ~0x01;					
+N			}
+N//---------------------------------------------------------------------------------//
+N			var32c = Modify_B_ACT; 
+N			var32c = var32c - Modify_A_ACT;
+N			var32c = var32c << 12;
+N			var16a=Modify_D_READ-Modify_C_READ;
+N			var16a=var16a*2;
+N			var32c=var32c/var16a;
+N			SET_LoadAH = var32c;
+X			InFlashSave[15] = var32c;
+N			var32c = Modify_B_ACT;
+N			var32c = var32c << 12;
+N			var32d = SET_LoadAH;
+X			var32d = InFlashSave[15];
+N			var32d = var32d * (Modify_D_READ*2);
+N			if (var32c < var32d)
+N			{
+N				var32d = var32d - var32c;
+N				SET_LoadA_OffsetH = var32d;
+X				InFlashSave[17] = var32d;
+N				Polar1 |= 0x04;
+X				correct_por[1] |= 0x04;
+N			}
+N			else 
+N			{
+N				var32c = var32c - var32d;
+N				SET_LoadA_OffsetH = var32c;
+X				InFlashSave[17] = var32c;
+N				Polar1 &= ~0x04;
+X				correct_por[1] &= ~0x04;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N			Flag_DAC_OFF =0;
+X			(flagB . bit3) =0;
+N		}
+N/************************************Ë¥üËΩΩÁîµÊµÅ‰ΩéÊ°£‰ΩçÈ´ò1-3*****************************************************************/
+N		if (g_tModS.RxBuf[1] == 0x2C)			   //CC??«µ?
+N		{
+N			Modify_A_READ = Imon1_value;//
+N			Modify_C_READ = Contr_Laod;//
+N			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			Flag_DAC_OFF=1;//
+X			(flagB . bit3)=1;
+N		}
+N
+N		if (g_tModS.RxBuf[1] == 0x2D)			   //
+N		{
+N			vu32 var16;
+N			vu32 var32a;
+N			vu32 var32b;
+N			
+N			vu32 var16a;
+N			vu32 var32c;
+N			vu32 var32d;
+N			
+N			Modify_B_READ = Imon1_value;
+N			Modify_D_READ = Contr_Laod;
+N			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			
+N			var32a = Modify_B_ACT;
+N			var32a = var32a - Modify_A_ACT;
+N			var32a = var32a << 12;
+N			var16 = Modify_B_READ - Modify_A_READ;
+N			var32a = var32a / var16;
+N			REG_Load_AH1 = var32a;
+X			InFlashSave[18] = var32a;
+N			var32a = Modify_B_ACT;
+N			var32a = var32a << 12;
+N			var32b = Modify_B_READ;
+N			var32b = var32b * REG_Load_AH1;
+X			var32b = var32b * InFlashSave[18];
+N			if (var32a < var32b)
+N			{
+N				var32b = var32b - var32a;
+N				REG_LoadA_OffsetH1 = var32b;
+X				InFlashSave[20] = var32b;
+N				Polar1 |= 0x01;
+X				correct_por[1] |= 0x01;
+N			}
+N			else 
+N			{
+N				var32a = var32a - var32b;
+N				REG_LoadA_OffsetH1 = var32a;
+X				InFlashSave[20] = var32a;
+N				Polar1 &= ~0x01;					
+X				correct_por[1] &= ~0x01;					
+N			}
+N//---------------------------------------------------------------------------------//
+N			var32c = Modify_B_ACT; 
+N			var32c = var32c - Modify_A_ACT;
+N			var32c = var32c << 12;
+N			var16a=Modify_D_READ-Modify_C_READ;
+N			var16a=var16a*2;
+N			var32c=var32c/var16a;
+N			SET_LoadAH1 = var32c;
+X			InFlashSave[19] = var32c;
+N			var32c = Modify_B_ACT;
+N			var32c = var32c << 12;
+N			var32d = SET_LoadAH1;
+X			var32d = InFlashSave[19];
+N			var32d = var32d * (Modify_D_READ*2);
+N			if (var32c < var32d)
+N			{
+N				var32d = var32d - var32c;
+N				SET_LoadA_OffsetH1 = var32d;
+X				InFlashSave[21] = var32d;
+N				Polar1 |= 0x04;
+X				correct_por[1] |= 0x04;
+N			}
+N			else 
+N			{
+N				var32c = var32c - var32d;
+N				SET_LoadA_OffsetH1 = var32c;
+X				InFlashSave[21] = var32c;
+N				Polar1 &= ~0x04;
+X				correct_por[1] &= ~0x04;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N			Flag_DAC_OFF =0;
+X			(flagB . bit3) =0;
+N		}
+N/*******************************??CC???°§????ßµ?******************************************/	
+N		if (g_tModS.RxBuf[1] == 0x2E||flag_ADJ_ALCC==1)			   //?°§?ßµ?
+X		if (g_tModS.RxBuf[1] == 0x2E||(flagF . bit4)==1)			   
+N		{
+N			Modify_A_READ = Imon_value;//??°§
+N			Modify_C_READ = Contr_Current;//???°§
+N			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N		}
+N
+N		if (g_tModS.RxBuf[1] == 0x2F||flag_ADJ_AHCC==1)			   //?°§?ßµ???
+X		if (g_tModS.RxBuf[1] == 0x2F||(flagF . bit5)==1)			   
+N		{
+N			vu16 var16;
+N			vu32 var32a;
+N			vu32 var32b;
+N			
+N			vu16 var16a;
+N			vu32 var32c;
+N			vu32 var32d;
+N			
+N			Modify_D_READ = Contr_Current;
+N			Modify_B_READ = Imon_value;
+N			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];
+N			var32a = Modify_B_ACT;
+N			var32a = var32a - Modify_A_ACT;
+N			var32a = var32a << 14;
+N			var16 = Modify_B_READ - Modify_A_READ;
+N			var32a = var32a / var16;
+N			REG_POWERA1 = var32a;
+X			InFlashSave[22] = var32a;
+N			var32a = Modify_B_ACT;
+N			var32a = var32a << 14;
+N			var32b = Modify_B_READ;
+N			var32b = var32b * REG_POWERA1;
+X			var32b = var32b * InFlashSave[22];
+N			if (var32a < var32b)
+N			{
+N				var32b = var32b - var32a;
+N				REG_POWERA_Offset1 = var32b;
+X				InFlashSave[24] = var32b;
+N				Polar4 |= 0x01;
+X				correct_por[4] |= 0x01;
+N			}
+N			else 
+N			{
+N				var32a = var32a - var32b;
+N				REG_POWERA_Offset1 = var32a;
+X				InFlashSave[24] = var32a;
+N				Polar4 &= ~0x01;					//?°§????°Í?ßµ???
+X				correct_por[4] &= ~0x01;					
+N			}
+N	//---------------------------------------------------------------------------------//
+N			var32c = Modify_B_ACT; //???°§ßµ?
+N			var32c = var32c - Modify_A_ACT;
+N			var32c = var32c << 14;
+N			var16a=Modify_D_READ-Modify_C_READ;
+N			var16a=var16a*2;
+N			var32c=var32c/var16a;
+N			SET_POWERA1 = var32c;
+X			InFlashSave[23] = var32c;
+N			var32c = Modify_B_ACT;
+N			var32c = var32c << 14;
+N			var32d = SET_POWERA1;
+X			var32d = InFlashSave[23];
+N			var32d = var32d * (Modify_D_READ*2);
+N			if (var32c < var32d)
+N			{
+N				var32d = var32d - var32c;
+N				SET_POWERA_Offset1 = var32d;
+X				InFlashSave[25] = var32d;
+N				Polar4 |= 0x04;
+X				correct_por[4] |= 0x04;
+N			}
+N			else 
+N			{
+N				var32c = var32c - var32d;
+N				SET_POWERA_Offset1 = var32c;
+X				InFlashSave[25] = var32c;
+N				Polar4 &= ~0x04;
+X				correct_por[4] &= ~0x04;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N			Flag_DAC_OFF=0;
+X			(flagB . bit3)=0;
+N		}
 N/***********??DAC*******************************************/
 N		if (g_tModS.RxBuf[1] == 0x0F)			   
 N		{
@@ -36922,7 +37466,9 @@ N    static u32 rave;
 N    static u8 rcount;
 N	vu32 var32;
 N	vu32 var32a;
-N	static u16 i;
+N	static u16 i,count,countr;
+N	static float sumv;
+N	static u32 sumr;
 N/*****************************ƒ⁄◊Ë≤‚¡øµÁ—π◊™ªª*******************************************/
 N//	if(r_raly == 1)
 N//    {
@@ -36930,42 +37476,11 @@ N//        var32 = Vmon1_value;
 N//    }else if(r_raly == 0){
 N//        var32 = Vmon1_value - 5;
 N//    }
-N	if(Vmon1_value < 4300)
-N	{		
-N		V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
-N		DISS_Voltage = 0;
-N		i=0;
-N	}else{					
-N		
-N			
-N		if(DISS_Voltage > 12)
+N	if(page_sw == face_cal)
+X	if(page_sw == 8)
+N	{
+N		if(vflag == 1)
 N		{
-N			V_SW(1);//ÁîµÂéãÈ´òÊ°£‰Ωç
-N			var32 = Vmon1_value;
-N			var32 = var32 * REG_CorrectionV;  
-X			var32 = var32 * Correct_Parametet[0];  
-N			if ((Polar & 0x01) == 0x01)		  
-X			if ((correct_por[0] & 0x01) == 0x01)		  
-N			{
-N				if (var32 < REG_ReadV_Offset) 
-X				if (var32 < Correct_Strong[0]) 
-N				{
-N					var32 = 0;
-N				}
-N				else var32 = var32 - REG_ReadV_Offset;
-X				else var32 = var32 - Correct_Strong[0];
-N			}
-N			else var32 = var32 + REG_ReadV_Offset;
-X			else var32 = var32 + Correct_Strong[0];
-N			var32 = var32 >> 12;
-N			if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
-N			Voltage = var32;
-X			Run_Control[10] = var32;
-N			DISS_Voltage=Voltage;
-X			DISS_Voltage=Run_Control[10];
-N			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
-N		}else{
-N			V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
 N			var32 = Vmon1_value;
 N			var32 = var32 * REG_CorrectionV1;  
 X			var32 = var32 * Correct_Parametet[13];  
@@ -36989,8 +37504,113 @@ X			Run_Control[10] = var32;
 N			DISS_Voltage=Voltage;
 X			DISS_Voltage=Run_Control[10];
 N			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
-N			i=0;
+N		}else if(vflag == 0){
+N			var32 = Vmon1_value;
+N			var32 = var32 * REG_CorrectionV;  
+X			var32 = var32 * Correct_Parametet[0];  
+N			if ((Polar & 0x01) == 0x01)		  
+X			if ((correct_por[0] & 0x01) == 0x01)		  
+N			{
+N				if (var32 < REG_ReadV_Offset) 
+X				if (var32 < Correct_Strong[0]) 
+N				{
+N					var32 = 0;
+N				}
+N				else var32 = var32 - REG_ReadV_Offset;
+X				else var32 = var32 - Correct_Strong[0];
+N			}
+N			else var32 = var32 + REG_ReadV_Offset;
+X			else var32 = var32 + Correct_Strong[0];
+N			var32 = var32 >> 12;
+N			if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+N			Voltage = var32;
+X			Run_Control[10] = var32;
+N			DISS_Voltage=Voltage;
+X			DISS_Voltage=Run_Control[10];
+N			DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
 N		}
+N	}else{
+N		if(Vmon1_value < 4300)
+N		{		
+N			V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
+N			DISS_Voltage = 0;
+N			i=0;
+N		}else{										
+N			if(DISS_Voltage > 12)
+N			{
+N				V_SW(1);//ÁîµÂéãÈ´òÊ°£‰Ωç
+N				if(r_raly == 1)
+N				{
+N					var32 = Vmon1_value;
+N				}else if(r_raly == 0){
+N					var32 = Vmon1_value - 2;
+N				}
+N//				var32 = Vmon1_value;
+N				var32 = var32 * REG_CorrectionV1;  
+X				var32 = var32 * Correct_Parametet[13];  
+N				if ((Polar & 0x01) == 0x01)		  
+X				if ((correct_por[0] & 0x01) == 0x01)		  
+N				{
+N					if (var32 < REG_ReadV_Offset1) 
+X					if (var32 < Correct_Strong[13]) 
+N					{
+N						var32 = 0;
+N					}
+N					else var32 = var32 - REG_ReadV_Offset1;
+X					else var32 = var32 - Correct_Strong[13];
+N				}
+N				else var32 = var32 + REG_ReadV_Offset1;
+X				else var32 = var32 + Correct_Strong[13];
+N				var32 = var32 >> 12;
+N				if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+N				Voltage = var32;
+X				Run_Control[10] = var32;
+N				DISS_Voltage=Voltage;
+X				DISS_Voltage=Run_Control[10];
+N				DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
+N				
+N			}else{
+N				V_SW(0);//ÁîµÂéã‰ΩéÊ°£‰Ωç
+N				if(r_raly == 1)
+N				{
+N					var32 = Vmon1_value;
+N				}else if(r_raly == 0){
+N					var32 = Vmon1_value - 3;
+N				}
+N//				var32 = Vmon1_value;
+N				var32 = var32 * REG_CorrectionV;  
+X				var32 = var32 * Correct_Parametet[0];  
+N				if ((Polar & 0x01) == 0x01)		  
+X				if ((correct_por[0] & 0x01) == 0x01)		  
+N				{
+N					if (var32 < REG_ReadV_Offset) 
+X					if (var32 < Correct_Strong[0]) 
+N					{
+N						var32 = 0;
+N					}
+N					else var32 = var32 - REG_ReadV_Offset;
+X					else var32 = var32 - Correct_Strong[0];
+N				}
+N				else var32 = var32 + REG_ReadV_Offset;
+X				else var32 = var32 + Correct_Strong[0];
+N				var32 = var32 >> 12;
+N				if (var32 < 30) var32 = 0;				  //40mV”î–Ç»•¬£
+N				Voltage = var32;
+X				Run_Control[10] = var32;
+N				DISS_Voltage=Voltage;
+X				DISS_Voltage=Run_Control[10];
+N				DISS_Voltage=DISS_Voltage/1000;//›ÜÃ£–î æ÷ß—π
+N			}
+N		}
+N	}
+N	if(count == 200)
+N	{
+N		disloadv = sumv/200;
+N		count = 0;
+N		sumv = 0;
+N	}else{
+N		sumv += DISS_Voltage;
+N		count++;
 N	}
 N	var32 = 0;
 N//		if(DISS_Voltage >= 30)
@@ -37020,58 +37640,282 @@ N//		}
 N		
 N	
 N	/*******************∏∫‘ÿ≤‚¡øµÁ¡˜◊™ªª**************************************/
-N	var32 = Imon1_value;
-N	var32 = var32 * REG_Load_A;  
-X	var32 = var32 * Correct_Parametet[1];  
-N	if ((Polar1 & 0x01) == 0x01)		  
-X	if ((correct_por[1] & 0x01) == 0x01)		  
+N	if(cflag == 0)
 N	{
-N		if (var32 < REG_LoadA_Offset) 
-X		if (var32 < Correct_Strong[1]) 
+N		var32 = Imon1_value;
+N		var32 = var32 * REG_Load_A;  
+X		var32 = var32 * Correct_Parametet[1];  
+N		if ((Polar1 & 0x01) == 0x01)		  
+X		if ((correct_por[1] & 0x01) == 0x01)		  
 N		{
-N			var32 = 0;
+N			if (var32 < REG_LoadA_Offset) 
+X			if (var32 < Correct_Strong[1]) 
+N			{
+N				var32 = 0;
+N			}
+N			else var32 = var32 - REG_LoadA_Offset;
+X			else var32 = var32 - Correct_Strong[1];
 N		}
-N		else var32 = var32 - REG_LoadA_Offset;
-X		else var32 = var32 - Correct_Strong[1];
+N		else var32 = var32 + REG_LoadA_Offset;
+X		else var32 = var32 + Correct_Strong[1];
+N		var32 = var32 >> 12;
+N		Laod_Current = var32;
+X		Run_Control[12] = var32;
+N		DISS_Current=Laod_Current;
+X		DISS_Current=Run_Control[12];
+N		DISS_Current=DISS_Current/1000;//º∆À„œ‘ æµÁ¡˜
+W "..\drive\modbus.c" 1282 6 single-precision operand implicitly converted to double-precision
+N		if(DISS_Current > 0.1)
+N		{
+N			var32 = Imon1_value;
+N			var32 = var32 * REG_Load_A1;  
+X			var32 = var32 * InFlashSave[6];  
+N			if ((Polar1 & 0x01) == 0x01)		  
+X			if ((correct_por[1] & 0x01) == 0x01)		  
+N			{
+N				if (var32 < REG_LoadA_Offset1) 
+X				if (var32 < InFlashSave[8]) 
+N				{
+N					var32 = 0;
+N				}
+N				else var32 = var32 - REG_LoadA_Offset1;
+X				else var32 = var32 - InFlashSave[8];
+N			}
+N			else var32 = var32 + REG_LoadA_Offset1;
+X			else var32 = var32 + InFlashSave[8];
+N			var32 = var32 >> 12;
+N			Laod_Current = var32;
+X			Run_Control[12] = var32;
+N			DISS_Current=Laod_Current;
+X			DISS_Current=Run_Control[12];
+N			DISS_Current=DISS_Current/1000;//›ÜÃ£–î æ÷ß¬∑
+N		}
+W "..\drive\modbus.c" 1300 6 single-precision operand implicitly converted to double-precision
+N		if(DISS_Current > 0.9)
+N		{
+N			var32 = Imon1_value;
+N			var32 = var32 * REG_Load_A2;  
+X			var32 = var32 * InFlashSave[10];  
+N			if ((Polar1 & 0x01) == 0x01)		  
+X			if ((correct_por[1] & 0x01) == 0x01)		  
+N			{
+N				if (var32 < REG_LoadA_Offset2) 
+X				if (var32 < InFlashSave[12]) 
+N				{
+N					var32 = 0;
+N				}
+N				else var32 = var32 - REG_LoadA_Offset2;
+X				else var32 = var32 - InFlashSave[12];
+N			}
+N			else var32 = var32 + REG_LoadA_Offset2;
+X			else var32 = var32 + InFlashSave[12];
+N			var32 = var32 >> 12;
+N			Laod_Current = var32;
+X			Run_Control[12] = var32;
+N			DISS_Current=Laod_Current;
+X			DISS_Current=Run_Control[12];
+N			DISS_Current=DISS_Current/1000;//›ÜÃ£–î æ÷ß¬∑
+N		}
+N	}else if(cflag == 1){
+N		var32 = Imon1_value;
+N		var32 = var32 * REG_Load_AH;  
+X		var32 = var32 * InFlashSave[14];  
+N		if ((Polar1 & 0x01) == 0x01)		  
+X		if ((correct_por[1] & 0x01) == 0x01)		  
+N		{
+N			if (var32 < REG_LoadA_OffsetH) 
+X			if (var32 < InFlashSave[16]) 
+N			{
+N				var32 = 0;
+N			}
+N			else var32 = var32 - REG_LoadA_OffsetH;
+X			else var32 = var32 - InFlashSave[16];
+N		}
+N		else var32 = var32 + REG_LoadA_OffsetH;
+X		else var32 = var32 + InFlashSave[16];
+N		var32 = var32 >> 12;
+N		Laod_Current = var32;
+X		Run_Control[12] = var32;
+N		DISS_Current=Laod_Current;
+X		DISS_Current=Run_Control[12];
+N		DISS_Current=DISS_Current/1000;//›ÜÃ£–î æ÷ß¬∑
+N		if(DISS_Current > 10)
+N		{
+N			var32 = Imon1_value;
+N		var32 = var32 * REG_Load_AH1;  
+X		var32 = var32 * InFlashSave[18];  
+N		if ((Polar1 & 0x01) == 0x01)		  
+X		if ((correct_por[1] & 0x01) == 0x01)		  
+N		{
+N			if (var32 < REG_LoadA_OffsetH1) 
+X			if (var32 < InFlashSave[20]) 
+N			{
+N				var32 = 0;
+N			}
+N			else var32 = var32 - REG_LoadA_OffsetH1;
+X			else var32 = var32 - InFlashSave[20];
+N		}
+N		else var32 = var32 + REG_LoadA_OffsetH1;
+X		else var32 = var32 + InFlashSave[20];
+N		var32 = var32 >> 12;
+N		Laod_Current = var32;
+X		Run_Control[12] = var32;
+N		DISS_Current=Laod_Current;
+X		DISS_Current=Run_Control[12];
+N		DISS_Current=DISS_Current/1000;//›ÜÃ£–î æ÷ß¬∑
+N		}
 N	}
-N	else var32 = var32 + REG_LoadA_Offset;
-X	else var32 = var32 + Correct_Strong[1];
-N	var32 = var32 >> 12;
-N	Laod_Current = var32;
-X	Run_Control[12] = var32;
-N	DISS_Current=Laod_Current;
-X	DISS_Current=Run_Control[12];
-N	DISS_Current=DISS_Current/1000;//º∆À„œ‘ æµÁ¡˜
 N	var32 = 0;	
 N	/*************************∏∫‘ÿµÁ—π∫ÕµÁ¡˜øÿ÷∆◊™ªª**************************************/
 N	if(flag_Load_CC==1)
 X	if((flagD . bit7)==1)
 N	{
-N		var32 = SET_Current_Laod;
-X		var32 = Run_Control[4];
-N		var32=var32<<12;   
-N		if ((Polar1 & 0x04) == 0)			   
-X		if ((correct_por[1] & 0x04) == 0)			   
+N		if(cflag == 0)
 N		{
-N			if (var32 < SET_LoadA_Offset) var32 = 0;
-X			if (var32 < Correct_Strong[2]) var32 = 0;
-N			else var32 = var32 - SET_LoadA_Offset;
-X			else var32 = var32 - Correct_Strong[2];
-N		}
-N		else var32 = var32 + SET_LoadA_Offset;
-X		else var32 = var32 + Correct_Strong[2];
-N		var32 = var32/SET_LoadA;
-X		var32 = var32/Correct_Parametet[2];
-N		var32=var32>>1;
-N		if(Flag_DAC_OFF==0)
-X		if((flagB . bit3)==0)
-N		{
-N			Contr_Laod = var32;
-N		}
-N		if(SET_Current_Laod==0)
-X		if(Run_Control[4]==0)
-N		{
-N			Contr_Laod=0;
+N			if(SET_Current_Laod <= 100)
+X			if(Run_Control[4] <= 100)
+N			{
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_Offset) var32 = 0;
+X					if (var32 < Correct_Strong[2]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_Offset;
+X					else var32 = var32 - Correct_Strong[2];
+N				}
+N				else var32 = var32 + SET_LoadA_Offset;
+X				else var32 = var32 + Correct_Strong[2];
+N				var32 = var32/SET_LoadA;
+X				var32 = var32/Correct_Parametet[2];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}else if(SET_Current_Laod <= 900){
+X			}else if(Run_Control[4] <= 900){
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_Offset1) var32 = 0;
+X					if (var32 < InFlashSave[9]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_Offset1;
+X					else var32 = var32 - InFlashSave[9];
+N				}
+N				else var32 = var32 + SET_LoadA_Offset1;
+X				else var32 = var32 + InFlashSave[9];
+N				var32 = var32/SET_LoadA1;
+X				var32 = var32/InFlashSave[7];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}else{
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_Offset2) var32 = 0;
+X					if (var32 < InFlashSave[13]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_Offset2;
+X					else var32 = var32 - InFlashSave[13];
+N				}
+N				else 
+N					var32 = var32 + SET_LoadA_Offset2;
+X					var32 = var32 + InFlashSave[13];
+N				var32 = var32/SET_LoadA2;
+X				var32 = var32/InFlashSave[11];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}
+N		}else{
+N			if(SET_Current_Laod <= 10000)
+X			if(Run_Control[4] <= 10000)
+N			{
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_OffsetH) var32 = 0;
+X					if (var32 < InFlashSave[17]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_OffsetH;
+X					else var32 = var32 - InFlashSave[17];
+N				}
+N				else var32 = var32 + SET_LoadA_OffsetH;
+X				else var32 = var32 + InFlashSave[17];
+N				var32 = var32/SET_LoadAH;
+X				var32 = var32/InFlashSave[15];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}else{
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
+X					if (var32 < InFlashSave[21]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_OffsetH1;
+X					else var32 = var32 - InFlashSave[21];
+N				}
+N				else var32 = var32 + SET_LoadA_OffsetH1;
+X				else var32 = var32 + InFlashSave[21];
+N				var32 = var32/SET_LoadAH1;
+X				var32 = var32/InFlashSave[19];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}
 N		}
 N		var32 = 0;
 N	}
@@ -37175,6 +38019,16 @@ X            Run_Control[13] = var32;
 N        }
 N        var32 = 0;
 N    }
+N	if(countr == 80)
+N	{
+N		disrvalue = sumr/80;
+N		countr = 0;
+N		sumr = 0;
+N	}else{
+N		sumr += R_VLUE;
+X		sumr += Run_Control[13];
+N		countr++;
+N	}
 N	/*****************************Œ»—πµÁ‘¥≤‚¡øµÁ—π◊™ªª*******************************************/
 N	var32 = Vmon_value;
 N	var32 = var32 * REG_POWERV;  
@@ -37250,9 +38104,8 @@ N    }
 N	var32 = 0;
 N/*****************************Œ»—πµÁ‘¥≤‚¡øµÁ¡˜◊™ªª*******************************************/
 N	var32 = Imon_value;
-N	if(flag_CC_MODE==1)
-X	if((flagE . bit7)==1)
-N	{
+N//	if(flag_CC_MODE==1)
+N//	{
 N		var32 = var32 * REG_POWERA;	   
 X		var32 = var32 * Correct_Parametet[6];	   
 N		if ((Polar4 & 0x01) == 0x01)			   
@@ -37274,43 +38127,65 @@ X		Run_Control[11] = var32;;
 N		DISS_POW_Current=Current;
 X		DISS_POW_Current=Run_Control[11];
 N		DISS_POW_Current=DISS_POW_Current/1000;//º∆À„œ‘ æµÁ¡˜
-N	}
-N	else
-N	{
-N		var32 = var32 * CON_POWERA;	   
-X		var32 = var32 * Correct_Parametet[10];	   
-N		if ((Polar3 & 0x04) == 0x04)			   
-X		if ((correct_por[3] & 0x04) == 0x04)			   
+N		if(DISS_POW_Current > 1)
 N		{
-N			if (var32 < CON_POWERA_Offset) var32 = 0;
-X			if (var32 < Correct_Strong[10]) var32 = 0;
-N			else var32 = var32 - CON_POWERA_Offset;
-X			else var32 = var32 - Correct_Strong[10];
+N			var32 = Imon_value;
+N			var32 = var32 * REG_POWERA1;	   
+X			var32 = var32 * InFlashSave[22];	   
+N			if ((Polar4 & 0x01) == 0x01)			   
+X			if ((correct_por[4] & 0x01) == 0x01)			   
+N			{
+N				if (var32 < REG_POWERA_Offset1) var32 = 0;
+X				if (var32 < InFlashSave[24]) var32 = 0;
+N				else var32 = var32 - REG_POWERA_Offset1;
+X				else var32 = var32 - InFlashSave[24];
+N			}
+N			else
+N			{
+N				var32 = var32 + REG_POWERA_Offset1;
+X				var32 = var32 + InFlashSave[24];
+N			}	
+N			var32 = var32 >> 14;
+N			Current = var32;;
+X			Run_Control[11] = var32;;
+N			DISS_POW_Current=Current;
+X			DISS_POW_Current=Run_Control[11];
+N			DISS_POW_Current=DISS_POW_Current/1000;//º∆À„œ‘ æµÁ¡˜
 N		}
-N		else
-N		{
-N			var32 = var32 + CON_POWERA_Offset;
-X			var32 = var32 + Correct_Strong[10];
-N		}	
-N		var32 = var32 >> 14;
-N		Current = var32;;
-X		Run_Control[11] = var32;;
-N		DISS_POW_Current=Current;
-X		DISS_POW_Current=Run_Control[11];
-N		DISS_POW_Current=DISS_POW_Current/1000;//º∆À„œ‘ æµÁ¡˜
-N	}
+N//	}
+N//	else
+N//	{
+N//		var32 = var32 * CON_POWERA;	   
+N//		if ((Polar3 & 0x04) == 0x04)			   
+N//		{
+N//			if (var32 < CON_POWERA_Offset) var32 = 0;
+N//			else var32 = var32 - CON_POWERA_Offset;
+N//		}
+N//		else
+N//		{
+N//			var32 = var32 + CON_POWERA_Offset;
+N//		}	
+N//		var32 = var32 >> 14;
+N//		Current = var32;;
+N//		DISS_POW_Current=Current;
+N//		DISS_POW_Current=DISS_POW_Current/1000;//º∆À„œ‘ æµÁ¡˜
+N//	}
 N/**************************Œ»—πµÁ‘¥…Ë÷√µÁ—π◊™ªª******************************************/
 N	var32 = SET_Voltage;
 X	var32 = Run_Control[1];
-N//    if(SET_Voltage < 1000)
-N//    {
+N    if(SET_Voltage < 1000)
+X    if(Run_Control[1] < 1000)
+N    {
 N        var32=var32<<14;   
-N//         if ((Polar5 & 0x04) == 0)			   
-N//         {
-N//             if (var32 < SET_POWERV_Offset) var32 = 0;
-N//             else var32 = var32 - SET_POWERV_Offset;
-N//         }
-N//         else 
+N         if ((Polar5 & 0x04) == 0)			   
+X         if ((correct_por[5] & 0x04) == 0)			   
+N         {
+N             if (var32 < SET_POWERV_Offset) var32 = 0;
+X             if (var32 < Correct_Strong[9]) var32 = 0;
+N             else var32 = var32 - SET_POWERV_Offset;
+X             else var32 = var32 - Correct_Strong[9];
+N         }
+N         else 
 N            var32 = var32 + SET_POWERV_Offset;
 X            var32 = var32 + Correct_Strong[9];
 N        var32 = var32/SET_POWERV;
@@ -37322,69 +38197,101 @@ X        if(Run_Control[1]==0)
 N        {
 N            Contr_Voltage=0;
 N        }
-N//    }else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
-N//        var32=var32<<14;   
-N////         if ((Polar5 & 0x04) == 0)			   
-N////         {
-N////             if (var32 < SET_POWERV_Offset1) var32 = 0;
-N////             else var32 = var32 - SET_POWERV_Offset1;
-N////         }
-N////         else 
-N//            var32 = var32 + SET_POWERV_Offset1;
-N//        var32 = var32/SET_POWERV1;
-N//        var32=var32>>1;
-N//        Contr_Voltage = var32;
-N//        if(SET_Voltage==0)
-N//        {
-N//            Contr_Voltage=0;
-N//        }
-N//    }else if(SET_Voltage >= 3000){
-N//        var32=var32<<14;   
-N////         if ((Polar5 & 0x04) == 0)			   
-N////         {
-N////             if (var32 < SET_POWERV_Offset2) var32 = 0;
-N////             else var32 = var32 - SET_POWERV_Offset2;
-N////         }
-N////         else 
-N//            var32 = var32 + SET_POWERV_Offset2;
-N//        var32 = var32/SET_POWERV2;
-N//        var32=var32>>1;
-N//        Contr_Voltage = var32;
-N//        if(SET_Voltage==0)
-N//        {
-N//            Contr_Voltage=0;
-N//        }
-N//    }
+N    }else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
+X    }else if(Run_Control[1] >= 1000 && Run_Control[1] < 3000){
+N        var32=var32<<14;   
+N//         if ((Polar5 & 0x04) == 0)			   
+N//         {
+N//             if (var32 < SET_POWERV_Offset1) var32 = 0;
+N//             else var32 = var32 - SET_POWERV_Offset1;
+N//         }
+N//         else 
+N            var32 = var32 + SET_POWERV_Offset1;
+X            var32 = var32 + Correct_Strong[19];
+N        var32 = var32/SET_POWERV1;
+X        var32 = var32/Correct_Parametet[19];
+N        var32=var32>>1;
+N        Contr_Voltage = var32;
+N        if(SET_Voltage==0)
+X        if(Run_Control[1]==0)
+N        {
+N            Contr_Voltage=0;
+N        }
+N    }else if(SET_Voltage >= 3000){
+X    }else if(Run_Control[1] >= 3000){
+N        var32=var32<<14;   
+N//         if ((Polar5 & 0x04) == 0)			   
+N//         {
+N//             if (var32 < SET_POWERV_Offset2) var32 = 0;
+N//             else var32 = var32 - SET_POWERV_Offset2;
+N//         }
+N//         else 
+N            var32 = var32 + SET_POWERV_Offset2;
+X            var32 = var32 + Correct_Strong[20];
+N        var32 = var32/SET_POWERV2;
+X        var32 = var32/Correct_Parametet[20];
+N        var32=var32>>1;
+N        Contr_Voltage = var32;
+N        if(SET_Voltage==0)
+X        if(Run_Control[1]==0)
+N        {
+N            Contr_Voltage=0;
+N        }
+N    }
 N	
 N	var32 = 0;
 N/**************************Œ»—πµÁ‘¥…Ë÷√µÁ¡˜◊™ªª**************************************/
 N	var32 = SET_Current;
 X	var32 = Run_Control[2];
-N	var32=var32<<14;   
-N	if ((Polar4 & 0x04) == 0)			   
-X	if ((correct_por[4] & 0x04) == 0)			   
+N	var32=var32<<14;
+N	if(SET_Current <= 1000)
+X	if(Run_Control[2] <= 1000)
 N	{
-N		if (var32 < SET_POWERA_Offset) var32 = 0;
-X		if (var32 < Correct_Strong[7]) var32 = 0;
-N		else var32 = var32 - SET_POWERA_Offset;
-X		else var32 = var32 - Correct_Strong[7];
-N	}
-N	else var32 = var32 + SET_POWERA_Offset;
-X	else var32 = var32 + Correct_Strong[7];
-N	var32 = var32/SET_POWERA;
-X	var32 = var32/Correct_Parametet[7];
-N	var32=var32>>1;
-N	Contr_Current = var32;
-N	if(SET_Current==0)
-X	if(Run_Control[2]==0)
-N	{
-N		Contr_Current=0;
+N		if ((Polar4 & 0x04) == 0)			   
+X		if ((correct_por[4] & 0x04) == 0)			   
+N		{
+N			if (var32 < SET_POWERA_Offset) var32 = 0;
+X			if (var32 < Correct_Strong[7]) var32 = 0;
+N			else var32 = var32 - SET_POWERA_Offset;
+X			else var32 = var32 - Correct_Strong[7];
+N		}
+N		else var32 = var32 + SET_POWERA_Offset;
+X		else var32 = var32 + Correct_Strong[7];
+N		var32 = var32/SET_POWERA;
+X		var32 = var32/Correct_Parametet[7];
+N		var32=var32>>1;
+N		Contr_Current = var32;
+N		if(SET_Current==0)
+X		if(Run_Control[2]==0)
+N		{
+N			Contr_Current=0;
+N		}
+N	}else{
+N		if ((Polar4 & 0x04) == 0)			   
+X		if ((correct_por[4] & 0x04) == 0)			   
+N		{
+N			if (var32 < SET_POWERA_Offset1) var32 = 0;
+X			if (var32 < InFlashSave[25]) var32 = 0;
+N			else var32 = var32 - SET_POWERA_Offset1;
+X			else var32 = var32 - InFlashSave[25];
+N		}
+N		else var32 = var32 + SET_POWERA_Offset1;
+X		else var32 = var32 + InFlashSave[25];
+N		var32 = var32/SET_POWERA1;
+X		var32 = var32/InFlashSave[23];
+N		var32=var32>>1;
+N		Contr_Current = var32;
+N		if(SET_Current==0)
+X		if(Run_Control[2]==0)
+N		{
+N			Contr_Current=0;
+N		}
 N	}
 N	
 N	var32 = 0;
-W "..\drive\modbus.c" 752 16 variable "rave"  was declared but never referenced
-W "..\drive\modbus.c" 753 15 variable "rcount"  was declared but never referenced
-W "..\drive\modbus.c" 756 13 variable "i"  was set but never used
+W "..\drive\modbus.c" 1116 16 variable "rave"  was declared but never referenced
+W "..\drive\modbus.c" 1117 15 variable "rcount"  was declared but never referenced
+W "..\drive\modbus.c" 1120 13 variable "i"  was set but never used
 N}
 N/********************************************************************************
 N  * √˚≥∆ :   MODBUS_Conrtl

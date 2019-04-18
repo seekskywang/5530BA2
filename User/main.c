@@ -32,7 +32,8 @@ float DISS_Voltage;//负载电压
 float DISS_POW_Voltage;//稳压电源电压
 float DISS_Current;//负载电流
 float DISS_POW_Current;//稳压电源电流
-
+float disloadv;
+u16 disrvalue;
 //USBH_HOST  USB_Host;
 //USB_OTG_CORE_HANDLE  USB_OTG_Core;
 //FIL   *file;
@@ -77,7 +78,7 @@ int main(void)
 	LCD_Initializtion();//液晶屏初始化	
 	EEPROM_READ_Coeff();//读取校准参数
 	//IWDG_Inte();
-	Flash_Read16BitDatas(FLASH_USER_START_ADDR,20,InFlashSave);
+	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
 //	MYDMA_Config();
 //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器

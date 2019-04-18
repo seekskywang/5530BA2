@@ -35106,6 +35106,7 @@ Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Nvoid V_SW(u8 i);
+Nvoid C_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35272,15 +35273,39 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int16_t InFlashSave[20];
+Nextern int32_t InFlashSave[40];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
+Nextern float disloadv;
+Nextern u16 disrvalue;
+Nextern vu8 cflag;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
 N#define set_min_pc						InFlashSave[3]
 N#define set_load_cutoffv				InFlashSave[4]
 N#define set_pow_cutoffc					InFlashSave[5]
+N#define REG_Load_A1			   			InFlashSave[6]
+N#define SET_LoadA1			   			InFlashSave[7]
+N#define REG_LoadA_Offset1   			InFlashSave[8]
+N#define SET_LoadA_Offset1   			InFlashSave[9]
+N#define REG_Load_A2			   			InFlashSave[10]
+N#define SET_LoadA2			   			InFlashSave[11]
+N#define REG_LoadA_Offset2   			InFlashSave[12]
+N#define SET_LoadA_Offset2   			InFlashSave[13]
+N#define REG_Load_AH			   			InFlashSave[14]
+N#define SET_LoadAH			   			InFlashSave[15]
+N#define REG_LoadA_OffsetH   			InFlashSave[16]
+N#define SET_LoadA_OffsetH   			InFlashSave[17]
+N#define REG_Load_AH1			   		InFlashSave[18]
+N#define SET_LoadAH1			   			InFlashSave[19]
+N#define REG_LoadA_OffsetH1   			InFlashSave[20]
+N#define SET_LoadA_OffsetH1   			InFlashSave[21]
+N#define REG_POWERA1			   			InFlashSave[22]//??CC???·???
+N#define SET_POWERA1			   			InFlashSave[23]//??CC???·?????
+N#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???·???
+N#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???·?????
+N
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35532,8 +35557,7 @@ N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???·???
 N#define  SET_LoadA			   Correct_Parametet[2]//??CC?????·??
-N#define  REG_Load_A1			   Correct_Parametet[17]//??CC???d???
-N#define  SET_LoadA1			   Correct_Parametet[18]//??CC?????d??
+N
 N#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
 N#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
 N
@@ -35567,8 +35591,7 @@ N#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
 N#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
 N#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???·???
 N#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????·??
-N#define  REG_LoadA_Offset1   Correct_Strong[17]//??CC???d???
-N#define  SET_LoadA_Offset1   Correct_Strong[18]//??CC?????d??
+N
 N#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
 N#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
 N
@@ -35756,9 +35779,10 @@ N#define AD7689_CNV_1			GPIO_SetBits(GPIOB,GPIO_Pin_6);
 Nvu16 AD7689_Buffer[8];
 Nvu16 DMA_Buffer[8];
 Nvu16 Ad7689_Fit_Imon[60];
-Nvu16 Ad7689_Fit_Imon1[60];
-Nvu16 Ad7689_Fit_Vmon[60];
-Nvu16 Ad7689_Fit_Rmon[40];
+Nvu16 Ad7689_Fit_Imon1[50];
+Nvu16 Ad7689_Fit_Vmon[100];
+Nvu16 Ad7689_Fit_Rmon[30];
+Nvu16 Ad7689_Fit_PVmon[100];
 Nvoid Bubble_sort(vu16 *D_temp,vu8 num);
 Nvoid AD7689_InitializeSPI1(void)
 N{
@@ -36055,17 +36079,17 @@ N  for(count = 3000; count != 0; count--);
 N}
 Nvoid AD7689_Scan_CH(void)
 N{
-N	static vu8 I_cont,I1_cont,V_cont,R_cont;
+N	static vu8 I_cont,I1_cont,V_cont,R_cont,V1_cont;
 N	vu8 i,f;
 N	vu32 sum1;
-N	vu16 var_chI,var_chV,var_chV1,var_chR;
+N	vu16 var_chI,var_chI1,var_chV,var_chV1,var_chR;
 N	for(i=0;i<8;i++)
 N	{
 N		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
 N		var_chV=AD7689_Buffer[2];
 N		var_chI=AD7689_Buffer[3];
-N		Imon_value=AD7689_Buffer[5];
-N		Vmon_value=AD7689_Buffer[6];
+N		var_chI1=AD7689_Buffer[5];
+N		var_chV1=AD7689_Buffer[6];
 N		var_chR=AD7689_Buffer[7];
 N	}
 N	Ad7689_Fit_Imon[I_cont++]=var_chI;
@@ -36077,30 +36101,78 @@ N		for(f=0;f<60;f++)
 N		{
 N			sum1 +=Ad7689_Fit_Imon[f];
 N		}
-N		Imon1_value=sum1/60;
+N		Imon1_value=sum1/60;//璐熻浇鐢垫祦
+N	}
+N	
+N	Ad7689_Fit_Imon1[I1_cont++]=var_chI1;
+N	if(I1_cont==30)
+N	{
+N		I1_cont=0;
+N		sum1=0;
+N		for(f=0;f<30;f++)
+N		{
+N			sum1 +=Ad7689_Fit_Imon1[f];
+N		}
+N		Imon_value=sum1/30;//鐢垫簮鐢垫祦
+N	}
+N	
+N	Ad7689_Fit_PVmon[V1_cont++]=var_chV1;
+N	if(V1_cont==100)
+N	{
+N		V1_cont=0;
+N		sum1=0;
+N		for(f=0;f<100;f++)
+N		{
+N			sum1 +=Ad7689_Fit_PVmon[f];
+N		}
+N		Vmon_value=sum1/100;//鐢垫簮鐢靛帇
 N	}
 N	
 N	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-N	if(V_cont==60)
+N	if(V_cont==100)
 N	{
 N		V_cont=0;
-N		sum1=0;
-N		for(f=0;f<60;f++)
+N		
+N	}
+N	sum1=0;
+N//		Bubble_sort( Ad7689_Fit_Vmon,100);//排序从大到小
+N		for(f=0;f<100;f++)
 N		{
 N			sum1 +=Ad7689_Fit_Vmon[f];
 N		}
-N		Vmon1_value=sum1/60;
-N	}
+N		Vmon1_value=sum1/100;//璐熻浇鐢靛帇
+N
 N	Ad7689_Fit_Rmon[R_cont++]=var_chR;
-N	if(R_cont==40)
+N	if(R_cont==30)
 N	{
 N		R_cont=0;
 N		sum1=0;
-N		for(f=0;f<40;f++)
+N		for(f=0;f<30;f++)
 N		{
 N			sum1 +=Ad7689_Fit_Rmon[f];
 N		}
-N		Rmon_value=sum1/40;
+N		Rmon_value=sum1/30;//鍐呴樆
 N	}
-W "..\drive\AD7689.c" 300 2 last line of file ends without a newline
+N}
+N
+N/*
+N冒泡排序，最大值在第一位，最小值在最后一位
+N */
+Nvoid Bubble_sort(vu16 *D_temp,vu8 num)
+N{
+N	unsigned int _temp;
+N	unsigned char m,n;
+N	for(m=0;m<num;m++)
+N	{
+N		for(n=m;n<num;n++)
+N		{
+N			if(D_temp[n]>D_temp[m])//最大的值放在第一位
+N			{
+N				_temp = D_temp[m];
+N				D_temp[m] =D_temp[n];
+N				D_temp[n]=_temp;		
+N			}
+N		}	
+N	}
+W "..\drive\AD7689.c" 349 2 last line of file ends without a newline
 N}

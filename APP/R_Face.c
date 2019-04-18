@@ -435,7 +435,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				{
 					if(test_mode == 0)
 					{
-						if((float)(GUI_GetTime()/500.0 - time1) > 1)
+						if((float)(GUI_GetTime()/500.0 - time1) > 0.5)
 						{
 							if(staticcdc == 1)
 							{
@@ -450,7 +450,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							v = DISS_Voltage;
 						}
 					}else if(test_mode == 1){
-						if((float)(GUI_GetTime()/500.0 - time1) > 2.5)
+						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 						{
 							if(staticcdc == 1)
 							{
@@ -586,7 +586,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				TEXT_SetText(hItem,buf);
 			}else{
 				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
-				sprintf(buf,"%.3f",DISS_Voltage);       
+				sprintf(buf,"%.3f",disloadv);       
 				TEXT_SetText(hItem,buf);
 				
 				if(R_VLUE >= 2000)
@@ -596,9 +596,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //						TEXT_SetText(hItem,"OVER");
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
-					sprintf(buf,"%04d",R_VLUE);       
+					sprintf(buf,"%04d",disrvalue);       
 					TEXT_SetText(hItem,buf);
 				}
+			}
+			//分选
+			if(para_set1 == set_1_on)
+			{
+				test_r();
 			}
 		}
 		//显示温度

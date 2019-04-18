@@ -762,7 +762,7 @@ void MENU_SET(void)
             TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
             TEXT_SetTextColor(hItem, GUI_BLACK);
                                                  
-            Flash_Write16BitDatas(FLASH_USER_START_ADDR,20, InFlashSave);
+            Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
             set_sw = set_88;
             bit = 1;
             dot_flag = 0;

@@ -43,6 +43,7 @@ vu16 sendload;
 extern vu8 cdc_sw;
 vu8 ocf;
 vu8 vflag;
+vu8 cflag;
 static void ee_Delay( vu32 nCount)	 //莶榨謩覔时诏私
 {
 	for(; nCount != 0; nCount--);
@@ -210,6 +211,18 @@ void V_SW(u8 i)
 	}else if(i == 1){
 		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
 		vflag = 1;
+	}
+}
+
+void C_SW(u8 i)
+{
+	if(i == 0)
+	{
+		GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+		cflag = 0;
+	}else if(i == 1){
+		GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+		cflag = 1;
 	}
 }
 ////缓启动

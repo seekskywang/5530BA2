@@ -1109,7 +1109,7 @@ void Key_Funtion(void)
                             break;
                         }                     
                     }
-//					Flash_Read16BitDatas(FLASH_USER_START_ADDR,20,InFlashSave);
+//					Flash_Read16BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
 //                  sLCD_WR_REG(0x01);
     //                main();
     //				timer_sw = 0;
@@ -1388,7 +1388,14 @@ void Key_Funtion(void)
                                 }
                             }else if(calmode == input){
                                 confirmcal();
-                            }
+                            }else if(calmode == mode_load){
+								if(vflag == 1)
+								{
+									V_SW(0);
+								}else{
+									V_SW(1);
+								}
+							}
                             KeyCounter = 0;
                             BEEP_Tiggr();//触发蜂鸣噿
                         }break;
@@ -1701,6 +1708,15 @@ void Key_Funtion(void)
                                 IO_OFF();
                             }
                         }break;
+						case face_load:
+						{
+							if(cflag == 0)
+							{
+								C_SW(1);
+							}else{
+								C_SW(0);
+							}
+						}break;
                     }
                     KeyCounter = 0;
                     BEEP_Tiggr();//

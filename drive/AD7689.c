@@ -26,9 +26,10 @@ extern struct bitDefine
 vu16 AD7689_Buffer[8];
 vu16 DMA_Buffer[8];
 vu16 Ad7689_Fit_Imon[60];
-vu16 Ad7689_Fit_Imon1[60];
-vu16 Ad7689_Fit_Vmon[60];
-vu16 Ad7689_Fit_Rmon[40];
+vu16 Ad7689_Fit_Imon1[50];
+vu16 Ad7689_Fit_Vmon[100];
+vu16 Ad7689_Fit_Rmon[30];
+vu16 Ad7689_Fit_PVmon[100];
 void Bubble_sort(vu16 *D_temp,vu8 num);
 void AD7689_InitializeSPI1(void)
 {
@@ -250,17 +251,17 @@ void AD7689_Delay1(void)
 }
 void AD7689_Scan_CH(void)
 {
-	static vu8 I_cont,I1_cont,V_cont,R_cont;
+	static vu8 I_cont,I1_cont,V_cont,R_cont,V1_cont;
 	vu8 i,f;
 	vu32 sum1;
-	vu16 var_chI,var_chV,var_chV1,var_chR;
+	vu16 var_chI,var_chI1,var_chV,var_chV1,var_chR;
 	for(i=0;i<8;i++)
 	{
 		AD7689_Buffer[i]=SPI_AD7689_Read(1, i);
 		var_chV=AD7689_Buffer[2];
 		var_chI=AD7689_Buffer[3];
-		Imon_value=AD7689_Buffer[5];
-		Vmon_value=AD7689_Buffer[6];
+		var_chI1=AD7689_Buffer[5];
+		var_chV1=AD7689_Buffer[6];
 		var_chR=AD7689_Buffer[7];
 	}
 	Ad7689_Fit_Imon[I_cont++]=var_chI;
@@ -272,29 +273,77 @@ void AD7689_Scan_CH(void)
 		{
 			sum1 +=Ad7689_Fit_Imon[f];
 		}
-		Imon1_value=sum1/60;
+		Imon1_value=sum1/60;//璐熻浇鐢垫祦
+	}
+	
+	Ad7689_Fit_Imon1[I1_cont++]=var_chI1;
+	if(I1_cont==30)
+	{
+		I1_cont=0;
+		sum1=0;
+		for(f=0;f<30;f++)
+		{
+			sum1 +=Ad7689_Fit_Imon1[f];
+		}
+		Imon_value=sum1/30;//鐢垫簮鐢垫祦
+	}
+	
+	Ad7689_Fit_PVmon[V1_cont++]=var_chV1;
+	if(V1_cont==100)
+	{
+		V1_cont=0;
+		sum1=0;
+		for(f=0;f<100;f++)
+		{
+			sum1 +=Ad7689_Fit_PVmon[f];
+		}
+		Vmon_value=sum1/100;//鐢垫簮鐢靛帇
 	}
 	
 	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-	if(V_cont==60)
+	if(V_cont==100)
 	{
 		V_cont=0;
-		sum1=0;
-		for(f=0;f<60;f++)
+		
+	}
+	sum1=0;
+//		Bubble_sort( Ad7689_Fit_Vmon,100);//排序从大到小
+		for(f=0;f<100;f++)
 		{
 			sum1 +=Ad7689_Fit_Vmon[f];
 		}
-		Vmon1_value=sum1/60;
-	}
+		Vmon1_value=sum1/100;//璐熻浇鐢靛帇
+
 	Ad7689_Fit_Rmon[R_cont++]=var_chR;
-	if(R_cont==40)
+	if(R_cont==30)
 	{
 		R_cont=0;
 		sum1=0;
-		for(f=0;f<40;f++)
+		for(f=0;f<30;f++)
 		{
 			sum1 +=Ad7689_Fit_Rmon[f];
 		}
-		Rmon_value=sum1/40;
+		Rmon_value=sum1/30;//鍐呴樆
+	}
+}
+
+/*
+冒泡排序，最大值在第一位，最小值在最后一位
+ */
+void Bubble_sort(vu16 *D_temp,vu8 num)
+{
+	unsigned int _temp;
+	unsigned char m,n;
+	for(m=0;m<num;m++)
+	{
+		for(n=m;n<num;n++)
+		{
+			if(D_temp[n]>D_temp[m])//最大的值放在第一位
+			{
+				_temp = D_temp[m];
+				D_temp[m] =D_temp[n];
+				D_temp[n]=_temp;		
+			}
+		}	
 	}
 }

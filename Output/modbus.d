@@ -39,3 +39,4 @@
 ..\output\modbus.o: ..\Include\modbus.h
 ..\output\modbus.o: ..\Include\flash.h
 ..\output\modbus.o: ..\Include\my_register.h
+..\output\modbus.o: ..\Include\internalflash.h

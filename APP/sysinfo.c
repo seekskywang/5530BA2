@@ -202,7 +202,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_136);
             TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-            sprintf(buf,"%4d",R_VLUE);
+            sprintf(buf,"%4d",disrvalue);
             TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
             GUI_UC_SetEncodeUTF8();        
             TEXT_SetText(hItem,buf);

@@ -94,7 +94,7 @@ FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
                   FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
 StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
 EndSector = Flash_GetSector(address+4*length);
-for (i = StartSector; i < EndSector; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
+for (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 {
 if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
 }

@@ -34992,6 +34992,7 @@ Nvoid RecHandle(void);
 Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Nvoid V_SW(u8 i);
+Nvoid C_SW(u8 i);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35158,15 +35159,39 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int16_t InFlashSave[20];
+Nextern int32_t InFlashSave[40];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
+Nextern float disloadv;
+Nextern u16 disrvalue;
+Nextern vu8 cflag;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
 N#define set_min_pc						InFlashSave[3]
 N#define set_load_cutoffv				InFlashSave[4]
 N#define set_pow_cutoffc					InFlashSave[5]
+N#define REG_Load_A1			   			InFlashSave[6]
+N#define SET_LoadA1			   			InFlashSave[7]
+N#define REG_LoadA_Offset1   			InFlashSave[8]
+N#define SET_LoadA_Offset1   			InFlashSave[9]
+N#define REG_Load_A2			   			InFlashSave[10]
+N#define SET_LoadA2			   			InFlashSave[11]
+N#define REG_LoadA_Offset2   			InFlashSave[12]
+N#define SET_LoadA_Offset2   			InFlashSave[13]
+N#define REG_Load_AH			   			InFlashSave[14]
+N#define SET_LoadAH			   			InFlashSave[15]
+N#define REG_LoadA_OffsetH   			InFlashSave[16]
+N#define SET_LoadA_OffsetH   			InFlashSave[17]
+N#define REG_Load_AH1			   		InFlashSave[18]
+N#define SET_LoadAH1			   			InFlashSave[19]
+N#define REG_LoadA_OffsetH1   			InFlashSave[20]
+N#define SET_LoadA_OffsetH1   			InFlashSave[21]
+N#define REG_POWERA1			   			InFlashSave[22]//??CC???，???
+N#define SET_POWERA1			   			InFlashSave[23]//??CC???，?????
+N#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???，???
+N#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???，?????
+N
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35418,8 +35443,7 @@ N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???，???
 N#define  SET_LoadA			   Correct_Parametet[2]//??CC?????，??
-N#define  REG_Load_A1			   Correct_Parametet[17]//??CC???d???
-N#define  SET_LoadA1			   Correct_Parametet[18]//??CC?????d??
+N
 N#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
 N#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
 N
@@ -35453,8 +35477,7 @@ N#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
 N#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
 N#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???，???
 N#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????，??
-N#define  REG_LoadA_Offset1   Correct_Strong[17]//??CC???d???
-N#define  SET_LoadA_Offset1   Correct_Strong[18]//??CC?????d??
+N
 N#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
 N#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
 N
@@ -35556,6 +35579,7 @@ Svoid RecHandle(void);
 Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
+Svoid C_SW(u8 i);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -35722,15 +35746,39 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int16_t InFlashSave[20];
+Sextern int32_t InFlashSave[40];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
+Sextern float disloadv;
+Sextern u16 disrvalue;
+Sextern vu8 cflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
 S#define set_min_pc						InFlashSave[3]
 S#define set_load_cutoffv				InFlashSave[4]
 S#define set_pow_cutoffc					InFlashSave[5]
+S#define REG_Load_A1			   			InFlashSave[6]
+S#define SET_LoadA1			   			InFlashSave[7]
+S#define REG_LoadA_Offset1   			InFlashSave[8]
+S#define SET_LoadA_Offset1   			InFlashSave[9]
+S#define REG_Load_A2			   			InFlashSave[10]
+S#define SET_LoadA2			   			InFlashSave[11]
+S#define REG_LoadA_Offset2   			InFlashSave[12]
+S#define SET_LoadA_Offset2   			InFlashSave[13]
+S#define REG_Load_AH			   			InFlashSave[14]
+S#define SET_LoadAH			   			InFlashSave[15]
+S#define REG_LoadA_OffsetH   			InFlashSave[16]
+S#define SET_LoadA_OffsetH   			InFlashSave[17]
+S#define REG_Load_AH1			   		InFlashSave[18]
+S#define SET_LoadAH1			   			InFlashSave[19]
+S#define REG_LoadA_OffsetH1   			InFlashSave[20]
+S#define SET_LoadA_OffsetH1   			InFlashSave[21]
+S#define REG_POWERA1			   			InFlashSave[22]//??CC???，???
+S#define SET_POWERA1			   			InFlashSave[23]//??CC???，?????
+S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???，???
+S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???，?????
+S
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35982,8 +36030,7 @@ S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???，???
 S#define  SET_LoadA			   Correct_Parametet[2]//??CC?????，??
-S#define  REG_Load_A1			   Correct_Parametet[17]//??CC???d???
-S#define  SET_LoadA1			   Correct_Parametet[18]//??CC?????d??
+S
 S#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
 S#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
 S
@@ -36017,8 +36064,7 @@ S#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
 S#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
 S#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???，???
 S#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????，??
-S#define  REG_LoadA_Offset1   Correct_Strong[17]//??CC???d???
-S#define  SET_LoadA_Offset1   Correct_Strong[18]//??CC?????d??
+S
 S#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
 S#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
 S
