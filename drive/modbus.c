@@ -1172,7 +1172,7 @@ void Transformation_ADC(void)
 			DISS_Voltage = 0;
 			i=0;
 		}else{										
-			if(DISS_Voltage > 12)
+			if(DISS_Voltage > 10)
 			{
 				V_SW(1);//电压高档位
 				if(r_raly == 1)
@@ -1331,24 +1331,24 @@ void Transformation_ADC(void)
 		Laod_Current = var32;
 		DISS_Current=Laod_Current;
 		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
-		if(DISS_Current > 10)
-		{
-			var32 = Imon1_value;
-		var32 = var32 * REG_Load_AH1;  
-		if ((Polar1 & 0x01) == 0x01)		  
-		{
-			if (var32 < REG_LoadA_OffsetH1) 
-			{
-				var32 = 0;
-			}
-			else var32 = var32 - REG_LoadA_OffsetH1;
-		}
-		else var32 = var32 + REG_LoadA_OffsetH1;
-		var32 = var32 >> 12;
-		Laod_Current = var32;
-		DISS_Current=Laod_Current;
-		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
-		}
+//		if(DISS_Current > 10)
+//		{
+//			var32 = Imon1_value;
+//		var32 = var32 * REG_Load_AH1;  
+//		if ((Polar1 & 0x01) == 0x01)		  
+//		{
+//			if (var32 < REG_LoadA_OffsetH1) 
+//			{
+//				var32 = 0;
+//			}
+//			else var32 = var32 - REG_LoadA_OffsetH1;
+//		}
+//		else var32 = var32 + REG_LoadA_OffsetH1;
+//		var32 = var32 >> 12;
+//		Laod_Current = var32;
+//		DISS_Current=Laod_Current;
+//		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
+//		}
 	}
 	var32 = 0;	
 	/*************************���ص�ѹ�͵�������ת��**************************************/
@@ -1417,8 +1417,8 @@ void Transformation_ADC(void)
 				}
 			}
 		}else{
-			if(SET_Current_Laod <= 10000)
-			{
+//			if(SET_Current_Laod <= 10000)
+//			{
 				var32 = SET_Current_Laod;
 				var32=var32<<12;   
 				if ((Polar1 & 0x04) == 0)			   
@@ -1437,26 +1437,26 @@ void Transformation_ADC(void)
 				{
 					Contr_Laod=0;
 				}
-			}else{
-				var32 = SET_Current_Laod;
-				var32=var32<<12;   
-				if ((Polar1 & 0x04) == 0)			   
-				{
-					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
-					else var32 = var32 - SET_LoadA_OffsetH1;
-				}
-				else var32 = var32 + SET_LoadA_OffsetH1;
-				var32 = var32/SET_LoadAH1;
-				var32=var32>>1;
-				if(Flag_DAC_OFF==0)
-				{
-					Contr_Laod = var32;
-				}
-				if(SET_Current_Laod==0)
-				{
-					Contr_Laod=0;
-				}
-			}
+//			}else{
+//				var32 = SET_Current_Laod;
+//				var32=var32<<12;   
+//				if ((Polar1 & 0x04) == 0)			   
+//				{
+//					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
+//					else var32 = var32 - SET_LoadA_OffsetH1;
+//				}
+//				else var32 = var32 + SET_LoadA_OffsetH1;
+//				var32 = var32/SET_LoadAH1;
+//				var32=var32>>1;
+//				if(Flag_DAC_OFF==0)
+//				{
+//					Contr_Laod = var32;
+//				}
+//				if(SET_Current_Laod==0)
+//				{
+//					Contr_Laod=0;
+//				}
+//			}
 		}
 		var32 = 0;
 	}
@@ -1515,7 +1515,7 @@ void Transformation_ADC(void)
 //             else var32 = var32 - REG_ReadRL_Offset;
 //         }
 //        else
-            var32 = var32 - REG_ReadRL_Offset;
+            var32 = var32 + REG_ReadRL_Offset;
         var32 = var32 >> 12;
         if (var32 < 1)
         {
@@ -1535,7 +1535,7 @@ void Transformation_ADC(void)
 //                 else var32 = var32 - REG_ReadRH_Offset;
 //             }
 //            else
-                var32 = var32 - REG_ReadRH_Offset;
+                var32 = var32 + REG_ReadRH_Offset;
             var32 = var32 >> 12;
             if (var32 < 5) var32 = 0;				  //40mVӔЂȥ£
             R_VLUE = var32;

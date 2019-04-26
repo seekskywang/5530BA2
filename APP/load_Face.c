@@ -844,7 +844,7 @@ void LOAD_SET(void) {
                     hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
                     TEXT_SetText(hItem,"CV");
 					flag_Load_CC = 0;
-                    GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV                  
+                    GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV                  
                     load_mode = 0;
                     Write_LOAD();
                     break;
@@ -855,7 +855,7 @@ void LOAD_SET(void) {
                      hItem = WM_GetDialogItem(load_wind, ID_TEXT_121);
                      TEXT_SetText(hItem,"CC");
 					 flag_Load_CC = 1;
-                     GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC                     
+                     GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC                   
                      load_mode =1;
                      Write_LOAD();
                      break;

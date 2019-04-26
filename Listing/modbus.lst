@@ -37536,7 +37536,7 @@ N			V_SW(0);//电压低档位
 N			DISS_Voltage = 0;
 N			i=0;
 N		}else{										
-N			if(DISS_Voltage > 12)
+N			if(DISS_Voltage > 10)
 N			{
 N				V_SW(1);//电压高档位
 N				if(r_raly == 1)
@@ -37739,31 +37739,24 @@ X		Run_Control[12] = var32;
 N		DISS_Current=Laod_Current;
 X		DISS_Current=Run_Control[12];
 N		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
-N		if(DISS_Current > 10)
-N		{
-N			var32 = Imon1_value;
-N		var32 = var32 * REG_Load_AH1;  
-X		var32 = var32 * InFlashSave[18];  
-N		if ((Polar1 & 0x01) == 0x01)		  
-X		if ((correct_por[1] & 0x01) == 0x01)		  
-N		{
-N			if (var32 < REG_LoadA_OffsetH1) 
-X			if (var32 < InFlashSave[20]) 
-N			{
-N				var32 = 0;
-N			}
-N			else var32 = var32 - REG_LoadA_OffsetH1;
-X			else var32 = var32 - InFlashSave[20];
-N		}
-N		else var32 = var32 + REG_LoadA_OffsetH1;
-X		else var32 = var32 + InFlashSave[20];
-N		var32 = var32 >> 12;
-N		Laod_Current = var32;
-X		Run_Control[12] = var32;
-N		DISS_Current=Laod_Current;
-X		DISS_Current=Run_Control[12];
-N		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
-N		}
+N//		if(DISS_Current > 10)
+N//		{
+N//			var32 = Imon1_value;
+N//		var32 = var32 * REG_Load_AH1;  
+N//		if ((Polar1 & 0x01) == 0x01)		  
+N//		{
+N//			if (var32 < REG_LoadA_OffsetH1) 
+N//			{
+N//				var32 = 0;
+N//			}
+N//			else var32 = var32 - REG_LoadA_OffsetH1;
+N//		}
+N//		else var32 = var32 + REG_LoadA_OffsetH1;
+N//		var32 = var32 >> 12;
+N//		Laod_Current = var32;
+N//		DISS_Current=Laod_Current;
+N//		DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
+N//		}
 N	}
 N	var32 = 0;	
 N	/*************************���ص�ѹ�͵�������ת��**************************************/
@@ -37859,9 +37852,8 @@ N					Contr_Laod=0;
 N				}
 N			}
 N		}else{
-N			if(SET_Current_Laod <= 10000)
-X			if(Run_Control[4] <= 10000)
-N			{
+N//			if(SET_Current_Laod <= 10000)
+N//			{
 N				var32 = SET_Current_Laod;
 X				var32 = Run_Control[4];
 N				var32=var32<<12;   
@@ -37888,34 +37880,26 @@ X				if(Run_Control[4]==0)
 N				{
 N					Contr_Laod=0;
 N				}
-N			}else{
-N				var32 = SET_Current_Laod;
-X				var32 = Run_Control[4];
-N				var32=var32<<12;   
-N				if ((Polar1 & 0x04) == 0)			   
-X				if ((correct_por[1] & 0x04) == 0)			   
-N				{
-N					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
-X					if (var32 < InFlashSave[21]) var32 = 0;
-N					else var32 = var32 - SET_LoadA_OffsetH1;
-X					else var32 = var32 - InFlashSave[21];
-N				}
-N				else var32 = var32 + SET_LoadA_OffsetH1;
-X				else var32 = var32 + InFlashSave[21];
-N				var32 = var32/SET_LoadAH1;
-X				var32 = var32/InFlashSave[19];
-N				var32=var32>>1;
-N				if(Flag_DAC_OFF==0)
-X				if((flagB . bit3)==0)
-N				{
-N					Contr_Laod = var32;
-N				}
-N				if(SET_Current_Laod==0)
-X				if(Run_Control[4]==0)
-N				{
-N					Contr_Laod=0;
-N				}
-N			}
+N//			}else{
+N//				var32 = SET_Current_Laod;
+N//				var32=var32<<12;   
+N//				if ((Polar1 & 0x04) == 0)			   
+N//				{
+N//					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
+N//					else var32 = var32 - SET_LoadA_OffsetH1;
+N//				}
+N//				else var32 = var32 + SET_LoadA_OffsetH1;
+N//				var32 = var32/SET_LoadAH1;
+N//				var32=var32>>1;
+N//				if(Flag_DAC_OFF==0)
+N//				{
+N//					Contr_Laod = var32;
+N//				}
+N//				if(SET_Current_Laod==0)
+N//				{
+N//					Contr_Laod=0;
+N//				}
+N//			}
 N		}
 N		var32 = 0;
 N	}
@@ -37986,8 +37970,8 @@ N//             }
 N//             else var32 = var32 - REG_ReadRL_Offset;
 N//         }
 N//        else
-N            var32 = var32 - REG_ReadRL_Offset;
-X            var32 = var32 - Correct_Strong[11];
+N            var32 = var32 + REG_ReadRL_Offset;
+X            var32 = var32 + Correct_Strong[11];
 N        var32 = var32 >> 12;
 N        if (var32 < 1)
 N        {
@@ -38010,8 +37994,8 @@ N//                 }
 N//                 else var32 = var32 - REG_ReadRH_Offset;
 N//             }
 N//            else
-N                var32 = var32 - REG_ReadRH_Offset;
-X                var32 = var32 - Correct_Strong[12];
+N                var32 = var32 + REG_ReadRH_Offset;
+X                var32 = var32 + Correct_Strong[12];
 N            var32 = var32 >> 12;
 N            if (var32 < 5) var32 = 0;				  //40mVӔЂȥ£
 N            R_VLUE = var32;

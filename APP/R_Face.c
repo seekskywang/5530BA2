@@ -1050,6 +1050,7 @@ WM_HWIN CreateR(void) {
   track = face_r;
     con_flag = 0;
     setmode_r();
+	C_SW(1);
 //    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 //    GPIO_SetBits(GPIOB,GPIO_Pin_13);
 //    r_raly = 1;

@@ -597,9 +597,9 @@ void MENU_SET(void)
     {
       SET_Voltage = /*3000*/ 6200;
     }
-    if(SET_Current > 10000)
+    if(SET_Current > 5000)
     {
-      SET_Current = 10000;
+      SET_Current = 5000;
     }
     switch(set_sw){
         case set_10:
@@ -694,9 +694,9 @@ void MENU_SET(void)
 				pow_c = atof(buf)*1000;
 			}
               
-            if(pow_c > 10000)
+            if(pow_c > 5000)
             {
-                pow_c = 10000;               
+                pow_c = 5000;               
             }
 			SET_Current = pow_c;
             if(SET_Voltage/100 * SET_Current/1000 > 250)
@@ -750,9 +750,9 @@ void MENU_SET(void)
 				strncpy(buf,set_limit,dot_flag + 3);
 				set_pow_cutoffc = atof(buf)*1000;
 			}
-            if(set_pow_cutoffc > 10000)
+            if(set_pow_cutoffc > 5000)
             {
-                set_pow_cutoffc = 10000;               
+                set_pow_cutoffc = 5000;               
             }
             pow_cutoffc = (float)set_pow_cutoffc/1000;
             sprintf(buf,"%.3f",pow_cutoffc);

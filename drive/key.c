@@ -1556,12 +1556,14 @@ void Key_Funtion(void)
                             }
                             else if(load_sw==load_off)
                             {
+								if(flag_Load_CC == 0)
+                                {
+									GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+                                    c_rec = 1;									
+                                }
                                 Flag_Swtich_ON=1;
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
-                                if(flag_Load_CC == 0)
-                                {
-                                    c_rec = 1;
-                                }
+                                
                                 mode_sw = mode_load;
                                 load_sw = load_on;
                             }
