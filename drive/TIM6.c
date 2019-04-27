@@ -231,6 +231,7 @@ void TIM4_IRQHandler(void)
 					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
 				}else if(flag_Load_CC == 0){
+					GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 					SET_Voltage_Laod = 0;
 					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
 					flag_Load_CC = 0;
