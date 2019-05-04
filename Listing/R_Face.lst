@@ -48892,7 +48892,7 @@ Nextern float DISS_POW_Current;
 Nextern float DISS_R;
 Nextern vu16 steptime;
 Nextern vu8 r_stable;
-Nextern char set_limit[5];
+Nextern char set_limit[6];
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49478,7 +49478,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52169,7 +52169,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53166,7 +53166,7 @@ NWM_HWIN hWinR;
 XGUI_HWIN hWinR;
 Nvoid OC_ADD(void); 
 Nvoid test_r(void);
-Nvu8 bit = 1;
+Nvu8 bit = 0;
 Nvu8 dot_flag = 0;
 Nvu8 page_sw = face_r;
 Xvu8 page_sw = 3;
@@ -53178,7 +53178,7 @@ Nvu8 para_set4 = set_4_off;
 Xvu8 para_set4 = 0;
 Nvu8 r_stable = 0;
 Nfloat gate_v = 0;
-Nchar set_limit[5];
+Nchar set_limit[6];
 Nvu16 stable_time;
 Nvu8 alert_flag;
 Nvu8 mode_sw;
@@ -53293,6 +53293,7 @@ N#define ID_TEXT_150     (GUI_ID_USER + 0x0134)
 N#define ID_TEXT_151     (GUI_ID_USER + 0x0135)
 N#define ID_TEXT_152     (GUI_ID_USER + 0x0136)
 N#define ID_TEXT_153     (GUI_ID_USER + 0x0137)
+N#define ID_TEXT_160     (GUI_ID_USER + 0x013B)
 N
 N#define ID_TimerTime    1
 N// USER START (Optionally insert additional defines)
@@ -53386,6 +53387,8 @@ N  { TEXT_CreateIndirect, "Text", ID_TEXT_152, 270, 40, 60, 15, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0136), 270, 40, 60, 15, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect, "Text", ID_TEXT_153, 335, 40, 40, 15, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0137), 335, 40, 40, 15, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_160, 380, 8, 20, 15, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x013B), 380, 8, 20, 15, 0, 0x0, 0 },
 N  { BUTTON_CreateIndirect, "Button", ID_BUTTON_13, 83, 226, 77, 45, 0, 0x0, 0 },
 X  { BUTTON_CreateIndirect, "Button", (0x800 + 0x19), 83, 226, 77, 45, 0, 0x0, 0 },
 N  { BUTTON_CreateIndirect, "Button", ID_BUTTON_14, 163, 226, 77, 45, 0, 0x0, 0 },
@@ -53461,8 +53464,7 @@ N    GUI_SetFont(&GUI_Fontunit);
 N    GUI_DispStringAt("°",342, 2);
 N    GUI_SetFont(&GUI_Font24_1);
 N    GUI_DispStringAt("C",350, 2);
-W "..\APP\R_Face.c" 264 5 function "DrawLock" declared implicitly
-N    DrawLock();
+N//    DrawLock();
 N//    GUI_DispDecAt(R_VLUE,50,140,4);//显示内阻值
 N//      GUI_GotoXY(220,4);
 N//      GUI_DispDec(short_time,6);
@@ -53550,11 +53552,21 @@ X	case 0x0113:
 N	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime)
 X	if(WM_GetTimerId(pMsg->Data.v) == 1)
 N	{
-N        lockstat1 = lock;
-N        if(lockstat1 != lockstat2)
-N        {
-N            WM_InvalidateWindow(hWinR);
-N        }//锁屏处理
+N//        lockstat1 = lock;
+N//        if(lockstat1 != lockstat2)
+N//        {
+N//            WM_InvalidateWindow(hWinR);
+N//        }//锁屏处理
+N		if(lock == 1)
+N		{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_160);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013B));
+N			TEXT_SetText(hItem,"锁");
+N		}else{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_160);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013B));
+N			TEXT_SetText(hItem,"");
+N		}
 N		if(manual == 0)
 N        {
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_125);
@@ -53669,14 +53681,14 @@ N				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 
 X				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && Run_Control[13] > 20 && con_flag == 0)
 N				{
 N					con_flag = 1;
-W "..\APP\R_Face.c" 432 14 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 442 14 single-precision operand implicitly converted to double-precision
 N					time1 = (float)GUI_GetTime()/500.0;
 N				}
 N				if(con_flag == 1)
 N				{
 N					if(test_mode == 0)
 N					{
-W "..\APP\R_Face.c" 438 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 448 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 0.5)
 N						{
 N							if(staticcdc == 1)
@@ -53695,7 +53707,7 @@ X							r = Run_Control[13];
 N							v = DISS_Voltage;
 N						}
 N					}else if(test_mode == 1){
-W "..\APP\R_Face.c" 453 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 463 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 N						{
 N							if(staticcdc == 1)
@@ -53722,7 +53734,7 @@ N                TEXT_SetTextColor(hItem, GUI_WHITE);
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
 N                TEXT_SetText(hItem, "未测试");
 N				
-W "..\APP\R_Face.c" 474 8 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 484 8 single-precision operand implicitly converted to double-precision
 N				if(DISS_Voltage < 0.3)
 N                {
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -53850,7 +53862,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 578 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 588 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -53910,6 +53922,12 @@ X        WINDOW_SetBkColor(hItem, 0x00000000);
 N		WM_CreateTimer(hItem,ID_TimerTime,500,0);//创建本窗口定时器  
 X		WM_CreateTimer(hItem,1,500,0);
 N        
+N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_160);
+X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013B));
+N		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
+X		TEXT_SetTextColor(hItem, 0x000000FF);
+N		TEXT_SetFont(hItem,&GUI_FontHZ14);
+N		TEXT_SetText(hItem,"");
 N	
 N	
 N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_13);
@@ -54462,7 +54480,7 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1052 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1066 5 function "setmode_r" declared implicitly
 N    setmode_r();
 N	C_SW(1);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
@@ -54981,7 +54999,7 @@ N				set_init_c = atoi(set_limit)*1000;
 X				Run_Control[22] = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				set_init_c = atof(buf)*1000;
 X				Run_Control[22] = atof(buf)*1000;
 N			}
@@ -55007,7 +55025,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_20;
 X            oc_sw = 19;
-N            bit =1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55056,7 +55074,7 @@ N				set_sbs_c = atoi(set_limit)*1000;
 X				Run_Control[23] = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				set_sbs_c = atof(buf)*1000;
 X				Run_Control[23] = atof(buf)*1000;
 N			}
@@ -55074,7 +55092,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_21;
 X            oc_sw = 20;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55122,7 +55140,7 @@ N			if(dot_flag == 0){
 N				dis_gate_v = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				dis_gate_v = atof(buf)*1000;
 N			}
 N            gate_v = (float)dis_gate_v/1000;
@@ -55138,7 +55156,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_64;
 X            oc_sw = 63;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55201,7 +55219,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_70;
 X            oc_sw = 69;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            Wrtite_step();
 N            break;
@@ -55220,7 +55238,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1578 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1592 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55236,7 +55254,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1591 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1605 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -55302,7 +55320,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_75;
 X            oc_sw = 74;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55351,7 +55369,7 @@ N				set_static_pc = atoi(set_limit)*1000;
 X				Run_Control[43] = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				set_static_pc = atof(buf)*1000;
 X				Run_Control[43] = atof(buf)*1000;
 N			}
@@ -55369,7 +55387,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_76;
 X            oc_sw = 75;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55418,7 +55436,7 @@ N				set_static_lc = atoi(set_limit)*1000;
 X				Run_Control[44] = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				set_static_lc = atof(buf)*1000;
 X				Run_Control[44] = atof(buf)*1000;
 N			}
@@ -55436,7 +55454,7 @@ N            Write_Limits();
 N            
 N            oc_sw = set_77;
 X            oc_sw = 76;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
@@ -55454,10 +55472,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinR);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_46);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6B));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55474,10 +55492,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinR);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6C));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55494,10 +55512,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinR);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_97);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0105));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55514,10 +55532,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinset);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_130);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x010E));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55533,10 +55551,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_148);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0132));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55553,10 +55571,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_149);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0133));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55573,10 +55591,10 @@ X            GUI_HWIN hItem;
 N //           WM_InvalidateWindow(load_wind);
 N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_150);
 X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0134));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -55587,7 +55605,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 1749 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 1763 5 variable "i"  was declared but never referenced
 N}
 N
 N//内阻页面数字输入
@@ -55607,17 +55625,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6B));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -55705,7 +55729,7 @@ N//                        set_init_c = 0;
 N//                    }else if(dot_flag == 2){
 N//                        set_init_c = set_init_c + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -55722,17 +55746,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6C));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -55820,7 +55850,7 @@ N//                        set_sbs_c = 0;
 N//                    }else if(dot_flag == 2){
 N//                        set_sbs_c = set_sbs_c + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -55837,17 +55867,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0105));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -55935,7 +55971,7 @@ N//                        dis_gate_v = 0;
 N//                    }else if(dot_flag == 2){
 N//                        dis_gate_v = dis_gate_v + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -55952,17 +55988,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x010E));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -55999,7 +56041,7 @@ N//                {
 N//                    steptime = steptime * 10 + atoi(num);
 N//                    strcat(set_limit,num);            
 N//                    TEXT_SetText(hItem,set_limit);
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break; 
 N//                }
 N//            }
@@ -56016,17 +56058,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0132));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -56103,7 +56151,7 @@ N//                    }else{
 N//                        set_static_pv = set_static_pv + atoi(num);
 N//                    }
 N//                                       
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -56120,17 +56168,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0133));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -56179,7 +56233,7 @@ N////                     }else{
 N////                         SET_Current = SET_Current + atoi(num) * 10;
 N////                     }
 N////                                        
-N////                     bit = 1;
+N////                     bit = 0;
 N////                     break;
 N////                 }
 N//                case 1:
@@ -56268,7 +56322,7 @@ N//                        set_static_pc = 0;
 N//                    }else if(dot_flag == 2){
 N//                        set_static_pc = set_static_pc + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -56285,17 +56339,23 @@ X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0134));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -56383,7 +56443,7 @@ N//                        set_static_lc = 0;
 N//                    }else if(dot_flag == 2){
 N//                        set_static_lc = set_static_lc + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -56391,7 +56451,6 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 1877 5 variable "i"  was declared but never referenced
 N}
 N
 Nvoid OC_CHECK(void){
@@ -56425,8 +56484,8 @@ N        crec2 = 0;
 N        rpow = 1;
 N		step =5;
 N    }
-W "..\APP\R_Face.c" 2681 27 single-precision operand implicitly converted to double-precision
-W "..\APP\R_Face.c" 2681 78 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2737 27 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2737 78 single-precision operand implicitly converted to double-precision
 N    if(((crec1 < crec2 && crec2 > 0.3) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
 X    if(((crec1 < crec2 && crec2 > 0.3) || v -  DISS_Voltage > v*0.9) && para_set2 == 0xff)
 N    {
@@ -56481,7 +56540,7 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 2726 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2782 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.9 && para_set2 == 0xff)
 N    {
@@ -56598,11 +56657,20 @@ Nvoid test_r(void)
 N{
 N    WM_HWIN hItem;
 X    GUI_HWIN hItem;
+N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-N        if(R_VLUE > set_max_r || R_VLUE < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
-X        if(Run_Control[13] > Run_Control[16] || Run_Control[13] < Run_Control[17] || DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15])
+W "..\APP\R_Face.c" 2878 6 single-precision operand implicitly converted to double-precision
+N		if(DISS_Voltage < 0.3)
+N		{
+N			rcomp = 0;
+N		}else{
+N			rcomp = R_VLUE;
+X			rcomp = Run_Control[13];
+N		}
+N        if(rcomp > set_max_r || rcomp < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
+X        if(rcomp > Run_Control[16] || rcomp < Run_Control[17] || DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15])
 N        {
 N            if(para_set4 == set_4_on){
 X            if(para_set4 == 0xff){

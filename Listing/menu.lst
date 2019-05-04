@@ -48890,7 +48890,7 @@ Nextern float DISS_POW_Current;
 Nextern float DISS_R;
 Nextern vu16 steptime;
 Nextern vu8 r_stable;
-Nextern char set_limit[5];
+Nextern char set_limit[6];
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49476,7 +49476,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52167,7 +52167,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53251,6 +53251,7 @@ N#define ID_TEXT_115         (GUI_ID_USER + 0x10B)
 N#define ID_TEXT_125         (GUI_ID_USER + 0x10C)
 N#define ID_TEXT_144         (GUI_ID_USER + 0x012E)
 N#define ID_TEXT_159         (GUI_ID_USER + 0x013A)
+N#define ID_TEXT_161         (GUI_ID_USER + 0x013C)
 N#define ID_TimerTime2    3
 N
 Nstatic const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
@@ -53297,6 +53298,8 @@ N    { TEXT_CreateIndirect,   "Text",   ID_TEXT_144, 370, 150, 65, 20, 0, 0x0, 0
 X    { TEXT_CreateIndirect,   "Text",   (0x800 + 0x012E), 370, 150, 65, 20, 0, 0x0, 0 },
 N	{ TEXT_CreateIndirect,   "Text",   ID_TEXT_159, 290, 150, 80, 20, 0, 0x0, 0 },
 X	{ TEXT_CreateIndirect,   "Text",   (0x800 + 0x013A), 290, 150, 80, 20, 0, 0x0, 0 },
+N	{ TEXT_CreateIndirect, "Text", ID_TEXT_161, 380, 8, 20, 15, 0, 0x0, 0 },
+X	{ TEXT_CreateIndirect, "Text", (0x800 + 0x013C), 380, 8, 20, 15, 0, 0x0, 0 },
 N  // USER START (Optionally insert additional widgets)
 N  // USER END
 N};
@@ -53368,8 +53371,7 @@ N        GUI_SetFont(&GUI_Fontunit);
 N        GUI_DispStringAt("°",342, 2);
 N        GUI_SetFont(&GUI_Font24_1);
 N        GUI_DispStringAt("C",350, 2);
-W "..\APP\menu.c" 134 9 function "DrawLock" declared implicitly
-N        DrawLock();
+N//        DrawLock();
 N//        GUI_SetColor(GUI_WHITE);
 N//        GUI_SetFont(&GUI_Fontset_font);
 N//        GUI_DispStringAt("过充电压",290, 150);
@@ -53380,15 +53382,25 @@ X	case 0x0113:
 N	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime2)
 X	if(WM_GetTimerId(pMsg->Data.v) == 3)
 N	{
-N        lockstat2 = lockstat1;
-N        lockstat1 = lock;
-N        if(lockstat1 != lockstat2)
-N        {
-N            WM_InvalidateWindow(hWinWind);
-N        }
+N//        lockstat2 = lockstat1;
+N//        lockstat1 = lock;
+N//        if(lockstat1 != lockstat2)
+N//        {
+N//            WM_InvalidateWindow(hWinWind);
+N//        }
 N//         if(clear_flag2 == 1)
 N//         {
-W "..\APP\menu.c" 151 16 single-precision operand implicitly converted to double-precision
+N		if(lock == 1)
+N		{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013C));
+N			TEXT_SetText(hItem,"锁");
+N		}else{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013C));
+N			TEXT_SetText(hItem,"");
+N		}
+W "..\APP\menu.c" 161 16 single-precision operand implicitly converted to double-precision
 N            if(DISS_POW_Voltage < 0.1)
 N            {
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_86);
@@ -53496,6 +53508,14 @@ N// 		BUTTON_SetText(hItem,"充放电");
 N    //
 N    // Initialization of 'Button'
 N    //
+N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013C));
+N		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
+X		TEXT_SetTextColor(hItem, 0x000000FF);
+N		TEXT_SetFont(hItem,&GUI_FontHZ14);
+N		TEXT_SetText(hItem,"");
+N		
+N		
 N        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
 X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x02));
 N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//设置字体颜色为黑色
@@ -53793,7 +53813,7 @@ N	  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\APP\menu.c" 482 4 function "Delay_ms" declared implicitly
+W "..\APP\menu.c" 498 4 function "Delay_ms" declared implicitly
 N	  Delay_ms(500);
 N	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -54009,7 +54029,7 @@ N				pow_v = atoi(set_limit)*100;
 X				Run_Control[38] = atoi(set_limit)*100;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 2);
+N				strncpy(buf,set_limit,dot_flag + 3);
 N				pow_v = atof(buf)*100;
 X				Run_Control[38] = atof(buf)*100;
 N			}
@@ -54043,7 +54063,7 @@ N
 N            Write_Limits();
 N            set_sw = set_10;
 X            set_sw = 9;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break; 
 N         }
@@ -54091,7 +54111,7 @@ N				pow_c = atoi(set_limit)*1000;
 X				Run_Control[40] = atoi(set_limit)*1000;					
 N			}else if(dot_flag != 0){
 N				memset(buf, '\0', sizeof(buf));
-N				strncpy(buf,set_limit,dot_flag + 3);
+N				strncpy(buf,set_limit,dot_flag + 4);
 N				pow_c = atof(buf)*1000;
 X				Run_Control[40] = atof(buf)*1000;
 N			}
@@ -54124,7 +54144,7 @@ N
 N            Write_Limits();
 N            set_sw = set_11;
 X            set_sw = 10;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break; 
 N         }
@@ -54197,7 +54217,7 @@ N            Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 X            Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
 N            set_sw = set_88;
 X            set_sw = 87;
-N            bit = 1;
+N            bit = 0;
 N            dot_flag = 0;
 N            break; 
 N         }
@@ -54215,10 +54235,10 @@ X			GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
 X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x66));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -54234,10 +54254,10 @@ X			GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
 X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x67));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -54253,10 +54273,10 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
 X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x012E));
-N			if(bit > 1)
+N			if(bit > 0)
 N			{
 N				bit --;
-N				set_limit[bit-1] = '\0';
+N				set_limit[bit] = '\0';
 N			}
 N			if(bit == dot_flag)
 N			{
@@ -54284,18 +54304,25 @@ X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x66));
 N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
+N			
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
 N//                case 1:
@@ -54398,7 +54425,7 @@ N//                    }else{
 N//                        pow_v = pow_v + atoi(num);
 N//                    }
 N//                    TEXT_SetText(hItem,set_limit);                   
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -54412,20 +54439,26 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
 X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x67));
-N			if(bit < 7)
+N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -54515,7 +54548,7 @@ N//                        pow_c = 0;
 N//                    }else if(dot_flag == 2){
 N//                        pow_c = pow_c + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
@@ -54529,20 +54562,26 @@ X            GUI_HWIN hItem;
 N//            WM_InvalidateWindow(hWinWind);
 N            hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
 X            hItem = WM_GetDialogItem(hWinWind, (0x800 + 0x012E));
-N			if(bit < 7)
+N			if(bit < 6)
 N			{
 N				strcat(set_limit,num);
-N			}
-N			if(dot_flag != 0 && strcmp(num,".") == 0)
-N			{
-N				
-N			}else{			
-N				
-N				if(dot_flag == 0 && strcmp(num,".") == 0)
+N				if(dot_flag != 0 && strcmp(num,".") == 0)
 N				{
-N					dot_flag = bit;
+N					
+N				}else{			
+N					
+N					if(dot_flag == 0 && strcmp(num,".") == 0)
+N					{
+N						dot_flag = bit;
+N					}
+N					bit ++;
 N				}
-N				bit ++;
+N			}else{
+N				bit = 0;
+N				for(i=0;i<6;i++)
+N				{
+N					set_limit[i] = '\0';
+N				}
 N			}
 N			TEXT_SetText(hItem,set_limit);
 N//            switch(bit){
@@ -54632,14 +54671,13 @@ N//                        set_pow_cutoffc = 0;
 N//                    }else if(dot_flag == 2){
 N//                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
 N//                    }                 
-N//                    bit = 1;
+N//                    bit = 0;
 N//                    break;
 N//                }
 N//            }
 N        }
 N        break;
 N    }    
-W "..\APP\menu.c" 832 5 variable "i"  was declared but never referenced
 N}
 N
 Nvoid test_pow(void)

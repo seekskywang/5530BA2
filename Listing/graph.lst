@@ -48892,7 +48892,7 @@ Nextern float DISS_POW_Current;
 Nextern float DISS_R;
 Nextern vu16 steptime;
 Nextern vu8 r_stable;
-Nextern char set_limit[5];
+Nextern char set_limit[6];
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49478,7 +49478,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52169,7 +52169,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53185,6 +53185,7 @@ N#define ID_BUTTON_22   	(GUI_ID_USER + 0x27)
 N#define ID_BUTTON_23    (GUI_ID_USER + 0x28)
 N#define ID_GRAPH_0      (GUI_ID_USER + 0x29)
 N#define ID_TEXT_128     (GUI_ID_USER + 0x11F)
+N#define ID_TEXT_164     (GUI_ID_USER + 0x013F)
 N
 N#define ID_TimerTime3    4
 N// USER START (Optionally insert additional defines)
@@ -53232,6 +53233,8 @@ N  { GRAPH_CreateIndirect,  "Graph",  ID_GRAPH_0,   100, 31, 350, 193, 0, 0x0, 0
 X  { GRAPH_CreateIndirect,  "Graph",  (0x800 + 0x29),   100, 31, 350, 193, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect,   "Text",   ID_TEXT_128, 300, 2, 80, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect,   "Text",   (0x800 + 0x11F), 300, 2, 80, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_164, 380, 8, 20, 15, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x013F), 380, 8, 20, 15, 0, 0x0, 0 },
 N  // USER START (Optionally insert additional widgets)
 N  // USER END
 N};
@@ -53294,8 +53297,7 @@ N    GUI_SetFont(&GUI_Fontunit);
 N    GUI_DispStringAt("Â°",342, 2);
 N    GUI_SetFont(&GUI_Font24_1);
 N    GUI_DispStringAt("C",350, 2);
-W "..\APP\graph.c" 134 5 function "DrawLock" declared implicitly
-N    DrawLock();
+N//    DrawLock();
 N    
 N	break;
 N	case WM_TIMER://¶¨Ê±Ä£¿éÏûÏ¢
@@ -53303,12 +53305,23 @@ X	case 0x0113:
 N	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime3)
 X	if(WM_GetTimerId(pMsg->Data.v) == 4)
 N	{
-N        lockstat2 = lockstat1;
-N        lockstat1 = lock; 
-N        if(lockstat1 != lockstat2)
-N        {
-N            WM_InvalidateWindow(hWinG);
-N        }
+N//        lockstat2 = lockstat1;
+N//        lockstat1 = lock; 
+N//        if(lockstat1 != lockstat2)
+N//        {
+N//            WM_InvalidateWindow(hWinG);
+N//        }
+N		if(lock == 1)
+N		{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013F));
+N			TEXT_SetText(hItem,"é”");
+N		}else{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013F));
+N			TEXT_SetText(hItem,"");
+N		}
+N		
 N        DrawGraph();
 N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_128);       
 X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x11F));       
@@ -53338,7 +53351,13 @@ N// 		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ÉèÖÃ×ÖÌåÑÕÉ«ÎªºÚÉ«
 N// 		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//Éè¶¨°´Å¥ÎÄ±¾×ÖÌå
 N// 		GUI_UC_SetEncodeUTF8();
 N// 		BUTTON_SetText(hItem,"å……æ”¾ç”µ");
-N	
+N		
+N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013F));
+N		TEXT_SetTextColor(hItem, GUI_RED);//è®¾ç½®å­—ä½“é¢œè‰²
+X		TEXT_SetTextColor(hItem, 0x000000FF);
+N		TEXT_SetFont(hItem,&GUI_FontHZ14);
+N		TEXT_SetText(hItem,"");
 N	
 N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_19);
 X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x24));
@@ -53472,7 +53491,7 @@ N        GRAPH_DATA_YT_AddValue(IData,DISS_POW_Current*10);
 N    }
 N    
 N//    GUI_Delay(50);
-W "..\APP\graph.c" 282 1 missing return statement at end of non-void function "DrawGraph" 
+W "..\APP\graph.c" 297 1 missing return statement at end of non-void function "DrawGraph" 
 N}
 N// USER START (Optionally insert additional public code)
 N// USER END

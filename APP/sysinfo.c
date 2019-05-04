@@ -170,23 +170,23 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetColor(0x00BFFFFF);
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt("JK5530B", 140, 50);
-        GUI_DispStringAt("Ver:2.4", 140, 75);
+        GUI_DispStringAt("Ver:2.5", 140, 75);
        
         GUI_DispStringAt("Ver:1.3", 140, 100);
         GUI_DispStringAt("-", 191, 125);
         GUI_DispStringAt("-", 227, 125);
         GUI_DispStringAt("A", 164, 150);
-        DrawLock();
+//        DrawLock();
 	break;
 	case WM_TIMER:
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime7)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock;
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(hWinsysinfo);
-        }
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock;
+//        if(lockstat1 != lockstat2)
+//        {
+//            WM_InvalidateWindow(hWinsysinfo);
+//        }
         
         if(pass == 14)
         {

@@ -64,6 +64,7 @@ extern struct bitDefine
 #define ID_TEXT_126         (GUI_ID_USER + 0x112)
 #define ID_TEXT_143         (GUI_ID_USER + 0x012D)
 #define ID_TEXT_158     	(GUI_ID_USER + 0x0139)
+#define ID_TEXT_162     	(GUI_ID_USER + 0x013D)
 
 #define ID_TimerTime1    2
 
@@ -92,6 +93,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate2[] = {
     { TEXT_CreateIndirect,   "Text",   ID_TEXT_116, 95, 184, 150, 40, 0, 0x0, 0 },
     { TEXT_CreateIndirect,   "Text",   ID_TEXT_126, 300, 2, 80, 20, 0, 0x0, 0 },
     { TEXT_CreateIndirect,   "Text",   ID_TEXT_143, 380, 150, 65, 20, 0, 0x0, 0 },
+	{ TEXT_CreateIndirect, "Text", ID_TEXT_162, 380, 8, 20, 15, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -149,7 +151,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
         GUI_DispStringAt("°",342, 2);
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt("C",350, 2);
-        DrawLock();
+//        DrawLock();
 //        GUI_SetColor(GUI_WHITE);
 //        GUI_SetFont(&GUI_Fontset_font);
 //        GUI_DispStringAt("过放电压",290, 150);
@@ -169,35 +171,43 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
 	case WM_TIMER://定时模块消息
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime1)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock;
-        
-//        if((vu32)(DISS_Current*1000) > SET_Current_Laod)
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock;
+//        
+////        if((vu32)(DISS_Current*1000) > SET_Current_Laod)
+////        {
+////            testflag = 1;
+////        }else{
+////            testflag = 0;
+////            testc1 = testc2 = 0;
+////        }
+////        if(testflag == 1)
+////        {
+////            testc2 = testc1;
+////            testc1 = DISS_Current;
+////            if(testc1 < testc2)
+////            {
+////                testres = testc2;
+////                testflag = 0;
+////                testc1 = testc2 = 0;
+////            }
+////        }
+//        
+//        
+//        if(lockstat1 != lockstat2)
 //        {
-//            testflag = 1;
-//        }else{
-//            testflag = 0;
-//            testc1 = testc2 = 0;
+//            WM_InvalidateWindow(load_wind);
 //        }
-//        if(testflag == 1)
-//        {
-//            testc2 = testc1;
-//            testc1 = DISS_Current;
-//            if(testc1 < testc2)
-//            {
-//                testres = testc2;
-//                testflag = 0;
-//                testc1 = testc2 = 0;
-//            }
-//        }
-        
-        
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(load_wind);
-        }
 //         if(clear_flag3 == 1)
 //         {
+		if(lock == 1)
+		{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_162);
+			TEXT_SetText(hItem,"锁");
+		}else{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_162);
+			TEXT_SetText(hItem,"");
+		}
 		
             if(DISS_Voltage < 0.3)
             {
@@ -318,6 +328,12 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'Button'
     //
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_162);
+		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
+		TEXT_SetFont(hItem,&GUI_FontHZ14);
+		TEXT_SetText(hItem,"");
+		
+		
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_7);
 //		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//设置字体颜色为黑色
 		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//设定按钮文本字体
@@ -751,7 +767,7 @@ void LOAD_SET(void) {
 				load_c = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				load_c = atof(buf)*1000;
 			}
 			if(load_c > 30000 || (float)load_c/1000 * DISS_Voltage > 200){
@@ -780,7 +796,7 @@ void LOAD_SET(void) {
             Write_Limits();
             
             set_sw = set_24;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break;
         }
@@ -812,7 +828,7 @@ void LOAD_SET(void) {
 				load_v = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				load_v = atof(buf)*1000;
 			}
 			if(load_v > 80000 || (float)load_v/1000 * DISS_Current > 200){
@@ -830,7 +846,7 @@ void LOAD_SET(void) {
             Write_Limits();
             
             set_sw = set_66;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break;
         }
@@ -903,7 +919,7 @@ void LOAD_SET(void) {
             Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
             
             set_sw = set_86;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break;
         }
@@ -917,10 +933,10 @@ void DEL_LOAD(void)
 			WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_49);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -933,10 +949,10 @@ void DEL_LOAD(void)
 			WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_123);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -949,10 +965,10 @@ void DEL_LOAD(void)
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_143);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -976,18 +992,25 @@ void INPUT_LOAD(char* num){
 			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
+			
 			TEXT_SetText(hItem,set_limit);
 //            switch(bit){
 //                case 1:
@@ -1074,7 +1097,7 @@ void INPUT_LOAD(char* num){
 //                    }else if(dot_flag == 2){
 //                        load_c = load_c + atoi(num);
 //                    }                 
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }
@@ -1089,18 +1112,25 @@ void INPUT_LOAD(char* num){
 			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
+			
 			TEXT_SetText(hItem,set_limit);
 //            switch(bit){
 //                case 1:
@@ -1187,7 +1217,7 @@ void INPUT_LOAD(char* num){
 //                    }else if(dot_flag == 2){
 //                        load_v = load_v + atoi(num);
 //                    }                 
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }
@@ -1300,7 +1330,7 @@ void INPUT_LOAD(char* num){
 //                    }else if(dot_flag == 2){
 //                        set_load_cutoffv = set_load_cutoffv + atoi(num);
 //                    }                 
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }

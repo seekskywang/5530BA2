@@ -48,6 +48,7 @@ float pow_cutoffc;
 #define ID_TEXT_125         (GUI_ID_USER + 0x10C)
 #define ID_TEXT_144         (GUI_ID_USER + 0x012E)
 #define ID_TEXT_159         (GUI_ID_USER + 0x013A)
+#define ID_TEXT_161         (GUI_ID_USER + 0x013C)
 #define ID_TimerTime2    3
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
@@ -73,6 +74,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] = {
     { TEXT_CreateIndirect,   "Text",   ID_TEXT_125, 300, 2, 80, 20, 0, 0x0, 0 },
     { TEXT_CreateIndirect,   "Text",   ID_TEXT_144, 370, 150, 65, 20, 0, 0x0, 0 },
 	{ TEXT_CreateIndirect,   "Text",   ID_TEXT_159, 290, 150, 80, 20, 0, 0x0, 0 },
+	{ TEXT_CreateIndirect, "Text", ID_TEXT_161, 380, 8, 20, 15, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -131,7 +133,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_DispStringAt("°",342, 2);
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt("C",350, 2);
-        DrawLock();
+//        DrawLock();
 //        GUI_SetColor(GUI_WHITE);
 //        GUI_SetFont(&GUI_Fontset_font);
 //        GUI_DispStringAt("过充电压",290, 150);
@@ -140,14 +142,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	case WM_TIMER://定时模块消息
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime2)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock;
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(hWinWind);
-        }
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock;
+//        if(lockstat1 != lockstat2)
+//        {
+//            WM_InvalidateWindow(hWinWind);
+//        }
 //         if(clear_flag2 == 1)
 //         {
+		if(lock == 1)
+		{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+			TEXT_SetText(hItem,"锁");
+		}else{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+			TEXT_SetText(hItem,"");
+		}
             if(DISS_POW_Voltage < 0.1)
             {
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_86);
@@ -238,6 +248,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     //
     // Initialization of 'Button'
     //
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
+		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
+		TEXT_SetFont(hItem,&GUI_FontHZ14);
+		TEXT_SetText(hItem,"");
+		
+		
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_1);
 //		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//设置字体颜色为黑色
 		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//设定按钮文本字体
@@ -632,7 +648,7 @@ void MENU_SET(void)
 				pow_v = atoi(set_limit)*100;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 2);
+				strncpy(buf,set_limit,dot_flag + 3);
 				pow_v = atof(buf)*100;
 			}
 			if(pow_v > 6200)
@@ -656,7 +672,7 @@ void MENU_SET(void)
                             
             Write_Limits();
             set_sw = set_10;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break; 
          }
@@ -690,7 +706,7 @@ void MENU_SET(void)
 				pow_c = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				pow_c = atof(buf)*1000;
 			}
               
@@ -713,7 +729,7 @@ void MENU_SET(void)
                                                  
             Write_Limits();
             set_sw = set_11;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break; 
          }
@@ -764,7 +780,7 @@ void MENU_SET(void)
                                                  
             Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
             set_sw = set_88;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break; 
          }
@@ -779,10 +795,10 @@ void DEL_POW(void)
 			WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_41);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -795,10 +811,10 @@ void DEL_POW(void)
 			WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -811,10 +827,10 @@ void DEL_POW(void)
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -839,18 +855,25 @@ void INPUT_POW(char* num){
 			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
+			
 			TEXT_SetText(hItem,set_limit);
 //            switch(bit){
 //                case 1:
@@ -953,7 +976,7 @@ void INPUT_POW(char* num){
 //                        pow_v = pow_v + atoi(num);
 //                    }
 //                    TEXT_SetText(hItem,set_limit);                   
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }
@@ -964,20 +987,26 @@ void INPUT_POW(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_42);
-			if(bit < 7)
+			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
 //            switch(bit){
@@ -1067,7 +1096,7 @@ void INPUT_POW(char* num){
 //                    }else if(dot_flag == 2){
 //                        pow_c = pow_c + atoi(num);
 //                    }                 
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }
@@ -1078,20 +1107,26 @@ void INPUT_POW(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
-			if(bit < 7)
+			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
 //            switch(bit){
@@ -1181,7 +1216,7 @@ void INPUT_POW(char* num){
 //                    }else if(dot_flag == 2){
 //                        set_pow_cutoffc = set_pow_cutoffc + atoi(num);
 //                    }                 
-//                    bit = 1;
+//                    bit = 0;
 //                    break;
 //                }
 //            }

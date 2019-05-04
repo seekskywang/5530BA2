@@ -170,7 +170,7 @@ extern float DISS_POW_Current;
 extern float DISS_R;
 extern vu16 steptime;
 extern vu8 r_stable;
-extern char set_limit[5];
+extern char set_limit[6];
 extern vu8 bit;
 extern vu8 bit1;
 extern vu8 dot_flag;

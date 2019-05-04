@@ -35023,7 +35023,7 @@ Nextern float DISS_POW_Current;
 Nextern float DISS_R;
 Nextern vu16 steptime;
 Nextern vu8 r_stable;
-Nextern char set_limit[5];
+Nextern char set_limit[6];
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49495,7 +49495,7 @@ Sextern float DISS_POW_Current;
 Sextern float DISS_R;
 Sextern vu16 steptime;
 Sextern vu8 r_stable;
-Sextern char set_limit[5];
+Sextern char set_limit[6];
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50194,8 +50194,8 @@ N					GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N					SET_Voltage_Laod = 0;
 X					Run_Control[3] = 0;
-N					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CV
-X					GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N					flag_Load_CC = 0;
 X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
@@ -50258,6 +50258,8 @@ N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }else if(flag_Load_CC == 0){
 X            }else if((flagD . bit7) == 0){
+N				GPIO_ResetBits(GPIOC,GPIO_Pin_13);
+X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                SET_Voltage_Laod = 0;
 X                Run_Control[3] = 0;
 N                GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
@@ -50269,7 +50271,7 @@ X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x0
 N            }
 N            crec2 = crec1;
 N            crec1 = DISS_Current;
-W "..\drive\TIM6.c" 289 33 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 290 33 single-precision operand implicitly converted to double-precision
 N            if(crec1 < crec2 && crec2 > 0.3)
 N            {     
 N                oc_data = crec2;
@@ -50354,11 +50356,11 @@ X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }
-W "..\drive\TIM6.c" 351 43 single-precision operand implicitly converted to double-precision
-W "..\drive\TIM6.c" 351 59 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 352 43 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 352 59 single-precision operand implicitly converted to double-precision
 N            if(((shortv - DISS_Voltage) > shortv*0.6) || (DISS_Current < 0.05))
 N            {
-W "..\drive\TIM6.c" 353 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 354 17 function "IO_OFF" declared implicitly
 N                IO_OFF();
 N                usartshortflag = 0;               
 N                g_tModS.TxBuf[17] = (short_time/10)>>8;
@@ -50389,7 +50391,7 @@ N                SET_Current_Laod = 1000;
 X                Run_Control[4] = 1000;
 N                powcount = 0;
 N                finishflag = 0;
-W "..\drive\TIM6.c" 378 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 379 17 function "IO_OFF" declared implicitly
 N                IO_OFF();                
 N            }
 N        }
@@ -50795,7 +50797,7 @@ N
 N	/* 鍒嗘瀽搴旂敤灞傚崗璁?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 735 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 736 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -50810,7 +50812,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* 蹇呴』娓呴浂璁℃暟鍣紝鏂逛究涓嬫甯у悓姝?*/
-W "..\drive\TIM6.c" 670 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 671 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 671 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 672 18 variable "crc1"  was declared but never referenced
 N}
 N

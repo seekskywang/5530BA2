@@ -40,6 +40,7 @@ WM_HWIN DrawGraph(void);
 #define ID_BUTTON_23    (GUI_ID_USER + 0x28)
 #define ID_GRAPH_0      (GUI_ID_USER + 0x29)
 #define ID_TEXT_128     (GUI_ID_USER + 0x11F)
+#define ID_TEXT_164     (GUI_ID_USER + 0x013F)
 
 #define ID_TimerTime3    4
 // USER START (Optionally insert additional defines)
@@ -79,6 +80,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate3[] = {
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_23, 403, 226, 77, 45, 0, 0x0, 0 },
   { GRAPH_CreateIndirect,  "Graph",  ID_GRAPH_0,   100, 31, 350, 193, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_128, 300, 2, 80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_164, 380, 8, 20, 15, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
 };
@@ -131,18 +133,27 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     GUI_DispStringAt("Â°",342, 2);
     GUI_SetFont(&GUI_Font24_1);
     GUI_DispStringAt("C",350, 2);
-    DrawLock();
+//    DrawLock();
     
 	break;
 	case WM_TIMER://¶¨Ê±Ä£¿éÏûÏ¢
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime3)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock; 
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(hWinG);
-        }
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock; 
+//        if(lockstat1 != lockstat2)
+//        {
+//            WM_InvalidateWindow(hWinG);
+//        }
+		if(lock == 1)
+		{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+			TEXT_SetText(hItem,"é”");
+		}else{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+			TEXT_SetText(hItem,"");
+		}
+		
         DrawGraph();
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_128);       
         sprintf(buf,"%.1f",temp);
@@ -168,7 +179,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 // 		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//Éè¶¨°´Å¥ÎÄ±¾×ÖÌå
 // 		GUI_UC_SetEncodeUTF8();
 // 		BUTTON_SetText(hItem,"å……æ”¾ç”µ");
-	
+		
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
+		TEXT_SetTextColor(hItem, GUI_RED);//è®¾ç½®å­—ä½“é¢œè‰²
+		TEXT_SetFont(hItem,&GUI_FontHZ14);
+		TEXT_SetText(hItem,"");
 	
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_19);
 //		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ÉèÖÃ×ÖÌåÑÕÉ«ÎªºÚÉ«

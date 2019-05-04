@@ -112,6 +112,7 @@ extern struct bitDefine
 #define ID_TEXT_127     (GUI_ID_USER + 0x114)
 #define ID_TEXT_131     (GUI_ID_USER + 0x120)
 #define ID_TEXT_135     (GUI_ID_USER + 0x124)
+#define ID_TEXT_163     (GUI_ID_USER + 0x013E)
 
 #define ID_TimerTime4    5
 
@@ -178,6 +179,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate4[] = {
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_79, 444, 205, 40, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_127, 330+60, 4, 80, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_131, 5, 225, 80, 30, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_163, 380+80, 8, 20, 15, 0, 0x0, 0 },
 
   // USER START (Optionally insert additional widgets)
   // USER END
@@ -245,7 +247,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_DispStringAt("°",372+60, 2);
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt("C",380+60, 2);       
-        DrawLockc();
+//        DrawLockc();
         
         GUI_SetColor(GUI_WHITE);
         GUI_SetFont(&GUI_Fontset_font);
@@ -261,13 +263,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	case WM_TIMER://֨ʱģࠩлϢ
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime4)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock; 
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(hWincdc);
-        }
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock; 
+//        if(lockstat1 != lockstat2)
+//        {
+//            WM_InvalidateWindow(hWincdc);
+//        }
         
+		if(lock == 1)
+		{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_163);
+			TEXT_SetText(hItem,"锁");
+		}else{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_163);
+			TEXT_SetText(hItem,"");
+		}
+		
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_74);
         sprintf(buf,"%02d",hour);
         TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
@@ -797,6 +808,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         WINDOW_SetBkColor(hItem, GUI_BLACK);
 		WM_CreateTimer(hItem,ID_TimerTime4,500,0);//ԴݨѾ԰ࠚ֨ʱǷ
 
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_163);
+		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
+		TEXT_SetFont(hItem,&GUI_FontHZ14);
+		TEXT_SetText(hItem,"");
 
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_25);
 //		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
@@ -1604,7 +1619,7 @@ void CDC_SET(void)
             }
             
             set_sw = set_30;
-            bit = 1;
+            bit = 0;
             break;
         }
         case set_30:
@@ -1626,7 +1641,7 @@ void CDC_SET(void)
 				opv1 = atoi(set_limit)*100;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 2);
+				strncpy(buf,set_limit,dot_flag + 3);
 				opv1 = atof(buf)*100;
 			}
 			if(opv1 > 6200)
@@ -1655,7 +1670,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_26;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -1699,7 +1714,7 @@ void CDC_SET(void)
 				opc1 = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				opc1 = atof(buf)*1000;
 			}
               
@@ -1734,7 +1749,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_27;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -1802,7 +1817,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_28;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -1837,7 +1852,7 @@ void CDC_SET(void)
 				coc1 = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				coc1 = atof(buf)*1000;
 			}
               
@@ -1869,7 +1884,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_29;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -1904,7 +1919,7 @@ void CDC_SET(void)
 				set_dc_cutoff_v = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				set_dc_cutoff_v = atof(buf)*1000;
 			}
 			dis_dc_cutoff_v = (float)set_dc_cutoff_v/1000;
@@ -1916,7 +1931,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_35;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -1956,7 +1971,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_36;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             break;
         }
@@ -1990,7 +2005,7 @@ void CDC_SET(void)
 				cdc_dc = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				cdc_dc = atof(buf)*1000;
 			}
 			if(cdc_dc > 30000 || (float)cdc_dc/1000 * DISS_Voltage > 200){
@@ -2009,7 +2024,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
             
             set_sw = set_34;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -2053,7 +2068,7 @@ void CDC_SET(void)
             TEXT_SetTextColor(hItem, GUI_BLACK);
 
             set_sw = set_37;
-            bit = 1;
+            bit = 0;
             dot_flag = 0;
             Write_Limits();
             break;
@@ -2069,10 +2084,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_54);
-			if(bit > 1)
+			if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2086,10 +2101,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_55);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2103,10 +2118,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_56);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2120,10 +2135,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_57);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2137,10 +2152,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_62);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2154,10 +2169,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_63);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2171,10 +2186,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_64);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2188,10 +2203,10 @@ void DEL_CDC(){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWincdc);
             hItem = WM_GetDialogItem(hWincdc, ID_TEXT_65);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -2208,6 +2223,7 @@ void DEL_CDC(){
            
 void INPUT_CDC(char* num){
     char loop_count[2];
+	u8 i;
     switch(set_sw){
         case set_30:
         {
@@ -2217,17 +2233,23 @@ void INPUT_CDC(char* num){
 			if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2240,17 +2262,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2263,17 +2291,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2286,17 +2320,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2309,17 +2349,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2332,17 +2378,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2355,17 +2407,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -2378,17 +2436,23 @@ void INPUT_CDC(char* num){
             if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;

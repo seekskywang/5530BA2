@@ -1563,7 +1563,7 @@ void Transformation_ADC(void)
 // 		else var32 = var32 - REG_POWERV_Offset;
 // 	}
 // 	else 
-        var32 = var32 - REG_POWERV_Offset;
+        var32 = var32 + REG_POWERV_Offset;
 	var32 = var32 >> 14;
 	if (var32 < 40) var32 = 0;				  //40mV以下清零
 	POW_Voltage = var32;
@@ -1582,7 +1582,7 @@ void Transformation_ADC(void)
 //             else var32 = var32 - REG_POWERV_Offset1;
 //         }
 //         else 
-            var32 = var32 - REG_POWERV_Offset1;
+            var32 = var32 + REG_POWERV_Offset1;
         var32 = var32 >> 14;
         if (var32 < 40) var32 = 0;				  //40mV訑袀去拢
         POW_Voltage = var32;
@@ -1602,7 +1602,7 @@ void Transformation_ADC(void)
 //             else var32 = var32 - REG_POWERV_Offset2;
 //         }
 //         else 
-            var32 = var32 - REG_POWERV_Offset2;
+            var32 = var32 + REG_POWERV_Offset2;
         var32 = var32 >> 14;
         if (var32 < 40) var32 = 0;				  //40mV訑袀去拢
         POW_Voltage = var32;

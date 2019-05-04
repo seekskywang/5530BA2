@@ -203,18 +203,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     GUI_DispStringAt("°",342, 2);
     GUI_SetFont(&GUI_Font24_1);
     GUI_DispStringAt("C",350, 2);
-    DrawLock();
+//    DrawLock();
     
 	break;
 	case WM_TIMER://֨ʱģࠩлϢ
 	if(WM_GetTimerId(pMsg->Data.v) == ID_TimerTime5)
 	{
-        lockstat2 = lockstat1;
-        lockstat1 = lock; 
-        if(lockstat1 != lockstat2)
-        {
-            WM_InvalidateWindow(hWinset);
-        }
+//        lockstat2 = lockstat1;
+//        lockstat1 = lock; 
+//        if(lockstat1 != lockstat2)
+//        {
+//            WM_InvalidateWindow(hWinset);
+//        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_129);       
         sprintf(buf,"%.1f",temp);
@@ -793,10 +793,10 @@ void SET_OP_DOWN(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 						
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_13;
                         break;
@@ -815,10 +815,10 @@ void SET_OP_DOWN(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_83;
                         break;
@@ -838,10 +838,10 @@ void SET_OP_DOWN(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_17;
                         break;
@@ -861,10 +861,10 @@ void SET_OP_DOWN(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_85;
                         break;
@@ -1286,10 +1286,10 @@ void SET_OP_UP(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_12;
                         break;
@@ -1309,10 +1309,10 @@ void SET_OP_UP(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_82;
                         break;
@@ -1332,10 +1332,10 @@ void SET_OP_UP(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_16;
                         break;
@@ -1355,10 +1355,10 @@ void SET_OP_UP(void) {
                         TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
                         TEXT_SetTextColor(hItem, GUI_BLACK);
 							
-						for(i=0;i<5;i++){
+						for(i=0;i<6;i++){
 							set_limit[i] = '\0';
 						}
-						bit = 1;
+						bit = 0;
                         dot_flag = 0;
                         set_sw = set_84;
                         break;
@@ -2110,7 +2110,7 @@ void PARA_SET(void) {
                         TEXT_SetTextColor(hItem, GUI_BLACK);
                         Write_Limits();
                         set_sw = set_4;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2156,7 +2156,7 @@ void PARA_SET(void) {
    
                         Write_Limits();
                         set_sw = set_4;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2191,7 +2191,7 @@ void PARA_SET(void) {
                         TEXT_SetTextColor(hItem, GUI_BLACK);
                         Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
                         set_sw = set_5;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2227,7 +2227,7 @@ void PARA_SET(void) {
    
                         Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
                         set_sw = set_5;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2292,7 +2292,7 @@ void PARA_SET(void) {
 
                         Write_Limits();
                         set_sw = set_6;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2337,7 +2337,7 @@ void PARA_SET(void) {
 
                         Write_Limits();
                         set_sw = set_7;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2401,7 +2401,7 @@ void PARA_SET(void) {
 
                         Write_Limits();
                         set_sw = set_8;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2449,7 +2449,7 @@ void PARA_SET(void) {
 
                         Write_Limits();
                         set_sw = set_8;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2520,7 +2520,7 @@ void PARA_SET(void) {
 
                         Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
                         set_sw = set_9;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -2569,7 +2569,7 @@ void PARA_SET(void) {
 
                         Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
                         set_sw = set_9;
-                        bit = 1;
+                        bit = 0;
                         dot_flag = 0;
                         break; 
                     }
@@ -3223,10 +3223,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_35);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3240,10 +3240,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_36);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3257,10 +3257,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_154);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3274,10 +3274,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_155);
-           if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3292,10 +3292,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_37);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3309,10 +3309,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_38);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3326,10 +3326,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_39);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3343,10 +3343,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_40);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3360,10 +3360,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_156);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3377,10 +3377,10 @@ void DEL_NUM(void){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_157);
-            if(bit > 1)
+            if(bit > 0)
 			{
 				bit --;
-				set_limit[bit-1] = '\0';
+				set_limit[bit] = '\0';
 			}
 			if(bit == dot_flag)
 			{
@@ -3402,20 +3402,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_35);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3425,20 +3431,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_36);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3448,20 +3460,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_154);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3471,20 +3489,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_155);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3495,20 +3519,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_37);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;           
@@ -3518,20 +3548,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_38);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3541,20 +3577,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_39);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3564,20 +3606,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_40);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3587,20 +3635,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_156);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;
@@ -3610,20 +3664,26 @@ void INPUT_NUM(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinset);
             hItem = WM_GetDialogItem(hWinset, ID_TEXT_157);
-            if(bit < 7)
+            if(bit < 6)
 			{
 				strcat(set_limit,num);
-			}
-			if(dot_flag != 0 && strcmp(num,".") == 0)
-			{
-				
-			}else{			
-				
-				if(dot_flag == 0 && strcmp(num,".") == 0)
+				if(dot_flag != 0 && strcmp(num,".") == 0)
 				{
-					dot_flag = bit;
+					
+				}else{			
+					
+					if(dot_flag == 0 && strcmp(num,".") == 0)
+					{
+						dot_flag = bit;
+					}
+					bit ++;
 				}
-				bit ++;
+			}else{
+				bit = 0;
+				for(i=0;i<6;i++)
+				{
+					set_limit[i] = '\0';
+				}
 			}
 			TEXT_SetText(hItem,set_limit);
             break;

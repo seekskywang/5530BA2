@@ -5,23 +5,23 @@
                           AREA ||i.DrawLock||, CODE, READONLY, ALIGN=2
 
                   DrawLock PROC
-;;;1876   
-;;;1877   void DrawLock(void)
+;;;1877   
+;;;1878   void DrawLock(void)
 000000  b51c              PUSH     {r2-r4,lr}
-;;;1878   {
-;;;1879       if(lock == 1)
+;;;1879   {
+;;;1880       if(lock == 1)
 000002  4810              LDR      r0,|L1.68|
 000004  79c0              LDRB     r0,[r0,#7]  ; lock
 000006  2801              CMP      r0,#1
 000008  d11a              BNE      |L1.64|
-;;;1880       {
-;;;1881           GUI_SetColor(GUI_RED);
+;;;1881       {
+;;;1882           GUI_SetColor(GUI_RED);
 00000a  20ff              MOVS     r0,#0xff
 00000c  f7fffffe          BL       GUI_SetColor
-;;;1882           GUI_SetPenSize(2);
+;;;1883           GUI_SetPenSize(2);
 000010  2002              MOVS     r0,#2
 000012  f7fffffe          BL       GUI_SetPenSize
-;;;1883           GUI_DrawArc( 390,12,6,3,0, 180 );
+;;;1884           GUI_DrawArc( 390,12,6,3,0, 180 );
 000016  20b4              MOVS     r0,#0xb4
 000018  2100              MOVS     r1,#0
 00001a  e9cd1000          STRD     r1,r0,[sp,#0]
@@ -30,7 +30,7 @@
 000022  210c              MOVS     r1,#0xc
 000024  f44f70c3          MOV      r0,#0x186
 000028  f7fffffe          BL       GUI_DrawArc
-;;;1884           GUI_DrawPolygon(aPoints,4,383,12);
+;;;1885           GUI_DrawPolygon(aPoints,4,383,12);
 00002c  b002              ADD      sp,sp,#8
 00002e  230c              MOVS     r3,#0xc
 000030  e8bd4010          POP      {r4,lr}
@@ -39,12 +39,12 @@
 00003a  4803              LDR      r0,|L1.72|
 00003c  f7ffbffe          B.W      GUI_DrawPolygon
                   |L1.64|
-;;;1885       }else{
-;;;1886           
-;;;1887       }
-;;;1888   }
+;;;1886       }else{
+;;;1887           
+;;;1888       }
+;;;1889   }
 000040  bd1c              POP      {r2-r4,pc}
-;;;1889   
+;;;1890   
                           ENDP
 
 000042  0000              DCW      0x0000
@@ -56,23 +56,23 @@
                           AREA ||i.DrawLockc||, CODE, READONLY, ALIGN=2
 
                   DrawLockc PROC
-;;;1889   
-;;;1890   void DrawLockc(void)
+;;;1890   
+;;;1891   void DrawLockc(void)
 000000  b51c              PUSH     {r2-r4,lr}
-;;;1891   {
-;;;1892       if(lock == 1)
+;;;1892   {
+;;;1893       if(lock == 1)
 000002  4810              LDR      r0,|L2.68|
 000004  79c0              LDRB     r0,[r0,#7]  ; lock
 000006  2801              CMP      r0,#1
 000008  d11a              BNE      |L2.64|
-;;;1893       {
-;;;1894           GUI_SetColor(GUI_RED);
+;;;1894       {
+;;;1895           GUI_SetColor(GUI_RED);
 00000a  20ff              MOVS     r0,#0xff
 00000c  f7fffffe          BL       GUI_SetColor
-;;;1895           GUI_SetPenSize(2);
+;;;1896           GUI_SetPenSize(2);
 000010  2002              MOVS     r0,#2
 000012  f7fffffe          BL       GUI_SetPenSize
-;;;1896           GUI_DrawArc( 405+60,12,6,3,0, 180 );
+;;;1897           GUI_DrawArc( 405+60,12,6,3,0, 180 );
 000016  20b4              MOVS     r0,#0xb4
 000018  2100              MOVS     r1,#0
 00001a  e9cd1000          STRD     r1,r0,[sp,#0]
@@ -81,7 +81,7 @@
 000022  210c              MOVS     r1,#0xc
 000024  f24010d1          MOV      r0,#0x1d1
 000028  f7fffffe          BL       GUI_DrawArc
-;;;1897           GUI_DrawPolygon(aPoints,4,398+60,12);
+;;;1898           GUI_DrawPolygon(aPoints,4,398+60,12);
 00002c  b002              ADD      sp,sp,#8
 00002e  230c              MOVS     r3,#0xc
 000030  e8bd4010          POP      {r4,lr}
@@ -90,12 +90,12 @@
 00003a  4803              LDR      r0,|L2.72|
 00003c  f7ffbffe          B.W      GUI_DrawPolygon
                   |L2.64|
-;;;1898       }else{
-;;;1899           
-;;;1900       }
-;;;1901   }
+;;;1899       }else{
+;;;1900           
+;;;1901       }
+;;;1902   }
 000040  bd1c              POP      {r2-r4,pc}
-;;;1902   void IO_OFF(void)
+;;;1903   void IO_OFF(void)
                           ENDP
 
 000042  0000              DCW      0x0000
@@ -107,33 +107,33 @@
                           AREA ||i.IO_OFF||, CODE, READONLY, ALIGN=2
 
                   IO_OFF PROC
-;;;1901   }
-;;;1902   void IO_OFF(void)
+;;;1902   }
+;;;1903   void IO_OFF(void)
 000000  b510              PUSH     {r4,lr}
-;;;1903   {
-;;;1904       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1904   {
+;;;1905       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 000002  4c0a              LDR      r4,|L3.44|
 000004  2102              MOVS     r1,#2
 000006  4620              MOV      r0,r4
 000008  f7fffffe          BL       GPIO_ResetBits
-;;;1905       GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜  
+;;;1906       GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜  
 00000c  f44f5100          MOV      r1,#0x2000
 000010  4620              MOV      r0,r4
 000012  f7fffffe          BL       GPIO_SetBits
-;;;1906       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF  
+;;;1907       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF  
 000016  f44f4100          MOV      r1,#0x8000
 00001a  4805              LDR      r0,|L3.48|
 00001c  f7fffffe          BL       GPIO_SetBits
-;;;1907       pow_sw = pow_off;
+;;;1908       pow_sw = pow_off;
 000020  4904              LDR      r1,|L3.52|
 000022  2000              MOVS     r0,#0
 000024  7008              STRB     r0,[r1,#0]
-;;;1908       load_sw = load_off;
+;;;1909       load_sw = load_off;
 000026  4904              LDR      r1,|L3.56|
 000028  7008              STRB     r0,[r1,#0]
-;;;1909   }
+;;;1910   }
 00002a  bd10              POP      {r4,pc}
-;;;1910   
+;;;1911   
                           ENDP
 
                   |L3.44|
@@ -1482,315 +1482,316 @@
 ;;;1549                               if(load_sw==load_on)
 ;;;1550                               {
 ;;;1551                                   Flag_Swtich_ON=0;
-;;;1552                                   GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
-;;;1553                                   c_rec = 0;
-;;;1554                                   mode_sw = 0;
-;;;1555                                   load_sw = load_off;
-;;;1556                               }
-;;;1557                               else if(load_sw==load_off)
-;;;1558                               {
-;;;1559   								if(flag_Load_CC == 0)
-;;;1560                                   {
-;;;1561   									GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1562                                       c_rec = 1;									
-;;;1563                                   }
-;;;1564                                   Flag_Swtich_ON=1;
-;;;1565                                   GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
-;;;1566                                   
-;;;1567                                   mode_sw = mode_load;
-;;;1568                                   load_sw = load_on;
-;;;1569                               }
-;;;1570                               KeyCounter = 0;
-;;;1571                               BEEP_Tiggr();//
-;;;1572                           }break;
-;;;1573                           case face_menu:
-;;;1574                           {
-;;;1575       //                         static vu8 POW_t;
-;;;1576       //                         POW_t++;
-;;;1577       //                         if(POW_t>1)
-;;;1578       //                         {
-;;;1579       //                             POW_t=0;
-;;;1580       //                         }
-;;;1581                               if(pow_sw==pow_on)
-;;;1582                               {
-;;;1583                                   GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1584   								Delay_ms(1000);
-;;;1585                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1586                                   mode_sw = 0;
-;;;1587                                   pow_sw = pow_off;
-;;;1588                               }
-;;;1589                               else if(pow_sw==pow_off)
-;;;1590                               {
-;;;1591                                  GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1592                                   GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ                           
-;;;1593                                   mode_sw = mode_pow;
-;;;1594                                   pow_sw = pow_on;
-;;;1595                               }
-;;;1596                               KeyCounter = 0;
-;;;1597                               BEEP_Tiggr();//
-;;;1598                           }break;
-;;;1599                            case face_cdc:
-;;;1600                           {
-;;;1601                               if(cdc_sw == cdc_off)
-;;;1602                               {
-;;;1603                                  SET_Voltage = opv1;
-;;;1604                                  SET_Current = opc1;
-;;;1605                                  cutoff_flag = 0;
-;;;1606       //                           Mode_SW_CONT(0x03);
-;;;1607                                  
-;;;1608                                  charge_step = 1;
-;;;1609                                  GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1610   							   Delay_ms(500);
-;;;1611                                  GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ
-;;;1612                                  mode_sw = mode_pow;
-;;;1613                                  cdc_sw = cdc_on;
-;;;1614                               }else{
-;;;1615                                  
-;;;1616                                  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1617   								Delay_ms(500);
-;;;1618                                  GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1619                                  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
-;;;1620                                  cdc_sw = cdc_off;
-;;;1621                                  paused = 0;
-;;;1622                                  mode_sw = 0;
-;;;1623                               }
-;;;1624                               KeyCounter = 0;
-;;;1625                               BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âô?
-;;;1626                              
-;;;1627                           }break;
-;;;1628                           case face_cal:
-;;;1629                           {
-;;;1630                               if(calmode == mode_pow)
-;;;1631                               {
-;;;1632                                   if(calstep == 1)
-;;;1633                                   {
-;;;1634                                       PowVCal(1);
-;;;1635                                   }else if(calstep == 2){
-;;;1636                                       PowVCal(2);
-;;;1637                                   }else if(calstep == 3){
-;;;1638                                       PowVCal(3);
-;;;1639                                   }else if(calstep == 4){
-;;;1640                                       PowVCal(4);
-;;;1641                                   }else if(calstep == 5){
-;;;1642                                       PowVCal(5);
-;;;1643                                   }else if(calstep == 6){
-;;;1644                                       PowVCal(6);
-;;;1645                                   }
-;;;1646                               }else if(calmode == mode_loadc){
-;;;1647                                   if(calstep == 1)
-;;;1648                                   {
-;;;1649                                       LoadCCal(1);
-;;;1650                                   }else if(calstep == 2){
-;;;1651                                       LoadCCal(2);
-;;;1652                                   }
-;;;1653                               }else if(calmode == mode_powc){
-;;;1654                                   if(calstep == 1)
-;;;1655                                   {
-;;;1656                                       PowCCal(1);
-;;;1657                                   }else if(calstep == 2){
-;;;1658                                       PowCCal(2);
-;;;1659                                   }
-;;;1660                               }
-;;;1661                               KeyCounter = 0;
-;;;1662                               BEEP_Tiggr();//
-;;;1663                           }break;
-;;;1664                       }
-;;;1665                       
-;;;1666                   }
-;;;1667                   break;
-;;;1668                   case KEY_Reset://µÁ◊Ë∏ﬂµÕµµŒª«–ªª
-;;;1669                   {
-;;;1670                       static vu8 at = 0;
-;;;1671                       switch(page_sw)
-;;;1672                       {
-;;;1673                           case face_r:
-;;;1674                           {
-;;;1675                               if(at == 0)
-;;;1676                               {
-;;;1677                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1678                                   GPIO_ResetBits(GPIOB,GPIO_Pin_13);//R_RALYµÕµµŒª                           
-;;;1679                                   at++;
-;;;1680                                   r_raly=0;
-;;;1681                                   manual = 1;// ÷∂Øªªµµ
-;;;1682                               }else if(at == 1){
-;;;1683                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
-;;;1684                                   GPIO_SetBits(GPIOB,GPIO_Pin_13);//R_RALY∏ﬂµµŒª
-;;;1685                                   r_raly=1;
-;;;1686                                   at++;
-;;;1687                                   manual = 1;// ÷∂Øªªµµ
-;;;1688                               }else if(at == 2){
-;;;1689                                   at = 0;
-;;;1690                                   manual =0;
-;;;1691                               }
-;;;1692                           }
-;;;1693                           case face_cal:
-;;;1694                           {
-;;;1695                               if(calmode == mode_load)
-;;;1696                               {
-;;;1697                                   calmode = mode_loadc;
-;;;1698                                   IO_OFF();
-;;;1699                               }else if(calmode == mode_loadc){ 
-;;;1700                                   calmode = mode_pow;
-;;;1701                                   IO_OFF();
-;;;1702                               }else if(calmode == mode_pow){ 
-;;;1703                                   calmode = mode_powc;
-;;;1704                                   IO_OFF();
-;;;1705                               }else if(calmode == mode_powc){ 
-;;;1706                                   calmode = mode_r;
-;;;1707                                   IO_OFF();
-;;;1708                               }else if(calmode == mode_r){ 
-;;;1709                                   calmode = mode_load;
-;;;1710                                   IO_OFF();
-;;;1711                               }
-;;;1712                           }break;
-;;;1713   						case face_load:
-;;;1714   						{
-;;;1715   							if(cflag == 0)
-;;;1716   							{
-;;;1717   								C_SW(1);
-;;;1718   							}else{
-;;;1719   								C_SW(0);
-;;;1720   							}
-;;;1721   						}break;
-;;;1722                       }
-;;;1723                       KeyCounter = 0;
-;;;1724                       BEEP_Tiggr();//
-;;;1725                   }
-;;;1726                   break;
-;;;1727       // 			case KEY_Powe :
-;;;1728       // 			{
-;;;1729       // 				
-;;;1730       // 				KeyCounter = 0;
-;;;1731       // 				BEEP_Tiggr();//
-;;;1732       // 			}
-;;;1733       // 			break;
-;;;1734                   case KEY_Lock :
-;;;1735                   {
-;;;1736                       lock = 1;
-;;;1737                       KeyCounter = 0;
-;;;1738                       BEEP_Tiggr();//
-;;;1739                   }break;
-;;;1740                   case KEY_Face1 :
-;;;1741                   {
-;;;1742                       WM_DeleteWindow(hWinR);
-;;;1743                       WM_DeleteWindow(hWinWind);
-;;;1744                       WM_DeleteWindow(hWinG);
-;;;1745                       WM_DeleteWindow(load_wind);
-;;;1746                       WM_DeleteWindow(hWinsysinfo);
-;;;1747                       WM_DeleteWindow(hWincdc);
-;;;1748                       WM_DeleteWindow(hWinset);
-;;;1749                       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
-;;;1750                       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1751   					Delay_ms(500);
-;;;1752   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
-;;;1753                       CreateR();
-;;;1754                       KeyCounter = 0;
-;;;1755                       BEEP_Tiggr();//
-;;;1756                   }
-;;;1757                   break;
-;;;1758                   case KEY_Face2 :
-;;;1759                   {
-;;;1760                       WM_DeleteWindow(hWinR);
-;;;1761                       WM_DeleteWindow(hWinWind);
-;;;1762                       WM_DeleteWindow(hWinG);
-;;;1763                       WM_DeleteWindow(load_wind);
-;;;1764                       WM_DeleteWindow(hWinsysinfo);
-;;;1765                       WM_DeleteWindow(hWincdc);
-;;;1766                       WM_DeleteWindow(hWinset);
-;;;1767                       CreateWindow2();
-;;;1768                       t_onoff = 0;
-;;;1769                       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1770   					Delay_ms(500);
-;;;1771   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
-;;;1772                       KeyCounter = 0;
-;;;1773                       BEEP_Tiggr();//
-;;;1774                   }
-;;;1775                   break;
-;;;1776                   case KEY_Face3 :
-;;;1777                   {
-;;;1778                       WM_DeleteWindow(hWinR);
-;;;1779                       WM_DeleteWindow(hWinWind);
-;;;1780                       WM_DeleteWindow(hWinG);
-;;;1781                       WM_DeleteWindow(load_wind);
-;;;1782                       WM_DeleteWindow(hWinsysinfo);
-;;;1783                       WM_DeleteWindow(hWincdc);
-;;;1784                       WM_DeleteWindow(hWinset);
-;;;1785                       CreateWindow();
-;;;1786                       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
-;;;1787                       KeyCounter = 0;
-;;;1788                       BEEP_Tiggr();//
-;;;1789                   }
-;;;1790                   break;
-;;;1791                   case KEY_Face4 :
-;;;1792                   {
-;;;1793                       WM_DeleteWindow(hWinR);
-;;;1794                       WM_DeleteWindow(hWinWind);
-;;;1795                       WM_DeleteWindow(hWinG);
-;;;1796                       WM_DeleteWindow(load_wind);
-;;;1797                       WM_DeleteWindow(hWinsysinfo);
-;;;1798                       WM_DeleteWindow(hWincdc);
-;;;1799                       WM_DeleteWindow(hWinset);
-;;;1800   					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1801   					Delay_ms(500);
-;;;1802   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
-;;;1803                       CreateCDC(); 
-;;;1804                       KeyCounter = 0;
-;;;1805                       BEEP_Tiggr();//
-;;;1806                   }
-;;;1807                   break;
-;;;1808                   case KEY_Face5 :
-;;;1809                   {
-;;;1810                       WM_DeleteWindow(hWinR);
-;;;1811                       WM_DeleteWindow(hWinWind);
-;;;1812                       WM_DeleteWindow(hWinG);
-;;;1813                       WM_DeleteWindow(load_wind);
-;;;1814                       WM_DeleteWindow(hWinsysinfo);
-;;;1815                       WM_DeleteWindow(hWincdc);
-;;;1816                       WM_DeleteWindow(hWinset);
-;;;1817                       CreateG();
-;;;1818                       KeyCounter = 0;
-;;;1819                       BEEP_Tiggr();//
-;;;1820                   }
-;;;1821                   break;
-;;;1822                   case KEY_BIAS :
-;;;1823                   {
-;;;1824                       WM_DeleteWindow(hWinR);
-;;;1825                       WM_DeleteWindow(hWinWind);
-;;;1826                       WM_DeleteWindow(hWinG);
-;;;1827                       WM_DeleteWindow(load_wind);
-;;;1828                       WM_DeleteWindow(hWinsysinfo);
-;;;1829                       WM_DeleteWindow(hWincdc);
-;;;1830                       WM_DeleteWindow(hWinset);
-;;;1831   					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-;;;1832   					Delay_ms(500);
-;;;1833   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
-;;;1834                       Createsysinfo();
-;;;1835                       KeyCounter = 0;
-;;;1836                       BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âô?
-;;;1837                   }
-;;;1838                   break;
-;;;1839   
-;;;1840                           
-;;;1841                   
-;;;1842                   default:
-;;;1843                   break;
-;;;1844               }
-;;;1845           }else{
-;;;1846               switch(KeyValue)
+;;;1552   								GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1553                                   GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
+;;;1554                                   c_rec = 0;
+;;;1555                                   mode_sw = 0;
+;;;1556                                   load_sw = load_off;
+;;;1557                               }
+;;;1558                               else if(load_sw==load_off)
+;;;1559                               {
+;;;1560   								if(flag_Load_CC == 0)
+;;;1561                                   {
+;;;1562   									GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1563                                       c_rec = 1;									
+;;;1564                                   }
+;;;1565                                   Flag_Swtich_ON=1;
+;;;1566                                   GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
+;;;1567                                   
+;;;1568                                   mode_sw = mode_load;
+;;;1569                                   load_sw = load_on;
+;;;1570                               }
+;;;1571                               KeyCounter = 0;
+;;;1572                               BEEP_Tiggr();//
+;;;1573                           }break;
+;;;1574                           case face_menu:
+;;;1575                           {
+;;;1576       //                         static vu8 POW_t;
+;;;1577       //                         POW_t++;
+;;;1578       //                         if(POW_t>1)
+;;;1579       //                         {
+;;;1580       //                             POW_t=0;
+;;;1581       //                         }
+;;;1582                               if(pow_sw==pow_on)
+;;;1583                               {
+;;;1584                                   GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1585   								Delay_ms(1000);
+;;;1586                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1587                                   mode_sw = 0;
+;;;1588                                   pow_sw = pow_off;
+;;;1589                               }
+;;;1590                               else if(pow_sw==pow_off)
+;;;1591                               {
+;;;1592                                  GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1593                                   GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ                           
+;;;1594                                   mode_sw = mode_pow;
+;;;1595                                   pow_sw = pow_on;
+;;;1596                               }
+;;;1597                               KeyCounter = 0;
+;;;1598                               BEEP_Tiggr();//
+;;;1599                           }break;
+;;;1600                            case face_cdc:
+;;;1601                           {
+;;;1602                               if(cdc_sw == cdc_off)
+;;;1603                               {
+;;;1604                                  SET_Voltage = opv1;
+;;;1605                                  SET_Current = opc1;
+;;;1606                                  cutoff_flag = 0;
+;;;1607       //                           Mode_SW_CONT(0x03);
+;;;1608                                  
+;;;1609                                  charge_step = 1;
+;;;1610                                  GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1611   							   Delay_ms(500);
+;;;1612                                  GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ
+;;;1613                                  mode_sw = mode_pow;
+;;;1614                                  cdc_sw = cdc_on;
+;;;1615                               }else{
+;;;1616                                  
+;;;1617                                  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1618   								Delay_ms(500);
+;;;1619                                  GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1620                                  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
+;;;1621                                  cdc_sw = cdc_off;
+;;;1622                                  paused = 0;
+;;;1623                                  mode_sw = 0;
+;;;1624                               }
+;;;1625                               KeyCounter = 0;
+;;;1626                               BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âô?
+;;;1627                              
+;;;1628                           }break;
+;;;1629                           case face_cal:
+;;;1630                           {
+;;;1631                               if(calmode == mode_pow)
+;;;1632                               {
+;;;1633                                   if(calstep == 1)
+;;;1634                                   {
+;;;1635                                       PowVCal(1);
+;;;1636                                   }else if(calstep == 2){
+;;;1637                                       PowVCal(2);
+;;;1638                                   }else if(calstep == 3){
+;;;1639                                       PowVCal(3);
+;;;1640                                   }else if(calstep == 4){
+;;;1641                                       PowVCal(4);
+;;;1642                                   }else if(calstep == 5){
+;;;1643                                       PowVCal(5);
+;;;1644                                   }else if(calstep == 6){
+;;;1645                                       PowVCal(6);
+;;;1646                                   }
+;;;1647                               }else if(calmode == mode_loadc){
+;;;1648                                   if(calstep == 1)
+;;;1649                                   {
+;;;1650                                       LoadCCal(1);
+;;;1651                                   }else if(calstep == 2){
+;;;1652                                       LoadCCal(2);
+;;;1653                                   }
+;;;1654                               }else if(calmode == mode_powc){
+;;;1655                                   if(calstep == 1)
+;;;1656                                   {
+;;;1657                                       PowCCal(1);
+;;;1658                                   }else if(calstep == 2){
+;;;1659                                       PowCCal(2);
+;;;1660                                   }
+;;;1661                               }
+;;;1662                               KeyCounter = 0;
+;;;1663                               BEEP_Tiggr();//
+;;;1664                           }break;
+;;;1665                       }
+;;;1666                       
+;;;1667                   }
+;;;1668                   break;
+;;;1669                   case KEY_Reset://µÁ◊Ë∏ﬂµÕµµŒª«–ªª
+;;;1670                   {
+;;;1671                       static vu8 at = 0;
+;;;1672                       switch(page_sw)
+;;;1673                       {
+;;;1674                           case face_r:
+;;;1675                           {
+;;;1676                               if(at == 0)
+;;;1677                               {
+;;;1678                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1679                                   GPIO_ResetBits(GPIOB,GPIO_Pin_13);//R_RALYµÕµµŒª                           
+;;;1680                                   at++;
+;;;1681                                   r_raly=0;
+;;;1682                                   manual = 1;// ÷∂Øªªµµ
+;;;1683                               }else if(at == 1){
+;;;1684                                   GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+;;;1685                                   GPIO_SetBits(GPIOB,GPIO_Pin_13);//R_RALY∏ﬂµµŒª
+;;;1686                                   r_raly=1;
+;;;1687                                   at++;
+;;;1688                                   manual = 1;// ÷∂Øªªµµ
+;;;1689                               }else if(at == 2){
+;;;1690                                   at = 0;
+;;;1691                                   manual =0;
+;;;1692                               }
+;;;1693                           }
+;;;1694                           case face_cal:
+;;;1695                           {
+;;;1696                               if(calmode == mode_load)
+;;;1697                               {
+;;;1698                                   calmode = mode_loadc;
+;;;1699                                   IO_OFF();
+;;;1700                               }else if(calmode == mode_loadc){ 
+;;;1701                                   calmode = mode_pow;
+;;;1702                                   IO_OFF();
+;;;1703                               }else if(calmode == mode_pow){ 
+;;;1704                                   calmode = mode_powc;
+;;;1705                                   IO_OFF();
+;;;1706                               }else if(calmode == mode_powc){ 
+;;;1707                                   calmode = mode_r;
+;;;1708                                   IO_OFF();
+;;;1709                               }else if(calmode == mode_r){ 
+;;;1710                                   calmode = mode_load;
+;;;1711                                   IO_OFF();
+;;;1712                               }
+;;;1713                           }break;
+;;;1714   						case face_load:
+;;;1715   						{
+;;;1716   							if(cflag == 0)
+;;;1717   							{
+;;;1718   								C_SW(1);
+;;;1719   							}else{
+;;;1720   								C_SW(0);
+;;;1721   							}
+;;;1722   						}break;
+;;;1723                       }
+;;;1724                       KeyCounter = 0;
+;;;1725                       BEEP_Tiggr();//
+;;;1726                   }
+;;;1727                   break;
+;;;1728       // 			case KEY_Powe :
+;;;1729       // 			{
+;;;1730       // 				
+;;;1731       // 				KeyCounter = 0;
+;;;1732       // 				BEEP_Tiggr();//
+;;;1733       // 			}
+;;;1734       // 			break;
+;;;1735                   case KEY_Lock :
+;;;1736                   {
+;;;1737                       lock = 1;
+;;;1738                       KeyCounter = 0;
+;;;1739                       BEEP_Tiggr();//
+;;;1740                   }break;
+;;;1741                   case KEY_Face1 :
+;;;1742                   {
+;;;1743                       WM_DeleteWindow(hWinR);
+;;;1744                       WM_DeleteWindow(hWinWind);
+;;;1745                       WM_DeleteWindow(hWinG);
+;;;1746                       WM_DeleteWindow(load_wind);
+;;;1747                       WM_DeleteWindow(hWinsysinfo);
+;;;1748                       WM_DeleteWindow(hWincdc);
+;;;1749                       WM_DeleteWindow(hWinset);
+;;;1750                       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
+;;;1751                       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1752   					Delay_ms(500);
+;;;1753   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+;;;1754                       CreateR();
+;;;1755                       KeyCounter = 0;
+;;;1756                       BEEP_Tiggr();//
+;;;1757                   }
+;;;1758                   break;
+;;;1759                   case KEY_Face2 :
+;;;1760                   {
+;;;1761                       WM_DeleteWindow(hWinR);
+;;;1762                       WM_DeleteWindow(hWinWind);
+;;;1763                       WM_DeleteWindow(hWinG);
+;;;1764                       WM_DeleteWindow(load_wind);
+;;;1765                       WM_DeleteWindow(hWinsysinfo);
+;;;1766                       WM_DeleteWindow(hWincdc);
+;;;1767                       WM_DeleteWindow(hWinset);
+;;;1768                       CreateWindow2();
+;;;1769                       t_onoff = 0;
+;;;1770                       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1771   					Delay_ms(500);
+;;;1772   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+;;;1773                       KeyCounter = 0;
+;;;1774                       BEEP_Tiggr();//
+;;;1775                   }
+;;;1776                   break;
+;;;1777                   case KEY_Face3 :
+;;;1778                   {
+;;;1779                       WM_DeleteWindow(hWinR);
+;;;1780                       WM_DeleteWindow(hWinWind);
+;;;1781                       WM_DeleteWindow(hWinG);
+;;;1782                       WM_DeleteWindow(load_wind);
+;;;1783                       WM_DeleteWindow(hWinsysinfo);
+;;;1784                       WM_DeleteWindow(hWincdc);
+;;;1785                       WM_DeleteWindow(hWinset);
+;;;1786                       CreateWindow();
+;;;1787                       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
+;;;1788                       KeyCounter = 0;
+;;;1789                       BEEP_Tiggr();//
+;;;1790                   }
+;;;1791                   break;
+;;;1792                   case KEY_Face4 :
+;;;1793                   {
+;;;1794                       WM_DeleteWindow(hWinR);
+;;;1795                       WM_DeleteWindow(hWinWind);
+;;;1796                       WM_DeleteWindow(hWinG);
+;;;1797                       WM_DeleteWindow(load_wind);
+;;;1798                       WM_DeleteWindow(hWinsysinfo);
+;;;1799                       WM_DeleteWindow(hWincdc);
+;;;1800                       WM_DeleteWindow(hWinset);
+;;;1801   					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1802   					Delay_ms(500);
+;;;1803   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+;;;1804                       CreateCDC(); 
+;;;1805                       KeyCounter = 0;
+;;;1806                       BEEP_Tiggr();//
+;;;1807                   }
+;;;1808                   break;
+;;;1809                   case KEY_Face5 :
+;;;1810                   {
+;;;1811                       WM_DeleteWindow(hWinR);
+;;;1812                       WM_DeleteWindow(hWinWind);
+;;;1813                       WM_DeleteWindow(hWinG);
+;;;1814                       WM_DeleteWindow(load_wind);
+;;;1815                       WM_DeleteWindow(hWinsysinfo);
+;;;1816                       WM_DeleteWindow(hWincdc);
+;;;1817                       WM_DeleteWindow(hWinset);
+;;;1818                       CreateG();
+;;;1819                       KeyCounter = 0;
+;;;1820                       BEEP_Tiggr();//
+;;;1821                   }
+;;;1822                   break;
+;;;1823                   case KEY_BIAS :
+;;;1824                   {
+;;;1825                       WM_DeleteWindow(hWinR);
+;;;1826                       WM_DeleteWindow(hWinWind);
+;;;1827                       WM_DeleteWindow(hWinG);
+;;;1828                       WM_DeleteWindow(load_wind);
+;;;1829                       WM_DeleteWindow(hWinsysinfo);
+;;;1830                       WM_DeleteWindow(hWincdc);
+;;;1831                       WM_DeleteWindow(hWinset);
+;;;1832   					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1833   					Delay_ms(500);
+;;;1834   				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+;;;1835                       Createsysinfo();
+;;;1836                       KeyCounter = 0;
+;;;1837                       BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âô?
+;;;1838                   }
+;;;1839                   break;
+;;;1840   
+;;;1841                           
+;;;1842                   
+;;;1843                   default:
+;;;1844                   break;
+;;;1845               }
+;;;1846           }else{
+;;;1847               switch(KeyValue)
 000028  9801              LDR      r0,[sp,#4]
 00002a  286c              CMP      r0,#0x6c
 00002c  d165              BNE      |L4.250|
-;;;1847               {
-;;;1848                   case KEY_Lock :
-;;;1849                   {
-;;;1850                       lock = 0;
+;;;1848               {
+;;;1849                   case KEY_Lock :
+;;;1850                   {
+;;;1851                       lock = 0;
 00002e  71e5              STRB     r5,[r4,#7]
-;;;1851                       usartocflag = 0;
+;;;1852                       usartocflag = 0;
 000030  48f4              LDR      r0,|L4.1028|
 000032  7005              STRB     r5,[r0,#0]
-;;;1852                       KeyCounter = 0;
+;;;1853                       KeyCounter = 0;
 000034  81e5              STRH     r5,[r4,#0xe]
-;;;1853                       BEEP_Tiggr();//
+;;;1854                       BEEP_Tiggr();//
 000036  e8bd5ffc          POP      {r2-r12,lr}
 00003a  f7ffbffe          B.W      BEEP_Tiggr
                   |L4.62|
@@ -2853,29 +2854,29 @@
                   |L4.2568|
 000a08  e112              B        |L4.3120|
                   |L4.2570|
-000a0a  e3ee              B        |L4.4586|
+000a0a  e3f1              B        |L4.4592|
                   |L4.2572|
 000a0c  e064              B        |L4.2776|
                   |L4.2574|
-000a0e  e3ed              B        |L4.4588|
+000a0e  e3f0              B        |L4.4594|
                   |L4.2576|
-000a10  e3ed              B        |L4.4590|
+000a10  e3f0              B        |L4.4596|
                   |L4.2578|
 000a12  e02e              B        |L4.2674|
                   |L4.2580|
-000a14  e3ec              B        |L4.4592|
+000a14  e3ef              B        |L4.4598|
                   |L4.2582|
-000a16  e3ec              B        |L4.4594|
+000a16  e3ef              B        |L4.4600|
                   |L4.2584|
 000a18  e0ae              B        |L4.2936|
                   |L4.2586|
-000a1a  e3eb              B        |L4.4596|
+000a1a  e3ee              B        |L4.4602|
                   |L4.2588|
 000a1c  e280              B        |L4.3872|
                   |L4.2590|
 000a1e  e161              B        |L4.3300|
                   |L4.2592|
-000a20  e3e9              B        |L4.4598|
+000a20  e3ec              B        |L4.4604|
                   |L4.2594|
 000a22  e1c4              B        |L4.3502|
                   |L4.2596|
@@ -2883,7 +2884,7 @@
                   |L4.2598|
 000a26  e084              B        |L4.2866|
                   |L4.2600|
-000a28  e3f2              B        |L4.4624|
+000a28  e3e9              B        |L4.4606|
                   |L4.2602|
 000a2a  81e5              STRH     r5,[r4,#0xe]          ;1002
 000a2c  e8bd5ffc          POP      {r2-r12,lr}           ;1003
@@ -3306,7 +3307,7 @@
 000e34  48aa              LDR      r0,|L4.4320|
 000e36  e000              B        |L4.3642|
                   |L4.3640|
-000e38  e114              B        |L4.4196|
+000e38  e118              B        |L4.4204|
                   |L4.3642|
 000e3a  6800              LDR      r0,[r0,#0]            ;1431  ; hWinset
 000e3c  f7fffffe          BL       WM_DeleteWindow
@@ -3419,10 +3420,10 @@
 000f66  7808              LDRB     r0,[r1,#0]            ;1516  ; page_sw
 000f68  f8dfb178          LDR      r11,|L4.4324|
 000f6c  2809              CMP      r0,#9                 ;1516
-000f6e  d279              BCS      |L4.4196|
+000f6e  d27d              BCS      |L4.4204|
 000f70  e8dff000          TBB      [pc,r0]               ;1516
-000f74  789d6e05          DCB      0x78,0x9d,0x6e,0x05
-000f78  38787878          DCB      0x38,0x78,0x78,0x78
+000f74  7cd67305          DCB      0x7c,0xd6,0x73,0x05
+000f78  387c7c7c          DCB      0x38,0x7c,0x7c,0x7c
 000f7c  fe00              DCB      0xfe,0x00
 000f7e  485a              LDR      r0,|L4.4328|
 000f80  7802              LDRB     r2,[r0,#0]            ;1520  ; test_start
@@ -3474,84 +3475,84 @@
 000fe6  7838              LDRB     r0,[r7,#0]            ;1549  ; load_sw
 000fe8  2801              CMP      r0,#1                 ;1549
 000fea  d002              BEQ      |L4.4082|
-000fec  7838              LDRB     r0,[r7,#0]            ;1557  ; load_sw
-000fee  b180              CBZ      r0,|L4.4114|
-000ff0  e029              B        |L4.4166|
+000fec  7838              LDRB     r0,[r7,#0]            ;1558  ; load_sw
+000fee  b1a8              CBZ      r0,|L4.4124|
+000ff0  e02e              B        |L4.4176|
                   |L4.4082|
 000ff2  f8da0000          LDR      r0,[r10,#0]           ;1551  ; flagA
 000ff6  f0200040          BIC      r0,r0,#0x40           ;1551
 000ffa  f8ca0000          STR      r0,[r10,#0]           ;1551  ; flagA
-000ffe  f44f4100          MOV      r1,#0x8000            ;1552
-001002  4841              LDR      r0,|L4.4360|
+000ffe  f44f5100          MOV      r1,#0x2000            ;1552
+001002  4630              MOV      r0,r6                 ;1552
 001004  f7fffffe          BL       GPIO_SetBits
-001008  7225              STRB     r5,[r4,#8]            ;1553
-00100a  f88b5000          STRB     r5,[r11,#0]           ;1554
-00100e  703d              STRB     r5,[r7,#0]            ;1555
-001010  e019              B        |L4.4166|
-                  |L4.4114|
-001012  4840              LDR      r0,|L4.4372|
-001014  7800              LDRB     r0,[r0,#0]            ;1559  ; flagD
-001016  0600              LSLS     r0,r0,#24             ;1559
-001018  d406              BMI      |L4.4136|
-00101a  f44f5100          MOV      r1,#0x2000            ;1561
-00101e  4630              MOV      r0,r6                 ;1561
-001020  f7fffffe          BL       GPIO_ResetBits
-001024  2001              MOVS     r0,#1                 ;1562
-001026  7220              STRB     r0,[r4,#8]            ;1562
-                  |L4.4136|
-001028  f8da0000          LDR      r0,[r10,#0]           ;1564  ; flagA
-00102c  f0400040          ORR      r0,r0,#0x40           ;1564
-001030  f8ca0000          STR      r0,[r10,#0]           ;1564  ; flagA
-001034  f44f4100          MOV      r1,#0x8000            ;1565
-001038  4833              LDR      r0,|L4.4360|
-00103a  f7fffffe          BL       GPIO_ResetBits
-00103e  f88b8000          STRB     r8,[r11,#0]           ;1567
-001042  2001              MOVS     r0,#1                 ;1568
-001044  7038              STRB     r0,[r7,#0]            ;1568
-                  |L4.4166|
-001046  81e5              STRH     r5,[r4,#0xe]          ;1570
-001048  e8bd5ffc          POP      {r2-r12,lr}           ;1571
-00104c  f7ffbffe          B.W      BEEP_Tiggr
-001050  f8df80c4          LDR      r8,|L4.4376|
-001054  f8980000          LDRB     r0,[r8,#0]            ;1581  ; pow_sw
-001058  2801              CMP      r0,#1                 ;1581
-00105a  d004              BEQ      |L4.4198|
-00105c  f8980000          LDRB     r0,[r8,#0]            ;1589  ; pow_sw
-001060  b190              CBZ      r0,|L4.4232|
-001062  e01f              B        |L4.4260|
-                  |L4.4196|
-001064  e29b              B        |L4.5534|
-                  |L4.4198|
-001066  2102              MOVS     r1,#2                 ;1583
-001068  4630              MOV      r0,r6                 ;1583
-00106a  f7fffffe          BL       GPIO_ResetBits
-00106e  4638              MOV      r0,r7                 ;1584
-001070  f7fffffe          BL       Delay_ms
-001074  f44f5100          MOV      r1,#0x2000            ;1585
-001078  4630              MOV      r0,r6                 ;1585
-00107a  f7fffffe          BL       GPIO_SetBits
-00107e  f88b5000          STRB     r5,[r11,#0]           ;1586
-001082  f8885000          STRB     r5,[r8,#0]            ;1587
-001086  e00d              B        |L4.4260|
-                  |L4.4232|
-001088  f44f5100          MOV      r1,#0x2000            ;1591
-00108c  4630              MOV      r0,r6                 ;1591
-00108e  f7fffffe          BL       GPIO_ResetBits
-001092  2102              MOVS     r1,#2                 ;1592
-001094  4630              MOV      r0,r6                 ;1592
-001096  f7fffffe          BL       GPIO_SetBits
-00109a  f88b9000          STRB     r9,[r11,#0]           ;1593
-00109e  2001              MOVS     r0,#1                 ;1594
-0010a0  f8880000          STRB     r0,[r8,#0]            ;1594
-                  |L4.4260|
-0010a4  81e5              STRH     r5,[r4,#0xe]          ;1596
-0010a6  e8bd5ffc          POP      {r2-r12,lr}           ;1597
-0010aa  f7ffbffe          B.W      BEEP_Tiggr
-0010ae  4f1b              LDR      r7,|L4.4380|
-0010b0  7838              LDRB     r0,[r7,#0]            ;1601  ; cdc_sw
-0010b2  b3a8              CBZ      r0,|L4.4384|
-0010b4  2102              MOVS     r1,#2                 ;1616
-0010b6  e034              B        |L4.4386|
+001008  f44f4100          MOV      r1,#0x8000            ;1553
+00100c  483e              LDR      r0,|L4.4360|
+00100e  f7fffffe          BL       GPIO_SetBits
+001012  7225              STRB     r5,[r4,#8]            ;1554
+001014  f88b5000          STRB     r5,[r11,#0]           ;1555
+001018  703d              STRB     r5,[r7,#0]            ;1556
+00101a  e019              B        |L4.4176|
+                  |L4.4124|
+00101c  483d              LDR      r0,|L4.4372|
+00101e  7800              LDRB     r0,[r0,#0]            ;1560  ; flagD
+001020  0600              LSLS     r0,r0,#24             ;1560
+001022  d406              BMI      |L4.4146|
+001024  f44f5100          MOV      r1,#0x2000            ;1562
+001028  4630              MOV      r0,r6                 ;1562
+00102a  f7fffffe          BL       GPIO_ResetBits
+00102e  2001              MOVS     r0,#1                 ;1563
+001030  7220              STRB     r0,[r4,#8]            ;1563
+                  |L4.4146|
+001032  f8da0000          LDR      r0,[r10,#0]           ;1565  ; flagA
+001036  f0400040          ORR      r0,r0,#0x40           ;1565
+00103a  f8ca0000          STR      r0,[r10,#0]           ;1565  ; flagA
+00103e  f44f4100          MOV      r1,#0x8000            ;1566
+001042  4831              LDR      r0,|L4.4360|
+001044  f7fffffe          BL       GPIO_ResetBits
+001048  f88b8000          STRB     r8,[r11,#0]           ;1568
+00104c  2001              MOVS     r0,#1                 ;1569
+00104e  7038              STRB     r0,[r7,#0]            ;1569
+                  |L4.4176|
+001050  81e5              STRH     r5,[r4,#0xe]          ;1571
+001052  e8bd5ffc          POP      {r2-r12,lr}           ;1572
+001056  f7ffbffe          B.W      BEEP_Tiggr
+00105a  f8df80bc          LDR      r8,|L4.4376|
+00105e  f8980000          LDRB     r0,[r8,#0]            ;1582  ; pow_sw
+001062  2801              CMP      r0,#1                 ;1582
+001064  d005              BEQ      |L4.4210|
+001066  f8980000          LDRB     r0,[r8,#0]            ;1590  ; pow_sw
+00106a  e000              B        |L4.4206|
+                  |L4.4204|
+00106c  e29c              B        |L4.5544|
+                  |L4.4206|
+00106e  b188              CBZ      r0,|L4.4244|
+001070  e01e              B        |L4.4272|
+                  |L4.4210|
+001072  2102              MOVS     r1,#2                 ;1584
+001074  4630              MOV      r0,r6                 ;1584
+001076  f7fffffe          BL       GPIO_ResetBits
+00107a  4638              MOV      r0,r7                 ;1585
+00107c  f7fffffe          BL       Delay_ms
+001080  f44f5100          MOV      r1,#0x2000            ;1586
+001084  4630              MOV      r0,r6                 ;1586
+001086  f7fffffe          BL       GPIO_SetBits
+00108a  f88b5000          STRB     r5,[r11,#0]           ;1587
+00108e  f8885000          STRB     r5,[r8,#0]            ;1588
+001092  e00d              B        |L4.4272|
+                  |L4.4244|
+001094  f44f5100          MOV      r1,#0x2000            ;1592
+001098  4630              MOV      r0,r6                 ;1592
+00109a  f7fffffe          BL       GPIO_ResetBits
+00109e  2102              MOVS     r1,#2                 ;1593
+0010a0  4630              MOV      r0,r6                 ;1593
+0010a2  f7fffffe          BL       GPIO_SetBits
+0010a6  f88b9000          STRB     r9,[r11,#0]           ;1594
+0010aa  2001              MOVS     r0,#1                 ;1595
+0010ac  f8880000          STRB     r0,[r8,#0]            ;1595
+                  |L4.4272|
+0010b0  81e5              STRH     r5,[r4,#0xe]          ;1597
+0010b2  e8bd5ffc          POP      {r2-r12,lr}           ;1598
+0010b6  e031              B        |L4.4380|
                   |L4.4280|
                           DCD      calmode
                   |L4.4284|
@@ -3603,507 +3604,518 @@
                   |L4.4376|
                           DCD      pow_sw
                   |L4.4380|
-                          DCD      cdc_sw
-                  |L4.4384|
-001120  e01a              B        |L4.4440|
-                  |L4.4386|
-001122  4630              MOV      r0,r6                 ;1616
-001124  f7fffffe          BL       GPIO_ResetBits
-001128  f44f70fa          MOV      r0,#0x1f4             ;1617
-00112c  f7fffffe          BL       Delay_ms
-001130  f44f5100          MOV      r1,#0x2000            ;1618
-001134  4630              MOV      r0,r6                 ;1618
-001136  f7fffffe          BL       GPIO_SetBits
-00113a  f44f4100          MOV      r1,#0x8000            ;1619
-00113e  48fe              LDR      r0,|L4.5432|
-001140  f7fffffe          BL       GPIO_SetBits
-001144  703d              STRB     r5,[r7,#0]            ;1620
-001146  48fd              LDR      r0,|L4.5436|
-001148  7005              STRB     r5,[r0,#0]            ;1621
-00114a  f88b5000          STRB     r5,[r11,#0]           ;1622
-                  |L4.4430|
-00114e  81e5              STRH     r5,[r4,#0xe]          ;1624
-001150  e8bd5ffc          POP      {r2-r12,lr}           ;1625
-001154  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.4440|
-001158  48f9              LDR      r0,|L4.5440|
-00115a  6fc1              LDR      r1,[r0,#0x7c]         ;1603  ; Run_Control
-00115c  6041              STR      r1,[r0,#4]            ;1603  ; Run_Control
-00115e  f8d01088          LDR      r1,[r0,#0x88]         ;1604  ; Run_Control
-001162  6081              STR      r1,[r0,#8]            ;1604  ; Run_Control
-001164  48f7              LDR      r0,|L4.5444|
-001166  7005              STRB     r5,[r0,#0]            ;1605
-001168  f04f0801          MOV      r8,#1                 ;1608
-00116c  48f6              LDR      r0,|L4.5448|
+00111c  f7ffbffe          B.W      BEEP_Tiggr
+001120  4ffe              LDR      r7,|L4.5404|
+001122  7838              LDRB     r0,[r7,#0]            ;1602  ; cdc_sw
+001124  b1d8              CBZ      r0,|L4.4446|
+001126  2102              MOVS     r1,#2                 ;1617
+001128  4630              MOV      r0,r6                 ;1617
+00112a  f7fffffe          BL       GPIO_ResetBits
+00112e  f44f70fa          MOV      r0,#0x1f4             ;1618
+001132  f7fffffe          BL       Delay_ms
+001136  f44f5100          MOV      r1,#0x2000            ;1619
+00113a  4630              MOV      r0,r6                 ;1619
+00113c  f7fffffe          BL       GPIO_SetBits
+001140  f44f4100          MOV      r1,#0x8000            ;1620
+001144  48f6              LDR      r0,|L4.5408|
+001146  f7fffffe          BL       GPIO_SetBits
+00114a  703d              STRB     r5,[r7,#0]            ;1621
+00114c  48f5              LDR      r0,|L4.5412|
+00114e  7005              STRB     r5,[r0,#0]            ;1622
+001150  f88b5000          STRB     r5,[r11,#0]           ;1623
+                  |L4.4436|
+001154  81e5              STRH     r5,[r4,#0xe]          ;1625
+001156  e8bd5ffc          POP      {r2-r12,lr}           ;1626
+00115a  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.4446|
+00115e  48f2              LDR      r0,|L4.5416|
+001160  6fc1              LDR      r1,[r0,#0x7c]         ;1604  ; Run_Control
+001162  6041              STR      r1,[r0,#4]            ;1604  ; Run_Control
+001164  f8d01088          LDR      r1,[r0,#0x88]         ;1605  ; Run_Control
+001168  6081              STR      r1,[r0,#8]            ;1605  ; Run_Control
+00116a  48f0              LDR      r0,|L4.5420|
+00116c  7005              STRB     r5,[r0,#0]            ;1606
 00116e  e000              B        |L4.4466|
-001170  e013              B        |L4.4506|
+001170  e016              B        |L4.4512|
                   |L4.4466|
-001172  f8808000          STRB     r8,[r0,#0]            ;1608
-001176  f44f5100          MOV      r1,#0x2000            ;1609
-00117a  4630              MOV      r0,r6                 ;1609
-00117c  f7fffffe          BL       GPIO_ResetBits
-001180  f44f70fa          MOV      r0,#0x1f4             ;1610
-001184  f7fffffe          BL       Delay_ms
-001188  2102              MOVS     r1,#2                 ;1611
-00118a  4630              MOV      r0,r6                 ;1611
-00118c  f7fffffe          BL       GPIO_SetBits
-001190  f88b9000          STRB     r9,[r11,#0]           ;1612
-001194  f8878000          STRB     r8,[r7,#0]            ;1613
-001198  e7d9              B        |L4.4430|
-                  |L4.4506|
-00119a  48ec              LDR      r0,|L4.5452|
-00119c  7800              LDRB     r0,[r0,#0]            ;1630  ; calmode
-00119e  2803              CMP      r0,#3                 ;1630
-0011a0  d004              BEQ      |L4.4524|
-0011a2  2804              CMP      r0,#4                 ;1646
-0011a4  d035              BEQ      |L4.4626|
-0011a6  2805              CMP      r0,#5                 ;1653
-0011a8  d042              BEQ      |L4.4656|
-0011aa  e04f              B        |L4.4684|
-                  |L4.4524|
-0011ac  7a60              LDRB     r0,[r4,#9]            ;1632  ; calstep
-0011ae  2801              CMP      r0,#1                 ;1632
-0011b0  d00f              BEQ      |L4.4562|
-0011b2  7a60              LDRB     r0,[r4,#9]            ;1635  ; calstep
-0011b4  2802              CMP      r0,#2                 ;1635
-0011b6  d010              BEQ      |L4.4570|
-0011b8  7a60              LDRB     r0,[r4,#9]            ;1637  ; calstep
-0011ba  2803              CMP      r0,#3                 ;1637
-0011bc  d011              BEQ      |L4.4578|
-0011be  7a60              LDRB     r0,[r4,#9]            ;1639  ; calstep
-0011c0  2804              CMP      r0,#4                 ;1639
-0011c2  d019              BEQ      |L4.4600|
-0011c4  7a60              LDRB     r0,[r4,#9]            ;1641  ; calstep
-0011c6  2805              CMP      r0,#5                 ;1641
+001172  48ef              LDR      r0,|L4.5424|
+001174  f04f0801          MOV      r8,#1                 ;1609
+001178  f8808000          STRB     r8,[r0,#0]            ;1609
+00117c  f44f5100          MOV      r1,#0x2000            ;1610
+001180  4630              MOV      r0,r6                 ;1610
+001182  f7fffffe          BL       GPIO_ResetBits
+001186  f44f70fa          MOV      r0,#0x1f4             ;1611
+00118a  f7fffffe          BL       Delay_ms
+00118e  2102              MOVS     r1,#2                 ;1612
+001190  4630              MOV      r0,r6                 ;1612
+001192  f7fffffe          BL       GPIO_SetBits
+001196  f88b9000          STRB     r9,[r11,#0]           ;1613
+00119a  f8878000          STRB     r8,[r7,#0]            ;1614
+00119e  e7d9              B        |L4.4436|
+                  |L4.4512|
+0011a0  48e4              LDR      r0,|L4.5428|
+0011a2  7800              LDRB     r0,[r0,#0]            ;1631  ; calmode
+0011a4  2803              CMP      r0,#3                 ;1631
+0011a6  d004              BEQ      |L4.4530|
+0011a8  2804              CMP      r0,#4                 ;1647
+0011aa  d035              BEQ      |L4.4632|
+0011ac  2805              CMP      r0,#5                 ;1654
+0011ae  d042              BEQ      |L4.4662|
+0011b0  e04f              B        |L4.4690|
+                  |L4.4530|
+0011b2  7a60              LDRB     r0,[r4,#9]            ;1633  ; calstep
+0011b4  2801              CMP      r0,#1                 ;1633
+0011b6  d00f              BEQ      |L4.4568|
+0011b8  7a60              LDRB     r0,[r4,#9]            ;1636  ; calstep
+0011ba  2802              CMP      r0,#2                 ;1636
+0011bc  d010              BEQ      |L4.4576|
+0011be  7a60              LDRB     r0,[r4,#9]            ;1638  ; calstep
+0011c0  2803              CMP      r0,#3                 ;1638
+0011c2  d011              BEQ      |L4.4584|
+0011c4  7a60              LDRB     r0,[r4,#9]            ;1640  ; calstep
+0011c6  2804              CMP      r0,#4                 ;1640
 0011c8  d01a              BEQ      |L4.4608|
-0011ca  7a60              LDRB     r0,[r4,#9]            ;1643  ; calstep
-0011cc  2806              CMP      r0,#6                 ;1643
+0011ca  7a60              LDRB     r0,[r4,#9]            ;1642  ; calstep
+0011cc  2805              CMP      r0,#5                 ;1642
 0011ce  d01b              BEQ      |L4.4616|
-0011d0  e03c              B        |L4.4684|
-                  |L4.4562|
-0011d2  2001              MOVS     r0,#1                 ;1634
-0011d4  f7fffffe          BL       PowVCal
-0011d8  e038              B        |L4.4684|
-                  |L4.4570|
-0011da  2002              MOVS     r0,#2                 ;1636
-0011dc  f7fffffe          BL       PowVCal
-0011e0  e034              B        |L4.4684|
-                  |L4.4578|
-0011e2  2003              MOVS     r0,#3                 ;1638
-0011e4  f7fffffe          BL       PowVCal
-0011e8  e030              B        |L4.4684|
-                  |L4.4586|
-0011ea  e187              B        |L4.5372|
-                  |L4.4588|
-0011ec  e09e              B        |L4.4908|
-                  |L4.4590|
-0011ee  e032              B        |L4.4694|
+0011d0  7a60              LDRB     r0,[r4,#9]            ;1644  ; calstep
+0011d2  2806              CMP      r0,#6                 ;1644
+0011d4  d01c              BEQ      |L4.4624|
+0011d6  e03c              B        |L4.4690|
+                  |L4.4568|
+0011d8  2001              MOVS     r0,#1                 ;1635
+0011da  f7fffffe          BL       PowVCal
+0011de  e038              B        |L4.4690|
+                  |L4.4576|
+0011e0  2002              MOVS     r0,#2                 ;1637
+0011e2  f7fffffe          BL       PowVCal
+0011e6  e034              B        |L4.4690|
+                  |L4.4584|
+0011e8  2003              MOVS     r0,#3                 ;1639
+0011ea  f7fffffe          BL       PowVCal
+0011ee  e030              B        |L4.4690|
                   |L4.4592|
-0011f0  e0a3              B        |L4.4922|
+0011f0  e187              B        |L4.5378|
                   |L4.4594|
-0011f2  e0d7              B        |L4.5028|
+0011f2  e09e              B        |L4.4914|
                   |L4.4596|
-0011f4  e107              B        |L4.5126|
+0011f4  e032              B        |L4.4700|
                   |L4.4598|
-0011f6  e12e              B        |L4.5206|
+0011f6  e0a3              B        |L4.4928|
                   |L4.4600|
-0011f8  2004              MOVS     r0,#4                 ;1640
-0011fa  f7fffffe          BL       PowVCal
-0011fe  e025              B        |L4.4684|
+0011f8  e0d7              B        |L4.5034|
+                  |L4.4602|
+0011fa  e107              B        |L4.5132|
+                  |L4.4604|
+0011fc  e12e              B        |L4.5212|
+                  |L4.4606|
+0011fe  e15d              B        |L4.5308|
                   |L4.4608|
-001200  2005              MOVS     r0,#5                 ;1642
+001200  2004              MOVS     r0,#4                 ;1641
 001202  f7fffffe          BL       PowVCal
-001206  e021              B        |L4.4684|
+001206  e024              B        |L4.4690|
                   |L4.4616|
-001208  2006              MOVS     r0,#6                 ;1644
+001208  2005              MOVS     r0,#5                 ;1643
 00120a  f7fffffe          BL       PowVCal
-00120e  e01d              B        |L4.4684|
+00120e  e020              B        |L4.4690|
                   |L4.4624|
-001210  e151              B        |L4.5302|
-                  |L4.4626|
-001212  7a60              LDRB     r0,[r4,#9]            ;1647  ; calstep
-001214  2801              CMP      r0,#1                 ;1647
-001216  d003              BEQ      |L4.4640|
-001218  7a60              LDRB     r0,[r4,#9]            ;1650  ; calstep
-00121a  2802              CMP      r0,#2                 ;1650
-00121c  d004              BEQ      |L4.4648|
-00121e  e015              B        |L4.4684|
-                  |L4.4640|
-001220  2001              MOVS     r0,#1                 ;1649
-001222  f7fffffe          BL       LoadCCal
-001226  e011              B        |L4.4684|
-                  |L4.4648|
-001228  2002              MOVS     r0,#2                 ;1651
-00122a  f7fffffe          BL       LoadCCal
-00122e  e00d              B        |L4.4684|
-                  |L4.4656|
-001230  7a60              LDRB     r0,[r4,#9]            ;1654  ; calstep
-001232  2801              CMP      r0,#1                 ;1654
-001234  d003              BEQ      |L4.4670|
-001236  7a60              LDRB     r0,[r4,#9]            ;1657  ; calstep
-001238  2802              CMP      r0,#2                 ;1657
-00123a  d004              BEQ      |L4.4678|
-00123c  e006              B        |L4.4684|
-                  |L4.4670|
-00123e  2001              MOVS     r0,#1                 ;1656
-001240  f7fffffe          BL       PowCCal
-001244  e002              B        |L4.4684|
-                  |L4.4678|
-001246  2002              MOVS     r0,#2                 ;1658
-001248  f7fffffe          BL       PowCCal
+001210  2006              MOVS     r0,#6                 ;1645
+001212  f7fffffe          BL       PowVCal
+001216  e01c              B        |L4.4690|
+                  |L4.4632|
+001218  7a60              LDRB     r0,[r4,#9]            ;1648  ; calstep
+00121a  2801              CMP      r0,#1                 ;1648
+00121c  d003              BEQ      |L4.4646|
+00121e  7a60              LDRB     r0,[r4,#9]            ;1651  ; calstep
+001220  2802              CMP      r0,#2                 ;1651
+001222  d004              BEQ      |L4.4654|
+001224  e015              B        |L4.4690|
+                  |L4.4646|
+001226  2001              MOVS     r0,#1                 ;1650
+001228  f7fffffe          BL       LoadCCal
+00122c  e011              B        |L4.4690|
+                  |L4.4654|
+00122e  2002              MOVS     r0,#2                 ;1652
+001230  f7fffffe          BL       LoadCCal
+001234  e00d              B        |L4.4690|
+                  |L4.4662|
+001236  7a60              LDRB     r0,[r4,#9]            ;1655  ; calstep
+001238  2801              CMP      r0,#1                 ;1655
+00123a  d003              BEQ      |L4.4676|
+00123c  7a60              LDRB     r0,[r4,#9]            ;1658  ; calstep
+00123e  2802              CMP      r0,#2                 ;1658
+001240  d004              BEQ      |L4.4684|
+001242  e006              B        |L4.4690|
+                  |L4.4676|
+001244  2001              MOVS     r0,#1                 ;1657
+001246  f7fffffe          BL       PowCCal
+00124a  e002              B        |L4.4690|
                   |L4.4684|
-00124c  81e5              STRH     r5,[r4,#0xe]          ;1661
-00124e  e8bd5ffc          POP      {r2-r12,lr}           ;1662
-001252  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.4694|
-001256  7808              LDRB     r0,[r1,#0]            ;1671  ; page_sw
-001258  2803              CMP      r0,#3                 ;1671
-00125a  d004              BEQ      |L4.4710|
-00125c  2804              CMP      r0,#4                 ;1671
-00125e  d056              BEQ      |L4.4878|
-001260  2808              CMP      r0,#8                 ;1671
-001262  d15a              BNE      |L4.4890|
-001264  e02d              B        |L4.4802|
-                  |L4.4710|
-001266  79a0              LDRB     r0,[r4,#6]            ;1675  ; at
-001268  4fb9              LDR      r7,|L4.5456|
-00126a  b130              CBZ      r0,|L4.4730|
-00126c  79a0              LDRB     r0,[r4,#6]            ;1682  ; at
-00126e  2801              CMP      r0,#1                 ;1682
-001270  d014              BEQ      |L4.4764|
-001272  79a0              LDRB     r0,[r4,#6]            ;1688  ; at
-001274  2802              CMP      r0,#2                 ;1688
-001276  d022              BEQ      |L4.4798|
-001278  e023              B        |L4.4802|
-                  |L4.4730|
-00127a  f44f5a00          MOV      r10,#0x2000           ;1677
-00127e  4651              MOV      r1,r10                ;1677
-001280  4630              MOV      r0,r6                 ;1677
-001282  f7fffffe          BL       GPIO_SetBits
-001286  4651              MOV      r1,r10                ;1678
-001288  48b2              LDR      r0,|L4.5460|
-00128a  f7fffffe          BL       GPIO_ResetBits
-00128e  79a0              LDRB     r0,[r4,#6]            ;1679  ; at
-001290  1c40              ADDS     r0,r0,#1              ;1679
-001292  71a0              STRB     r0,[r4,#6]            ;1679
-001294  70a5              STRB     r5,[r4,#2]            ;1680
-001296  2001              MOVS     r0,#1                 ;1681
-001298  7038              STRB     r0,[r7,#0]            ;1681
-00129a  e012              B        |L4.4802|
-                  |L4.4764|
-00129c  f44f5a00          MOV      r10,#0x2000           ;1683
-0012a0  4651              MOV      r1,r10                ;1683
-0012a2  4630              MOV      r0,r6                 ;1683
-0012a4  f7fffffe          BL       GPIO_SetBits
-0012a8  4651              MOV      r1,r10                ;1684
-0012aa  48aa              LDR      r0,|L4.5460|
-0012ac  f7fffffe          BL       GPIO_SetBits
-0012b0  2001              MOVS     r0,#1                 ;1685
-0012b2  70a0              STRB     r0,[r4,#2]            ;1685
-0012b4  79a1              LDRB     r1,[r4,#6]            ;1686  ; at
-0012b6  1c49              ADDS     r1,r1,#1              ;1686
-0012b8  71a1              STRB     r1,[r4,#6]            ;1686
-0012ba  7038              STRB     r0,[r7,#0]            ;1687
-0012bc  e001              B        |L4.4802|
-                  |L4.4798|
-0012be  71a5              STRB     r5,[r4,#6]            ;1689
-0012c0  703d              STRB     r5,[r7,#0]            ;1690
-                  |L4.4802|
-0012c2  49a2              LDR      r1,|L4.5452|
-0012c4  7808              LDRB     r0,[r1,#0]            ;1695  ; calmode
-0012c6  2802              CMP      r0,#2                 ;1695
-0012c8  d008              BEQ      |L4.4828|
-0012ca  2804              CMP      r0,#4                 ;1699
-0012cc  d00b              BEQ      |L4.4838|
-0012ce  2803              CMP      r0,#3                 ;1702
-0012d0  d00e              BEQ      |L4.4848|
-0012d2  2805              CMP      r0,#5                 ;1705
-0012d4  d011              BEQ      |L4.4858|
-0012d6  2801              CMP      r0,#1                 ;1708
-0012d8  d014              BEQ      |L4.4868|
-0012da  e01e              B        |L4.4890|
-                  |L4.4828|
-0012dc  2004              MOVS     r0,#4                 ;1697
-0012de  7008              STRB     r0,[r1,#0]            ;1697
-0012e0  f7fffffe          BL       IO_OFF
-0012e4  e019              B        |L4.4890|
-                  |L4.4838|
-0012e6  f8819000          STRB     r9,[r1,#0]            ;1700
-0012ea  f7fffffe          BL       IO_OFF
-0012ee  e014              B        |L4.4890|
-                  |L4.4848|
-0012f0  2005              MOVS     r0,#5                 ;1703
-0012f2  7008              STRB     r0,[r1,#0]            ;1703
-0012f4  f7fffffe          BL       IO_OFF
-0012f8  e00f              B        |L4.4890|
-                  |L4.4858|
-0012fa  2001              MOVS     r0,#1                 ;1706
-0012fc  7008              STRB     r0,[r1,#0]            ;1706
-0012fe  f7fffffe          BL       IO_OFF
-001302  e00a              B        |L4.4890|
-                  |L4.4868|
-001304  f8818000          STRB     r8,[r1,#0]            ;1709
-001308  f7fffffe          BL       IO_OFF
-00130c  e005              B        |L4.4890|
-                  |L4.4878|
-00130e  4892              LDR      r0,|L4.5464|
-001310  7800              LDRB     r0,[r0,#0]            ;1715  ; cflag
-001312  b138              CBZ      r0,|L4.4900|
-001314  2000              MOVS     r0,#0                 ;1719
-001316  f7fffffe          BL       C_SW
-                  |L4.4890|
-00131a  81e5              STRH     r5,[r4,#0xe]          ;1723
-00131c  e8bd5ffc          POP      {r2-r12,lr}           ;1724
-001320  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.4900|
-001324  2001              MOVS     r0,#1                 ;1717
-001326  f7fffffe          BL       C_SW
-00132a  e7f6              B        |L4.4890|
-                  |L4.4908|
-00132c  2001              MOVS     r0,#1                 ;1736
-00132e  71e0              STRB     r0,[r4,#7]            ;1736
-001330  81e5              STRH     r5,[r4,#0xe]          ;1737
-001332  e8bd5ffc          POP      {r2-r12,lr}           ;1738
-001336  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.4922|
-00133a  4888              LDR      r0,|L4.5468|
-00133c  6800              LDR      r0,[r0,#0]            ;1742  ; hWinR
-00133e  f7fffffe          BL       WM_DeleteWindow
-001342  4887              LDR      r0,|L4.5472|
-001344  6800              LDR      r0,[r0,#0]            ;1743  ; hWinWind
-001346  f7fffffe          BL       WM_DeleteWindow
-00134a  4886              LDR      r0,|L4.5476|
-00134c  6800              LDR      r0,[r0,#0]            ;1744  ; hWinG
-00134e  f7fffffe          BL       WM_DeleteWindow
-001352  4885              LDR      r0,|L4.5480|
-001354  6800              LDR      r0,[r0,#0]            ;1745  ; load_wind
-001356  f7fffffe          BL       WM_DeleteWindow
-00135a  4884              LDR      r0,|L4.5484|
-00135c  6800              LDR      r0,[r0,#0]            ;1746  ; hWinsysinfo
-00135e  f7fffffe          BL       WM_DeleteWindow
-001362  4883              LDR      r0,|L4.5488|
-001364  6800              LDR      r0,[r0,#0]            ;1747  ; hWincdc
-001366  f7fffffe          BL       WM_DeleteWindow
-00136a  4882              LDR      r0,|L4.5492|
-00136c  6800              LDR      r0,[r0,#0]            ;1748  ; hWinset
-00136e  f7fffffe          BL       WM_DeleteWindow
-001372  f44f4100          MOV      r1,#0x8000            ;1749
-001376  4870              LDR      r0,|L4.5432|
-001378  f7fffffe          BL       GPIO_SetBits
-00137c  2102              MOVS     r1,#2                 ;1750
-00137e  4630              MOV      r0,r6                 ;1750
-001380  f7fffffe          BL       GPIO_ResetBits
-001384  f44f70fa          MOV      r0,#0x1f4             ;1751
-001388  f7fffffe          BL       Delay_ms
-00138c  f44f5100          MOV      r1,#0x2000            ;1752
-001390  4630              MOV      r0,r6                 ;1752
-001392  f7fffffe          BL       GPIO_SetBits
-001396  f7fffffe          BL       CreateR
-00139a  81e5              STRH     r5,[r4,#0xe]          ;1754
-00139c  e8bd5ffc          POP      {r2-r12,lr}           ;1755
-0013a0  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5028|
-0013a4  486d              LDR      r0,|L4.5468|
-0013a6  6800              LDR      r0,[r0,#0]            ;1760  ; hWinR
-0013a8  f7fffffe          BL       WM_DeleteWindow
-0013ac  486c              LDR      r0,|L4.5472|
-0013ae  6800              LDR      r0,[r0,#0]            ;1761  ; hWinWind
-0013b0  f7fffffe          BL       WM_DeleteWindow
-0013b4  486b              LDR      r0,|L4.5476|
-0013b6  6800              LDR      r0,[r0,#0]            ;1762  ; hWinG
-0013b8  f7fffffe          BL       WM_DeleteWindow
-0013bc  486a              LDR      r0,|L4.5480|
-0013be  6800              LDR      r0,[r0,#0]            ;1763  ; load_wind
-0013c0  f7fffffe          BL       WM_DeleteWindow
-0013c4  4869              LDR      r0,|L4.5484|
-0013c6  6800              LDR      r0,[r0,#0]            ;1764  ; hWinsysinfo
-0013c8  f7fffffe          BL       WM_DeleteWindow
-0013cc  4868              LDR      r0,|L4.5488|
-0013ce  6800              LDR      r0,[r0,#0]            ;1765  ; hWincdc
-0013d0  f7fffffe          BL       WM_DeleteWindow
-0013d4  4867              LDR      r0,|L4.5492|
-0013d6  6800              LDR      r0,[r0,#0]            ;1766  ; hWinset
-0013d8  f7fffffe          BL       WM_DeleteWindow
-0013dc  f7fffffe          BL       CreateWindow2
-0013e0  7325              STRB     r5,[r4,#0xc]          ;1768
-0013e2  2102              MOVS     r1,#2                 ;1769
-0013e4  4630              MOV      r0,r6                 ;1769
-0013e6  f7fffffe          BL       GPIO_ResetBits
-0013ea  f44f70fa          MOV      r0,#0x1f4             ;1770
-0013ee  f7fffffe          BL       Delay_ms
-0013f2  f44f5100          MOV      r1,#0x2000            ;1771
-0013f6  4630              MOV      r0,r6                 ;1771
-0013f8  f7fffffe          BL       GPIO_SetBits
-0013fc  81e5              STRH     r5,[r4,#0xe]          ;1772
-0013fe  e8bd5ffc          POP      {r2-r12,lr}           ;1773
-001402  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5126|
-001406  4855              LDR      r0,|L4.5468|
-001408  6800              LDR      r0,[r0,#0]            ;1778  ; hWinR
-00140a  f7fffffe          BL       WM_DeleteWindow
-00140e  4854              LDR      r0,|L4.5472|
-001410  6800              LDR      r0,[r0,#0]            ;1779  ; hWinWind
-001412  f7fffffe          BL       WM_DeleteWindow
-001416  4853              LDR      r0,|L4.5476|
-001418  6800              LDR      r0,[r0,#0]            ;1780  ; hWinG
-00141a  f7fffffe          BL       WM_DeleteWindow
-00141e  4852              LDR      r0,|L4.5480|
-001420  6800              LDR      r0,[r0,#0]            ;1781  ; load_wind
-001422  f7fffffe          BL       WM_DeleteWindow
-001426  4851              LDR      r0,|L4.5484|
-001428  6800              LDR      r0,[r0,#0]            ;1782  ; hWinsysinfo
-00142a  f7fffffe          BL       WM_DeleteWindow
-00142e  4850              LDR      r0,|L4.5488|
-001430  6800              LDR      r0,[r0,#0]            ;1783  ; hWincdc
-001432  f7fffffe          BL       WM_DeleteWindow
-001436  484f              LDR      r0,|L4.5492|
-001438  6800              LDR      r0,[r0,#0]            ;1784  ; hWinset
-00143a  f7fffffe          BL       WM_DeleteWindow
-00143e  f7fffffe          BL       CreateWindow
-001442  f44f4100          MOV      r1,#0x8000            ;1786
-001446  483c              LDR      r0,|L4.5432|
-001448  f7fffffe          BL       GPIO_SetBits
-00144c  81e5              STRH     r5,[r4,#0xe]          ;1787
-00144e  e8bd5ffc          POP      {r2-r12,lr}           ;1788
-001452  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5206|
-001456  4841              LDR      r0,|L4.5468|
-001458  6800              LDR      r0,[r0,#0]            ;1793  ; hWinR
-00145a  f7fffffe          BL       WM_DeleteWindow
-00145e  4840              LDR      r0,|L4.5472|
-001460  6800              LDR      r0,[r0,#0]            ;1794  ; hWinWind
-001462  f7fffffe          BL       WM_DeleteWindow
-001466  483f              LDR      r0,|L4.5476|
-001468  6800              LDR      r0,[r0,#0]            ;1795  ; hWinG
-00146a  f7fffffe          BL       WM_DeleteWindow
-00146e  483e              LDR      r0,|L4.5480|
-001470  6800              LDR      r0,[r0,#0]            ;1796  ; load_wind
-001472  f7fffffe          BL       WM_DeleteWindow
-001476  483d              LDR      r0,|L4.5484|
-001478  6800              LDR      r0,[r0,#0]            ;1797  ; hWinsysinfo
-00147a  f7fffffe          BL       WM_DeleteWindow
-00147e  483c              LDR      r0,|L4.5488|
-001480  6800              LDR      r0,[r0,#0]            ;1798  ; hWincdc
-001482  f7fffffe          BL       WM_DeleteWindow
-001486  483b              LDR      r0,|L4.5492|
-001488  6800              LDR      r0,[r0,#0]            ;1799  ; hWinset
-00148a  f7fffffe          BL       WM_DeleteWindow
-00148e  2102              MOVS     r1,#2                 ;1800
-001490  4630              MOV      r0,r6                 ;1800
-001492  f7fffffe          BL       GPIO_ResetBits
-001496  f44f70fa          MOV      r0,#0x1f4             ;1801
-00149a  f7fffffe          BL       Delay_ms
-00149e  f44f5100          MOV      r1,#0x2000            ;1802
-0014a2  4630              MOV      r0,r6                 ;1802
-0014a4  f7fffffe          BL       GPIO_SetBits
-0014a8  f7fffffe          BL       CreateCDC
-0014ac  81e5              STRH     r5,[r4,#0xe]          ;1804
-0014ae  e8bd5ffc          POP      {r2-r12,lr}           ;1805
-0014b2  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5302|
-0014b6  4829              LDR      r0,|L4.5468|
-0014b8  6800              LDR      r0,[r0,#0]            ;1810  ; hWinR
-0014ba  f7fffffe          BL       WM_DeleteWindow
-0014be  4828              LDR      r0,|L4.5472|
-0014c0  6800              LDR      r0,[r0,#0]            ;1811  ; hWinWind
-0014c2  f7fffffe          BL       WM_DeleteWindow
-0014c6  4827              LDR      r0,|L4.5476|
-0014c8  6800              LDR      r0,[r0,#0]            ;1812  ; hWinG
-0014ca  f7fffffe          BL       WM_DeleteWindow
-0014ce  4826              LDR      r0,|L4.5480|
-0014d0  6800              LDR      r0,[r0,#0]            ;1813  ; load_wind
-0014d2  f7fffffe          BL       WM_DeleteWindow
-0014d6  4825              LDR      r0,|L4.5484|
-0014d8  6800              LDR      r0,[r0,#0]            ;1814  ; hWinsysinfo
-0014da  f7fffffe          BL       WM_DeleteWindow
-0014de  4824              LDR      r0,|L4.5488|
-0014e0  6800              LDR      r0,[r0,#0]            ;1815  ; hWincdc
-0014e2  f7fffffe          BL       WM_DeleteWindow
-0014e6  4823              LDR      r0,|L4.5492|
-0014e8  6800              LDR      r0,[r0,#0]            ;1816  ; hWinset
-0014ea  f7fffffe          BL       WM_DeleteWindow
-0014ee  f7fffffe          BL       CreateG
-0014f2  81e5              STRH     r5,[r4,#0xe]          ;1818
-0014f4  e8bd5ffc          POP      {r2-r12,lr}           ;1819
-0014f8  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5372|
-0014fc  4817              LDR      r0,|L4.5468|
-0014fe  6800              LDR      r0,[r0,#0]            ;1824  ; hWinR
-001500  f7fffffe          BL       WM_DeleteWindow
-001504  4816              LDR      r0,|L4.5472|
-001506  6800              LDR      r0,[r0,#0]            ;1825  ; hWinWind
-001508  f7fffffe          BL       WM_DeleteWindow
-00150c  4815              LDR      r0,|L4.5476|
-00150e  6800              LDR      r0,[r0,#0]            ;1826  ; hWinG
-001510  f7fffffe          BL       WM_DeleteWindow
-001514  4814              LDR      r0,|L4.5480|
-001516  6800              LDR      r0,[r0,#0]            ;1827  ; load_wind
-001518  f7fffffe          BL       WM_DeleteWindow
-00151c  4813              LDR      r0,|L4.5484|
-00151e  6800              LDR      r0,[r0,#0]            ;1828  ; hWinsysinfo
-001520  f7fffffe          BL       WM_DeleteWindow
-001524  4812              LDR      r0,|L4.5488|
-001526  6800              LDR      r0,[r0,#0]            ;1829  ; hWincdc
-001528  f7fffffe          BL       WM_DeleteWindow
-00152c  4811              LDR      r0,|L4.5492|
-00152e  6800              LDR      r0,[r0,#0]            ;1830  ; hWinset
-001530  f7fffffe          BL       WM_DeleteWindow
-001534  2102              MOVS     r1,#2                 ;1831
-001536  e01f              B        |L4.5496|
-                  |L4.5432|
+00124c  2002              MOVS     r0,#2                 ;1659
+00124e  f7fffffe          BL       PowCCal
+                  |L4.4690|
+001252  81e5              STRH     r5,[r4,#0xe]          ;1662
+001254  e8bd5ffc          POP      {r2-r12,lr}           ;1663
+001258  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.4700|
+00125c  7808              LDRB     r0,[r1,#0]            ;1672  ; page_sw
+00125e  2803              CMP      r0,#3                 ;1672
+001260  d004              BEQ      |L4.4716|
+001262  2804              CMP      r0,#4                 ;1672
+001264  d056              BEQ      |L4.4884|
+001266  2808              CMP      r0,#8                 ;1672
+001268  d15a              BNE      |L4.4896|
+00126a  e02d              B        |L4.4808|
+                  |L4.4716|
+00126c  79a0              LDRB     r0,[r4,#6]            ;1676  ; at
+00126e  4fb2              LDR      r7,|L4.5432|
+001270  b130              CBZ      r0,|L4.4736|
+001272  79a0              LDRB     r0,[r4,#6]            ;1683  ; at
+001274  2801              CMP      r0,#1                 ;1683
+001276  d014              BEQ      |L4.4770|
+001278  79a0              LDRB     r0,[r4,#6]            ;1689  ; at
+00127a  2802              CMP      r0,#2                 ;1689
+00127c  d022              BEQ      |L4.4804|
+00127e  e023              B        |L4.4808|
+                  |L4.4736|
+001280  f44f5a00          MOV      r10,#0x2000           ;1678
+001284  4651              MOV      r1,r10                ;1678
+001286  4630              MOV      r0,r6                 ;1678
+001288  f7fffffe          BL       GPIO_SetBits
+00128c  4651              MOV      r1,r10                ;1679
+00128e  48ab              LDR      r0,|L4.5436|
+001290  f7fffffe          BL       GPIO_ResetBits
+001294  79a0              LDRB     r0,[r4,#6]            ;1680  ; at
+001296  1c40              ADDS     r0,r0,#1              ;1680
+001298  71a0              STRB     r0,[r4,#6]            ;1680
+00129a  70a5              STRB     r5,[r4,#2]            ;1681
+00129c  2001              MOVS     r0,#1                 ;1682
+00129e  7038              STRB     r0,[r7,#0]            ;1682
+0012a0  e012              B        |L4.4808|
+                  |L4.4770|
+0012a2  f44f5a00          MOV      r10,#0x2000           ;1684
+0012a6  4651              MOV      r1,r10                ;1684
+0012a8  4630              MOV      r0,r6                 ;1684
+0012aa  f7fffffe          BL       GPIO_SetBits
+0012ae  4651              MOV      r1,r10                ;1685
+0012b0  48a2              LDR      r0,|L4.5436|
+0012b2  f7fffffe          BL       GPIO_SetBits
+0012b6  2001              MOVS     r0,#1                 ;1686
+0012b8  70a0              STRB     r0,[r4,#2]            ;1686
+0012ba  79a1              LDRB     r1,[r4,#6]            ;1687  ; at
+0012bc  1c49              ADDS     r1,r1,#1              ;1687
+0012be  71a1              STRB     r1,[r4,#6]            ;1687
+0012c0  7038              STRB     r0,[r7,#0]            ;1688
+0012c2  e001              B        |L4.4808|
+                  |L4.4804|
+0012c4  71a5              STRB     r5,[r4,#6]            ;1690
+0012c6  703d              STRB     r5,[r7,#0]            ;1691
+                  |L4.4808|
+0012c8  499a              LDR      r1,|L4.5428|
+0012ca  7808              LDRB     r0,[r1,#0]            ;1696  ; calmode
+0012cc  2802              CMP      r0,#2                 ;1696
+0012ce  d008              BEQ      |L4.4834|
+0012d0  2804              CMP      r0,#4                 ;1700
+0012d2  d00b              BEQ      |L4.4844|
+0012d4  2803              CMP      r0,#3                 ;1703
+0012d6  d00e              BEQ      |L4.4854|
+0012d8  2805              CMP      r0,#5                 ;1706
+0012da  d011              BEQ      |L4.4864|
+0012dc  2801              CMP      r0,#1                 ;1709
+0012de  d014              BEQ      |L4.4874|
+0012e0  e01e              B        |L4.4896|
+                  |L4.4834|
+0012e2  2004              MOVS     r0,#4                 ;1698
+0012e4  7008              STRB     r0,[r1,#0]            ;1698
+0012e6  f7fffffe          BL       IO_OFF
+0012ea  e019              B        |L4.4896|
+                  |L4.4844|
+0012ec  f8819000          STRB     r9,[r1,#0]            ;1701
+0012f0  f7fffffe          BL       IO_OFF
+0012f4  e014              B        |L4.4896|
+                  |L4.4854|
+0012f6  2005              MOVS     r0,#5                 ;1704
+0012f8  7008              STRB     r0,[r1,#0]            ;1704
+0012fa  f7fffffe          BL       IO_OFF
+0012fe  e00f              B        |L4.4896|
+                  |L4.4864|
+001300  2001              MOVS     r0,#1                 ;1707
+001302  7008              STRB     r0,[r1,#0]            ;1707
+001304  f7fffffe          BL       IO_OFF
+001308  e00a              B        |L4.4896|
+                  |L4.4874|
+00130a  f8818000          STRB     r8,[r1,#0]            ;1710
+00130e  f7fffffe          BL       IO_OFF
+001312  e005              B        |L4.4896|
+                  |L4.4884|
+001314  488a              LDR      r0,|L4.5440|
+001316  7800              LDRB     r0,[r0,#0]            ;1716  ; cflag
+001318  b138              CBZ      r0,|L4.4906|
+00131a  2000              MOVS     r0,#0                 ;1720
+00131c  f7fffffe          BL       C_SW
+                  |L4.4896|
+001320  81e5              STRH     r5,[r4,#0xe]          ;1724
+001322  e8bd5ffc          POP      {r2-r12,lr}           ;1725
+001326  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.4906|
+00132a  2001              MOVS     r0,#1                 ;1718
+00132c  f7fffffe          BL       C_SW
+001330  e7f6              B        |L4.4896|
+                  |L4.4914|
+001332  2001              MOVS     r0,#1                 ;1737
+001334  71e0              STRB     r0,[r4,#7]            ;1737
+001336  81e5              STRH     r5,[r4,#0xe]          ;1738
+001338  e8bd5ffc          POP      {r2-r12,lr}           ;1739
+00133c  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.4928|
+001340  4880              LDR      r0,|L4.5444|
+001342  6800              LDR      r0,[r0,#0]            ;1743  ; hWinR
+001344  f7fffffe          BL       WM_DeleteWindow
+001348  487f              LDR      r0,|L4.5448|
+00134a  6800              LDR      r0,[r0,#0]            ;1744  ; hWinWind
+00134c  f7fffffe          BL       WM_DeleteWindow
+001350  487e              LDR      r0,|L4.5452|
+001352  6800              LDR      r0,[r0,#0]            ;1745  ; hWinG
+001354  f7fffffe          BL       WM_DeleteWindow
+001358  487d              LDR      r0,|L4.5456|
+00135a  6800              LDR      r0,[r0,#0]            ;1746  ; load_wind
+00135c  f7fffffe          BL       WM_DeleteWindow
+001360  487c              LDR      r0,|L4.5460|
+001362  6800              LDR      r0,[r0,#0]            ;1747  ; hWinsysinfo
+001364  f7fffffe          BL       WM_DeleteWindow
+001368  487b              LDR      r0,|L4.5464|
+00136a  6800              LDR      r0,[r0,#0]            ;1748  ; hWincdc
+00136c  f7fffffe          BL       WM_DeleteWindow
+001370  487a              LDR      r0,|L4.5468|
+001372  6800              LDR      r0,[r0,#0]            ;1749  ; hWinset
+001374  f7fffffe          BL       WM_DeleteWindow
+001378  f44f4100          MOV      r1,#0x8000            ;1750
+00137c  4868              LDR      r0,|L4.5408|
+00137e  f7fffffe          BL       GPIO_SetBits
+001382  2102              MOVS     r1,#2                 ;1751
+001384  4630              MOV      r0,r6                 ;1751
+001386  f7fffffe          BL       GPIO_ResetBits
+00138a  f44f70fa          MOV      r0,#0x1f4             ;1752
+00138e  f7fffffe          BL       Delay_ms
+001392  f44f5100          MOV      r1,#0x2000            ;1753
+001396  4630              MOV      r0,r6                 ;1753
+001398  f7fffffe          BL       GPIO_SetBits
+00139c  f7fffffe          BL       CreateR
+0013a0  81e5              STRH     r5,[r4,#0xe]          ;1755
+0013a2  e8bd5ffc          POP      {r2-r12,lr}           ;1756
+0013a6  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5034|
+0013aa  4866              LDR      r0,|L4.5444|
+0013ac  6800              LDR      r0,[r0,#0]            ;1761  ; hWinR
+0013ae  f7fffffe          BL       WM_DeleteWindow
+0013b2  4865              LDR      r0,|L4.5448|
+0013b4  6800              LDR      r0,[r0,#0]            ;1762  ; hWinWind
+0013b6  f7fffffe          BL       WM_DeleteWindow
+0013ba  4864              LDR      r0,|L4.5452|
+0013bc  6800              LDR      r0,[r0,#0]            ;1763  ; hWinG
+0013be  f7fffffe          BL       WM_DeleteWindow
+0013c2  4863              LDR      r0,|L4.5456|
+0013c4  6800              LDR      r0,[r0,#0]            ;1764  ; load_wind
+0013c6  f7fffffe          BL       WM_DeleteWindow
+0013ca  4862              LDR      r0,|L4.5460|
+0013cc  6800              LDR      r0,[r0,#0]            ;1765  ; hWinsysinfo
+0013ce  f7fffffe          BL       WM_DeleteWindow
+0013d2  4861              LDR      r0,|L4.5464|
+0013d4  6800              LDR      r0,[r0,#0]            ;1766  ; hWincdc
+0013d6  f7fffffe          BL       WM_DeleteWindow
+0013da  4860              LDR      r0,|L4.5468|
+0013dc  6800              LDR      r0,[r0,#0]            ;1767  ; hWinset
+0013de  f7fffffe          BL       WM_DeleteWindow
+0013e2  f7fffffe          BL       CreateWindow2
+0013e6  7325              STRB     r5,[r4,#0xc]          ;1769
+0013e8  2102              MOVS     r1,#2                 ;1770
+0013ea  4630              MOV      r0,r6                 ;1770
+0013ec  f7fffffe          BL       GPIO_ResetBits
+0013f0  f44f70fa          MOV      r0,#0x1f4             ;1771
+0013f4  f7fffffe          BL       Delay_ms
+0013f8  f44f5100          MOV      r1,#0x2000            ;1772
+0013fc  4630              MOV      r0,r6                 ;1772
+0013fe  f7fffffe          BL       GPIO_SetBits
+001402  81e5              STRH     r5,[r4,#0xe]          ;1773
+001404  e8bd5ffc          POP      {r2-r12,lr}           ;1774
+001408  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5132|
+00140c  484d              LDR      r0,|L4.5444|
+00140e  6800              LDR      r0,[r0,#0]            ;1779  ; hWinR
+001410  f7fffffe          BL       WM_DeleteWindow
+001414  484c              LDR      r0,|L4.5448|
+001416  6800              LDR      r0,[r0,#0]            ;1780  ; hWinWind
+001418  f7fffffe          BL       WM_DeleteWindow
+00141c  484b              LDR      r0,|L4.5452|
+00141e  6800              LDR      r0,[r0,#0]            ;1781  ; hWinG
+001420  f7fffffe          BL       WM_DeleteWindow
+001424  484a              LDR      r0,|L4.5456|
+001426  6800              LDR      r0,[r0,#0]            ;1782  ; load_wind
+001428  f7fffffe          BL       WM_DeleteWindow
+00142c  4849              LDR      r0,|L4.5460|
+00142e  6800              LDR      r0,[r0,#0]            ;1783  ; hWinsysinfo
+001430  f7fffffe          BL       WM_DeleteWindow
+001434  4848              LDR      r0,|L4.5464|
+001436  6800              LDR      r0,[r0,#0]            ;1784  ; hWincdc
+001438  f7fffffe          BL       WM_DeleteWindow
+00143c  4847              LDR      r0,|L4.5468|
+00143e  6800              LDR      r0,[r0,#0]            ;1785  ; hWinset
+001440  f7fffffe          BL       WM_DeleteWindow
+001444  f7fffffe          BL       CreateWindow
+001448  f44f4100          MOV      r1,#0x8000            ;1787
+00144c  4834              LDR      r0,|L4.5408|
+00144e  f7fffffe          BL       GPIO_SetBits
+001452  81e5              STRH     r5,[r4,#0xe]          ;1788
+001454  e8bd5ffc          POP      {r2-r12,lr}           ;1789
+001458  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5212|
+00145c  4839              LDR      r0,|L4.5444|
+00145e  6800              LDR      r0,[r0,#0]            ;1794  ; hWinR
+001460  f7fffffe          BL       WM_DeleteWindow
+001464  4838              LDR      r0,|L4.5448|
+001466  6800              LDR      r0,[r0,#0]            ;1795  ; hWinWind
+001468  f7fffffe          BL       WM_DeleteWindow
+00146c  4837              LDR      r0,|L4.5452|
+00146e  6800              LDR      r0,[r0,#0]            ;1796  ; hWinG
+001470  f7fffffe          BL       WM_DeleteWindow
+001474  4836              LDR      r0,|L4.5456|
+001476  6800              LDR      r0,[r0,#0]            ;1797  ; load_wind
+001478  f7fffffe          BL       WM_DeleteWindow
+00147c  4835              LDR      r0,|L4.5460|
+00147e  6800              LDR      r0,[r0,#0]            ;1798  ; hWinsysinfo
+001480  f7fffffe          BL       WM_DeleteWindow
+001484  4834              LDR      r0,|L4.5464|
+001486  6800              LDR      r0,[r0,#0]            ;1799  ; hWincdc
+001488  f7fffffe          BL       WM_DeleteWindow
+00148c  4833              LDR      r0,|L4.5468|
+00148e  6800              LDR      r0,[r0,#0]            ;1800  ; hWinset
+001490  f7fffffe          BL       WM_DeleteWindow
+001494  2102              MOVS     r1,#2                 ;1801
+001496  4630              MOV      r0,r6                 ;1801
+001498  f7fffffe          BL       GPIO_ResetBits
+00149c  f44f70fa          MOV      r0,#0x1f4             ;1802
+0014a0  f7fffffe          BL       Delay_ms
+0014a4  f44f5100          MOV      r1,#0x2000            ;1803
+0014a8  4630              MOV      r0,r6                 ;1803
+0014aa  f7fffffe          BL       GPIO_SetBits
+0014ae  f7fffffe          BL       CreateCDC
+0014b2  81e5              STRH     r5,[r4,#0xe]          ;1805
+0014b4  e8bd5ffc          POP      {r2-r12,lr}           ;1806
+0014b8  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5308|
+0014bc  4821              LDR      r0,|L4.5444|
+0014be  6800              LDR      r0,[r0,#0]            ;1811  ; hWinR
+0014c0  f7fffffe          BL       WM_DeleteWindow
+0014c4  4820              LDR      r0,|L4.5448|
+0014c6  6800              LDR      r0,[r0,#0]            ;1812  ; hWinWind
+0014c8  f7fffffe          BL       WM_DeleteWindow
+0014cc  481f              LDR      r0,|L4.5452|
+0014ce  6800              LDR      r0,[r0,#0]            ;1813  ; hWinG
+0014d0  f7fffffe          BL       WM_DeleteWindow
+0014d4  481e              LDR      r0,|L4.5456|
+0014d6  6800              LDR      r0,[r0,#0]            ;1814  ; load_wind
+0014d8  f7fffffe          BL       WM_DeleteWindow
+0014dc  481d              LDR      r0,|L4.5460|
+0014de  6800              LDR      r0,[r0,#0]            ;1815  ; hWinsysinfo
+0014e0  f7fffffe          BL       WM_DeleteWindow
+0014e4  481c              LDR      r0,|L4.5464|
+0014e6  6800              LDR      r0,[r0,#0]            ;1816  ; hWincdc
+0014e8  f7fffffe          BL       WM_DeleteWindow
+0014ec  481b              LDR      r0,|L4.5468|
+0014ee  6800              LDR      r0,[r0,#0]            ;1817  ; hWinset
+0014f0  f7fffffe          BL       WM_DeleteWindow
+0014f4  f7fffffe          BL       CreateG
+0014f8  81e5              STRH     r5,[r4,#0xe]          ;1819
+0014fa  e8bd5ffc          POP      {r2-r12,lr}           ;1820
+0014fe  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5378|
+001502  4810              LDR      r0,|L4.5444|
+001504  6800              LDR      r0,[r0,#0]            ;1825  ; hWinR
+001506  f7fffffe          BL       WM_DeleteWindow
+00150a  480f              LDR      r0,|L4.5448|
+00150c  6800              LDR      r0,[r0,#0]            ;1826  ; hWinWind
+00150e  f7fffffe          BL       WM_DeleteWindow
+001512  480e              LDR      r0,|L4.5452|
+001514  6800              LDR      r0,[r0,#0]            ;1827  ; hWinG
+001516  f7fffffe          BL       WM_DeleteWindow
+00151a  e021              B        |L4.5472|
+                  |L4.5404|
+                          DCD      cdc_sw
+                  |L4.5408|
                           DCD      0x40020000
-                  |L4.5436|
+                  |L4.5412|
                           DCD      paused
-                  |L4.5440|
+                  |L4.5416|
                           DCD      Run_Control
-                  |L4.5444|
+                  |L4.5420|
                           DCD      cutoff_flag
-                  |L4.5448|
+                  |L4.5424|
                           DCD      charge_step
-                  |L4.5452|
+                  |L4.5428|
                           DCD      calmode
-                  |L4.5456|
+                  |L4.5432|
                           DCD      manual
-                  |L4.5460|
+                  |L4.5436|
                           DCD      0x40020400
-                  |L4.5464|
+                  |L4.5440|
                           DCD      cflag
-                  |L4.5468|
+                  |L4.5444|
                           DCD      hWinR
-                  |L4.5472|
+                  |L4.5448|
                           DCD      hWinWind
-                  |L4.5476|
+                  |L4.5452|
                           DCD      hWinG
-                  |L4.5480|
+                  |L4.5456|
                           DCD      load_wind
-                  |L4.5484|
+                  |L4.5460|
                           DCD      hWinsysinfo
-                  |L4.5488|
+                  |L4.5464|
                           DCD      hWincdc
-                  |L4.5492|
+                  |L4.5468|
                           DCD      hWinset
-                  |L4.5496|
-001578  4630              MOV      r0,r6                 ;1831
-00157a  f7fffffe          BL       GPIO_ResetBits
-00157e  f44f70fa          MOV      r0,#0x1f4             ;1832
-001582  f7fffffe          BL       Delay_ms
-001586  f44f5100          MOV      r1,#0x2000            ;1833
-00158a  4630              MOV      r0,r6                 ;1833
-00158c  f7fffffe          BL       GPIO_SetBits
-001590  f7fffffe          BL       Createsysinfo
-001594  81e5              STRH     r5,[r4,#0xe]          ;1835
-001596  e8bd5ffc          POP      {r2-r12,lr}           ;1836
-00159a  f7ffbffe          B.W      BEEP_Tiggr
-                  |L4.5534|
-;;;1854                   }break;
-;;;1855               }
-;;;1856           } 
-;;;1857   	}
-;;;1858   }
-00159e  e8bd9ffc          POP      {r2-r12,pc}
-;;;1859   
+                  |L4.5472|
+001560  4812              LDR      r0,|L4.5548|
+001562  6800              LDR      r0,[r0,#0]            ;1828  ; load_wind
+001564  f7fffffe          BL       WM_DeleteWindow
+001568  4811              LDR      r0,|L4.5552|
+00156a  6800              LDR      r0,[r0,#0]            ;1829  ; hWinsysinfo
+00156c  f7fffffe          BL       WM_DeleteWindow
+001570  4810              LDR      r0,|L4.5556|
+001572  6800              LDR      r0,[r0,#0]            ;1830  ; hWincdc
+001574  f7fffffe          BL       WM_DeleteWindow
+001578  480f              LDR      r0,|L4.5560|
+00157a  6800              LDR      r0,[r0,#0]            ;1831  ; hWinset
+00157c  f7fffffe          BL       WM_DeleteWindow
+001580  2102              MOVS     r1,#2                 ;1832
+001582  4630              MOV      r0,r6                 ;1832
+001584  f7fffffe          BL       GPIO_ResetBits
+001588  f44f70fa          MOV      r0,#0x1f4             ;1833
+00158c  f7fffffe          BL       Delay_ms
+001590  f44f5100          MOV      r1,#0x2000            ;1834
+001594  4630              MOV      r0,r6                 ;1834
+001596  f7fffffe          BL       GPIO_SetBits
+00159a  f7fffffe          BL       Createsysinfo
+00159e  81e5              STRH     r5,[r4,#0xe]          ;1836
+0015a0  e8bd5ffc          POP      {r2-r12,lr}           ;1837
+0015a4  f7ffbffe          B.W      BEEP_Tiggr
+                  |L4.5544|
+;;;1855                   }break;
+;;;1856               }
+;;;1857           } 
+;;;1858   	}
+;;;1859   }
+0015a8  e8bd9ffc          POP      {r2-r12,pc}
+;;;1860   
                           ENDP
 
+                  |L4.5548|
+                          DCD      load_wind
+                  |L4.5552|
+                          DCD      hWinsysinfo
+                  |L4.5556|
+                          DCD      hWincdc
+                  |L4.5560|
+                          DCD      hWinset
 
                           AREA ||i.Key_Scan||, CODE, READONLY, ALIGN=2
 
@@ -4254,37 +4266,37 @@
                           AREA ||i.setmode_r||, CODE, READONLY, ALIGN=2
 
                   setmode_r PROC
-;;;1860   
-;;;1861   void setmode_r(void)
+;;;1861   
+;;;1862   void setmode_r(void)
 000000  b510              PUSH     {r4,lr}
-;;;1862   {
-;;;1863       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+;;;1863   {
+;;;1864       GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 000002  4c0c              LDR      r4,|L6.52|
 000004  2102              MOVS     r1,#2
 000006  4620              MOV      r0,r4
 000008  f7fffffe          BL       GPIO_ResetBits
-;;;1864       GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜  
+;;;1865       GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜  
 00000c  f44f5100          MOV      r1,#0x2000
 000010  4620              MOV      r0,r4
 000012  f7fffffe          BL       GPIO_SetBits
-;;;1865       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF  
+;;;1866       GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF  
 000016  f44f4100          MOV      r1,#0x8000
 00001a  4807              LDR      r0,|L6.56|
 00001c  f7fffffe          BL       GPIO_SetBits
-;;;1866       pow_sw = pow_off;
+;;;1867       pow_sw = pow_off;
 000020  4906              LDR      r1,|L6.60|
 000022  2000              MOVS     r0,#0
 000024  7008              STRB     r0,[r1,#0]
-;;;1867       load_sw = load_off;
+;;;1868       load_sw = load_off;
 000026  4906              LDR      r1,|L6.64|
 000028  7008              STRB     r0,[r1,#0]
-;;;1868       mode_sw = mode_r;
+;;;1869       mode_sw = mode_r;
 00002a  4906              LDR      r1,|L6.68|
 00002c  2001              MOVS     r0,#1
 00002e  7008              STRB     r0,[r1,#0]
-;;;1869   }
+;;;1870   }
 000030  bd10              POP      {r4,pc}
-;;;1870   const GUI_POINT aPoints[] = {
+;;;1871   const GUI_POINT aPoints[] = {
                           ENDP
 
 000032  0000              DCW      0x0000

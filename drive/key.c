@@ -1549,6 +1549,7 @@ void Key_Funtion(void)
                             if(load_sw==load_on)
                             {
                                 Flag_Swtich_ON=0;
+								GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
                                 GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
                                 c_rec = 0;
                                 mode_sw = 0;
