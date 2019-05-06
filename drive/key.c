@@ -1517,27 +1517,30 @@ void Key_Funtion(void)
                     {
                         case face_r:
                         {
-                             if(test_start == 0 && DISS_Voltage > gate_v)
-                             {								 
-                                test_start = 1;
-								r = R_VLUE;
-								v = DISS_Voltage;
-								if(staticcdc == 1)
-								{
-									step = 1;
-								}else{
-									step = 4;
-									SET_Current_Laod = set_init_c;
-									GPIO_ResetBits(GPIOA,GPIO_Pin_15);
-								}
-                             }else if(test_start == 1){
-                                test_start = 0;
-								step = 0;
-								con_flag = 0;
-                             }
-                             KeyCounter = 0;
-                             BEEP_Tiggr();//´¥·¢·äÃùÆ÷
-                             break;
+							if(para_set2 == set_2_on)
+							{
+								 if(test_start == 0 && DISS_Voltage > gate_v)
+								 {								 
+									test_start = 1;
+									r = R_VLUE;
+									v = DISS_Voltage;
+									if(staticcdc == 1)
+									{
+										step = 1;
+									}else{
+										step = 4;
+										SET_Current_Laod = set_init_c;
+										GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+									}
+								 }else if(test_start == 1){
+									test_start = 0;
+									step = 0;
+									con_flag = 0;
+								 }
+								 KeyCounter = 0;
+								 BEEP_Tiggr();//´¥·¢·äÃùÆ÷
+								 break;
+							 }
                         }
                         case face_load:
                         {
