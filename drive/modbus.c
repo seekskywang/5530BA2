@@ -1496,7 +1496,7 @@ void Transformation_ADC(void)
 //             else var32 = var32 - REG_ReadR_Offset;
 //         }
 //        else
-        var32 = var32 - REG_ReadR_Offset;
+        var32 = var32 + REG_ReadR_Offset;
         var32 = var32 >> 12;
         if (var32 < 1)
         {
