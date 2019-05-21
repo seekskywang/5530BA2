@@ -325,7 +325,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_66);
-            sprintf(buf,"%.2f",DISS_POW_Voltage);       
+            sprintf(buf,"%.3f",DISS_Voltage);       
             TEXT_SetText(hItem,buf);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_67);
@@ -582,7 +582,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             if(charge_step == 1)
             {
-                if(DISS_POW_Voltage >= (float)cov1/100 && cov1 != 0)//若测量电流小于截止电流
+                if(DISS_Voltage >= (float)cov1/100 && cov1 != 0)//若测量电流小于截止电流
                 {
                     SET_Current = 100;
                     charge_step =2;
@@ -753,7 +753,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             }
         }else if(pause_flag == 1 && battery_c != 0){
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_66);
-            sprintf(buf,"%.2f",0.00);       
+            sprintf(buf,"%.3f",0.00);       
             TEXT_SetText(hItem,buf);
                 
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_67);
@@ -771,7 +771,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
         }else if(cdc_sw == cdc_off){
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_66);
-            sprintf(buf,"%.2f",0.00);       
+            sprintf(buf,"%.3f",0.00);       
             TEXT_SetText(hItem,buf);
                 
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_67);
@@ -976,7 +976,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 // 		TEXT_SetText(hItem,dc_cutoff_c);
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_66);
-        sprintf(buf,"%.2f",0.00);
+        sprintf(buf,"%.3f",0.00);
         TEXT_SetTextColor(hItem, GUI_GREEN);//设置字体颜色
         TEXT_SetFont(hItem,&GUI_FontD24x32);//设定文本字体
         GUI_UC_SetEncodeUTF8();        
