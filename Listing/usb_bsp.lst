@@ -37286,8 +37286,8 @@ N  GPIO_InitTypeDef  GPIO_InitStructure;
 N
 N  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOA时钟
 X  RCC_AHB1PeriphClockCmd(((uint32_t)0x00000002), ENABLE);
-N  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS, ENABLE);//使能USB OTG时钟	钟
-X  RCC_AHB2PeriphClockCmd(((uint32_t)0x00000080), ENABLE);
+N  RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_OTG_HS, ENABLE) ;//使能USB OTG时钟	钟
+X  RCC_AHB1PeriphClockCmd( ((uint32_t)0x20000000), ENABLE) ;
 N  //GPIOA11,A12设置
 N  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;//PC14/15复用功能输出	
 X  GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x4000) | ((uint16_t)0x8000);
@@ -37300,13 +37300,11 @@ N  GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
 X  GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400)), &GPIO_InitStructure);
 N	
 N	
-N  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PC10推挽输出		
-X  GPIO_InitStructure.GPIO_Pin = ((uint16_t)0x0400);
-N  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//输出功能
-N	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-N  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
-N  GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
-X  GPIO_Init(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)), &GPIO_InitStructure);
+N//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PC10推挽输出		
+N//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//输出功能
+N//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+N//  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
+N//  GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
 N	
 N  USB_HOST_PWRCTRL=1;			//开启USB HOST电源供电
 X  *((volatile unsigned long *)((((((((uint32_t)0x40000000) + 0x00020000) + 0x0800)+20) & 0xF0000000)+0x2000000+(((((((uint32_t)0x40000000) + 0x00020000) + 0x0800)+20) &0xFFFFF)<<5)+(10<<2))))=1;			
