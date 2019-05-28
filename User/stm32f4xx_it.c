@@ -31,11 +31,40 @@
 #include "stm32f4xx_it.h"
 #include "bsp_SysTick.h"
 #include "my_register.h"
-
+#include  "gui.h"
+#include "MainTask.h"
+extern WM_HWIN CreateR(void);
+extern WM_HWIN CreateWindow2(void);
+extern WM_HWIN CreateWindow(void);
+extern WM_HWIN CreateG(void);
+extern WM_HWIN CreateSET(void);
+extern WM_HWIN Createcal(void);
+extern WM_HWIN hWinWind;
+extern WM_HWIN hWinR;
+extern WM_HWIN load_wind;//Ë¥üËΩΩÁïåÈù¢Âè•ÊüÑ
+extern WM_HWIN hWinG;
+extern WM_HWIN hWinset;
+extern WM_HWIN hWincdc;
+extern WM_HWIN hWinsysinfo;
+extern vu8 cdc_sw;
+extern vu8 paused;
+extern vu8 mode_sw;
+extern vu8 pow_sw;
+extern vu8 c_rec;
+extern vu8 load_sw;
+extern u8 load_mode;
+u8 rmtrig[3];
 extern __IO int32_t OS_TimeMS;
 static void MODS_03H(void);
 static void MODS_06H(void);
+static void MODS_50H(void);
+static void MODS_51H(void);
+static void MODS_52H(void);
 static void MODS_SendAckErr(uint8_t _ucErrCode);
+static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value);
+static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value);
+static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value);
+static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value);
 extern struct bitDefine
 {
 	unsigned bit0: 1;
@@ -339,6 +368,10 @@ void USART1_IRQHandler(void)
         {
             g_tModS.RxBuf[g_tModS.RxCount++] = USART_ReceiveData(USART1);
         }
+		if(g_tModS.RxCount > 7 && g_tModS.RxBuf[1] == 6)
+		{
+			MODS_SendAckOk();
+		}
 	}
 }
 
@@ -411,6 +444,18 @@ void RecHandle(void)
         case 0x06:
         {
             MODS_06H();
+        }break;
+		case 0x50:
+        {
+            MODS_50H();
+        }break;
+		case 0x51:
+        {
+            MODS_51H();
+        }break;
+		case 0x52:
+        {
+            MODS_52H();
         }break;
         default:break;
     }
@@ -509,6 +554,399 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 	return 1;											/* ∂¡»°≥…π¶ */
 }
 
+/*
+*********************************************************************************************************
+*	∫Ø  ˝ √˚: MODS_WriteRegValue
+*	π¶ƒ‹Àµ√˜: ∂¡»°±£≥÷ºƒ¥Ê∆˜µƒ÷µ
+*	–Œ    ≤Œ: reg_addr ºƒ¥Ê∆˜µÿ÷∑
+*			  reg_value ºƒ¥Ê∆˜÷µ
+*	∑µ ªÿ ÷µ: 1±Ì æOK 0±Ì æ¥ÌŒÛ
+*********************************************************************************************************
+*/
+static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
+{
+	switch (reg_addr)							/* ≈–∂œºƒ¥Ê∆˜µÿ÷∑ */
+	{	
+		case SLAVE_REG_P00://Ë¥üËΩΩÊ®°Âºè
+			if(reg_value == 0)
+			{
+				load_mode = 1;
+                Write_LOAD();
+				GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+				flag_Load_CC = 1;
+			}else if(reg_value == 1){
+				load_mode = 0;
+                Write_LOAD();
+				GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+				flag_Load_CC = 0;
+			}
+			break;
+		case SLAVE_REG_P01://Ë¥üËΩΩÁîµÂéã
+			load_v = reg_value;
+			SET_Voltage_Laod = load_v;
+			Write_Limits();
+			break;
+		
+		case SLAVE_REG_P02://Ë¥üËΩΩÁîµÊµÅ
+			load_c = reg_value;
+			SET_Current_Laod = load_c;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P03://ËæìÂá∫ÁîµÂéã
+			pow_v = reg_value;
+			SET_Voltage = pow_v;
+			Write_Limits();
+			break;
+
+		case SLAVE_REG_P04://ÈôêÂà∂ÁîµÊµÅ
+			pow_c = reg_value;
+			SET_Current = pow_c;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P05://ÂÖÖÊîæÁîµËæìÂá∫ÁîµÂéã
+			opv1 = reg_value;
+			SET_Voltage = opv1;
+			Write_Limits();
+			break;
+
+		case SLAVE_REG_P06://ÂÖÖÊîæÈôêÂà∂ÁîµÊµÅ
+			opc1 = reg_value;
+			SET_Current = opc1;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P07://ÂÖÖÁîµÊà™Ê≠¢ÁîµÂéã
+			cov1 = reg_value;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P08://ÂÖÖÁîµÊà™Ê≠¢ÁîµÊµÅ
+			coc1 = reg_value;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P09:	//ÂÖÖÊîæÁîµË¥üËΩΩÁîµÊµÅ
+			cdc_dc = reg_value;
+			SET_Current_Laod = cdc_dc;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P10:	//ÊîæÁîµÊà™Ê≠¢ÁîµÂéã
+			set_dc_cutoff_v = reg_value;
+			Write_Limits();
+			break;
+
+		case SLAVE_REG_P11://Âæ™ÁéØÊ¨°Êï∞
+			set_loop_count = reg_value;
+			Write_Limits();
+			break;
+		case SLAVE_REG_P12:
+			break;
+
+		case SLAVE_REG_P13:
+			break;
+		case SLAVE_REG_P14:
+			break;
+
+		case SLAVE_REG_P15:
+			break;
+		case SLAVE_REG_P16:
+			break;
+
+		case SLAVE_REG_P17:
+			break;
+		default:
+			return 0;
+	}
+
+	return 1;
+}
+
+static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
+{
+	switch (reg_addr)							
+	{	
+		case SLAVE_REG_P00://ÂºÄÂßãÂÅúÊ≠¢Ë¥üËΩΩ
+			if(reg_value == 1)//ÂºÄÂßãË¥üËΩΩ
+			{
+				WM_DeleteWindow(hWinR);
+				WM_DeleteWindow(hWinWind);
+				WM_DeleteWindow(hWinG);
+				WM_DeleteWindow(load_wind);
+				WM_DeleteWindow(hWinsysinfo);
+				WM_DeleteWindow(hWincdc);
+				WM_DeleteWindow(hWinset);
+				CreateWindow2();
+				t_onoff = 0;
+				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
+				Delay_ms(500);
+				GPIO_SetBits(GPIOC,GPIO_Pin_13);
+				
+				if(flag_Load_CC == 0)
+				{
+					GPIO_ResetBits(GPIOC,GPIO_Pin_13);
+					c_rec = 1;									
+				}
+				Flag_Swtich_ON=1;
+				GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+				
+				mode_sw = mode_load;
+				load_sw = load_on;
+				rmtrig[0] = 1;
+			}else if(reg_value == 4){//ÂÅúÊ≠¢Ë¥üËΩΩ
+				Flag_Swtich_ON=0;
+				GPIO_SetBits(GPIOC,GPIO_Pin_13);
+				GPIO_SetBits(GPIOA,GPIO_Pin_15);
+				c_rec = 0;
+				mode_sw = 0;
+				load_sw = load_off;
+				rmtrig[0] = 0;
+			}
+			break;
+		case SLAVE_REG_P01://
+
+			break;
+		
+		case SLAVE_REG_P02://
+
+			break;
+		case SLAVE_REG_P03://
+
+			break;
+
+		case SLAVE_REG_P04://
+
+			break;
+		case SLAVE_REG_P05://
+
+			break;
+
+		case SLAVE_REG_P06://
+
+			break;
+		case SLAVE_REG_P07://
+
+			break;
+		case SLAVE_REG_P08://
+
+			break;
+		case SLAVE_REG_P09:	//
+
+			break;
+		case SLAVE_REG_P10:	//
+
+			break;
+
+		case SLAVE_REG_P11://
+
+			break;
+		case SLAVE_REG_P12:
+			break;
+
+		case SLAVE_REG_P13:
+			break;
+		case SLAVE_REG_P14:
+			break;
+
+		case SLAVE_REG_P15:
+			break;
+		case SLAVE_REG_P16:
+			break;
+
+		case SLAVE_REG_P17:
+			break;
+		default:
+			return 0;
+	}
+
+	return 1;
+}
+
+static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
+{
+	switch (reg_addr)							
+	{	
+		case SLAVE_REG_P00://ÂºÄÂßãÂÅúÊ≠¢ÁîµÊ∫ê
+			if(reg_value == 1)//ÂºÄÂßãÁîµÊ∫ê
+			{
+				WM_DeleteWindow(hWinR);
+				WM_DeleteWindow(hWinWind);
+				WM_DeleteWindow(hWinG);
+				WM_DeleteWindow(load_wind);
+				WM_DeleteWindow(hWinsysinfo);
+				WM_DeleteWindow(hWincdc);
+				WM_DeleteWindow(hWinset);
+				CreateWindow();
+				GPIO_SetBits(GPIOA,GPIO_Pin_15);
+				GPIO_ResetBits(GPIOC,GPIO_Pin_13);//’≤ﬂ™÷ß‘¥À§‘∂›å÷ß«∑
+				GPIO_SetBits(GPIOC,GPIO_Pin_1);//’≤ﬂ™÷ß‘¥À§‘∂                           
+				mode_sw = mode_pow;
+				pow_sw = pow_on;
+				rmtrig[1] = 1;
+					
+			}else if(reg_value == 4){//ÂÅúÊ≠¢ÁîµÊ∫ê
+				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//⁄ò“ï÷ß‘¥À§‘∂
+				Delay_ms(1000);
+				GPIO_SetBits(GPIOC,GPIO_Pin_13);//⁄ò“ï÷ß‘¥À§‘∂›å÷ß«∑
+				mode_sw = 0;
+				pow_sw = pow_off;
+				rmtrig[1] = 0;
+			}
+			break;
+		case SLAVE_REG_P01://
+
+			break;
+		
+		case SLAVE_REG_P02://
+
+			break;
+		case SLAVE_REG_P03://
+
+			break;
+
+		case SLAVE_REG_P04://
+
+			break;
+		case SLAVE_REG_P05://
+
+			break;
+
+		case SLAVE_REG_P06://
+
+			break;
+		case SLAVE_REG_P07://
+
+			break;
+		case SLAVE_REG_P08://
+
+			break;
+		case SLAVE_REG_P09:	//
+
+			break;
+		case SLAVE_REG_P10:	//
+
+			break;
+
+		case SLAVE_REG_P11://
+
+			break;
+		case SLAVE_REG_P12:
+			break;
+
+		case SLAVE_REG_P13:
+			break;
+		case SLAVE_REG_P14:
+			break;
+
+		case SLAVE_REG_P15:
+			break;
+		case SLAVE_REG_P16:
+			break;
+
+		case SLAVE_REG_P17:
+			break;
+		default:
+			return 0;
+	}
+
+	return 1;
+}
+
+static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
+{
+	switch (reg_addr)							
+	{	
+		case SLAVE_REG_P00://ÂºÄÂßãÂÅúÊ≠¢ÁîµÊ∫ê
+			if(reg_value == 1)//ÂºÄÂßãÁîµÊ∫ê
+			{
+				WM_DeleteWindow(hWinR);
+				WM_DeleteWindow(hWinWind);
+				WM_DeleteWindow(hWinG);
+				WM_DeleteWindow(load_wind);
+				WM_DeleteWindow(hWinsysinfo);
+				WM_DeleteWindow(hWincdc);
+				WM_DeleteWindow(hWinset);
+				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//⁄ò“ï÷ß‘¥À§‘∂
+				Delay_ms(500);
+				GPIO_SetBits(GPIOC,GPIO_Pin_13);//⁄ò“ï÷ß‘¥À§‘∂›å÷ß∆ç
+				CreateCDC(); 
+				SET_Voltage = opv1;
+			    SET_Current = opc1;
+			    cutoff_flag = 0;
+//                           Mode_SW_CONT(0x03);
+			   
+			    charge_step = 1;
+			    GPIO_ResetBits(GPIOC,GPIO_Pin_13);//’≤ﬂ™÷ß‘¥À§‘∂›å÷ß«∑
+			    Delay_ms(500);
+			    GPIO_SetBits(GPIOC,GPIO_Pin_1);//’≤ﬂ™÷ß‘¥À§‘∂
+			    mode_sw = mode_pow;
+			    cdc_sw = cdc_on;
+				rmtrig[2] = 1;
+			}else if(reg_value == 4){//ÂÅúÊ≠¢ÁîµÊ∫ê
+				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//⁄ò“ï÷ß‘¥À§‘∂
+				Delay_ms(500);
+			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//⁄ò“ï÷ß‘¥À§‘∂›å÷ß«∑
+			   GPIO_SetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOFF
+			   cdc_sw = cdc_off;
+			   paused = 0;
+			   mode_sw = 0;
+			   rmtrig[2] = 0;
+			}
+			break;
+		case SLAVE_REG_P01://
+
+			break;
+		
+		case SLAVE_REG_P02://
+
+			break;
+		case SLAVE_REG_P03://
+
+			break;
+
+		case SLAVE_REG_P04://
+
+			break;
+		case SLAVE_REG_P05://
+
+			break;
+
+		case SLAVE_REG_P06://
+
+			break;
+		case SLAVE_REG_P07://
+
+			break;
+		case SLAVE_REG_P08://
+
+			break;
+		case SLAVE_REG_P09:	//
+
+			break;
+		case SLAVE_REG_P10:	//
+
+			break;
+
+		case SLAVE_REG_P11://
+
+			break;
+		case SLAVE_REG_P12:
+			break;
+
+		case SLAVE_REG_P13:
+			break;
+		case SLAVE_REG_P14:
+			break;
+
+		case SLAVE_REG_P15:
+			break;
+		case SLAVE_REG_P16:
+			break;
+
+		case SLAVE_REG_P17:
+			break;
+		default:
+			return 0;
+	}
+
+	return 1;
+}
 
 static void MODS_03H(void)
 {
@@ -605,37 +1043,147 @@ static void MODS_06H(void)
 	reg = BEBufToUint16(&g_tModS.RxBuf[2]); 	/* ºƒ¥Ê∆˜∫≈ */
 	value = BEBufToUint16(&g_tModS.RxBuf[4]);	/* ºƒ¥Ê∆˜÷µ */
     
-    if(reg == 0x0E)
-    {
-        if(value == 00)
-        {
-            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
-            flag_Load_CC = 1;
-        }else if(value == 01){
-            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
-            flag_Load_CC = 0;
-        }
-    }
-// 	if (MODS_WriteRegValue(reg, value) == 1)	/* ∏√∫Ø ˝ª·∞—–¥»Îµƒ÷µ¥Ê»Îºƒ¥Ê∆˜ */
-// 	{
-// 		;
-// 	}
-// 	else
-// 	{
-// 		g_tModS.RspCode = RSP_ERR_REG_ADDR;		/* ºƒ¥Ê∆˜µÿ÷∑¥ÌŒÛ */
-// 	}
+//    if(reg == 0x0E)
+//    {
+//        if(value == 00)
+//        {
+//            GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+//            flag_Load_CC = 1;
+//        }else if(value == 01){
+//            GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+//            flag_Load_CC = 0;
+//        }
+//    }
+ 	if (MODS_WriteRegValue(reg, value) == 1)	/* ∏√∫Ø ˝ª·∞—–¥»Îµƒ÷µ¥Ê»Îºƒ¥Ê∆˜ */
+ 	{
+ 		;
+ 	}
+ 	else
+ 	{
+ 		g_tModS.RspCode = RSP_ERR_REG_ADDR;		/* ºƒ¥Ê∆˜µÿ÷∑¥ÌŒÛ */
+ 	}
 
 err_ret:
 	if (g_tModS.RspCode == RSP_OK)				/* ’˝»∑”¶¥ */
 	{
-//		MODS_SendAckOk();
+		
 	}
 	else
 	{
-//		MODS_SendAckErr(g_tModS.RspCode);		/* ∏ÊÀﬂ÷˜ª˙√¸¡Ó¥ÌŒÛ */
+		MODS_SendAckErr(g_tModS.RspCode);		/* ∏ÊÀﬂ÷˜ª˙√¸¡Ó¥ÌŒÛ */
 	}
 }
 
+static void MODS_50H(void)
+{
+    uint16_t reg;
+	uint16_t value;
+
+	g_tModS.RspCode = RSP_OK;
+
+	if (g_tModS.RxCount != 8)
+	{
+		g_tModS.RspCode = RSP_ERR_VALUE;		
+		goto err_ret;
+	}
+
+	reg = BEBufToUint16(&g_tModS.RxBuf[2]);
+	value = BEBufToUint16(&g_tModS.RxBuf[4]);
+    
+
+ 	if (MODS_Load(reg, value) == 1)
+ 	{
+ 		;
+ 	}
+ 	else
+ 	{
+ 		g_tModS.RspCode = RSP_ERR_REG_ADDR;
+ 	}
+
+err_ret:
+	if (g_tModS.RspCode == RSP_OK)
+	{
+		MODS_SendAckOk();
+	}
+	else
+	{
+		MODS_SendAckErr(g_tModS.RspCode);
+	}
+}
+
+static void MODS_51H(void)
+{
+    uint16_t reg;
+	uint16_t value;
+
+	g_tModS.RspCode = RSP_OK;
+
+	if (g_tModS.RxCount != 8)
+	{
+		g_tModS.RspCode = RSP_ERR_VALUE;		
+		goto err_ret;
+	}
+
+	reg = BEBufToUint16(&g_tModS.RxBuf[2]);
+	value = BEBufToUint16(&g_tModS.RxBuf[4]);
+    
+
+ 	if (MODS_Pow(reg, value) == 1)
+ 	{
+ 		;
+ 	}
+ 	else
+ 	{
+ 		g_tModS.RspCode = RSP_ERR_REG_ADDR;
+ 	}
+
+err_ret:
+	if (g_tModS.RspCode == RSP_OK)
+	{
+		MODS_SendAckOk();
+	}
+	else
+	{
+		MODS_SendAckErr(g_tModS.RspCode);
+	}
+}
+
+static void MODS_52H(void)
+{
+    uint16_t reg;
+	uint16_t value;
+
+	g_tModS.RspCode = RSP_OK;
+
+	if (g_tModS.RxCount != 8)
+	{
+		g_tModS.RspCode = RSP_ERR_VALUE;		
+		goto err_ret;
+	}
+
+	reg = BEBufToUint16(&g_tModS.RxBuf[2]);
+	value = BEBufToUint16(&g_tModS.RxBuf[4]);
+    
+
+ 	if (MODS_CDC(reg, value) == 1)
+ 	{
+ 		;
+ 	}
+ 	else
+ 	{
+ 		g_tModS.RspCode = RSP_ERR_REG_ADDR;
+ 	}
+
+err_ret:
+	if (g_tModS.RspCode == RSP_OK)
+	{
+		MODS_SendAckOk();
+	}
+	else
+	{
+		MODS_SendAckErr(g_tModS.RspCode);
+	}
+}
 
 uint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen)
 {    

@@ -1770,9 +1770,9 @@ void Key_Funtion(void)
                     WM_DeleteWindow(hWinset);
                     CreateWindow2();
                     t_onoff = 0;
-                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 					Delay_ms(500);
-				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+				    GPIO_SetBits(GPIOC,GPIO_Pin_13);
                     KeyCounter = 0;
                     BEEP_Tiggr();//
                 }

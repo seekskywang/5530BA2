@@ -28,8 +28,8 @@ extern struct bitDefine
     unsigned bit7: 1;
 } flagA, flagB,flagC,flagD,flagE,flagF,flagG;
 
-
-vu16 battery_c;
+void SendToPC(u8 mode);
+vu32 battery_c;
 float bc_raw;
 float cbc_raw;
 float c_sum;
@@ -532,6 +532,10 @@ void TIM3_IRQHandler(void)
                 if(pow_sw == pow_on)
                 {
                     bc_raw += DISS_POW_Current * 1000 * 1/3600;
+					if(rmtrig[1] == 1)
+					{
+						SendToPC(1);
+					}
                 }else{
                     bc_raw = 0;
                 }
@@ -546,6 +550,10 @@ void TIM3_IRQHandler(void)
                     hour   = ctime/3600;//时
                     cbc_raw += DISS_POW_Current * 1000 * 1/3600;
                     bc_raw = 0;
+					if(rmtrig[2] == 1)
+					{
+						SendToPC(2);
+					}
 //                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
                 }else if(mode_sw == mode_load && cdc_sw == cdc_on){
                     dctime++;
@@ -580,6 +588,10 @@ void TIM3_IRQHandler(void)
                         }
                     }
                     bc_raw += DISS_Current * 1000 * 1/3600;
+					if(rmtrig[0] == 1)
+					{
+						SendToPC(0);
+					}
                 }else{
                     bc_raw = 0;
                 }
@@ -665,6 +677,60 @@ void TIM5_IRQHandler(void)
     }
 }
 
+void SendToPC(u8 mode)
+{
+	uint8_t vccbuf[11];
+	
+	vccbuf[0] = 0x01;
+	vccbuf[2] = 0x08;
+	if(mode == 0)
+	{
+		vccbuf[1] = 0x50;
+		
+		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
+		vccbuf[4] = (vu16)(DISS_Voltage*1000);
+		
+		vccbuf[5] = (vu16)(DISS_Current*1000)>>8;
+		vccbuf[6] = (vu16)(DISS_Current*1000);
+		
+		vccbuf[7] = battery_c>>24;
+		vccbuf[8] = battery_c>>16;
+		vccbuf[9] = battery_c>>8;
+		vccbuf[10] = battery_c;
+	}else if(mode == 1){
+		vccbuf[1] = 0x51;
+		
+		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
+		vccbuf[4] = (vu16)(DISS_Voltage*1000);
+		
+		vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
+		vccbuf[6] = (vu16)(DISS_POW_Current*1000);
+		
+		vccbuf[7] = battery_c>>24;
+		vccbuf[8] = battery_c>>16;
+		vccbuf[9] = battery_c>>8;
+		vccbuf[10] = battery_c;
+	}else if(mode == 2){
+		vccbuf[1] = 0x52;
+		
+		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
+		vccbuf[4] = (vu16)(DISS_Voltage*1000);
+		if(mode_sw == mode_pow)
+		{
+			vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
+			vccbuf[6] = (vu16)(DISS_POW_Current*1000);
+		}else if(mode_sw == mode_load){
+			vccbuf[5] = (vu16)(DISS_Current*1000)>>8;
+			vccbuf[6] = (vu16)(DISS_Current*1000);
+		}
+		
+		vccbuf[7] = battery_c>>24;
+		vccbuf[8] = battery_c>>16;
+		vccbuf[9] = battery_c>>8;
+		vccbuf[10] = battery_c;
+	}
+	MODS_SendWithCRC(vccbuf, 11);
+}
 
 void MODS_Poll(void)
 {

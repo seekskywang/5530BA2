@@ -21,7 +21,6 @@ vu8 load_sw = load_off;
 extern vu16 load_time;
 void test_load(void);
 extern vu8 clear_flag3;
-extern vu16 battery_c;
 extern vu8 mode_sw;
 extern vu8 oc_mode;
 u8 load_mode;

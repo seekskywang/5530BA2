@@ -190,7 +190,7 @@
 000006  9001              STR      r0,[sp,#4]
 ;;;566    	{
 ;;;567    		sum +=ADC1_Buffer[count];
-000008  490b              LDR      r1,|L2.56|
+000008  490c              LDR      r1,|L2.60|
 00000a  e00a              B        |L2.34|
                   |L2.12|
 00000c  f89d0004          LDRB     r0,[sp,#4]
@@ -206,19 +206,20 @@
 000026  2832              CMP      r0,#0x32              ;565
 000028  d3f0              BCC      |L2.12|
 ;;;568    	}
-;;;569    	NTC_value=sum/50;
+;;;569    	NTC_value=sum/500;
 00002a  9800              LDR      r0,[sp,#0]
-00002c  2132              MOVS     r1,#0x32
-00002e  fbb0f0f1          UDIV     r0,r0,r1
-000032  4902              LDR      r1,|L2.60|
-000034  8008              STRH     r0,[r1,#0]
+00002c  f44f71fa          MOV      r1,#0x1f4
+000030  fbb0f0f1          UDIV     r0,r0,r1
+000034  4902              LDR      r1,|L2.64|
+000036  8008              STRH     r0,[r1,#0]
 ;;;570    }
-000036  bd0c              POP      {r2,r3,pc}
+000038  bd0c              POP      {r2,r3,pc}
                           ENDP
 
-                  |L2.56|
-                          DCD      ||.bss||
+00003a  0000              DCW      0x0000
                   |L2.60|
+                          DCD      ||.bss||
+                  |L2.64|
                           DCD      ||.data||
 
                           AREA ||i.DAM1_ADC_NVIC||, CODE, READONLY, ALIGN=1
