@@ -34,8 +34,8 @@ float DISS_Current;//负载电流
 float DISS_POW_Current;//稳压电源电流
 float disloadv;
 u16 disrvalue;
-//USBH_HOST  USB_Host;
-//USB_OTG_CORE_HANDLE  USB_OTG_Core;
+USBH_HOST  USB_Host;
+USB_OTG_CORE_HANDLE  USB_OTG_Core;
 //FIL   *file;
 //UINT  br, bw;
 ////u8 *fatbuff;
@@ -79,6 +79,7 @@ int main(void)
 	EEPROM_READ_Coeff();//读取校准参数
 	//IWDG_Inte();
 	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
+
 //	MYDMA_Config();
 //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器

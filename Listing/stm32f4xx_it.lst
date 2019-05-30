@@ -50008,6 +50008,7 @@ Nextern vu8 pow_sw;
 Nextern vu8 c_rec;
 Nextern vu8 load_sw;
 Nextern u8 load_mode;
+Nextern u8 sendmodeflag;
 Nu8 rmtrig[3];
 Nextern __IO int32_t OS_TimeMS;
 Xextern volatile int32_t OS_TimeMS;
@@ -50383,7 +50384,7 @@ N            if(i < 10)
 N            {
 N             sum += (UART_Buffer_Rece[2] * 256 + UART_Buffer_Rece[3])/10.0;
 N            }else{
-W "..\User\stm32f4xx_it.c" 416 24 single-precision operand implicitly converted to double-precision
+W "..\User\stm32f4xx_it.c" 417 24 single-precision operand implicitly converted to double-precision
 N                temp = sum/10.0;
 N                sum = 0;
 N                i = 0;
@@ -50431,13 +50432,13 @@ N            MODS_52H();
 N        }break;
 N        default:break;
 N    }
-W "..\User\stm32f4xx_it.c" 430 8 variable "crec"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 431 9 variable "csend"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 432 16 variable "sendbuf"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 433 8 variable "sendlen"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 434 16 variable "recrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 435 16 variable "scrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 436 8 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 431 8 variable "crec"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 432 9 variable "csend"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 433 16 variable "sendbuf"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 434 8 variable "sendlen"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 435 16 variable "recrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 436 16 variable "scrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 437 8 variable "i"  was declared but never referenced
 N}
 N
 N/*
@@ -50481,7 +50482,7 @@ N			value =	(int)(DISS_POW_Current*1000);		/* ���Ĵ���ֵ���� */
 N			break;
 N		case SLAVE_REG_P05:
 X		case 0x0005:
-W "..\User\stm32f4xx_it.c" 498 4 function "IO_OFF" declared implicitly
+W "..\User\stm32f4xx_it.c" 499 4 function "IO_OFF" declared implicitly
 N			IO_OFF();
 N            SET_Current_Laod = 1000;
 X            Run_Control[4] = 1000;
@@ -50571,6 +50572,7 @@ N*******************************************************************************
 N*/
 Nstatic uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
 N{
+N	lock = 1;
 N	switch (reg_addr)							/* �жϼĴ�����ַ */
 N	{	
 N		case SLAVE_REG_P00://负载模式
@@ -50705,6 +50707,7 @@ N}
 N
 Nstatic uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
 N{
+N	lock = 1;
 N	switch (reg_addr)							
 N	{	
 N		case SLAVE_REG_P00://开始停止负载
@@ -50719,10 +50722,11 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
+W "..\User\stm32f4xx_it.c" 679 5 function "Delay_ms" declared implicitly
+N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 678 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50836,6 +50840,7 @@ N}
 N
 Nstatic uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 N{
+N	lock = 1;
 N	switch (reg_addr)							
 N	{	
 N		case SLAVE_REG_P00://开始停止电源
@@ -50850,6 +50855,8 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
+W "..\User\stm32f4xx_it.c" 781 5 function "Delay_ms" declared implicitly
+N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_13);//ղߪ֧ԴˤԶ݌֧Ƿ
@@ -50865,7 +50872,7 @@ N
 N			}else if(reg_value == 4){//停止电源
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 785 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 791 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧Ƿ
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50953,6 +50960,7 @@ N}
 N
 Nstatic uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 N{
+N	lock = 1;
 N	switch (reg_addr)							
 N	{	
 N		case SLAVE_REG_P00://开始停止电源
@@ -50965,15 +50973,16 @@ N				WM_DeleteWindow(hWinG);
 N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
-N				WM_DeleteWindow(hWinset);
+N				WM_DeleteWindow(hWinset);				
+W "..\User\stm32f4xx_it.c" 872 5 function "CreateCDC" declared implicitly
+N				CreateCDC(); 
+W "..\User\stm32f4xx_it.c" 873 5 function "Delay_ms" declared implicitly
+N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 866 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧ƍ
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\User\stm32f4xx_it.c" 868 5 function "CreateCDC" declared implicitly
-N				CreateCDC(); 
 N				SET_Voltage = opv1;
 X				Run_Control[1] = Run_Control[31];
 N			    SET_Current = opc1;
@@ -50992,10 +51001,11 @@ X			    mode_sw = 3;
 N			    cdc_sw = cdc_on;
 X			    cdc_sw = 1;
 N				rmtrig[2] = 1;
+N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//停止电源
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 883 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 892 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧Ƿ
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51154,7 +51164,7 @@ N{
 N	uint16_t crc;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1015 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1024 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;

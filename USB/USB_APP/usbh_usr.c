@@ -171,7 +171,7 @@ int USBH_USR_MSC_Application(void)
 			AppState=USH_USR_FS_TEST;
       		break;
     	case USH_USR_FS_TEST:	//执行USB OTG 测试主程序
-			res=USH_User_App(); //用户主程序
+//			res=USH_User_App(); //用户主程序
      		res=0;
 			if(res)AppState=USH_USR_FS_INIT;
       		break;

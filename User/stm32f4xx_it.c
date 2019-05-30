@@ -53,6 +53,7 @@ extern vu8 pow_sw;
 extern vu8 c_rec;
 extern vu8 load_sw;
 extern u8 load_mode;
+extern u8 sendmodeflag;
 u8 rmtrig[3];
 extern __IO int32_t OS_TimeMS;
 static void MODS_03H(void);
@@ -565,6 +566,7 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 */
 static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
 {
+	lock = 1;
 	switch (reg_addr)							/* �жϼĴ�����ַ */
 	{	
 		case SLAVE_REG_P00://负载模式
@@ -660,6 +662,7 @@ static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
 
 static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
 {
+	lock = 1;
 	switch (reg_addr)							
 	{	
 		case SLAVE_REG_P00://开始停止负载
@@ -673,6 +676,7 @@ static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
 				WM_DeleteWindow(hWincdc);
 				WM_DeleteWindow(hWinset);
 				CreateWindow2();
+				Delay_ms(500);
 				t_onoff = 0;
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 				Delay_ms(500);
@@ -760,6 +764,7 @@ static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
 
 static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 {
+	lock = 1;
 	switch (reg_addr)							
 	{	
 		case SLAVE_REG_P00://开始停止电源
@@ -773,6 +778,7 @@ static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 				WM_DeleteWindow(hWincdc);
 				WM_DeleteWindow(hWinset);
 				CreateWindow();
+				Delay_ms(500);
 				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 				GPIO_ResetBits(GPIOC,GPIO_Pin_13);//ղߪ֧ԴˤԶ݌֧Ƿ
 				GPIO_SetBits(GPIOC,GPIO_Pin_1);//ղߪ֧ԴˤԶ                           
@@ -850,6 +856,7 @@ static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 
 static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 {
+	lock = 1;
 	switch (reg_addr)							
 	{	
 		case SLAVE_REG_P00://开始停止电源
@@ -861,11 +868,12 @@ static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 				WM_DeleteWindow(load_wind);
 				WM_DeleteWindow(hWinsysinfo);
 				WM_DeleteWindow(hWincdc);
-				WM_DeleteWindow(hWinset);
+				WM_DeleteWindow(hWinset);				
+				CreateCDC(); 
+				Delay_ms(500);
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 				Delay_ms(500);
 				GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧ƍ
-				CreateCDC(); 
 				SET_Voltage = opv1;
 			    SET_Current = opc1;
 			    cutoff_flag = 0;
@@ -878,6 +886,7 @@ static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 			    mode_sw = mode_pow;
 			    cdc_sw = cdc_on;
 				rmtrig[2] = 1;
+				sendmodeflag = 1;
 			}else if(reg_value == 4){//停止电源
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 				Delay_ms(500);

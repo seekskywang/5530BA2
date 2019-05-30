@@ -5,29 +5,29 @@
                           AREA ||i.OTG_FS_IRQHandler||, CODE, READONLY, ALIGN=1
 
                   OTG_FS_IRQHandler PROC
-;;;23     //处理所有USB中断
-;;;24     void OTG_FS_IRQHandler(void)
+;;;22     //处理所有USB中断
+;;;23     void OTG_FS_IRQHandler(void)
 000000  4770              BX       lr
-;;;25     {
-;;;26       	//USBH_OTG_ISR_Handler(&USB_OTG_Core);
-;;;27     } 
-;;;28     //USB HOST 用户回调函数.
+;;;24     {
+;;;25       	//USBH_OTG_ISR_Handler(&USB_OTG_Core);
+;;;26     } 
+;;;27     //USB HOST 用户回调函数.
                           ENDP
 
 
                           AREA ||i.USBH_UDISK_Read||, CODE, READONLY, ALIGN=2
 
                   USBH_UDISK_Read PROC
-;;;209    //返回值:错误状态;0,正常;其他,错误代码;		 
-;;;210    u8 USBH_UDISK_Read(u8* buf,u32 sector,u32 cnt)
+;;;208    //返回值:错误状态;0,正常;其他,错误代码;		 
+;;;209    u8 USBH_UDISK_Read(u8* buf,u32 sector,u32 cnt)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;211    {
+;;;210    {
 000004  4606              MOV      r6,r0
 000006  460f              MOV      r7,r1
 000008  4615              MOV      r5,r2
-;;;212    	u8 res=1;
+;;;211    	u8 res=1;
 00000a  2401              MOVS     r4,#1
-;;;213    	if(HCD_IsDeviceConnected(&USB_OTG_Core)&&AppState==USH_USR_FS_TEST)//连接还存在,且是APP测试状态
+;;;212    	if(HCD_IsDeviceConnected(&USB_OTG_Core)&&AppState==USH_USR_FS_TEST)//连接还存在,且是APP测试状态
 00000c  480f              LDR      r0,|L2.76|
 00000e  f7fffffe          BL       HCD_IsDeviceConnected
 000012  b1a8              CBZ      r0,|L2.64|
@@ -35,10 +35,10 @@
 000016  7800              LDRB     r0,[r0,#0]  ; AppState
 000018  2801              CMP      r0,#1
 00001a  d111              BNE      |L2.64|
-;;;214    	{  		    
-;;;215    		do
-;;;216    		{
-;;;217    			res=USBH_MSC_Read10(&USB_OTG_Core,buf,sector,512*cnt);
+;;;213    	{  		    
+;;;214    		do
+;;;215    		{
+;;;216    			res=USBH_MSC_Read10(&USB_OTG_Core,buf,sector,512*cnt);
 00001c  026d              LSLS     r5,r5,#9
                   |L2.30|
 00001e  462b              MOV      r3,r5
@@ -47,32 +47,32 @@
 000024  4809              LDR      r0,|L2.76|
 000026  f7fffffe          BL       USBH_MSC_Read10
 00002a  4604              MOV      r4,r0
-;;;218    			USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);		      
+;;;217    			USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);		      
 00002c  4909              LDR      r1,|L2.84|
 00002e  4807              LDR      r0,|L2.76|
 000030  f7fffffe          BL       USBH_MSC_HandleBOTXfer
-;;;219    			if(!HCD_IsDeviceConnected(&USB_OTG_Core))
+;;;218    			if(!HCD_IsDeviceConnected(&USB_OTG_Core))
 000034  4805              LDR      r0,|L2.76|
 000036  f7fffffe          BL       HCD_IsDeviceConnected
 00003a  b120              CBZ      r0,|L2.70|
-;;;220    			{
-;;;221    				res=1;//读写错误
-;;;222    				break;
-;;;223    			};   
-;;;224    		}while(res==USBH_MSC_BUSY);
+;;;219    			{
+;;;220    				res=1;//读写错误
+;;;221    				break;
+;;;222    			};   
+;;;223    		}while(res==USBH_MSC_BUSY);
 00003c  2c03              CMP      r4,#3
 00003e  d0ee              BEQ      |L2.30|
                   |L2.64|
-;;;225    	}else res=1;		  
-;;;226    	if(res==USBH_MSC_OK)res=0;	
-;;;227    	return res;
+;;;224    	}else res=1;		  
+;;;225    	if(res==USBH_MSC_OK)res=0;	
+;;;226    	return res;
 000040  4620              MOV      r0,r4
-;;;228    }
+;;;227    }
 000042  e8bd81f0          POP      {r4-r8,pc}
                   |L2.70|
-000046  2401              MOVS     r4,#1                 ;221
+000046  2401              MOVS     r4,#1                 ;220
 000048  e7fa              B        |L2.64|
-;;;229    
+;;;228    
                           ENDP
 
 00004a  0000              DCW      0x0000
@@ -86,17 +86,17 @@
                           AREA ||i.USBH_UDISK_Status||, CODE, READONLY, ALIGN=2
 
                   USBH_UDISK_Status PROC
-;;;199    //      1,就绪
-;;;200    u8 USBH_UDISK_Status(void)
+;;;198    //      1,就绪
+;;;199    u8 USBH_UDISK_Status(void)
 000000  b510              PUSH     {r4,lr}
-;;;201    {
-;;;202    	return HCD_IsDeviceConnected(&USB_OTG_Core);//返回U盘状态
+;;;200    {
+;;;201    	return HCD_IsDeviceConnected(&USB_OTG_Core);//返回U盘状态
 000002  4802              LDR      r0,|L3.12|
 000004  f7fffffe          BL       HCD_IsDeviceConnected
 000008  b2c0              UXTB     r0,r0
-;;;203    }
+;;;202    }
 00000a  bd10              POP      {r4,pc}
-;;;204    
+;;;203    
                           ENDP
 
                   |L3.12|
@@ -105,16 +105,16 @@
                           AREA ||i.USBH_UDISK_Write||, CODE, READONLY, ALIGN=2
 
                   USBH_UDISK_Write PROC
-;;;234    //返回值:错误状态;0,正常;其他,错误代码;		 
-;;;235    u8 USBH_UDISK_Write(u8* buf,u32 sector,u32 cnt)
+;;;233    //返回值:错误状态;0,正常;其他,错误代码;		 
+;;;234    u8 USBH_UDISK_Write(u8* buf,u32 sector,u32 cnt)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;236    {
+;;;235    {
 000004  4606              MOV      r6,r0
 000006  460f              MOV      r7,r1
 000008  4615              MOV      r5,r2
-;;;237    	u8 res=1;
+;;;236    	u8 res=1;
 00000a  2401              MOVS     r4,#1
-;;;238    	if(HCD_IsDeviceConnected(&USB_OTG_Core)&&AppState==USH_USR_FS_TEST)//连接还存在,且是APP测试状态
+;;;237    	if(HCD_IsDeviceConnected(&USB_OTG_Core)&&AppState==USH_USR_FS_TEST)//连接还存在,且是APP测试状态
 00000c  480f              LDR      r0,|L4.76|
 00000e  f7fffffe          BL       HCD_IsDeviceConnected
 000012  b1a8              CBZ      r0,|L4.64|
@@ -122,10 +122,10 @@
 000016  7800              LDRB     r0,[r0,#0]  ; AppState
 000018  2801              CMP      r0,#1
 00001a  d111              BNE      |L4.64|
-;;;239    	{  		    
-;;;240    		do
-;;;241    		{
-;;;242    			res=USBH_MSC_Write10(&USB_OTG_Core,buf,sector,512*cnt); 
+;;;238    	{  		    
+;;;239    		do
+;;;240    		{
+;;;241    			res=USBH_MSC_Write10(&USB_OTG_Core,buf,sector,512*cnt); 
 00001c  026d              LSLS     r5,r5,#9
                   |L4.30|
 00001e  462b              MOV      r3,r5
@@ -134,32 +134,32 @@
 000024  4809              LDR      r0,|L4.76|
 000026  f7fffffe          BL       USBH_MSC_Write10
 00002a  4604              MOV      r4,r0
-;;;243    			USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);		      
+;;;242    			USBH_MSC_HandleBOTXfer(&USB_OTG_Core ,&USB_Host);		      
 00002c  4909              LDR      r1,|L4.84|
 00002e  4807              LDR      r0,|L4.76|
 000030  f7fffffe          BL       USBH_MSC_HandleBOTXfer
-;;;244    			if(!HCD_IsDeviceConnected(&USB_OTG_Core))
+;;;243    			if(!HCD_IsDeviceConnected(&USB_OTG_Core))
 000034  4805              LDR      r0,|L4.76|
 000036  f7fffffe          BL       HCD_IsDeviceConnected
 00003a  b120              CBZ      r0,|L4.70|
-;;;245    			{
-;;;246    				res=1;//读写错误
-;;;247    				break;
-;;;248    			};   
-;;;249    		}while(res==USBH_MSC_BUSY);
+;;;244    			{
+;;;245    				res=1;//读写错误
+;;;246    				break;
+;;;247    			};   
+;;;248    		}while(res==USBH_MSC_BUSY);
 00003c  2c03              CMP      r4,#3
 00003e  d0ee              BEQ      |L4.30|
                   |L4.64|
-;;;250    	}else res=1;		  
-;;;251    	if(res==USBH_MSC_OK)res=0;	
-;;;252    	return res;
+;;;249    	}else res=1;		  
+;;;250    	if(res==USBH_MSC_OK)res=0;	
+;;;251    	return res;
 000040  4620              MOV      r0,r4
-;;;253    }
+;;;252    }
 000042  e8bd81f0          POP      {r4-r8,pc}
                   |L4.70|
-000046  2401              MOVS     r4,#1                 ;246
+000046  2401              MOVS     r4,#1                 ;245
 000048  e7fa              B        |L4.64|
-;;;254    
+;;;253    
                           ENDP
 
 00004a  0000              DCW      0x0000
@@ -173,40 +173,40 @@
                           AREA ||i.USBH_USR_Configuration_DescAvailable||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_Configuration_DescAvailable PROC
-;;;111    //配置描述符获有效
-;;;112    void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
+;;;110    //配置描述符获有效
+;;;111    void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
 000000  7948              LDRB     r0,[r1,#5]
-;;;113                                              USBH_InterfaceDesc_TypeDef *itfDesc,
-;;;114                                              USBH_EpDesc_TypeDef *epDesc)
-;;;115    {
-;;;116    	USBH_InterfaceDesc_TypeDef *id; 
-;;;117    	id = itfDesc;   
-;;;118    	if((*id).bInterfaceClass==0x08)
-;;;119    	{
-;;;120    		//printf("可移动存储器设备!\r\n"); 
-;;;121    	}else if((*id).bInterfaceClass==0x03)
-;;;122    	{
-;;;123    		//printf("HID 设备!\r\n"); 
-;;;124    	}    
-;;;125    }
+;;;112                                              USBH_InterfaceDesc_TypeDef *itfDesc,
+;;;113                                              USBH_EpDesc_TypeDef *epDesc)
+;;;114    {
+;;;115    	USBH_InterfaceDesc_TypeDef *id; 
+;;;116    	id = itfDesc;   
+;;;117    	if((*id).bInterfaceClass==0x08)
+;;;118    	{
+;;;119    		//printf("可移动存储器设备!\r\n"); 
+;;;120    	}else if((*id).bInterfaceClass==0x03)
+;;;121    	{
+;;;122    		//printf("HID 设备!\r\n"); 
+;;;123    	}    
+;;;124    }
 000002  4770              BX       lr
-;;;126    //获取到设备Manufacturer String
+;;;125    //获取到设备Manufacturer String
                           ENDP
 
 
                           AREA ||i.USBH_USR_DeInit||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_DeInit PROC
-;;;183    //用户要求重新初始化设备
-;;;184    void USBH_USR_DeInit(void)
+;;;182    //用户要求重新初始化设备
+;;;183    void USBH_USR_DeInit(void)
 000000  4901              LDR      r1,|L6.8|
-;;;185    {
-;;;186      	AppState=USH_USR_FS_INIT;
+;;;184    {
+;;;185      	AppState=USH_USR_FS_INIT;
 000002  2000              MOVS     r0,#0
 000004  7008              STRB     r0,[r1,#0]
-;;;187    }
+;;;186    }
 000006  4770              BX       lr
-;;;188    //无法恢复的错误!!  
+;;;187    //无法恢复的错误!!  
                           ENDP
 
                   |L6.8|
@@ -215,53 +215,53 @@
                           AREA ||i.USBH_USR_DeviceAddressAssigned||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_DeviceAddressAssigned PROC
-;;;106    //从机地址分配成功
-;;;107    void USBH_USR_DeviceAddressAssigned(void)
+;;;105    //从机地址分配成功
+;;;106    void USBH_USR_DeviceAddressAssigned(void)
 000000  4770              BX       lr
-;;;108    {
-;;;109    	//printf("从机地址分配成功!\r\n");   
-;;;110    }
-;;;111    //配置描述符获有效
+;;;107    {
+;;;108    	//printf("从机地址分配成功!\r\n");   
+;;;109    }
+;;;110    //配置描述符获有效
                           ENDP
 
 
                           AREA ||i.USBH_USR_DeviceAttached||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_DeviceAttached PROC
-;;;61     //检测到U盘插入
-;;;62     void USBH_USR_DeviceAttached(void)//U盘插入
+;;;60     //检测到U盘插入
+;;;61     void USBH_USR_DeviceAttached(void)//U盘插入
 000000  4770              BX       lr
-;;;63     {
-;;;64     	//printf("检测到USB设备插入!\r\n");
-;;;65     }
-;;;66     //检测到U盘拔出
+;;;62     {
+;;;63     	//printf("检测到USB设备插入!\r\n");
+;;;64     }
+;;;65     //检测到U盘拔出
                           ENDP
 
 
                           AREA ||i.USBH_USR_DeviceDisconnected||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_DeviceDisconnected PROC
-;;;66     //检测到U盘拔出
-;;;67     void USBH_USR_DeviceDisconnected (void)//U盘移除
+;;;65     //检测到U盘拔出
+;;;66     void USBH_USR_DeviceDisconnected (void)//U盘移除
 000000  4770              BX       lr
-;;;68     {
-;;;69     	//printf("USB设备拔出!\r\n");
-;;;70     }  
-;;;71     //复位从机
+;;;67     {
+;;;68     	//printf("USB设备拔出!\r\n");
+;;;69     }  
+;;;70     //复位从机
                           ENDP
 
 
                           AREA ||i.USBH_USR_DeviceNotSupported||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_DeviceNotSupported PROC
-;;;146    //无法识别的USB设备
-;;;147    void USBH_USR_DeviceNotSupported(void)
+;;;145    //无法识别的USB设备
+;;;146    void USBH_USR_DeviceNotSupported(void)
 000000  a001              ADR      r0,|L10.8|
-;;;148    {
-;;;149    	printf("无法识别的USB设备!\r\n\r\n");    
+;;;147    {
+;;;148    	printf("无法识别的USB设备!\r\n\r\n");    
 000002  f7ffbffe          B.W      __2printf
-;;;150    }  
-;;;151    //等待用户输入按键,执行下一步操作
+;;;149    }  
+;;;150    //等待用户输入按键,执行下一步操作
                           ENDP
 
 000006  0000              DCW      0x0000
@@ -277,28 +277,28 @@
                           AREA ||i.USBH_USR_DeviceSpeedDetected||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_DeviceSpeedDetected PROC
-;;;77     //DeviceSpeed:从机速度(0,1,2 / 其他)
-;;;78     void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
+;;;76     //DeviceSpeed:从机速度(0,1,2 / 其他)
+;;;77     void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 000000  4770              BX       lr
-;;;79     {
-;;;80     	if(DeviceSpeed==HPRT0_PRTSPD_HIGH_SPEED)
-;;;81     	{
-;;;82     		//printf("高速(HS)USB设备!\r\n");
-;;;83      	}  
-;;;84     	else if(DeviceSpeed==HPRT0_PRTSPD_FULL_SPEED)
-;;;85     	{
-;;;86     		//printf("全速(FS)USB设备!\r\n"); 
-;;;87     	}
-;;;88     	else if(DeviceSpeed==HPRT0_PRTSPD_LOW_SPEED)
-;;;89     	{
-;;;90     		//printf("低速(LS)USB设备!\r\n");  
-;;;91     	}
-;;;92     	else
-;;;93     	{
-;;;94     		//printf("设备错误!\r\n");  
-;;;95     	}
-;;;96     }
-;;;97     //检测到从机的描述符
+;;;78     {
+;;;79     	if(DeviceSpeed==HPRT0_PRTSPD_HIGH_SPEED)
+;;;80     	{
+;;;81     		//printf("高速(HS)USB设备!\r\n");
+;;;82      	}  
+;;;83     	else if(DeviceSpeed==HPRT0_PRTSPD_FULL_SPEED)
+;;;84     	{
+;;;85     		//printf("全速(FS)USB设备!\r\n"); 
+;;;86     	}
+;;;87     	else if(DeviceSpeed==HPRT0_PRTSPD_LOW_SPEED)
+;;;88     	{
+;;;89     		//printf("低速(LS)USB设备!\r\n");  
+;;;90     	}
+;;;91     	else
+;;;92     	{
+;;;93     		//printf("设备错误!\r\n");  
+;;;94     	}
+;;;95     }
+;;;96     //检测到从机的描述符
                           ENDP
 
 
@@ -311,24 +311,24 @@
                           REQUIRE _printf_x
                           REQUIRE _printf_longlong_hex
                   USBH_USR_Device_DescAvailable PROC
-;;;98     //DeviceDesc:设备描述符指针
-;;;99     void USBH_USR_Device_DescAvailable(void *DeviceDesc)
+;;;97     //DeviceDesc:设备描述符指针
+;;;98     void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 000000  b510              PUSH     {r4,lr}
-;;;100    { 
+;;;99     { 
 000002  4604              MOV      r4,r0
-;;;101    	USBH_DevDesc_TypeDef *hs;
-;;;102    	hs=DeviceDesc;   
-;;;103    	printf("VID: %04Xh\r\n" , (uint32_t)(*hs).idVendor); 
+;;;100    	USBH_DevDesc_TypeDef *hs;
+;;;101    	hs=DeviceDesc;   
+;;;102    	printf("VID: %04Xh\r\n" , (uint32_t)(*hs).idVendor); 
 000004  a004              ADR      r0,|L12.24|
 000006  8921              LDRH     r1,[r4,#8]
 000008  f7fffffe          BL       __2printf
-;;;104    	printf("PID: %04Xh\r\n" , (uint32_t)(*hs).idProduct); 
+;;;103    	printf("PID: %04Xh\r\n" , (uint32_t)(*hs).idProduct); 
 00000c  8961              LDRH     r1,[r4,#0xa]
 00000e  e8bd4010          POP      {r4,lr}
 000012  a005              ADR      r0,|L12.40|
 000014  f7ffbffe          B.W      __2printf
-;;;105    }
-;;;106    //从机地址分配成功
+;;;104    }
+;;;105    //从机地址分配成功
                           ENDP
 
                   |L12.24|
@@ -351,14 +351,14 @@
                           AREA ||i.USBH_USR_EnumerationDone||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_EnumerationDone PROC
-;;;141    //设备USB枚举完成
-;;;142    void USBH_USR_EnumerationDone(void)
+;;;140    //设备USB枚举完成
+;;;141    void USBH_USR_EnumerationDone(void)
 000000  a001              ADR      r0,|L13.8|
-;;;143    { 
-;;;144    	printf("设备枚举完成!\r\n\r\n");    
+;;;142    { 
+;;;143    	printf("设备枚举完成!\r\n\r\n");    
 000002  f7ffbffe          B.W      __2printf
-;;;145    } 
-;;;146    //无法识别的USB设备
+;;;144    } 
+;;;145    //无法识别的USB设备
                           ENDP
 
 000006  0000              DCW      0x0000
@@ -374,23 +374,23 @@
                           AREA ||i.USBH_USR_Init||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_Init PROC
-;;;53     //USB HOST 初始化 
-;;;54     void USBH_USR_Init(void)
+;;;52     //USB HOST 初始化 
+;;;53     void USBH_USR_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;55     {
-;;;56     	printf("USB OTG HS MSC Host\r\n");
+;;;54     {
+;;;55     	printf("USB OTG HS MSC Host\r\n");
 000002  a005              ADR      r0,|L14.24|
 000004  f7fffffe          BL       __2printf
-;;;57     	printf("> USB Host library started.\r\n");
+;;;56     	printf("> USB Host library started.\r\n");
 000008  a009              ADR      r0,|L14.48|
 00000a  f7fffffe          BL       __2printf
-;;;58     	printf("  USB Host Library v2.1.0\r\n\r\n");
+;;;57     	printf("  USB Host Library v2.1.0\r\n\r\n");
 00000e  e8bd4010          POP      {r4,lr}
 000012  a00f              ADR      r0,|L14.80|
 000014  f7ffbffe          B.W      __2printf
-;;;59     	
-;;;60     }
-;;;61     //检测到U盘插入
+;;;58     	
+;;;59     }
+;;;60     //检测到U盘插入
                           ENDP
 
                   |L14.24|
@@ -428,85 +428,78 @@
                           AREA ||i.USBH_USR_MSC_Application||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_MSC_Application PROC
-;;;164    //USB HOST MSC类用户应用程序
-;;;165    int USBH_USR_MSC_Application(void)
+;;;163    //USB HOST MSC类用户应用程序
+;;;164    int USBH_USR_MSC_Application(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;166    {
-;;;167    	u8 res=0;
+;;;165    {
+;;;166    	u8 res=0;
 000002  2400              MOVS     r4,#0
-;;;168      	switch(AppState)
-000004  4d08              LDR      r5,|L15.40|
+;;;167      	switch(AppState)
+000004  4d05              LDR      r5,|L15.28|
 000006  7829              LDRB     r1,[r5,#0]  ; AppState
 000008  2900              CMP      r1,#0
-00000a  d002              BEQ      |L15.18|
-00000c  2901              CMP      r1,#1
-00000e  d109              BNE      |L15.36|
-000010  e005              B        |L15.30|
-                  |L15.18|
-;;;169      	{
-;;;170        	case USH_USR_FS_INIT://初始化文件系统 
-;;;171    			printf("开始执行用户程序!!!\r\n");
-000012  a006              ADR      r0,|L15.44|
-000014  f7fffffe          BL       __2printf
-;;;172    			AppState=USH_USR_FS_TEST;
-000018  2001              MOVS     r0,#1
-00001a  7028              STRB     r0,[r5,#0]
-;;;173          		break;
-00001c  e002              B        |L15.36|
-                  |L15.30|
-;;;174        	case USH_USR_FS_TEST:	//执行USB OTG 测试主程序
-;;;175    			res=USH_User_App(); //用户主程序
-00001e  f7fffffe          BL       USH_User_App
-;;;176         		res=0;
-000022  2400              MOVS     r4,#0
-                  |L15.36|
-;;;177    			if(res)AppState=USH_USR_FS_INIT;
-;;;178          		break;
-;;;179        	default:break;
-;;;180      	} 
-;;;181    	return res;
-000024  4620              MOV      r0,r4
-;;;182    }
-000026  bd70              POP      {r4-r6,pc}
-;;;183    //用户要求重新初始化设备
+00000a  d104              BNE      |L15.22|
+;;;168      	{
+;;;169        	case USH_USR_FS_INIT://初始化文件系统 
+;;;170    			printf("开始执行用户程序!!!\r\n");
+00000c  a004              ADR      r0,|L15.32|
+00000e  f7fffffe          BL       __2printf
+;;;171    			AppState=USH_USR_FS_TEST;
+000012  2101              MOVS     r1,#1
+000014  7029              STRB     r1,[r5,#0]
+                  |L15.22|
+;;;172          		break;
+;;;173        	case USH_USR_FS_TEST:	//执行USB OTG 测试主程序
+;;;174    //			res=USH_User_App(); //用户主程序
+;;;175         		res=0;
+;;;176    			if(res)AppState=USH_USR_FS_INIT;
+;;;177          		break;
+;;;178        	default:break;
+;;;179      	} 
+;;;180    	return res;
+000016  4620              MOV      r0,r4
+;;;181    }
+000018  bd70              POP      {r4-r6,pc}
+;;;182    //用户要求重新初始化设备
                           ENDP
 
-                  |L15.40|
+00001a  0000              DCW      0x0000
+                  |L15.28|
                           DCD      ||area_number.26||
-                  |L15.44|
-00002c  bfaacabc          DCB      191,170,202,188,214,180,208,208,211,195,187,167,179,204,208
-000030  d6b4d0d0
-000034  d3c3bba7
-000038  b3ccd0  
-00003b  f2212121          DCB      242,"!!!\r\n",0
-00003f  0d0a00  
-000042  00                DCB      0
-000043  00                DCB      0
+                  |L15.32|
+000020  bfaacabc          DCB      191,170,202,188,214,180,208,208,211,195,187,167,179,204,208
+000024  d6b4d0d0
+000028  d3c3bba7
+00002c  b3ccd0  
+00002f  f2212121          DCB      242,"!!!\r\n",0
+000033  0d0a00  
+000036  00                DCB      0
+000037  00                DCB      0
 
                           AREA ||i.USBH_USR_Manufacturer_String||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_Manufacturer_String PROC
-;;;126    //获取到设备Manufacturer String
-;;;127    void USBH_USR_Manufacturer_String(void *ManufacturerString)
+;;;125    //获取到设备Manufacturer String
+;;;126    void USBH_USR_Manufacturer_String(void *ManufacturerString)
 000000  4770              BX       lr
-;;;128    {
-;;;129    	//printf("Manufacturer: %s\r\n",(char *)ManufacturerString);
-;;;130    }
-;;;131    //获取到设备Product String 
+;;;127    {
+;;;128    	//printf("Manufacturer: %s\r\n",(char *)ManufacturerString);
+;;;129    }
+;;;130    //获取到设备Product String 
                           ENDP
 
 
                           AREA ||i.USBH_USR_OverCurrentDetected||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_OverCurrentDetected PROC
-;;;157    //USB接口电流过载
-;;;158    void USBH_USR_OverCurrentDetected (void)
+;;;156    //USB接口电流过载
+;;;157    void USBH_USR_OverCurrentDetected (void)
 000000  a001              ADR      r0,|L17.8|
-;;;159    {
-;;;160    	printf("端口电流过大!!!\r\n");
+;;;158    {
+;;;159    	printf("端口电流过大!!!\r\n");
 000002  f7ffbffe          B.W      __2printf
-;;;161    } 
-;;;162    
+;;;160    } 
+;;;161    
                           ENDP
 
 000006  0000              DCW      0x0000
@@ -523,53 +516,53 @@
                           AREA ||i.USBH_USR_Product_String||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_Product_String PROC
-;;;131    //获取到设备Product String 
-;;;132    void USBH_USR_Product_String(void *ProductString)
+;;;130    //获取到设备Product String 
+;;;131    void USBH_USR_Product_String(void *ProductString)
 000000  4770              BX       lr
-;;;133    {
-;;;134    	//printf("Product: %s\r\n",(char *)ProductString);  
-;;;135    }
-;;;136    //获取到设备SerialNum String 
+;;;132    {
+;;;133    	//printf("Product: %s\r\n",(char *)ProductString);  
+;;;134    }
+;;;135    //获取到设备SerialNum String 
                           ENDP
 
 
                           AREA ||i.USBH_USR_ResetDevice||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_ResetDevice PROC
-;;;71     //复位从机
-;;;72     void USBH_USR_ResetDevice(void)
+;;;70     //复位从机
+;;;71     void USBH_USR_ResetDevice(void)
 000000  4770              BX       lr
-;;;73     {
-;;;74     	//printf("复位设备...\r\n");
-;;;75     }
-;;;76     //检测到从机速度
+;;;72     {
+;;;73     	//printf("复位设备...\r\n");
+;;;74     }
+;;;75     //检测到从机速度
                           ENDP
 
 
                           AREA ||i.USBH_USR_SerialNum_String||, CODE, READONLY, ALIGN=1
 
                   USBH_USR_SerialNum_String PROC
-;;;136    //获取到设备SerialNum String 
-;;;137    void USBH_USR_SerialNum_String(void *SerialNumString)
+;;;135    //获取到设备SerialNum String 
+;;;136    void USBH_USR_SerialNum_String(void *SerialNumString)
 000000  4770              BX       lr
-;;;138    {
-;;;139    	//printf("Serial Number: %s\r\n",(char *)SerialNumString);    
-;;;140    } 
-;;;141    //设备USB枚举完成
+;;;137    {
+;;;138    	//printf("Serial Number: %s\r\n",(char *)SerialNumString);    
+;;;139    } 
+;;;140    //设备USB枚举完成
                           ENDP
 
 
                           AREA ||i.USBH_USR_UnrecoveredError||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_UnrecoveredError PROC
-;;;188    //无法恢复的错误!!  
-;;;189    void USBH_USR_UnrecoveredError (void)
+;;;187    //无法恢复的错误!!  
+;;;188    void USBH_USR_UnrecoveredError (void)
 000000  a001              ADR      r0,|L21.8|
-;;;190    {
-;;;191    	printf("无法恢复的错误!!!\r\n\r\n");	
+;;;189    {
+;;;190    	printf("无法恢复的错误!!!\r\n\r\n");	
 000002  f7ffbffe          B.W      __2printf
-;;;192    }
-;;;193    ////////////////////////////////////////////////////////////////////////////////////////
+;;;191    }
+;;;192    ////////////////////////////////////////////////////////////////////////////////////////
                           ENDP
 
 000006  0000              DCW      0x0000
@@ -586,18 +579,18 @@
                           AREA ||i.USBH_USR_UserInput||, CODE, READONLY, ALIGN=2
 
                   USBH_USR_UserInput PROC
-;;;151    //等待用户输入按键,执行下一步操作
-;;;152    USBH_USR_Status USBH_USR_UserInput(void)
+;;;150    //等待用户输入按键,执行下一步操作
+;;;151    USBH_USR_Status USBH_USR_UserInput(void)
 000000  b510              PUSH     {r4,lr}
-;;;153    { 
-;;;154    	printf("跳过用户确认步骤!\r\n");
+;;;152    { 
+;;;153    	printf("跳过用户确认步骤!\r\n");
 000002  a002              ADR      r0,|L22.12|
 000004  f7fffffe          BL       __2printf
-;;;155    	return USBH_USR_RESP_OK;
+;;;154    	return USBH_USR_RESP_OK;
 000008  2001              MOVS     r0,#1
-;;;156    } 
+;;;155    } 
 00000a  bd10              POP      {r4,pc}
-;;;157    //USB接口电流过载
+;;;156    //USB接口电流过载
                           ENDP
 
                   |L22.12|

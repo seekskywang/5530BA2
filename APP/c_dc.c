@@ -45,6 +45,7 @@ vu8 coffc_step;
 vu8 charge_step;
 vu16 coff[6];
 int count_num(int data);
+u8 sendmodeflag;
 WM_HWIN timer(void);
 
 //=================================================================
@@ -598,6 +599,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                      GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
                     mode_sw = mode_load;
+					sendmodeflag = 1;
                 }
             }
 //			else if(charge_step == 3){
@@ -734,6 +736,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_79);
                     TEXT_SetText(hItem,"");
+					sendmodeflag = 1;
                     
                 }else{
                     c_sum += bc_raw;
@@ -748,7 +751,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
 //                    GPIO_SetBits(GPIOB,GPIO_Pin_13);//打开稳压电源输出
                     mode_sw = mode_pow;
-                    cutoff_flag = 0;                           
+                    cutoff_flag = 0; 
+					sendmodeflag = 1;
                 }
             }
         }else if(pause_flag == 1 && battery_c != 0){

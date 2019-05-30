@@ -187,7 +187,7 @@ N/   874  - Thai (OEM, Windows)
 N/   1    - ASCII (Valid for only non-LFN configuration) */
 N
 N
-N#define	_USE_LFN	3		/* 0 to 3 */
+N#define	_USE_LFN	2		/* 0 to 3 */
 N#define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
 N/* The _USE_LFN option switches the LFN feature.
 N/
@@ -468,7 +468,7 @@ X#if 0
 S	UINT	lockid;			/* File lock ID (index of file semaphore table Files[]) */
 N#endif
 N#if _USE_LFN
-X#if 3
+X#if 2
 N	WCHAR*	lfn;			/* Pointer to the LFN working buffer */
 N	WORD	lfn_idx;		/* Last matched LFN index number (0xFFFF:No LFN) */
 N#endif
@@ -485,7 +485,7 @@ N	WORD	ftime;			/* Last modified time */
 N	BYTE	fattrib;		/* Attribute */
 N	TCHAR	fname[13];		/* Short file name (8.3 format) */
 N#if _USE_LFN
-X#if 3
+X#if 2
 N	TCHAR*	lfname;			/* Pointer to the LFN buffer */
 N	UINT 	lfsize;			/* Size of LFN buffer in TCHAR */
 N#endif
@@ -580,13 +580,13 @@ N#endif
 N
 N/* Unicode support functions */
 N#if _USE_LFN							/* Unicode - OEM code conversion */
-X#if 3							 
+X#if 2							 
 NWCHAR ff_convert (WCHAR chr, UINT dir);	/* OEM-Unicode bidirectional conversion */
 NWCHAR ff_wtoupper (WCHAR chr);			/* Unicode upper-case conversion */
 N#if _USE_LFN == 3						/* Memory functions */
-X#if 3 == 3						 
-Nvoid* ff_memalloc (UINT msize);			/* Allocate memory block */
-Nvoid ff_memfree (void* mblock);			/* Free memory block */
+X#if 2 == 3						 
+Svoid* ff_memalloc (UINT msize);			/* Allocate memory block */
+Svoid ff_memfree (void* mblock);			/* Free memory block */
 N#endif
 N#endif
 N
@@ -41278,7 +41278,6 @@ N///////////////////////////////////////////////////////////////////////////////
 N
 Nstatic u8 AppState;
 Nextern USB_OTG_CORE_HANDLE  USB_OTG_Core;
-N
 N//USB OTG 中断服务函数
 N//处理所有USB中断
 Nvoid OTG_FS_IRQHandler(void)
@@ -41438,7 +41437,7 @@ X			AppState=1;
 N      		break;
 N    	case USH_USR_FS_TEST:	//执行USB OTG 测试主程序
 X    	case 1:	
-N			res=USH_User_App(); //用户主程序
+N//			res=USH_User_App(); //用户主程序
 N     		res=0;
 N			if(res)AppState=USH_USR_FS_INIT;
 X			if(res)AppState=0;

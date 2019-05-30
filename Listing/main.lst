@@ -53520,7 +53520,7 @@ N/   874  - Thai (OEM, Windows)
 N/   1    - ASCII (Valid for only non-LFN configuration) */
 N
 N
-N#define	_USE_LFN	3		/* 0 to 3 */
+N#define	_USE_LFN	2		/* 0 to 3 */
 N#define	_MAX_LFN	255		/* Maximum LFN length to handle (12 to 255) */
 N/* The _USE_LFN option switches the LFN feature.
 N/
@@ -53801,7 +53801,7 @@ X#if 0
 S	UINT	lockid;			/* File lock ID (index of file semaphore table Files[]) */
 N#endif
 N#if _USE_LFN
-X#if 3
+X#if 2
 N	WCHAR*	lfn;			/* Pointer to the LFN working buffer */
 N	WORD	lfn_idx;		/* Last matched LFN index number (0xFFFF:No LFN) */
 N#endif
@@ -53818,7 +53818,7 @@ N	WORD	ftime;			/* Last modified time */
 N	BYTE	fattrib;		/* Attribute */
 N	TCHAR	fname[13];		/* Short file name (8.3 format) */
 N#if _USE_LFN
-X#if 3
+X#if 2
 N	TCHAR*	lfname;			/* Pointer to the LFN buffer */
 N	UINT 	lfsize;			/* Size of LFN buffer in TCHAR */
 N#endif
@@ -53913,13 +53913,13 @@ N#endif
 N
 N/* Unicode support functions */
 N#if _USE_LFN							/* Unicode - OEM code conversion */
-X#if 3							 
+X#if 2							 
 NWCHAR ff_convert (WCHAR chr, UINT dir);	/* OEM-Unicode bidirectional conversion */
 NWCHAR ff_wtoupper (WCHAR chr);			/* Unicode upper-case conversion */
 N#if _USE_LFN == 3						/* Memory functions */
-X#if 3 == 3						 
-Nvoid* ff_memalloc (UINT msize);			/* Allocate memory block */
-Nvoid ff_memfree (void* mblock);			/* Free memory block */
+X#if 2 == 3						 
+Svoid* ff_memalloc (UINT msize);			/* Allocate memory block */
+Svoid ff_memfree (void* mblock);			/* Free memory block */
 N#endif
 N#endif
 N
@@ -59657,8 +59657,8 @@ Nfloat DISS_Current;//负载电流
 Nfloat DISS_POW_Current;//稳压电源电流
 Nfloat disloadv;
 Nu16 disrvalue;
-N//USBH_HOST  USB_Host;
-N//USB_OTG_CORE_HANDLE  USB_OTG_Core;
+NUSBH_HOST  USB_Host;
+NUSB_OTG_CORE_HANDLE  USB_OTG_Core;
 N//FIL   *file;
 N//UINT  br, bw;
 N////u8 *fatbuff;
@@ -59709,6 +59709,7 @@ N	EEPROM_READ_Coeff();//读取校准参数
 N	//IWDG_Inte();
 N	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
 X	Flash_Read32BitDatas(((uint32_t)0x080E0000),40,InFlashSave);
+N
 N//	MYDMA_Config();
 N//    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 N//    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器

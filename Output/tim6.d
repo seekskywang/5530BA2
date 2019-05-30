@@ -84,3 +84,5 @@
 ..\output\tim6.o: ..\APP\MENU.h
 ..\output\tim6.o: ..\Include\ssd1963.h
 ..\output\tim6.o: ..\Include\my_register.h
+..\output\tim6.o: ..\Include\bsp_SysTick.h
+..\output\tim6.o: ..\Include\my_register.h

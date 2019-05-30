@@ -27,7 +27,7 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   GPIO_InitTypeDef  GPIO_InitStructure;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOA时钟
-  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS, ENABLE);//使能USB OTG时钟	钟
+  RCC_AHB1PeriphClockCmd( RCC_AHB1Periph_OTG_HS, ENABLE) ;//使能USB OTG时钟	钟
   //GPIOA11,A12设置
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;//PC14/15复用功能输出	
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
@@ -37,11 +37,11 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
 	
 	
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PC10推挽输出		
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//输出功能
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
-  GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
+//  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PC10推挽输出		
+//  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//输出功能
+//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+//  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; 
+//  GPIO_Init(GPIOC, &GPIO_InitStructure);//初始化
 	
   USB_HOST_PWRCTRL=1;			//开启USB HOST电源供电
 

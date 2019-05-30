@@ -53194,6 +53194,7 @@ Nvu8 coffc_step;
 Nvu8 charge_step;
 Nvu16 coff[6];
 Nint count_num(int data);
+Nu8 sendmodeflag;
 NWM_HWIN timer(void);
 XGUI_HWIN timer(void);
 N
@@ -53851,6 +53852,7 @@ N                     GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
 X                     GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N                    mode_sw = mode_load;
 X                    mode_sw = 2;
+N					sendmodeflag = 1;
 N                }
 N            }
 N//			else if(charge_step == 3){
@@ -54010,6 +54012,7 @@ N
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_79);
 X                    hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x8C));
 N                    TEXT_SetText(hItem,"");
+N					sendmodeflag = 1;
 N                    
 N                }else{
 N                    c_sum += bc_raw;
@@ -54031,7 +54034,8 @@ X                    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0
 N//                    GPIO_SetBits(GPIOB,GPIO_Pin_13);//打开稳压电源输出
 N                    mode_sw = mode_pow;
 X                    mode_sw = 3;
-N                    cutoff_flag = 0;                           
+N                    cutoff_flag = 0; 
+N					sendmodeflag = 1;
 N                }
 N            }
 N        }else if(pause_flag == 1 && battery_c != 0){
@@ -54501,7 +54505,7 @@ X	  track = 1;
 N	  TM1650_SET_LED(0x68,0x70);
 N	  GPIO_ResetBits(GPIOD,GPIO_Pin_12);//İֆ+
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-W "..\APP\c_dc.c" 1118 4 function "IO_OFF" declared implicitly
+W "..\APP\c_dc.c" 1122 4 function "IO_OFF" declared implicitly
 N	  IO_OFF();//ȍ
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
@@ -56280,7 +56284,7 @@ N            break;
 N        }
 N        
 N    }    
-W "..\APP\c_dc.c" 2225 10 variable "loop_count"  was declared but never referenced
+W "..\APP\c_dc.c" 2229 10 variable "loop_count"  was declared but never referenced
 N}
 N
 Nint count_num(int data)

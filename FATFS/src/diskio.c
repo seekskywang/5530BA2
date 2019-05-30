@@ -258,15 +258,16 @@ DWORD get_fattime (void)
 {				 
 	return 0;
 }			 
+
 //动态分配内存
 void *ff_memalloc (UINT size)			
 {
-	return (void*)mymalloc(SRAMIN,size);
+//	return (void*)mymalloc(SRAMIN,size);
 }
 //释放内存
 void ff_memfree (void* mf)		 
 {
-	myfree(SRAMIN,mf);
+//	myfree(SRAMIN,mf);
 }
 
 

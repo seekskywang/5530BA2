@@ -13,6 +13,7 @@
 #include "tim6.h"
 #include "MainTask.h"
 #include "ssd1963.h"
+#include "bsp_SysTick.h"
 /*****************************************************************/
 /*****************************************************************/
 
@@ -45,6 +46,7 @@ extern vu8 hour;
 extern vu8 second1;
 extern vu8 minute1;
 extern vu8 hour1;
+extern u8 sendmodeflag;
 vu8 resetflag;
 vu8 resdone;
 float watch;
@@ -68,6 +70,9 @@ extern float static_lv;
 extern vu8 staticcdc;
 extern vu8 step;
 extern vu16 sendload;
+u8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
+u8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
+u8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
 //????? 3 ?????
 //arr¨²?????c psc¨²??????
 //???????????:Tout=((arr+1)*(psc+1))/Ft us.
@@ -487,9 +492,10 @@ void TIM3_IRQHandler(void)
 {
     static vu8 calert = 0;
     static vu16 resetcount;
-    static vu8 read1963;
+    static vu8 read1963,i;
     static vu16 scancount;
     static vu32 ctime,dctime;
+
     
     if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //????
     {
@@ -544,6 +550,15 @@ void TIM3_IRQHandler(void)
             {
                 if(mode_sw == mode_pow && cdc_sw == cdc_on)
                 {
+					if(sendmodeflag == 1)
+					{
+						for(i=0;i<3;i++)
+						{
+							MODS_SendWithCRC(sendmodepow,6);
+							Delay_ms(50);
+						}
+						sendmodeflag = 0;
+					}
                     ctime++;
                     second = ctime%60;//ç§’
                     minute = (ctime/60)%60;//åˆ†
@@ -556,6 +571,16 @@ void TIM3_IRQHandler(void)
 					}
 //                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
                 }else if(mode_sw == mode_load && cdc_sw == cdc_on){
+					if(sendmodeflag == 1)
+					{
+						for(i=0;i<3;i++)
+						{
+							MODS_SendWithCRC(sendmodeload,6);
+							Delay_ms(50);
+							
+						}
+						sendmodeflag = 0;
+					}
                     dctime++;
                     second1 = dctime%60;//ç§’
                     minute1 = (dctime/60)%60;//åˆ†
@@ -563,12 +588,25 @@ void TIM3_IRQHandler(void)
                     bc_raw += DISS_Current * 1000 * 1/3600;
 //                    c_sum += DISS_Current * 1000 * 1/3600;
                     cbc_raw = 0;
+					if(rmtrig[2] == 1)
+					{
+						SendToPC(2);
+					}
                 }else if(cdc_sw == cdc_off){
                     bc_raw = 0;
                     cbc_raw = 0;
                     c_sum = 0;
                     ctime=0;
                     dctime=0;
+					if(sendmodeflag == 1)
+					{
+						for(i=0;i<3;i++)
+						{
+							MODS_SendWithCRC(sendmodestop,6);
+							Delay_ms(50);
+						}
+						sendmodeflag = 0;
+					}
                 }
             }break;
             case face_load:

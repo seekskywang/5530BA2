@@ -49923,6 +49923,597 @@ N
 N#endif
 N
 L 16 "..\drive\TIM6.c" 2
+N#include "bsp_SysTick.h"
+L 1 "..\Include\bsp_SysTick.h" 1
+N#ifndef __SYSTICK_H
+N#define __SYSTICK_H
+N
+N#include "my_register.h"
+L 1 "..\Include\my_register.h" 1
+N/******************** (C) COPYRIGHT 2014 KUNKIN********************
+N * ¦Ó??  ¨²my_register
+N * ??    ¨²n?
+N * ??    ¨²????
+N * ??    ¨²Define register??????????¨¬???
+N * ??		 ¨²?¦Ó???????¨¬?????
+N * ???¨·¨²2014-12-9
+N*********************************************************************/
+N
+N#include "STM32F4xx.h"
+N#ifndef __my_register_h__
+S#define __my_register_h__
+S//=============================================================================
+Svoid Write_Limits(void);
+Svoid Wrtite_step(void);
+Svoid OC_ADD(void);
+Svoid Wrtite_S(void);
+Svoid Write_oct(void);
+Svoid Write_alarm(void);
+Svoid Write_btype(void);
+Svoid Write_LOAD(void);
+Svoid Write_info(void);
+Svoid OC_CHECK(void);
+Svoid INPUT_POW(char* num);  
+Svoid INPUT_NUM(char* num); 
+Svoid INPUT_CDC(char* num); 
+Svoid INPUT_C(char* num);  
+Svoid INPUT_LOAD(char* num);  
+Svoid INPUT_INFO(vu8 num);
+Svoid SET_OP_DOWN(void);
+Svoid SET_OP_UP(void);
+Svoid SET_OP_RIGHT(void);
+Svoid SET_OP_LEFT(void);
+Svoid PARA_SET(void);
+Svoid SYS_INFO_RIGHT(void);
+Svoid SYS_INFO_LEFT(void);
+Svoid SYS_INFO_UP(void);
+Svoid SYS_INFO_DOWN(void);
+Svoid INPUT_INFO(vu8 num);
+Svoid CDC_OP_DOWN(void);
+Svoid CDC_OP_UP(void);
+Svoid CDC_OP_LEFT(void);
+Svoid CDC_OP_RIGHT(void);
+Svoid CDC_SET(void);
+Svoid INPUT_CDC(char* num); 
+Suint16_t CRC16(uint8_t *_pBuf, uint16_t _usLen);
+Svoid RecHandle(void);
+Svoid MODS_Poll(void);
+Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
+Svoid V_SW(u8 i);
+Svoid C_SW(u8 i);
+S//=============================================================================
+S#define NOP   __nop();	  //???
+S
+S//============================================================================
+Sextern struct bitDefine flagA,flagB,flagC,flagD,flagE,flagF,flagG;
+S#define   Flag_ADC_Full             (flagA.bit1)//DMA??????¦Ë 
+S#define   Flag_BEEP						    	(flagA.bit2)//???????
+S#define   Flag_Key_Scan							(flagA.bit3)//§Õ???????
+S#define   UART_SEND_flag						(flagA.bit4)//????????
+S#define   UART_Buffer_Rece_flag			(flagA.bit5)//????????
+S#define   Flag_Swtich_ON      			(flagA.bit6)//??§Õ???ON??
+S#define   Flag_0_5S      		      	(flagA.bit7)//§¥?????????
+S
+S#define   Flag_1S      		         	(flagB.bit0)//§¥????¡¤????
+S#define   Flag_5S      		        	(flagB.bit1)//????????
+S#define   Flag_Long                 (flagB.bit2)//§Õ??§Õ??
+S#define   Flag_DAC_OFF              (flagB.bit3)//ÊÇ·ñ×ª»»DAC¿ØÖÆÖµ±êÖ¾
+S#define   Flag_SetA                 (flagB.bit5)//?????¡¤??¦Ë
+S#define   Flag_SetV                 (flagB.bit6)//????????¦Ë 
+S#define   Flag_DisSet               (flagB.bit7)//§¥???????¡¤??¦Ë
+S
+S#define   Flag_GE                   (flagC.bit0)//?¦Ë????
+S#define   Flag_SHI                  (flagC.bit1)//?¦Ë????
+S#define   Flag_BAI                  (flagC.bit2)//?¦Ë????
+S#define   Flag_QIAN                 (flagC.bit3)//?¦Ë????
+S#define   Flag_Beep_OFF             (flagC.bit6)//???????
+S
+S#define   flag_Tim_USART            (flagD.bit0)//?????¡ê??
+S#define   flag_Test                 (flagD.bit1)//????????
+S#define   flag_Test_PASS            (flagD.bit2)//????PASS??
+S#define   flag_Test_FAIL            (flagD.bit3)//????FAIL??
+S#define   flag_Test_Time            (flagD.bit4)//??????????
+S#define   flag_Test_Start           (flagD.bit5)//??????????
+S#define   flag_Test_Min             (flagD.bit6)//?????§°??
+S#define   flag_Load_CC              (flagD.bit7)//??CC/CV????¦Ë
+S
+S#define   flag_Test_Door             (flagE.bit0)//????????
+S#define   flag_Test_SetTime          (flagE.bit1)//???????? 
+S#define   flag_OVP                   (flagE.bit2)//OVP??
+S#define   flag_OCP                   (flagE.bit3)//OCP??
+S#define   flag_Doub                  (flagE.bit4)//§Õ???
+S#define   flag_t_Doub                (flagE.bit5)//§Õ???????
+S#define   flag_Time_SW               (flagE.bit6)//????????
+S#define   flag_CC_MODE               (flagE.bit7)//??????
+S
+S#define   flag_Adjust                (flagF.bit0)//
+S#define   flag_ADJ_ON                (flagF.bit1)//
+S#define   flag_ADJ_VL                (flagF.bit2)//
+S#define   flag_ADJ_VH                (flagF.bit3)//
+S#define   flag_ADJ_ALCC              (flagF.bit4)//
+S#define   flag_ADJ_AHCC              (flagF.bit5)//
+S#define   flag_ADJ_ALCV              (flagF.bit6)//
+S#define   flag_ADJ_AHCV              (flagF.bit7)//
+S
+S#define   flag_DisVL                 (flagG.bit0)//
+S#define   flag_OverV                 (flagG.bit1)//
+S#define   flag_OverACC               (flagG.bit2)//
+S#define   flag_OverACV               (flagG.bit3)//
+S#define   flag_Just_Usart            (flagG.bit4)//
+S#define   flag_FAN_ON                (flagG.bit5)//
+S#define   flag_ADJ_FAN               (flagG.bit6)//
+S#define   flag_TM7707_CH						 (flagG.bit7)//
+S//=============================================================================
+Sextern vu32 GE_V;
+Sextern vu32 SHI_V;
+Sextern vu32 BAI_V;
+Sextern vu32 QIAN_V;  //???????
+Sextern vu32 GE_A;
+Sextern vu32 SHI_A;
+Sextern vu32 BAI_A;
+Sextern vu32 QIAN_A;
+S//--------------------------
+Sextern vu8 NewKey;
+Sextern vu8 DAC_Flag;
+Sextern vu8 Beep_Flag;
+Sextern vu8 t_beep;
+Sextern vu8 t_KeyScan;
+Sextern vu8 t_LEDScan;  //?????
+Sextern vu8 t_KEYON;
+Sextern vu16 t_0_5S;
+Sextern vu16 t_1S;
+Sextern vu16 t_5S;
+Sextern vu16 t_Basket;
+Sextern vu16 Basket_V;
+Sextern vu16 Basket_A;
+Sextern vu16 t_OFF_V;
+Sextern vu16 t_ON_V;
+Sextern vu16 t_OFF_A;
+Sextern vu16 t_ON_A;
+Sextern vu8 t_USART;
+Sextern vu16 ADJ_Write;//§µ???§Õ?????
+Sextern vu8 OFFSET_Zore;//¡ê??
+Sextern vu8 ADDR;
+Sextern vu8 t_lock;
+Sextern vu8 t_onoff;
+Sextern vu16 MAX_limit;
+Sextern vu16 MIN_limit;
+Sextern vu16 Test_Time;
+Sextern vu16 Test_Time1;
+Sextern vu16 Time_sw;
+Sextern vu16 Test_Daley;
+Sextern vu16 Test_C_Door;
+Sextern vu16 TEMP_OFFSET;//?????
+S//--------------------------
+Sextern vu8 UART_Buffer_Size;//????????
+Sextern vu8 Transmit_BUFFERsize;
+S//---------------------------
+Sextern vu16 NTC_value;   //AD?
+Sextern vu16 Imon_value;
+Sextern vu32 Imon1_value;
+Sextern vu16 Vmon_value;
+Sextern vu32 Vmon1_value;
+Sextern vu16 Rmon_value;
+S
+Sextern float DISS_Voltage;
+Sextern  float DISS_POW_Voltage;
+Sextern float DISS_Current;
+Sextern float DISS_POW_Current;
+Sextern float DISS_R;
+Sextern vu16 steptime;
+Sextern vu8 r_stable;
+Sextern char set_limit[6];
+Sextern u8 rmtrig[3];
+Sextern vu8 bit;
+Sextern vu8 bit1;
+Sextern vu8 dot_flag;
+Sextern vu8 page_sw;
+Sextern vu8 para_set1;
+Sextern vu8 para_set2;
+Sextern vu8 para_set3;
+Sextern vu8 para_set4;
+Sextern vu8 oct_sw;
+Sextern vu8 set_sw;
+Sextern vu8 charge_step;
+Sextern vu8 cutoff_flag;
+Sextern vu8 lang;
+Sextern vu8 r_raly;
+Sextern vu16 steptime;
+Sextern vu8 alert_flag;
+Sextern vu8 t_onoff;
+Sextern vu8 ocstop;
+Sextern float temp;
+Sextern vu8 mode_sw;
+Sextern vu16 stepcount;
+Sextern vu32 battery_c;
+Sextern float bc_raw;
+Sextern float cbc_raw;
+Sextern float c_sum;
+Sextern vu8 track;
+Sextern vu8 clear_flag1;
+Sextern vu8 clear_flag2;
+Sextern vu8 clear_flag3;
+Sextern vu8 pass;
+Sextern vu8 b_type;
+Sextern vu8 buffer;
+Sextern float clear_v;
+Sextern float clear_pv;
+Sextern float clear_lv;
+Sextern float temp;
+Sextern vu8 set_loop_count;
+Sextern vu8 test_mode;
+Sextern u8 usartocflag;
+Sextern u8 usartshortflag;
+Sextern float oc_data;
+Sextern vu8 lock;
+Sextern vu32 Run_Control[49];	
+Sextern u8 lockstat1,lockstat2;
+Sextern int32_t InFlashSave[40];
+Sextern vu8 vflag;
+Svoid dma_rec(vu16 buf,u16 ndtr);
+Sextern float disloadv;
+Sextern u16 disrvalue;
+Sextern vu8 cflag;
+S#define set_max_lv						InFlashSave[0]
+S#define set_min_lv						InFlashSave[1]
+S#define set_max_pc						InFlashSave[2]
+S#define set_min_pc						InFlashSave[3]
+S#define set_load_cutoffv				InFlashSave[4]
+S#define set_pow_cutoffc					InFlashSave[5]
+S#define REG_Load_A1			   			InFlashSave[6]
+S#define SET_LoadA1			   			InFlashSave[7]
+S#define REG_LoadA_Offset1   			InFlashSave[8]
+S#define SET_LoadA_Offset1   			InFlashSave[9]
+S#define REG_Load_A2			   			InFlashSave[10]
+S#define SET_LoadA2			   			InFlashSave[11]
+S#define REG_LoadA_Offset2   			InFlashSave[12]
+S#define SET_LoadA_Offset2   			InFlashSave[13]
+S#define REG_Load_AH			   			InFlashSave[14]
+S#define SET_LoadAH			   			InFlashSave[15]
+S#define REG_LoadA_OffsetH   			InFlashSave[16]
+S#define SET_LoadA_OffsetH   			InFlashSave[17]
+S#define REG_Load_AH1			   		InFlashSave[18]
+S#define SET_LoadAH1			   			InFlashSave[19]
+S#define REG_LoadA_OffsetH1   			InFlashSave[20]
+S#define SET_LoadA_OffsetH1   			InFlashSave[21]
+S#define REG_POWERA1			   			InFlashSave[22]//??CC???¡¤???
+S#define SET_POWERA1			   			InFlashSave[23]//??CC???¡¤?????
+S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???¡¤???
+S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???¡¤?????
+S
+S
+S#define SLAVE_REG_P00		0x0000       //R_VOLU
+S#define SLAVE_REG_P01		0x0001      //Load_Voltage
+S#define SLAVE_REG_P02		0x0002      //Load_Current
+S#define SLAVE_REG_P03		0x0003		//Change_Voltage
+S#define SLAVE_REG_P04		0x0004		//Change_Current
+S#define SLAVE_REG_P05		0x0005		//Load_OCP
+S#define SLAVE_REG_P06		0x0006		//Change_OCP
+S#define SLAVE_REG_P07		0x0007		//Short_Time
+S#define SLAVE_REG_P08		0x0008		//Leak_Current
+S#define SLAVE_REG_P09		0x0009		//R1_Volu
+S#define SLAVE_REG_P10		0x000A		//R2_Volu
+S#define SLAVE_REG_P11		0x000B		//Temper
+S#define SLAVE_REG_P12		0x000C		//DHQ_Voltage
+S#define SLAVE_REG_P13		0x000D		//MODE
+S#define SLAVE_REG_P14		0x000E		//Load_Mode
+S#define SLAVE_REG_P15		0x000F		//Load_SET_Voltage
+S#define SLAVE_REG_P16		0x0010		//Load_SET_Current
+S#define SLAVE_REG_P17		0x0011		//Change_SET_Voltage
+S#define SLAVE_REG_P18		0x0012		//Change_SET_Current
+S
+S/* RTU Ó¦´ð´úÂë */
+S#define RSP_OK				0		/* ³É¹¦ */
+S#define RSP_ERR_CMD			0x01	/* ²»Ö§³ÖµÄ¹¦ÄÜÂë */
+S#define RSP_ERR_REG_ADDR	0x02	/* ¼Ä´æÆ÷µØÖ·´íÎó */
+S#define RSP_ERR_VALUE		0x03	/* Êý¾ÝÖµÓò´íÎó */
+S#define RSP_ERR_WRITE		0x04	/* Ð´ÈëÊ§°Ü */
+S
+S#define S_RX_BUF_SIZE		30
+S#define S_TX_BUF_SIZE		128
+S
+S
+S
+S#define onoff_ch                    Run_Control[0]  //ON/OFF
+S#define SET_Voltage 	    	        Run_Control[1]  //??????
+S#define SET_Current	    	    		  Run_Control[2]  //?????¡¤
+S#define SET_Voltage_Laod 					  Run_Control[3]  //??????
+S#define SET_Current_Laod					  Run_Control[4]  //?????¡¤
+S#define LOCK_KEY								    Run_Control[5]  //
+S#define BEEP_KEY								    Run_Control[6]  //
+S#define STRONG_KEY							    Run_Control[7]  //
+S
+S#define MODE_Woke							   	  Run_Control[8]  //
+S#define POW_Voltage	    	            Run_Control[9]  //?????
+S#define Voltage	    	                Run_Control[10]  //?????
+S#define Current	    	    		    Run_Control[11]  //????¡¤
+S#define Laod_Current	    		    Run_Control[12]  //????¡¤
+S#define R_VLUE							Run_Control[13]  //???
+S#define set_max_v						Run_Control[14]  //ÉèÖÃ²âÁ¿µçÑ¹ÉÏÏÞ
+S#define set_min_v						Run_Control[15]  //ÉèÖÃ²âÁ¿µçÑ¹ÏÂÏÞ
+S#define set_max_r						Run_Control[16]  //ÉèÖÃ²âÁ¿ÄÚ×èÉÏÏÞ
+S#define set_min_r						Run_Control[17]  //ÉèÖÃ²âÁ¿ÄÚ×èÏÂÏÞ
+S#define set_max_c						Run_Control[18]  //ÉèÖÃ²âÁ¿µçÁ÷ÉÏÏÞ
+S#define set_min_c						Run_Control[19]  //ÉèÖÃ²âÁ¿µçÁ÷Î÷Ïß
+S#define set_output_v					Run_Control[20]  //ÉèÖÃ²âÁ¿Êä³öµçÑ¹
+S#define set_output_c					Run_Control[21]  //ÉèÖÃ²âÁ¿Êä³öµçÁ÷
+S#define set_init_c					    Run_Control[22]  //ÉèÖÃ²âÁ¿Êä³öµçÑ¹
+S#define set_sbs_c					    Run_Control[23]  //ÉèÖÃ²âÁ¿Êä³öµçÁ÷
+S#define set_add_c					    Run_Control[24]
+S#define set_c_cutoff_v					Run_Control[25]
+S#define set_c_cutoff_c					Run_Control[26]
+S#define set_dc_cutoff_v					Run_Control[27]
+S#define set_dc_cutoff_c					Run_Control[28]
+S#define start_time					    Run_Control[29]
+S#define end_time					    Run_Control[30]
+S#define opv1    					    Run_Control[31]
+S#define opv2    					    Run_Control[32]
+S#define opv3    					    Run_Control[33]
+S#define opc1    					    Run_Control[34]
+S#define opc2    					    Run_Control[35]
+S#define opc3    					    Run_Control[36]
+S#define load_c    					    Run_Control[37]
+S#define pow_v    					    Run_Control[38]
+S#define cdc_dc    					    Run_Control[39]
+S#define pow_c    					    Run_Control[40]
+S#define load_v    					    Run_Control[41]
+S#define set_static_pv					Run_Control[42]
+S#define set_static_pc					Run_Control[43]
+S#define set_static_lc					Run_Control[44]
+S
+S
+S
+S
+Sextern vu16 coff[6];
+S#define cov1    					    coff[0]
+S#define cov2    					    coff[1]
+S#define cov3    					    coff[2]
+S#define coc1    					    coff[3]
+S#define coc2    					    coff[4]
+S#define coc3    					    coff[5]										 //???
+S
+S/*
+S************************************************************************
+S*						Ò³ÃæÊ¶±ð·û
+S************************************************************************
+S*/
+S
+S#define face_graph      0
+S#define face_cdc        1
+S#define face_menu       2
+S#define face_r          3
+S#define face_load       4
+S#define face_set        5
+S#define face_starter    6
+S#define face_sys_info   7
+S#define face_cal        8
+S/*
+S************************************************************************
+S*						ÉèÖÃÑ¡ÏîÊ¶±ð·û
+S************************************************************************
+S*/
+S
+S#define set_1           0
+S#define set_2           1
+S#define set_3           2
+S#define set_4           3
+S#define set_5           4
+S#define set_6           5
+S#define set_7           6
+S#define set_8           7
+S#define set_9           8
+S#define set_10          9
+S#define set_11          10
+S#define set_12          11
+S#define set_13          12
+S#define set_14          13
+S#define set_15          14
+S#define set_16          15
+S#define set_17          16
+S#define set_18          17
+S#define set_19          18
+S#define set_20          19
+S#define set_21          20
+S#define set_22          21
+S#define set_23          22
+S#define set_24          23
+S#define set_25          24
+S#define set_26          25
+S#define set_27          26
+S#define set_28          27
+S#define set_29          28
+S#define set_30          29
+S#define set_31          30
+S#define set_32          31
+S#define set_33          32
+S#define set_34          33
+S#define set_35          34
+S#define set_36          35
+S#define set_37          36
+S#define set_38          37
+S#define set_39          38
+S#define set_40          39
+S#define set_41          40
+S#define set_42          41
+S#define set_43          42
+S#define set_44          43
+S#define set_45          44
+S#define set_46          45
+S#define set_47          46
+S#define set_48          47
+S#define set_49          48
+S#define set_50          49
+S#define set_51          50
+S#define set_52          51
+S#define set_53          52
+S#define set_54          53
+S#define set_55          54
+S#define set_56          55
+S#define set_57          56
+S#define set_58          57
+S#define set_59          58
+S#define set_60          59
+S#define set_61          60
+S#define set_62          61
+S#define set_63          62
+S#define set_64          63
+S#define set_65          64
+S#define set_66          65
+S#define set_67          66
+S#define set_68          67
+S#define set_69          68
+S#define set_70          69
+S#define set_71          70
+S#define set_72          71
+S#define set_73          72
+S#define set_74          73
+S#define set_75          74
+S#define set_76          75
+S#define set_77          76
+S#define set_78          77
+S#define set_79          78
+S#define set_80          79
+S#define set_81          80
+S#define set_82          81
+S#define set_83          82
+S#define set_84          83
+S#define set_85          84
+S#define set_86          85
+S#define set_87          86
+S#define set_88          87
+S#define set_89          88
+S/*
+S************************************************************************
+S*						²ÎÊýÉèÖÃÊ¶±ð·û
+S************************************************************************
+S*/
+S
+S#define set_1_on            0xff
+S#define set_1_off           0
+S#define set_2_on            0xff
+S#define set_2_off           0
+S#define set_3_on            1
+S#define set_3_off           0
+S#define set_4_on            0xff
+S#define set_4_off           0
+S#define cdc_on              1
+S#define cdc_off             0
+S#define oct_on              1
+S#define oct_off             0
+S#define c_on                1
+S#define c_off               0
+S#define mode_r              1
+S#define mode_load           2
+S#define mode_pow            3
+S#define mode_loadc          4
+S#define mode_powc           5
+S#define input               6
+S#define load_on             1
+S#define load_off            0
+S#define pow_on              1
+S#define pow_off             0
+S#define Lion                1
+S#define NiMH                2
+S#define NiCd                3
+S#define SLA                 4
+S#define LiMH                5
+S#define step1               0
+S#define step2               1
+S#define step3               2
+S
+S
+S
+Sextern vu16 Contr_Voltage;//
+Sextern vu16 Contr_Current;//
+Sextern vu16 Contr_Laod;//
+Sextern vu32 Correct_Parametet[21];
+S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
+S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
+S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
+S#define  SET_LoadA			   Correct_Parametet[2]//??CC?????¡¤??
+S
+S#define  REG_LoadV			   Correct_Parametet[3]//??CV????????
+S#define  SET_LoadV			   Correct_Parametet[4]//??CV??????????
+S
+S#define  REG_CorrectionR   Correct_Parametet[5]//?????
+S
+S#define  REG_POWERA			   Correct_Parametet[6]//??CC???¡¤???
+S#define  SET_POWERA			   Correct_Parametet[7]//??CC???¡¤?????
+S#define  REG_POWERV			   Correct_Parametet[8]//??CV???????
+S#define  REG_POWERV1		   Correct_Parametet[15]//??CV???????
+S#define  REG_POWERV2		   Correct_Parametet[16]//??CV???????
+S#define  SET_POWERV			 Correct_Parametet[9]//??CV????????
+S#define  SET_POWERV1			 Correct_Parametet[19]//??CV????????
+S#define  SET_POWERV2			 Correct_Parametet[20]//??CV????????
+S#define  CON_POWERA				 Correct_Parametet[10]//??CV???¡¤???
+S#define  REG_CorrectionRL    Correct_Parametet[11]//?????
+S#define  REG_CorrectionRH    Correct_Parametet[12]
+S
+S
+S
+Sextern vu8  correct_por[6];
+S#define  Polar                       correct_por[0]//???????
+S#define  Polar1                      correct_por[1]//???¡¤????
+S#define  Polar2						 correct_por[2]//??CV????????
+S#define  Polar3						 correct_por[3]//??????CV???¡¤?
+S#define  Polar4						 correct_por[4]//??CC???¡¤????
+S#define  Polar5						 correct_por[5]//??CV????????
+S
+Sextern vu32 Correct_Strong[21];//§µ???
+S#define  REG_ReadV_Offset   Correct_Strong[0]//???????
+S#define  REG_ReadV_Offset1   Correct_Strong[13]//???????
+S#define  REG_ReadV_Offset2   Correct_Strong[14]//???????
+S#define  REG_LoadA_Offset   Correct_Strong[1]//??CC???¡¤???
+S#define  SET_LoadA_Offset   Correct_Strong[2]//??CC?????¡¤??
+S
+S#define  REG_LoadV_Offset   Correct_Strong[3]//??CV????????
+S#define  SET_LoadV_Offset   Correct_Strong[4]//??CV??????????
+S
+S#define  REG_ReadR_Offset   Correct_Strong[5]//?????
+S
+S#define  REG_POWERA_Offset  Correct_Strong[6]//??CC???¡¤???
+S#define  SET_POWERA_Offset  Correct_Strong[7]//??CC???¡¤?????
+S#define  REG_POWERV_Offset  Correct_Strong[8]//??CV???????
+S#define  REG_POWERV_Offset1  Correct_Strong[15]//??CV???????
+S#define  REG_POWERV_Offset2  Correct_Strong[16]//??CV???????
+S#define  SET_POWERV_Offset	Correct_Strong[9]//??CV????????
+S#define  SET_POWERV_Offset1	Correct_Strong[19]//??CV????????
+S#define  SET_POWERV_Offset2	Correct_Strong[20]//??CV????????
+S#define  CON_POWERA_Offset	Correct_Strong[10]//??CV???¡¤???
+S#define  REG_ReadRL_Offset   Correct_Strong[11]//?????
+S#define  REG_ReadRH_Offset   Correct_Strong[12]
+S
+S//---------------------------
+Sextern vu16 ADC_NTC_Filt[50];
+Sextern vu16 ADC_Vmon_Filt[50];
+Sextern vu16 ADC_Imon_Filt[50];
+Sextern vu8 UART_Buffer_Rece[16];
+Sextern vu8 UART_Buffer_Send[20];
+S//============================================================================= 
+Sstruct MODS_T
+S{
+S	uint8_t RxBuf[S_RX_BUF_SIZE];
+S	uint8_t TxBuf[S_TX_BUF_SIZE];
+S	uint8_t RxCount;
+S	uint8_t RxStatus;
+S	uint8_t RxNewFlag;
+S	uint8_t RspCode;
+S	
+S	uint8_t TxCount;
+S};
+S
+S#define Receive_BUFFERSIZE   10
+S//=============================================================================
+N#endif
+N/******************* (C) COPYRIGHT 2015 KUNKIN *****END OF FILE*************************/
+L 5 "..\Include\bsp_SysTick.h" 2
+N
+Nvoid SysTick_Init(void);
+Nvoid Delay_us(vu32 nTime);         // µ¥Î»1us
+Nvoid TimingDelay_Decrement(void);
+N#endif /* __SYSTICK_H */
+L 17 "..\drive\TIM6.c" 2
 N/*****************************************************************/
 N/*****************************************************************/
 N
@@ -49955,6 +50546,7 @@ Nextern vu8 hour;
 Nextern vu8 second1;
 Nextern vu8 minute1;
 Nextern vu8 hour1;
+Nextern u8 sendmodeflag;
 Nvu8 resetflag;
 Nvu8 resdone;
 Nfloat watch;
@@ -49978,6 +50570,9 @@ Nextern float static_lv;
 Nextern vu8 staticcdc;
 Nextern vu8 step;
 Nextern vu16 sendload;
+Nu8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
+Nu8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
+Nu8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
 N//????? 3 ?????
 N//arr¨²?????c psc¨²??????
 N//???????????:Tout=((arr+1)*(psc+1))/Ft us.
@@ -50049,27 +50644,27 @@ N                     GUI_Init();
 N                     if(page_sw == face_menu)
 X                     if(page_sw == 2)
 N                     {
-W "..\drive\TIM6.c" 132 26 function "ResetPow" declared implicitly
+W "..\drive\TIM6.c" 137 26 function "ResetPow" declared implicitly
 N                         ResetPow();
 N                     }else if(page_sw == face_cdc){
 X                     }else if(page_sw == 1){
-W "..\drive\TIM6.c" 134 26 function "ResetCDC" declared implicitly
+W "..\drive\TIM6.c" 139 26 function "ResetCDC" declared implicitly
 N                         ResetCDC();
 N                     }else if(page_sw == face_r){
 X                     }else if(page_sw == 3){
-W "..\drive\TIM6.c" 136 26 function "ResetR" declared implicitly
+W "..\drive\TIM6.c" 141 26 function "ResetR" declared implicitly
 N                         ResetR();
 N                     }else if(page_sw == face_load){
 X                     }else if(page_sw == 4){
-W "..\drive\TIM6.c" 138 26 function "ResetLoad" declared implicitly
+W "..\drive\TIM6.c" 143 26 function "ResetLoad" declared implicitly
 N                         ResetLoad();
 N                     }else if(page_sw == face_graph){
 X                     }else if(page_sw == 0){
-W "..\drive\TIM6.c" 140 26 function "ResetG" declared implicitly
+W "..\drive\TIM6.c" 145 26 function "ResetG" declared implicitly
 N                         ResetG();
 N                     }else if(page_sw == face_set){
 X                     }else if(page_sw == 5){
-W "..\drive\TIM6.c" 142 26 function "ResetSET" declared implicitly
+W "..\drive\TIM6.c" 147 26 function "ResetSET" declared implicitly
 N                         ResetSET();
 N                     }
 N//                     resdone = 1;
@@ -50100,7 +50695,7 @@ N					powcount++;
 N				}else{
 N					powcount = 0;
 N					
-W "..\drive\TIM6.c" 167 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 172 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					step = 2;
 N				}
@@ -50122,7 +50717,7 @@ N					static_pc = DISS_POW_Current;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 182 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 187 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50170,7 +50765,7 @@ N					powcount++;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 220 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 225 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50203,10 +50798,10 @@ X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//Ö§Ø“ØºÕ˜On
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				}
-W "..\drive\TIM6.c" 240 30 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 245 30 single-precision operand implicitly converted to double-precision
 N				if(((v - DISS_Voltage) > v*0.6)/* || (DISS_Current < 0.05)*/)
 N				{
-W "..\drive\TIM6.c" 242 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 247 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					step = 7;
 N				}else{
@@ -50228,7 +50823,7 @@ N	//                 shortv = DISS_Voltage;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 258 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 263 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50239,7 +50834,7 @@ N				}
 N			 }else if(step == 0)
 N			 {
 N				 powcount = 0;
-W "..\drive\TIM6.c" 267 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 272 6 function "IO_OFF" declared implicitly
 N				 IO_OFF();
 N			 }
 N		}
@@ -50273,7 +50868,7 @@ X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x0
 N            }
 N            crec2 = crec1;
 N            crec1 = DISS_Current;
-W "..\drive\TIM6.c" 290 33 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 295 33 single-precision operand implicitly converted to double-precision
 N            if(crec1 < crec2 && crec2 > 0.3)
 N            {     
 N                oc_data = crec2;
@@ -50358,11 +50953,11 @@ X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }
-W "..\drive\TIM6.c" 352 43 single-precision operand implicitly converted to double-precision
-W "..\drive\TIM6.c" 352 59 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 357 43 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 357 59 single-precision operand implicitly converted to double-precision
 N            if(((shortv - DISS_Voltage) > shortv*0.6) || (DISS_Current < 0.05))
 N            {
-W "..\drive\TIM6.c" 354 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 359 17 function "IO_OFF" declared implicitly
 N                IO_OFF();
 N                usartshortflag = 0;               
 N                g_tModS.TxBuf[17] = (short_time/10)>>8;
@@ -50393,18 +50988,18 @@ N                SET_Current_Laod = 1000;
 X                Run_Control[4] = 1000;
 N                powcount = 0;
 N                finishflag = 0;
-W "..\drive\TIM6.c" 379 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 384 17 function "IO_OFF" declared implicitly
 N                IO_OFF();                
 N            }
 N        }
 N    }    
-W "..\drive\TIM6.c" 106 8 variable "crec"  was declared but never referenced
-W "..\drive\TIM6.c" 107 9 variable "csend"  was declared but never referenced
-W "..\drive\TIM6.c" 108 16 variable "sendbuf"  was declared but never referenced
-W "..\drive\TIM6.c" 109 8 variable "sendlen"  was declared but never referenced
-W "..\drive\TIM6.c" 110 16 variable "recrc"  was declared but never referenced
-W "..\drive\TIM6.c" 111 16 variable "scrc"  was declared but never referenced
-W "..\drive\TIM6.c" 113 8 variable "i"  was declared but never referenced
+W "..\drive\TIM6.c" 111 8 variable "crec"  was declared but never referenced
+W "..\drive\TIM6.c" 112 9 variable "csend"  was declared but never referenced
+W "..\drive\TIM6.c" 113 16 variable "sendbuf"  was declared but never referenced
+W "..\drive\TIM6.c" 114 8 variable "sendlen"  was declared but never referenced
+W "..\drive\TIM6.c" 115 16 variable "recrc"  was declared but never referenced
+W "..\drive\TIM6.c" 116 16 variable "scrc"  was declared but never referenced
+W "..\drive\TIM6.c" 118 8 variable "i"  was declared but never referenced
 N}
 N
 N//void TIM6_Config(void)
@@ -50525,9 +51120,10 @@ Nvoid TIM3_IRQHandler(void)
 N{
 N    static vu8 calert = 0;
 N    static vu16 resetcount;
-N    static vu8 read1963;
+N    static vu8 read1963,i;
 N    static vu16 scancount;
 N    static vu32 ctime,dctime;
+N
 N    
 N    if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //????
 X    if(TIM_GetITStatus(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0400)),((uint16_t)0x0001))==SET) 
@@ -50588,6 +51184,16 @@ N            {
 N                if(mode_sw == mode_pow && cdc_sw == cdc_on)
 X                if(mode_sw == 3 && cdc_sw == 1)
 N                {
+N					if(sendmodeflag == 1)
+N					{
+N						for(i=0;i<3;i++)
+N						{
+N							MODS_SendWithCRC(sendmodepow,6);
+W "..\drive\TIM6.c" 558 8 function "Delay_ms" declared implicitly
+N							Delay_ms(50);
+N						}
+N						sendmodeflag = 0;
+N					}
 N                    ctime++;
 N                    second = ctime%60;//ç§’
 N                    minute = (ctime/60)%60;//åˆ†
@@ -50601,6 +51207,17 @@ N					}
 N//                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
 N                }else if(mode_sw == mode_load && cdc_sw == cdc_on){
 X                }else if(mode_sw == 2 && cdc_sw == 1){
+N					if(sendmodeflag == 1)
+N					{
+N						for(i=0;i<3;i++)
+N						{
+N							MODS_SendWithCRC(sendmodeload,6);
+W "..\drive\TIM6.c" 579 8 function "Delay_ms" declared implicitly
+N							Delay_ms(50);
+N							
+N						}
+N						sendmodeflag = 0;
+N					}
 N                    dctime++;
 N                    second1 = dctime%60;//ç§’
 N                    minute1 = (dctime/60)%60;//åˆ†
@@ -50608,6 +51225,10 @@ N                    hour1   = dctime/3600;//æ—¶
 N                    bc_raw += DISS_Current * 1000 * 1/3600;
 N//                    c_sum += DISS_Current * 1000 * 1/3600;
 N                    cbc_raw = 0;
+N					if(rmtrig[2] == 1)
+N					{
+N						SendToPC(2);
+N					}
 N                }else if(cdc_sw == cdc_off){
 X                }else if(cdc_sw == 0){
 N                    bc_raw = 0;
@@ -50615,6 +51236,16 @@ N                    cbc_raw = 0;
 N                    c_sum = 0;
 N                    ctime=0;
 N                    dctime=0;
+N					if(sendmodeflag == 1)
+N					{
+N						for(i=0;i<3;i++)
+N						{
+N							MODS_SendWithCRC(sendmodestop,6);
+W "..\drive\TIM6.c" 606 8 function "Delay_ms" declared implicitly
+N							Delay_ms(50);
+N						}
+N						sendmodeflag = 0;
+N					}
 N                }
 N            }break;
 N            case face_load:
@@ -50867,7 +51498,7 @@ N
 N	/* åˆ†æžåº”ç”¨å±‚åè®?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 802 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 840 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -50882,7 +51513,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* å¿…é¡»æ¸…é›¶è®¡æ•°å™¨ï¼Œæ–¹ä¾¿ä¸‹æ¬¡å¸§åŒæ­?*/
-W "..\drive\TIM6.c" 737 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 738 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 775 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 776 18 variable "crc1"  was declared but never referenced
 N}
 N
