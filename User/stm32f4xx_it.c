@@ -478,6 +478,7 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 	switch (reg_addr)									/* ÅÐ¶Ï¼Ä´æÆ÷µØÖ· */
 	{
         case SLAVE_REG_P00:
+			C_SW(1);
 			value =	R_VLUE;	
 			break;
 		case SLAVE_REG_P01:
@@ -497,7 +498,7 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 			break;
 		case SLAVE_REG_P05:
 			IO_OFF();
-            SET_Current_Laod = 1000;
+            SET_Current_Laod = 0;
             usartocflag = 1; 
 //            while(usartocflag == 1);
             value = (int)(oc_data*1000);

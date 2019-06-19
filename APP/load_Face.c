@@ -905,7 +905,7 @@ void LOAD_SET(void) {
 				set_load_cutoffv = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				set_load_cutoffv = atof(buf)*1000;
 			}
             load_cutoffv = (float)set_load_cutoffv/1000;
@@ -1228,7 +1228,7 @@ void INPUT_LOAD(char* num){
             WM_HWIN hItem;
  //           WM_InvalidateWindow(load_wind);
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_143);
-			if(bit < 6)
+			if(bit < 7)
 			{
 				strcat(set_limit,num);
 			}

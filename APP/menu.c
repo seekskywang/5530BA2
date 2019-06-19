@@ -763,7 +763,7 @@ void MENU_SET(void)
 				set_pow_cutoffc = atoi(set_limit)*1000;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 3);
+				strncpy(buf,set_limit,dot_flag + 4);
 				set_pow_cutoffc = atof(buf)*1000;
 			}
             if(set_pow_cutoffc > 5000)
@@ -1107,7 +1107,7 @@ void INPUT_POW(char* num){
             WM_HWIN hItem;
 //            WM_InvalidateWindow(hWinWind);
             hItem = WM_GetDialogItem(hWinWind, ID_TEXT_144);
-			if(bit < 6)
+			if(bit < 7)
 			{
 				strcat(set_limit,num);
 				if(dot_flag != 0 && strcmp(num,".") == 0)

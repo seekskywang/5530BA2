@@ -266,7 +266,7 @@ void TIM4_IRQHandler(void)
 					step = 0;
 //					IO_OFF();                
 				}
-			 }else if(step == 0)
+			 }else if(step == 0 && powcount == 0)
 			 {
 				 powcount = 0;
 				 IO_OFF();
@@ -276,7 +276,7 @@ void TIM4_IRQHandler(void)
 		
         if(usartocflag == 1)
         {
-
+			
             if(flag_Load_CC == 1)
             {   
 //				load_sw = load_on;
@@ -334,6 +334,7 @@ void TIM4_IRQHandler(void)
                 powcount = 0;
                 powflag = 0;
                 GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
+				Delay_ms(500);
                 GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器 
                 usartshortflag = 1;
                 
