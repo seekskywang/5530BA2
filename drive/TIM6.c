@@ -603,6 +603,11 @@ void TIM3_IRQHandler(void)
 					{
 						for(i=0;i<3;i++)
 						{
+							if(rmtrig[2] == 1)
+							{
+								SendToPC(2);
+							}
+							Delay_ms(50);
 							MODS_SendWithCRC(sendmodestop,6);
 							Delay_ms(50);
 						}
