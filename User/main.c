@@ -25,8 +25,8 @@
 #include "dac8531.h"
 #include "ad7689.h"
 #include "internalflash.h"
-#include "usbh_usr.h" 
-#include "ff.h" 
+#include "flash_if.h"
+
 
 float DISS_Voltage;//负载电压
 float DISS_POW_Voltage;//稳压电源电压
@@ -34,8 +34,7 @@ float DISS_Current;//负载电流
 float DISS_POW_Current;//稳压电源电流
 float disloadv;
 u16 disrvalue;
-USBH_HOST  USB_Host;
-USB_OTG_CORE_HANDLE  USB_OTG_Core;
+
 //FIL   *file;
 //UINT  br, bw;
 ////u8 *fatbuff;
@@ -43,6 +42,8 @@ USB_OTG_CORE_HANDLE  USB_OTG_Core;
 //u8 RX_BUF[REC_LEN] __attribute__ ((at(0X20001000)));//接收缓冲,最大REC_LEN个字节,起始地址为0X20001000.    
 //static  u8    filedatabuf[2048];
 //static  UINT   readcount;
+
+
 
 struct bitDefine
 {
@@ -58,6 +59,8 @@ struct bitDefine
 
 int main(void)
 {
+	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x20000);
+	__enable_irq();
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);//开启CRC时钟，STEMWIN授权使用
 	RCC_Configuration();
 	SysTick_Init();

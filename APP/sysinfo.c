@@ -170,7 +170,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetColor(0x00BFFFFF);
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt("JK5530B", 140, 50);
-        GUI_DispStringAt("Ver:3.0", 140, 75);
+        GUI_DispStringAt("Ver:3.1", 140, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端

@@ -17,6 +17,7 @@
 #include  "gui.h"
 #include "MainTask.h"
 #include "internalflash.h"
+#include "flash_if.h"
 
 extern WM_HWIN CreateR(void);
 extern WM_HWIN CreateWindow2(void);
@@ -172,6 +173,59 @@ extern u8 calmode;
 /* 闀挎寜鏃堕棿 */
 #define         KEY_LONG_PERIOD             50                /* 长按时间1S */
 #define        KEY_CONTINUE_PERIOD          10                /* 双击时间500ms */
+
+void JumpBoot(u8 flag)
+{
+  	void (*pUserApp)(void);
+  uint32_t JumpAddress;
+	if(flag==55)
+  {		
+	__asm("CPSID  I");
+        
+		JumpAddress = *(volatile uint32_t*) (USER_FLASH_FIRST_PAGE_ADDRESS+4);
+		pUserApp = (void (*)(void)) JumpAddress;
+		TIM_Cmd(TIM1, DISABLE);	
+		TIM_DeInit(TIM1);
+		TIM_ITConfig(TIM1,TIM_IT_Update,DISABLE);
+		TIM_Cmd(TIM2, DISABLE);	
+		TIM_DeInit(TIM2);
+		TIM_ITConfig(TIM2,TIM_IT_Update,DISABLE);
+		TIM_Cmd(TIM4,DISABLE);
+		TIM_DeInit(TIM4);
+		TIM_ITConfig(TIM4,TIM_IT_Update,DISABLE);
+		TIM_Cmd(TIM6, DISABLE);	
+	    TIM_DeInit(TIM6);
+		TIM_ITConfig(TIM6,TIM_IT_Update,DISABLE);
+		USART_DeInit(USART1);
+		USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);		
+		USART_Cmd(USART1,DISABLE);
+	    USART_DeInit(USART3);
+		USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);		
+		USART_Cmd(USART3,DISABLE);
+		RCC_DeInit();
+		RCC_RTCCLKCmd(DISABLE);
+		EXTI_DeInit();
+		SysTick->CTRL = 0;
+		RTC_DeInit();
+		RTC_ITConfig(RTC_IT_WUT,DISABLE);//关闭WAKE UP 定时器中断
+		RTC_WakeUpCmd( DISABLE);//关闭WAKE UP 定时器　
+		__disable_irq();
+		NVIC_DisableIRQ(OTG_FS_IRQn);
+		NVIC_DisableIRQ(OTG_FS_WKUP_IRQn);
+		NVIC_DisableIRQ(OTG_HS_IRQn);
+		NVIC_DisableIRQ(OTG_HS_WKUP_IRQn);
+		__ASM volatile ("cpsid i");
+		/* Initialize user application's Stack Pointer */
+		__set_PSP(*(volatile uint32_t*) USER_FLASH_FIRST_PAGE_ADDRESS);
+		__set_CONTROL(0);
+		__set_MSP(*(volatile uint32_t*) USER_FLASH_FIRST_PAGE_ADDRESS);
+		
+        
+		
+//		NVIC_SystemReset();
+		pUserApp();
+	}
+}
 
 /************************************************************************************************************************/
 vu32 Key_Scan(void)
@@ -1665,6 +1719,10 @@ void Key_Funtion(void)
                             KeyCounter = 0;
                             BEEP_Tiggr();//
                         }break;
+						case face_sys_info:
+                        {
+							JumpBoot(55);
+						}break;
                     }
                     
                 }

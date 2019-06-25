@@ -326,7 +326,7 @@
 ;;;379      /* FPU settings ------------------------------------------------------------*/
 ;;;380      #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
 ;;;381        SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
-000002  4812              LDR      r0,|L3.76|
+000002  4811              LDR      r0,|L3.72|
 000004  6801              LDR      r1,[r0,#0]
 000006  f4410170          ORR      r1,r1,#0xf00000
 00000a  6001              STR      r1,[r0,#0]
@@ -334,14 +334,14 @@
 ;;;383      /* Reset the RCC clock configuration to the default reset state ------------*/
 ;;;384      /* Set HSION bit */
 ;;;385      RCC->CR |= (uint32_t)0x00000001;
-00000c  4810              LDR      r0,|L3.80|
+00000c  480f              LDR      r0,|L3.76|
 00000e  6801              LDR      r1,[r0,#0]
 000010  f0410101          ORR      r1,r1,#1
 000014  6001              STR      r1,[r0,#0]
 ;;;386    
 ;;;387      /* Reset CFGR register */
 ;;;388      RCC->CFGR = 0x00000000;
-000016  4a0e              LDR      r2,|L3.80|
+000016  4a0d              LDR      r2,|L3.76|
 000018  2100              MOVS     r1,#0
 00001a  3208              ADDS     r2,r2,#8
 00001c  6011              STR      r1,[r2,#0]
@@ -349,14 +349,14 @@
 ;;;390      /* Reset HSEON, CSSON and PLLON bits */
 ;;;391      RCC->CR &= (uint32_t)0xFEF6FFFF;
 00001e  6802              LDR      r2,[r0,#0]
-000020  4b0c              LDR      r3,|L3.84|
+000020  4b0b              LDR      r3,|L3.80|
 000022  401a              ANDS     r2,r2,r3
 000024  6002              STR      r2,[r0,#0]
 ;;;392    
 ;;;393      /* Reset PLLCFGR register */
 ;;;394      RCC->PLLCFGR = 0x24003010;
 000026  1d03              ADDS     r3,r0,#4
-000028  4a0b              LDR      r2,|L3.88|
+000028  4a0a              LDR      r2,|L3.84|
 00002a  601a              STR      r2,[r3,#0]
 ;;;395    
 ;;;396      /* Reset HSEBYP bit */
@@ -367,7 +367,7 @@
 ;;;398    
 ;;;399      /* Disable all interrupts */
 ;;;400      RCC->CIR = 0x00000000;
-000034  4806              LDR      r0,|L3.80|
+000034  4805              LDR      r0,|L3.76|
 000036  300c              ADDS     r0,r0,#0xc
 000038  6001              STR      r1,[r0,#0]
 ;;;401    
@@ -385,25 +385,26 @@
 ;;;412      SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
 ;;;413    #else
 ;;;414      SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
-00003e  4903              LDR      r1,|L3.76|
-000040  f04f6000          MOV      r0,#0x8000000
-000044  3980              SUBS     r1,r1,#0x80
-000046  6008              STR      r0,[r1,#0]
+00003e  4902              LDR      r1,|L3.72|
+000040  4805              LDR      r0,|L3.88|
+000042  3980              SUBS     r1,r1,#0x80
+000044  6008              STR      r0,[r1,#0]
 ;;;415    #endif
 ;;;416    }
-000048  bd10              POP      {r4,pc}
+000046  bd10              POP      {r4,pc}
 ;;;417    
                           ENDP
 
-00004a  0000              DCW      0x0000
-                  |L3.76|
+                  |L3.72|
                           DCD      0xe000ed88
-                  |L3.80|
+                  |L3.76|
                           DCD      0x40023800
-                  |L3.84|
+                  |L3.80|
                           DCD      0xfef6ffff
-                  |L3.88|
+                  |L3.84|
                           DCD      0x24003010
+                  |L3.88|
+                          DCD      0x08020000
 
                           AREA ||.data||, DATA, ALIGN=2
 

@@ -90,3 +90,5 @@
 ..\output\key.o: ..\STemWinLibrary522\inc\TREEVIEW.h
 ..\output\key.o: ..\APP\MENU.h
 ..\output\key.o: ..\Include\internalflash.h
+..\output\key.o: ..\User\flash_if.h
+..\output\key.o: ..\User\flash_if.h
