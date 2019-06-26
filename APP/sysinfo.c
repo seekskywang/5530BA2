@@ -176,6 +176,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//2.8电源电压显示改成测量端
 		//2.9增加动态测试协议
 		//3.0修复截止电压电流输入只有2位有效数字bug
+		//3.1增加U盘IAP
         GUI_DispStringAt("Ver:1.3", 140, 100);
         GUI_DispStringAt("-", 191, 125);
         GUI_DispStringAt("-", 227, 125);
@@ -206,7 +207,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_136);
             TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-            sprintf(buf,"%4d",disrvalue);
+            sprintf(buf,"%d",NTC_value);
             TEXT_SetFont(hItem,&GUI_Font24_1);//设定文本字体
             GUI_UC_SetEncodeUTF8();        
             TEXT_SetText(hItem,buf);

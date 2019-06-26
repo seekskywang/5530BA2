@@ -158,14 +158,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_161);
 			TEXT_SetText(hItem,"");
 		}
-            if(DISS_POW_Voltage < 0.1)
+            if(disloadv < 0.1)
             {
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_86);
                 sprintf(buf,"%.3f",0.00);       
                 TEXT_SetText(hItem,buf);
             }else{
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_86);
-                sprintf(buf,"%.3f",DISS_Voltage);       
+                sprintf(buf,"%.3f",disloadv);       
                 TEXT_SetText(hItem,buf);
             }
 //         }else{
