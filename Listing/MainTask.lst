@@ -48942,6 +48942,7 @@ Nextern vu16 steptime;
 Nextern vu8 r_stable;
 Nextern char set_limit[6];
 Nextern u8 rmtrig[3];
+Nextern vu8 jkflag;
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49558,6 +49559,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50161,6 +50163,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50767,6 +50770,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -51373,6 +51377,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52011,6 +52016,7 @@ Nextern vu8 test_start;
 Nextern vu8 step;
 NRCC_ClocksTypeDef rcc;
 Nvu16 sendload;
+Nvu8 jkflag;
 Nextern vu8 cdc_sw;
 Nvu8 ocf;
 Nvu8 vflag;
@@ -52070,8 +52076,13 @@ N	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x0800));
 N	Flag_Swtich_ON=0;
 X	(flagA . bit6)=0;
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 85 5 function "CreateSTARTER" declared implicitly
-N    CreateSTARTER();
+N	if(jkflag == 1)
+N	{
+W "..\STemWinLibrary522\emWinTask\MainTask.c" 88 3 function "CreateSTARTER" declared implicitly
+N		CreateSTARTER();
+N	}else if(jkflag == 0){
+N		CreateR();
+N	}
 N////	CreateR();//开机进入内阻测试界面
 N//// 	flag_Load_CC=1;//开机负载默认进入CC模式
 N//// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC

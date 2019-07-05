@@ -172,6 +172,7 @@ extern vu16 steptime;
 extern vu8 r_stable;
 extern char set_limit[6];
 extern u8 rmtrig[3];
+extern vu8 jkflag;
 extern vu8 bit;
 extern vu8 bit1;
 extern vu8 dot_flag;

@@ -35025,6 +35025,7 @@ Nextern vu16 steptime;
 Nextern vu8 r_stable;
 Nextern char set_limit[6];
 Nextern u8 rmtrig[3];
+Nextern vu8 jkflag;
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49498,6 +49499,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50104,6 +50106,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50629,7 +50632,7 @@ X    if(TIM_GetITStatus(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0800)),((ui
 N    {
 N        TIM_ClearITPendingBit(TIM4,TIM_IT_Update); //����жϱ�־λ
 X        TIM_ClearITPendingBit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0800)),((uint16_t)0x0001)); 
-N        
+N        IWDG_ReloadCounter();
 N        if(page_sw != face_starter)
 X        if(page_sw != 6)
 N        {
@@ -51132,6 +51135,7 @@ X    if(TIM_GetITStatus(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0400)),((ui
 N    {
 N        TIM_ClearITPendingBit(TIM3,TIM_IT_Update); //??????��
 X        TIM_ClearITPendingBit(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0400)),((uint16_t)0x0001)); 
+N		
 N//         if(page_sw != face_starter)
 N//         {
 N//              if(resetflag == 1)
@@ -51191,7 +51195,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodepow,6);
-W "..\drive\TIM6.c" 559 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 560 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N						}
 N						sendmodeflag = 0;
@@ -51214,7 +51218,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodeload,6);
-W "..\drive\TIM6.c" 580 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 581 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							
 N						}
@@ -51246,7 +51250,7 @@ N							if(rmtrig[2] == 1)
 N							{
 N								SendToPC(2);
 N							}
-W "..\drive\TIM6.c" 610 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 611 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							MODS_SendWithCRC(sendmodestop,6);
 N							Delay_ms(50);
@@ -51505,7 +51509,7 @@ N
 N	/* 分析应用层协�?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 846 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 847 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -51520,7 +51524,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* 必须清零计数器，方便下次帧同�?*/
-W "..\drive\TIM6.c" 781 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 782 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 782 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 783 18 variable "crc1"  was declared but never referenced
 N}
 N

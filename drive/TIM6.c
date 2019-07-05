@@ -121,7 +121,7 @@ void TIM4_IRQHandler(void)
     if(TIM_GetITStatus(TIM4,TIM_IT_Update)==SET) //????
     {
         TIM_ClearITPendingBit(TIM4,TIM_IT_Update); //清除中断标志位
-        
+        IWDG_ReloadCounter();
         if(page_sw != face_starter)
         {
              if(resetflag == 1)
@@ -501,6 +501,7 @@ void TIM3_IRQHandler(void)
     if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //????
     {
         TIM_ClearITPendingBit(TIM3,TIM_IT_Update); //??????λ
+		
 //         if(page_sw != face_starter)
 //         {
 //              if(resetflag == 1)

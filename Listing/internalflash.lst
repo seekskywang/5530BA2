@@ -35026,11 +35026,13 @@ NStartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
 NEndSector = Flash_GetSector(address+4*length);
 Nfor (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 N{
-Nif (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
-Xif (FLASH_EraseSector(i, ((uint8_t)0x02)) != FLASH_COMPLETE) while (1);
+Nif (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1) IWDG_ReloadCounter();;
+Xif (FLASH_EraseSector(i, ((uint8_t)0x02)) != FLASH_COMPLETE) while (1) IWDG_ReloadCounter();;
+N	IWDG_ReloadCounter();
 N}
 Nfor(i=0; i<length; i++)
 N{
+N	IWDG_ReloadCounter();
 Nif (FLASH_ProgramWord(address, data_32[i]) == FLASH_COMPLETE)   //将DATA_32写入相应的地址。
 N{
 N   address = address + 4;
@@ -35289,5 +35291,5 @@ N//WriteData:要写入的数据
 Nvoid Test_Write(u32 WriteAddr,u16 WriteData)   	
 N{
 N	STMFLASH_Write(WriteAddr,&WriteData,1);//写入一个字 
-W "..\drive\internalflash.c" 340 2 last line of file ends without a newline
+W "..\drive\internalflash.c" 342 2 last line of file ends without a newline
 N}

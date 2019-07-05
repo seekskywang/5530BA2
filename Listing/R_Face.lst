@@ -48894,6 +48894,7 @@ Nextern vu16 steptime;
 Nextern vu8 r_stable;
 Nextern char set_limit[6];
 Nextern u8 rmtrig[3];
+Nextern vu8 jkflag;
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49481,6 +49482,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52173,6 +52175,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53452,7 +53455,10 @@ N	GUI_SetFont(&GUI_Fontsymbol);
 N	GUI_UC_SetEncodeUTF8();
 N	GUI_SetTextMode(GUI_TM_TRANS);//设置文本模式为底色透明
 X	GUI_SetTextMode((1<<1));
-N	GUI_DispStringAt("Jinko", 5, 1);//SET
+N	if(jkflag == 1)
+N	{
+N		GUI_DispStringAt("Jinko", 5, 1);//SET
+N	}
 N	GUI_SetColor(GUI_WHITE);
 X	GUI_SetColor(0x00FFFFFF);
 N	GUI_SetFont(&GUI_FontHZ20S);
@@ -53684,14 +53690,14 @@ N				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 
 X				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && Run_Control[13] > 20 && con_flag == 0)
 N				{
 N					con_flag = 1;
-W "..\APP\R_Face.c" 442 14 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 445 14 single-precision operand implicitly converted to double-precision
 N					time1 = (float)GUI_GetTime()/500.0;
 N				}
 N				if(con_flag == 1)
 N				{
 N					if(test_mode == 0)
 N					{
-W "..\APP\R_Face.c" 448 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 451 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 0.5)
 N						{
 N							if(staticcdc == 1)
@@ -53710,7 +53716,7 @@ X							r = Run_Control[13];
 N							v = DISS_Voltage;
 N						}
 N					}else if(test_mode == 1){
-W "..\APP\R_Face.c" 463 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 466 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 N						{
 N							if(staticcdc == 1)
@@ -53737,7 +53743,7 @@ N                TEXT_SetTextColor(hItem, GUI_WHITE);
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
 N                TEXT_SetText(hItem, "未测试");
 N				
-W "..\APP\R_Face.c" 484 8 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 487 8 single-precision operand implicitly converted to double-precision
 N				if(DISS_Voltage < 0.3)
 N                {
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -53865,7 +53871,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 588 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 591 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54483,7 +54489,7 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1066 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1069 5 function "setmode_r" declared implicitly
 N    setmode_r();
 N	C_SW(1);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
@@ -55241,7 +55247,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1592 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1595 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55257,7 +55263,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1605 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1608 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -55608,7 +55614,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 1763 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 1766 5 variable "i"  was declared but never referenced
 N}
 N
 N//内阻页面数字输入
@@ -56487,8 +56493,8 @@ N        crec2 = 0;
 N        rpow = 1;
 N		step =5;
 N    }
-W "..\APP\R_Face.c" 2737 27 single-precision operand implicitly converted to double-precision
-W "..\APP\R_Face.c" 2737 78 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2740 27 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2740 78 single-precision operand implicitly converted to double-precision
 N    if(((crec1 < crec2 && crec2 > 0.3) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
 X    if(((crec1 < crec2 && crec2 > 0.3) || v -  DISS_Voltage > v*0.9) && para_set2 == 0xff)
 N    {
@@ -56543,7 +56549,7 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 2782 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2785 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.9 && para_set2 == 0xff)
 N    {
@@ -56664,7 +56670,7 @@ N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-W "..\APP\R_Face.c" 2878 6 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 2881 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Voltage < 0.3)
 N		{
 N			rcomp = 0;

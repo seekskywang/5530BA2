@@ -62,29 +62,44 @@
 000068  f7fffffe          BL       LCD_Initializtion
 ;;;82     	EEPROM_READ_Coeff();//读取校准参数
 00006c  f7fffffe          BL       EEPROM_READ_Coeff
-;;;83     	//IWDG_Inte();
+;;;83     	IWDG_Inte();
+000070  f7fffffe          BL       IWDG_Inte
 ;;;84     	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
-000070  4a04              LDR      r2,|L1.132|
-000072  2128              MOVS     r1,#0x28
-000074  4804              LDR      r0,|L1.136|
-000076  f7fffffe          BL       Flash_Read32BitDatas
-;;;85     
-;;;86     //	MYDMA_Config();
-;;;87     //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
-;;;88     //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
-;;;89     	MainTask();
-00007a  f7fffffe          BL       MainTask
-;;;90     }
-00007e  2000              MOVS     r0,#0
-000080  bd10              POP      {r4,pc}
-;;;91     
+000074  4a08              LDR      r2,|L1.152|
+000076  2128              MOVS     r1,#0x28
+000078  4808              LDR      r0,|L1.156|
+00007a  f7fffffe          BL       Flash_Read32BitDatas
+;;;85     	if(jkflag > 1)
+00007e  4808              LDR      r0,|L1.160|
+000080  7801              LDRB     r1,[r0,#0]  ; jkflag
+000082  2901              CMP      r1,#1
+000084  d903              BLS      |L1.142|
+;;;86     	{
+;;;87     		jkflag = 1;
+000086  2101              MOVS     r1,#1
+000088  7001              STRB     r1,[r0,#0]
+;;;88     		Write_Limits();
+00008a  f7fffffe          BL       Write_Limits
+                  |L1.142|
+;;;89     	}
+;;;90     //	MYDMA_Config();
+;;;91     //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
+;;;92     //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
+;;;93     	MainTask();
+00008e  f7fffffe          BL       MainTask
+;;;94     }
+000092  2000              MOVS     r0,#0
+000094  bd10              POP      {r4,pc}
+;;;95     
                           ENDP
 
-000082  0000              DCW      0x0000
-                  |L1.132|
+000096  0000              DCW      0x0000
+                  |L1.152|
                           DCD      InFlashSave
-                  |L1.136|
+                  |L1.156|
                           DCD      0x080e0000
+                  |L1.160|
+                          DCD      jkflag
 
                           AREA ||.data||, DATA, ALIGN=2
 

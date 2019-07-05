@@ -80,9 +80,13 @@ int main(void)
 	AD7689_InitializeSPI1();//AD7689初始化
 	LCD_Initializtion();//液晶屏初始化	
 	EEPROM_READ_Coeff();//读取校准参数
-	//IWDG_Inte();
+	IWDG_Inte();
 	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
-
+	if(jkflag > 1)
+	{
+		jkflag = 1;
+		Write_Limits();
+	}
 //	MYDMA_Config();
 //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器

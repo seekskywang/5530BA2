@@ -48894,6 +48894,7 @@ Nextern vu16 steptime;
 Nextern vu8 r_stable;
 Nextern char set_limit[6];
 Nextern u8 rmtrig[3];
+Nextern vu8 jkflag;
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -49481,6 +49482,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52173,6 +52175,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53326,7 +53329,10 @@ N        GUI_SetFont(&GUI_Fontsymbol);
 N        GUI_UC_SetEncodeUTF8();
 N        GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
 X        GUI_SetTextMode((1<<1));
-N        GUI_DispStringAt("Jinko", 5, 1);//SET
+N        if(jkflag == 1)
+N		{
+N			GUI_DispStringAt("Jinko", 5, 1);//SET
+N		}
 N        GUI_SetColor(GUI_WHITE);
 X        GUI_SetColor(0x00FFFFFF);
 N        GUI_SetFont(&GUI_FontHZ20S);
@@ -53344,14 +53350,20 @@ N        GUI_DispStringAt("生产日期", 30, 125);
 N        GUI_DispStringAt("仪器编号", 30, 150);
 N        GUI_SetColor(0x00BFFFFF);
 N        GUI_SetFont(&GUI_Font24_1);
-N        GUI_DispStringAt("JK5530B", 140, 50);
-N        GUI_DispStringAt("Ver:3.1", 140, 75);
+N		if(jkflag == 1)
+N		{
+N			GUI_DispStringAt("JK5530B", 140, 50);
+N		}else if(jkflag == 0){
+N			GUI_DispStringAt("5530B", 140, 50);
+N		}
+N        GUI_DispStringAt("Ver:3.2", 140, 75);
 N		//2.6修复内阻测试过流没分开bug
 N		//2.7增加风扇断路保护
 N		//2.8电源电压显示改成测量端
 N		//2.9增加动态测试协议
 N		//3.0修复截止电压电流输入只有2位有效数字bug
 N		//3.1增加U盘IAP
+N		//3.2增加看门狗
 N        GUI_DispStringAt("Ver:1.3", 140, 100);
 N        GUI_DispStringAt("-", 191, 125);
 N        GUI_DispStringAt("-", 227, 125);

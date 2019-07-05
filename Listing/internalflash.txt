@@ -198,120 +198,120 @@
                           AREA ||i.Flash_Read16BitDatas||, CODE, READONLY, ALIGN=1
 
                   Flash_Read16BitDatas PROC
-;;;177    ****************************************************************************/
-;;;178    void Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16)
+;;;179    ****************************************************************************/
+;;;180    void Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16)
 000000  b510              PUSH     {r4,lr}
-;;;179    {
-;;;180    uint8_t i;
-;;;181    for(i=0; i<length; i++)
+;;;181    {
+;;;182    uint8_t i;
+;;;183    for(i=0; i<length; i++)
 000002  2300              MOVS     r3,#0
 000004  e005              B        |L3.18|
                   |L3.6|
-;;;182    {
-;;;183    data_16[i]=*(__IO int16_t*)address;
+;;;184    {
+;;;185    data_16[i]=*(__IO int16_t*)address;
 000006  f8304b02          LDRH     r4,[r0],#2
 00000a  f8224013          STRH     r4,[r2,r3,LSL #1]
-00000e  1c5b              ADDS     r3,r3,#1              ;181
-000010  b2db              UXTB     r3,r3                 ;181
+00000e  1c5b              ADDS     r3,r3,#1              ;183
+000010  b2db              UXTB     r3,r3                 ;183
                   |L3.18|
-000012  428b              CMP      r3,r1                 ;181
+000012  428b              CMP      r3,r1                 ;183
 000014  d3f7              BCC      |L3.6|
-;;;184    address=address + 2;
-;;;185    }
-;;;186    }
+;;;186    address=address + 2;
+;;;187    }
+;;;188    }
 000016  bd10              POP      {r4,pc}
-;;;187    
+;;;189    
                           ENDP
 
 
                           AREA ||i.Flash_Read32BitDatas||, CODE, READONLY, ALIGN=1
 
                   Flash_Read32BitDatas PROC
-;;;123    ****************************************************************************/
-;;;124    void Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32)
+;;;125    ****************************************************************************/
+;;;126    void Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32)
 000000  b510              PUSH     {r4,lr}
-;;;125    {
-;;;126    uint8_t i;
-;;;127    for(i=0; i<length; i++)
+;;;127    {
+;;;128    uint8_t i;
+;;;129    for(i=0; i<length; i++)
 000002  2300              MOVS     r3,#0
 000004  e004              B        |L4.16|
                   |L4.6|
-;;;128    {
-;;;129    data_32[i]=*(__IO int32_t*)address;
+;;;130    {
+;;;131    data_32[i]=*(__IO int32_t*)address;
 000006  c810              LDM      r0!,{r4}
 000008  f8424023          STR      r4,[r2,r3,LSL #2]
-00000c  1c5b              ADDS     r3,r3,#1              ;127
-00000e  b2db              UXTB     r3,r3                 ;127
+00000c  1c5b              ADDS     r3,r3,#1              ;129
+00000e  b2db              UXTB     r3,r3                 ;129
                   |L4.16|
-000010  428b              CMP      r3,r1                 ;127
+000010  428b              CMP      r3,r1                 ;129
 000012  d3f8              BCC      |L4.6|
-;;;130    address=address + 4;
-;;;131    }
-;;;132    }
+;;;132    address=address + 4;
+;;;133    }
+;;;134    }
 000014  bd10              POP      {r4,pc}
-;;;133    
+;;;135    
                           ENDP
 
 
                           AREA ||i.Flash_Read8BitDatas||, CODE, READONLY, ALIGN=1
 
                   Flash_Read8BitDatas PROC
-;;;231    ****************************************************************************/
-;;;232    void Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8)
+;;;233    ****************************************************************************/
+;;;234    void Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8)
 000000  b510              PUSH     {r4,lr}
-;;;233    {
-;;;234    uint8_t i;
-;;;235    for(i=0; i<length; i++)
+;;;235    {
+;;;236    uint8_t i;
+;;;237    for(i=0; i<length; i++)
 000002  2300              MOVS     r3,#0
 000004  e004              B        |L5.16|
                   |L5.6|
-;;;236    {
-;;;237    data_8[i]=*(__IO int8_t*)address;
+;;;238    {
+;;;239    data_8[i]=*(__IO int8_t*)address;
 000006  f8104b01          LDRB     r4,[r0],#1
 00000a  54d4              STRB     r4,[r2,r3]
-00000c  1c5b              ADDS     r3,r3,#1              ;235
-00000e  b2db              UXTB     r3,r3                 ;235
+00000c  1c5b              ADDS     r3,r3,#1              ;237
+00000e  b2db              UXTB     r3,r3                 ;237
                   |L5.16|
-000010  428b              CMP      r3,r1                 ;235
+000010  428b              CMP      r3,r1                 ;237
 000012  d3f8              BCC      |L5.6|
-;;;238    address++;
-;;;239    }
-;;;240    }
+;;;240    address++;
+;;;241    }
+;;;242    }
 000014  bd10              POP      {r4,pc}
-;;;241    
+;;;243    
                           ENDP
 
 
                           AREA ||i.Flash_Write16BitDatas||, CODE, READONLY, ALIGN=1
 
                   Flash_Write16BitDatas PROC
-;;;142    ****************************************************************************/
-;;;143    void Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16)
+;;;144    ****************************************************************************/
+;;;145    void Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;144    {
+;;;146    {
 000004  4605              MOV      r5,r0
 000006  460e              MOV      r6,r1
 000008  4617              MOV      r7,r2
-;;;145    uint16_t StartSector, EndSector,i;
-;;;146    FLASH_Unlock(); //解锁FLASH后才能向FLASH中写数据。
+;;;147    uint16_t StartSector, EndSector,i;
+;;;148    FLASH_Unlock(); //解锁FLASH后才能向FLASH中写数据。
 00000a  f7fffffe          BL       FLASH_Unlock
-;;;147    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | 
+;;;149    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | 
 00000e  20f3              MOVS     r0,#0xf3
 000010  f7fffffe          BL       FLASH_ClearFlag
-;;;148                      FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
-;;;149    StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
+;;;150                      FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
+;;;151    StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
 000014  4628              MOV      r0,r5
 000016  f7fffffe          BL       Flash_GetSector
 00001a  4604              MOV      r4,r0
-;;;150    EndSector = Flash_GetSector(address+2*length);
+;;;152    EndSector = Flash_GetSector(address+2*length);
 00001c  eb050046          ADD      r0,r5,r6,LSL #1
 000020  f7fffffe          BL       Flash_GetSector
-;;;151    for (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
+;;;153    for (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 000024  f1000801          ADD      r8,r0,#1
 000028  e008              B        |L6.60|
                   |L6.42|
-;;;152    {
-;;;153    if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
+;;;154    {
+;;;155    if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
 00002a  2102              MOVS     r1,#2
 00002c  4620              MOV      r0,r4
 00002e  f7fffffe          BL       FLASH_EraseSector
@@ -320,45 +320,45 @@
                   |L6.54|
 000036  e7fe              B        |L6.54|
                   |L6.56|
-000038  3408              ADDS     r4,r4,#8              ;151
-00003a  b2a4              UXTH     r4,r4                 ;151
+000038  3408              ADDS     r4,r4,#8              ;153
+00003a  b2a4              UXTH     r4,r4                 ;153
                   |L6.60|
-00003c  4544              CMP      r4,r8                 ;151
+00003c  4544              CMP      r4,r8                 ;153
 00003e  d3f4              BCC      |L6.42|
-;;;154    }
-;;;155    for(i=0; i<length; i++)
+;;;156    }
+;;;157    for(i=0; i<length; i++)
 000040  2400              MOVS     r4,#0
 000042  e00a              B        |L6.90|
                   |L6.68|
-;;;156    {
-;;;157    if (FLASH_ProgramHalfWord(address, data_16[i]) == FLASH_COMPLETE)   
+;;;158    {
+;;;159    if (FLASH_ProgramHalfWord(address, data_16[i]) == FLASH_COMPLETE)   
 000044  f8371014          LDRH     r1,[r7,r4,LSL #1]
 000048  4628              MOV      r0,r5
 00004a  f7fffffe          BL       FLASH_ProgramHalfWord
 00004e  2809              CMP      r0,#9
 000050  d000              BEQ      |L6.84|
                   |L6.82|
-;;;158    {
-;;;159       address = address + 2;
-;;;160    }
-;;;161    else
-;;;162    { 
-;;;163    while (1);
+;;;160    {
+;;;161       address = address + 2;
+;;;162    }
+;;;163    else
+;;;164    { 
+;;;165    while (1);
 000052  e7fe              B        |L6.82|
                   |L6.84|
-000054  1cad              ADDS     r5,r5,#2              ;159
-000056  1c64              ADDS     r4,r4,#1              ;155
-000058  b2a4              UXTH     r4,r4                 ;155
+000054  1cad              ADDS     r5,r5,#2              ;161
+000056  1c64              ADDS     r4,r4,#1              ;157
+000058  b2a4              UXTH     r4,r4                 ;157
                   |L6.90|
-00005a  42b4              CMP      r4,r6                 ;155
+00005a  42b4              CMP      r4,r6                 ;157
 00005c  d3f2              BCC      |L6.68|
-;;;164    }
-;;;165    }
-;;;166    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
+;;;166    }
+;;;167    }
+;;;168    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
 00005e  e8bd41f0          POP      {r4-r8,lr}
 000062  f7ffbffe          B.W      FLASH_Lock
-;;;167    }
-;;;168    
+;;;169    }
+;;;170    
                           ENDP
 
 
@@ -388,90 +388,95 @@
 000020  f7fffffe          BL       Flash_GetSector
 ;;;97     for (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 000024  f1000801          ADD      r8,r0,#1
-000028  e008              B        |L7.60|
+000028  e00c              B        |L7.68|
                   |L7.42|
 ;;;98     {
-;;;99     if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
+;;;99     if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1) IWDG_ReloadCounter();;
 00002a  2102              MOVS     r1,#2
 00002c  4620              MOV      r0,r4
 00002e  f7fffffe          BL       FLASH_EraseSector
 000032  2809              CMP      r0,#9
-000034  d000              BEQ      |L7.56|
+000034  d002              BEQ      |L7.60|
                   |L7.54|
-000036  e7fe              B        |L7.54|
-                  |L7.56|
-000038  3408              ADDS     r4,r4,#8              ;97
-00003a  b2a4              UXTH     r4,r4                 ;97
+000036  f7fffffe          BL       IWDG_ReloadCounter
+00003a  e7fc              B        |L7.54|
                   |L7.60|
-00003c  4544              CMP      r4,r8                 ;97
-00003e  d3f4              BCC      |L7.42|
-;;;100    }
-;;;101    for(i=0; i<length; i++)
-000040  2400              MOVS     r4,#0
-000042  e00a              B        |L7.90|
+;;;100    	IWDG_ReloadCounter();
+00003c  f7fffffe          BL       IWDG_ReloadCounter
+000040  3408              ADDS     r4,r4,#8              ;97
+000042  b2a4              UXTH     r4,r4                 ;97
                   |L7.68|
-;;;102    {
-;;;103    if (FLASH_ProgramWord(address, data_32[i]) == FLASH_COMPLETE)   //将DATA_32写入相应的地址。
-000044  f8571024          LDR      r1,[r7,r4,LSL #2]
-000048  4628              MOV      r0,r5
-00004a  f7fffffe          BL       FLASH_ProgramWord
-00004e  2809              CMP      r0,#9
-000050  d000              BEQ      |L7.84|
-                  |L7.82|
-;;;104    {
-;;;105       address = address + 4;
-;;;106    }
-;;;107    else
-;;;108    { 
-;;;109    while (1);
-000052  e7fe              B        |L7.82|
-                  |L7.84|
-000054  1d2d              ADDS     r5,r5,#4              ;105
-000056  1c64              ADDS     r4,r4,#1              ;101
-000058  b2a4              UXTH     r4,r4                 ;101
-                  |L7.90|
-00005a  42b4              CMP      r4,r6                 ;101
-00005c  d3f2              BCC      |L7.68|
-;;;110    }
-;;;111    }
-;;;112    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
-00005e  e8bd41f0          POP      {r4-r8,lr}
-000062  f7ffbffe          B.W      FLASH_Lock
+000044  4544              CMP      r4,r8                 ;97
+000046  d3f0              BCC      |L7.42|
+;;;101    }
+;;;102    for(i=0; i<length; i++)
+000048  2400              MOVS     r4,#0
+00004a  e00c              B        |L7.102|
+                  |L7.76|
+;;;103    {
+;;;104    	IWDG_ReloadCounter();
+00004c  f7fffffe          BL       IWDG_ReloadCounter
+;;;105    if (FLASH_ProgramWord(address, data_32[i]) == FLASH_COMPLETE)   //将DATA_32写入相应的地址。
+000050  f8571024          LDR      r1,[r7,r4,LSL #2]
+000054  4628              MOV      r0,r5
+000056  f7fffffe          BL       FLASH_ProgramWord
+00005a  2809              CMP      r0,#9
+00005c  d000              BEQ      |L7.96|
+                  |L7.94|
+;;;106    {
+;;;107       address = address + 4;
+;;;108    }
+;;;109    else
+;;;110    { 
+;;;111    while (1);
+00005e  e7fe              B        |L7.94|
+                  |L7.96|
+000060  1d2d              ADDS     r5,r5,#4              ;107
+000062  1c64              ADDS     r4,r4,#1              ;102
+000064  b2a4              UXTH     r4,r4                 ;102
+                  |L7.102|
+000066  42b4              CMP      r4,r6                 ;102
+000068  d3f0              BCC      |L7.76|
+;;;112    }
 ;;;113    }
-;;;114    
+;;;114    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
+00006a  e8bd41f0          POP      {r4-r8,lr}
+00006e  f7ffbffe          B.W      FLASH_Lock
+;;;115    }
+;;;116    
                           ENDP
 
 
                           AREA ||i.Flash_Write8BitDatas||, CODE, READONLY, ALIGN=1
 
                   Flash_Write8BitDatas PROC
-;;;196    ****************************************************************************/
-;;;197    void Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8)
+;;;198    ****************************************************************************/
+;;;199    void Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;198    {
+;;;200    {
 000004  4605              MOV      r5,r0
 000006  460e              MOV      r6,r1
 000008  4617              MOV      r7,r2
-;;;199    uint16_t StartSector, EndSector,i;
-;;;200    FLASH_Unlock(); //解锁FLASH后才能向FLASH中写数据。
+;;;201    uint16_t StartSector, EndSector,i;
+;;;202    FLASH_Unlock(); //解锁FLASH后才能向FLASH中写数据。
 00000a  f7fffffe          BL       FLASH_Unlock
-;;;201    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | 
+;;;203    FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | 
 00000e  20f3              MOVS     r0,#0xf3
 000010  f7fffffe          BL       FLASH_ClearFlag
-;;;202                      FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
-;;;203    StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
+;;;204                      FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR|FLASH_FLAG_PGSERR);
+;;;205    StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
 000014  4628              MOV      r0,r5
 000016  f7fffffe          BL       Flash_GetSector
 00001a  4604              MOV      r4,r0
-;;;204    EndSector = Flash_GetSector(address+length);
+;;;206    EndSector = Flash_GetSector(address+length);
 00001c  19a8              ADDS     r0,r5,r6
 00001e  f7fffffe          BL       Flash_GetSector
 000022  4680              MOV      r8,r0
-;;;205    for (i = StartSector; i < EndSector; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
+;;;207    for (i = StartSector; i < EndSector; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 000024  e008              B        |L8.56|
                   |L8.38|
-;;;206    {
-;;;207    if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
+;;;208    {
+;;;209    if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
 000026  2102              MOVS     r1,#2
 000028  4620              MOV      r0,r4
 00002a  f7fffffe          BL       FLASH_EraseSector
@@ -480,133 +485,133 @@
                   |L8.50|
 000032  e7fe              B        |L8.50|
                   |L8.52|
-000034  3408              ADDS     r4,r4,#8              ;205
-000036  b2a4              UXTH     r4,r4                 ;205
+000034  3408              ADDS     r4,r4,#8              ;207
+000036  b2a4              UXTH     r4,r4                 ;207
                   |L8.56|
-000038  4544              CMP      r4,r8                 ;205
+000038  4544              CMP      r4,r8                 ;207
 00003a  d3f4              BCC      |L8.38|
-;;;208    }
-;;;209    for(i=0; i<length; i++)
+;;;210    }
+;;;211    for(i=0; i<length; i++)
 00003c  2400              MOVS     r4,#0
 00003e  e009              B        |L8.84|
                   |L8.64|
-;;;210    {
-;;;211    if (FLASH_ProgramByte(address, data_8[i]) == FLASH_COMPLETE)   
+;;;212    {
+;;;213    if (FLASH_ProgramByte(address, data_8[i]) == FLASH_COMPLETE)   
 000040  5d39              LDRB     r1,[r7,r4]
 000042  4628              MOV      r0,r5
 000044  f7fffffe          BL       FLASH_ProgramByte
 000048  2809              CMP      r0,#9
 00004a  d000              BEQ      |L8.78|
                   |L8.76|
-;;;212    {
-;;;213       address++;
-;;;214    }
-;;;215    else
-;;;216    { 
-;;;217    while (1);
+;;;214    {
+;;;215       address++;
+;;;216    }
+;;;217    else
+;;;218    { 
+;;;219    while (1);
 00004c  e7fe              B        |L8.76|
                   |L8.78|
-00004e  1c6d              ADDS     r5,r5,#1              ;213
-000050  1c64              ADDS     r4,r4,#1              ;209
-000052  b2a4              UXTH     r4,r4                 ;209
+00004e  1c6d              ADDS     r5,r5,#1              ;215
+000050  1c64              ADDS     r4,r4,#1              ;211
+000052  b2a4              UXTH     r4,r4                 ;211
                   |L8.84|
-000054  42b4              CMP      r4,r6                 ;209
+000054  42b4              CMP      r4,r6                 ;211
 000056  d3f3              BCC      |L8.64|
-;;;218    }
-;;;219    }
-;;;220    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
+;;;220    }
+;;;221    }
+;;;222    FLASH_Lock();  //读FLASH不需要FLASH处于解锁状态。
 000058  e8bd41f0          POP      {r4-r8,lr}
 00005c  f7ffbffe          B.W      FLASH_Lock
-;;;221    }
-;;;222    
+;;;223    }
+;;;224    
                           ENDP
 
 
                           AREA ||i.STMFLASH_Read||, CODE, READONLY, ALIGN=1
 
                   STMFLASH_Read PROC
-;;;323    //NumToWrite:半字(16位)数
-;;;324    void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead)   	
+;;;325    //NumToWrite:半字(16位)数
+;;;326    void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead)   	
 000000  b510              PUSH     {r4,lr}
-;;;325    {
+;;;327    {
 000002  4604              MOV      r4,r0
-;;;326    	u16 i;
-;;;327    	for(i=0;i<NumToRead;i++)
+;;;328    	u16 i;
+;;;329    	for(i=0;i<NumToRead;i++)
 000004  2300              MOVS     r3,#0
 000006  e007              B        |L9.24|
                   |L9.8|
-;;;328    	{
-;;;329    		pBuffer[i]=STMFLASH_ReadHalfWord(ReadAddr);//读取2个字节.
+;;;330    	{
+;;;331    		pBuffer[i]=STMFLASH_ReadHalfWord(ReadAddr);//读取2个字节.
 000008  4620              MOV      r0,r4
 00000a  f7fffffe          BL       STMFLASH_ReadHalfWord
 00000e  f8210013          STRH     r0,[r1,r3,LSL #1]
-;;;330    		ReadAddr+=2;//偏移2个字节.	
+;;;332    		ReadAddr+=2;//偏移2个字节.	
 000012  1ca4              ADDS     r4,r4,#2
-000014  1c5b              ADDS     r3,r3,#1              ;327
-000016  b29b              UXTH     r3,r3                 ;327
+000014  1c5b              ADDS     r3,r3,#1              ;329
+000016  b29b              UXTH     r3,r3                 ;329
                   |L9.24|
-000018  4293              CMP      r3,r2                 ;327
+000018  4293              CMP      r3,r2                 ;329
 00001a  d3f5              BCC      |L9.8|
-;;;331    	}
-;;;332    }
+;;;333    	}
+;;;334    }
 00001c  bd10              POP      {r4,pc}
-;;;333    
+;;;335    
                           ENDP
 
 
                           AREA ||i.STMFLASH_ReadHalfWord||, CODE, READONLY, ALIGN=1
 
                   STMFLASH_ReadHalfWord PROC
-;;;245    //返回值:对应数据.
-;;;246    u16 STMFLASH_ReadHalfWord(u32 faddr)
+;;;247    //返回值:对应数据.
+;;;248    u16 STMFLASH_ReadHalfWord(u32 faddr)
 000000  8800              LDRH     r0,[r0,#0]
-;;;247    {
-;;;248    	return *(vu16*)faddr; 
-;;;249    }
+;;;249    {
+;;;250    	return *(vu16*)faddr; 
+;;;251    }
 000002  4770              BX       lr
-;;;250    #if STM32_FLASH_WREN	//如果使能了写   
+;;;252    #if STM32_FLASH_WREN	//如果使能了写   
                           ENDP
 
 
                           AREA ||i.STMFLASH_Write||, CODE, READONLY, ALIGN=2
 
                   STMFLASH_Write PROC
-;;;273    u16 STMFLASH_BUF[STM_SECTOR_SIZE/2];//最多是2K字节
-;;;274    void STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite)	
+;;;275    u16 STMFLASH_BUF[STM_SECTOR_SIZE/2];//最多是2K字节
+;;;276    void STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite)	
 000000  e92d5ff0          PUSH     {r4-r12,lr}
-;;;275    {
+;;;277    {
 000004  4682              MOV      r10,r0
 000006  460f              MOV      r7,r1
 000008  4615              MOV      r5,r2
-;;;276    	u32 secpos;	   //扇区地址
-;;;277    	u16 secoff;	   //扇区内偏移地址(16位字计算)
-;;;278    	u16 secremain; //扇区内剩余地址(16位字计算)	   
-;;;279     	u16 i;    
-;;;280    	u32 offaddr;   //去掉0X08000000后的地址
-;;;281    	if(WriteAddr<STM32_FLASH_BASE||(WriteAddr>=(STM32_FLASH_BASE+1024*STM32_FLASH_SIZE)))return;//非法地址
+;;;278    	u32 secpos;	   //扇区地址
+;;;279    	u16 secoff;	   //扇区内偏移地址(16位字计算)
+;;;280    	u16 secremain; //扇区内剩余地址(16位字计算)	   
+;;;281     	u16 i;    
+;;;282    	u32 offaddr;   //去掉0X08000000后的地址
+;;;283    	if(WriteAddr<STM32_FLASH_BASE||(WriteAddr>=(STM32_FLASH_BASE+1024*STM32_FLASH_SIZE)))return;//非法地址
 00000a  f1aa6400          SUB      r4,r10,#0x8000000
 00000e  f5b41f80          CMP      r4,#0x100000
 000012  d253              BCS      |L11.188|
-;;;282    	FLASH_Unlock();						//解锁
+;;;284    	FLASH_Unlock();						//解锁
 000014  f7fffffe          BL       FLASH_Unlock
-;;;283    	offaddr=WriteAddr-STM32_FLASH_BASE;		//实际偏移地址.
-;;;284    	secpos=offaddr/STM_SECTOR_SIZE;			//扇区地址  0~127 for STM32F103RBT6
+;;;285    	offaddr=WriteAddr-STM32_FLASH_BASE;		//实际偏移地址.
+;;;286    	secpos=offaddr/STM_SECTOR_SIZE;			//扇区地址  0~127 for STM32F103RBT6
 000018  ea4f28d4          LSR      r8,r4,#11
-;;;285    	secoff=(offaddr%STM_SECTOR_SIZE)/2;		//在扇区内的偏移(2个字节为基本单位.)
+;;;287    	secoff=(offaddr%STM_SECTOR_SIZE)/2;		//在扇区内的偏移(2个字节为基本单位.)
 00001c  f3c40649          UBFX     r6,r4,#1,#10
-;;;286    	secremain=STM_SECTOR_SIZE/2-secoff;		//扇区剩余空间大小   
+;;;288    	secremain=STM_SECTOR_SIZE/2-secoff;		//扇区剩余空间大小   
 000020  f5c66480          RSB      r4,r6,#0x400
-;;;287    	if(NumToWrite<=secremain)secremain=NumToWrite;//不大于该扇区范围
+;;;289    	if(NumToWrite<=secremain)secremain=NumToWrite;//不大于该扇区范围
 000024  42a5              CMP      r5,r4
 000026  d800              BHI      |L11.42|
 000028  462c              MOV      r4,r5
                   |L11.42|
-;;;288    	while(1) 
-;;;289    	{	
-;;;290    		STMFLASH_Read(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,STMFLASH_BUF,STM_SECTOR_SIZE/2);//读出整个扇区的内容
-;;;291    		for(i=0;i<secremain;i++)//校验数据
-;;;292    		{
-;;;293    			if(STMFLASH_BUF[secoff+i]!=0XFFFF)break;//需要擦除  	  
+;;;290    	while(1) 
+;;;291    	{	
+;;;292    		STMFLASH_Read(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,STMFLASH_BUF,STM_SECTOR_SIZE/2);//读出整个扇区的内容
+;;;293    		for(i=0;i<secremain;i++)//校验数据
+;;;294    		{
+;;;295    			if(STMFLASH_BUF[secoff+i]!=0XFFFF)break;//需要擦除  	  
 00002a  f8dfb094          LDR      r11,|L11.192|
 00002e  e038              B        |L11.162|
                   |L11.48|
@@ -614,91 +619,91 @@
 000032  f83b2012          LDRH     r2,[r11,r2,LSL #1]
 000036  428a              CMP      r2,r1
 000038  d103              BNE      |L11.66|
-00003a  1c40              ADDS     r0,r0,#1              ;291
-00003c  b280              UXTH     r0,r0                 ;291
+00003a  1c40              ADDS     r0,r0,#1              ;293
+00003c  b280              UXTH     r0,r0                 ;293
                   |L11.62|
-00003e  42a0              CMP      r0,r4                 ;291
+00003e  42a0              CMP      r0,r4                 ;293
 000040  d3f6              BCC      |L11.48|
                   |L11.66|
-;;;294    		}
-;;;295    		if(i<secremain)//需要擦除
+;;;296    		}
+;;;297    		if(i<secremain)//需要擦除
 000042  42a0              CMP      r0,r4
 000044  d215              BCS      |L11.114|
-;;;296    		{
-;;;297    			FLASH_EraseSector(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,VoltageRange_3);//擦除这个扇区
+;;;298    		{
+;;;299    			FLASH_EraseSector(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,VoltageRange_3);//擦除这个扇区
 000046  4648              MOV      r0,r9
 000048  2102              MOVS     r1,#2
 00004a  f7fffffe          BL       FLASH_EraseSector
-;;;298    			for(i=0;i<secremain;i++)//复制
+;;;300    			for(i=0;i<secremain;i++)//复制
 00004e  2000              MOVS     r0,#0
 000050  e006              B        |L11.96|
                   |L11.82|
-;;;299    			{
-;;;300    				STMFLASH_BUF[i+secoff]=pBuffer[i];	  
+;;;301    			{
+;;;302    				STMFLASH_BUF[i+secoff]=pBuffer[i];	  
 000052  1982              ADDS     r2,r0,r6
 000054  f8371010          LDRH     r1,[r7,r0,LSL #1]
 000058  f82b1012          STRH     r1,[r11,r2,LSL #1]
-00005c  1c40              ADDS     r0,r0,#1              ;298
-00005e  b280              UXTH     r0,r0                 ;298
+00005c  1c40              ADDS     r0,r0,#1              ;300
+00005e  b280              UXTH     r0,r0                 ;300
                   |L11.96|
-000060  42a0              CMP      r0,r4                 ;298
+000060  42a0              CMP      r0,r4                 ;300
 000062  d3f6              BCC      |L11.82|
-;;;301    			}
-;;;302    			STMFLASH_Write_NoCheck(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,STMFLASH_BUF,STM_SECTOR_SIZE/2);//写入整个扇区  
+;;;303    			}
+;;;304    			STMFLASH_Write_NoCheck(secpos*STM_SECTOR_SIZE+STM32_FLASH_BASE,STMFLASH_BUF,STM_SECTOR_SIZE/2);//写入整个扇区  
 000064  4648              MOV      r0,r9
 000066  f44f6280          MOV      r2,#0x400
 00006a  4915              LDR      r1,|L11.192|
 00006c  f7fffffe          BL       STMFLASH_Write_NoCheck
 000070  e004              B        |L11.124|
                   |L11.114|
-;;;303    		}else STMFLASH_Write_NoCheck(WriteAddr,pBuffer,secremain);//写已经擦除了的,直接写入扇区剩余区间. 				   
+;;;305    		}else STMFLASH_Write_NoCheck(WriteAddr,pBuffer,secremain);//写已经擦除了的,直接写入扇区剩余区间. 				   
 000072  4622              MOV      r2,r4
 000074  4639              MOV      r1,r7
 000076  4650              MOV      r0,r10
 000078  f7fffffe          BL       STMFLASH_Write_NoCheck
                   |L11.124|
-;;;304    		if(NumToWrite==secremain)break;//写入结束了
+;;;306    		if(NumToWrite==secremain)break;//写入结束了
 00007c  42a5              CMP      r5,r4
 00007e  d103              BNE      |L11.136|
-;;;305    		else//写入未结束
-;;;306    		{
-;;;307    			secpos++;				//扇区地址增1
-;;;308    			secoff=0;				//偏移位置为0 	 
-;;;309    		   	pBuffer+=secremain;  	//指针偏移
-;;;310    			WriteAddr+=secremain;	//写地址偏移	   
-;;;311    		   	NumToWrite-=secremain;	//字节(16位)数递减
-;;;312    			if(NumToWrite>(STM_SECTOR_SIZE/2))secremain=STM_SECTOR_SIZE/2;//下一个扇区还是写不完
-;;;313    			else secremain=NumToWrite;//下一个扇区可以写完了
-;;;314    		}	 
-;;;315    	};	
-;;;316    	FLASH_Lock();//上锁
+;;;307    		else//写入未结束
+;;;308    		{
+;;;309    			secpos++;				//扇区地址增1
+;;;310    			secoff=0;				//偏移位置为0 	 
+;;;311    		   	pBuffer+=secremain;  	//指针偏移
+;;;312    			WriteAddr+=secremain;	//写地址偏移	   
+;;;313    		   	NumToWrite-=secremain;	//字节(16位)数递减
+;;;314    			if(NumToWrite>(STM_SECTOR_SIZE/2))secremain=STM_SECTOR_SIZE/2;//下一个扇区还是写不完
+;;;315    			else secremain=NumToWrite;//下一个扇区可以写完了
+;;;316    		}	 
+;;;317    	};	
+;;;318    	FLASH_Lock();//上锁
 000080  e8bd5ff0          POP      {r4-r12,lr}
 000084  f7ffbffe          B.W      FLASH_Lock
                   |L11.136|
-000088  f1080801          ADD      r8,r8,#1              ;307
-00008c  2600              MOVS     r6,#0                 ;308
-00008e  eb070744          ADD      r7,r7,r4,LSL #1       ;309
-000092  44a2              ADD      r10,r10,r4            ;310
-000094  1b28              SUBS     r0,r5,r4              ;311
-000096  b285              UXTH     r5,r0                 ;311
-000098  f44f6480          MOV      r4,#0x400             ;312
-00009c  42a5              CMP      r5,r4                 ;312
+000088  f1080801          ADD      r8,r8,#1              ;309
+00008c  2600              MOVS     r6,#0                 ;310
+00008e  eb070744          ADD      r7,r7,r4,LSL #1       ;311
+000092  44a2              ADD      r10,r10,r4            ;312
+000094  1b28              SUBS     r0,r5,r4              ;313
+000096  b285              UXTH     r5,r0                 ;313
+000098  f44f6480          MOV      r4,#0x400             ;314
+00009c  42a5              CMP      r5,r4                 ;314
 00009e  d800              BHI      |L11.162|
-0000a0  462c              MOV      r4,r5                 ;313
+0000a0  462c              MOV      r4,r5                 ;315
                   |L11.162|
-0000a2  f04f6000          MOV      r0,#0x8000000         ;290
-0000a6  eb0029c8          ADD      r9,r0,r8,LSL #11      ;290
-0000aa  1442              ASRS     r2,r0,#17             ;290
+0000a2  f04f6000          MOV      r0,#0x8000000         ;292
+0000a6  eb0029c8          ADD      r9,r0,r8,LSL #11      ;292
+0000aa  1442              ASRS     r2,r0,#17             ;292
 0000ac  4904              LDR      r1,|L11.192|
-0000ae  4648              MOV      r0,r9                 ;290
+0000ae  4648              MOV      r0,r9                 ;292
 0000b0  f7fffffe          BL       STMFLASH_Read
-0000b4  2000              MOVS     r0,#0                 ;291
-0000b6  f64f71ff          MOV      r1,#0xffff            ;293
+0000b4  2000              MOVS     r0,#0                 ;293
+0000b6  f64f71ff          MOV      r1,#0xffff            ;295
 0000ba  e7c0              B        |L11.62|
                   |L11.188|
-;;;317    }
+;;;319    }
 0000bc  e8bd9ff0          POP      {r4-r12,pc}
-;;;318    #endif
+;;;320    #endif
                           ENDP
 
                   |L11.192|
@@ -707,49 +712,49 @@
                           AREA ||i.STMFLASH_Write_NoCheck||, CODE, READONLY, ALIGN=1
 
                   STMFLASH_Write_NoCheck PROC
-;;;254    //NumToWrite:半字(16位)数   
-;;;255    void STMFLASH_Write_NoCheck(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite)   
+;;;256    //NumToWrite:半字(16位)数   
+;;;257    void STMFLASH_Write_NoCheck(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite)   
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;256    { 			 		 
+;;;258    { 			 		 
 000004  4605              MOV      r5,r0
 000006  460e              MOV      r6,r1
 000008  4617              MOV      r7,r2
-;;;257    	u16 i;
-;;;258    	for(i=0;i<NumToWrite;i++)
+;;;259    	u16 i;
+;;;260    	for(i=0;i<NumToWrite;i++)
 00000a  2400              MOVS     r4,#0
 00000c  e007              B        |L12.30|
                   |L12.14|
-;;;259    	{
-;;;260    		FLASH_ProgramHalfWord(WriteAddr,pBuffer[i]);
+;;;261    	{
+;;;262    		FLASH_ProgramHalfWord(WriteAddr,pBuffer[i]);
 00000e  f8361014          LDRH     r1,[r6,r4,LSL #1]
 000012  4628              MOV      r0,r5
 000014  f7fffffe          BL       FLASH_ProgramHalfWord
-;;;261    	    WriteAddr+=2;//地址增加2.
+;;;263    	    WriteAddr+=2;//地址增加2.
 000018  1cad              ADDS     r5,r5,#2
-00001a  1c64              ADDS     r4,r4,#1              ;258
-00001c  b2a4              UXTH     r4,r4                 ;258
+00001a  1c64              ADDS     r4,r4,#1              ;260
+00001c  b2a4              UXTH     r4,r4                 ;260
                   |L12.30|
-00001e  42bc              CMP      r4,r7                 ;258
+00001e  42bc              CMP      r4,r7                 ;260
 000020  d3f5              BCC      |L12.14|
-;;;262    	}  
-;;;263    } 
+;;;264    	}  
+;;;265    } 
 000022  e8bd81f0          POP      {r4-r8,pc}
-;;;264    //从指定地址开始写入指定长度的数据
+;;;266    //从指定地址开始写入指定长度的数据
                           ENDP
 
 
                           AREA ||i.Test_Write||, CODE, READONLY, ALIGN=1
 
                   Test_Write PROC
-;;;336    //WriteData:要写入的数据
-;;;337    void Test_Write(u32 WriteAddr,u16 WriteData)   	
+;;;338    //WriteData:要写入的数据
+;;;339    void Test_Write(u32 WriteAddr,u16 WriteData)   	
 000000  b513              PUSH     {r0,r1,r4,lr}
-;;;338    {
-;;;339    	STMFLASH_Write(WriteAddr,&WriteData,1);//写入一个字 
+;;;340    {
+;;;341    	STMFLASH_Write(WriteAddr,&WriteData,1);//写入一个字 
 000002  2201              MOVS     r2,#1
 000004  a901              ADD      r1,sp,#4
 000006  f7fffffe          BL       STMFLASH_Write
-;;;340    }
+;;;342    }
 00000a  bd1c              POP      {r2-r4,pc}
                           ENDP
 

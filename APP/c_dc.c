@@ -226,7 +226,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetFont(&GUI_Fontsymbol);
         GUI_UC_SetEncodeUTF8();
         GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
-        GUI_DispStringAt("Jinko", 5, 1);//SET
+        if(jkflag == 1)
+		{
+			GUI_DispStringAt("Jinko", 5, 1);//SET
+		}
         GUI_SetColor(GUI_WHITE);
         GUI_SetFont(&GUI_FontHZ20S);
         GUI_UC_SetEncodeUTF8();

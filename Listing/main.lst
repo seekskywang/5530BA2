@@ -35025,6 +35025,7 @@ Nextern vu16 steptime;
 Nextern vu8 r_stable;
 Nextern char set_limit[6];
 Nextern u8 rmtrig[3];
+Nextern vu8 jkflag;
 Nextern vu8 bit;
 Nextern vu8 bit1;
 Nextern vu8 dot_flag;
@@ -35723,6 +35724,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -36342,6 +36344,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -50834,6 +50837,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -51438,6 +51442,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52054,6 +52059,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -52660,6 +52666,7 @@ Sextern vu16 steptime;
 Sextern vu8 r_stable;
 Sextern char set_limit[6];
 Sextern u8 rmtrig[3];
+Sextern vu8 jkflag;
 Sextern vu8 bit;
 Sextern vu8 bit1;
 Sextern vu8 dot_flag;
@@ -53439,10 +53446,14 @@ W "..\User\main.c" 80 2 function "AD7689_InitializeSPI1" declared implicitly
 N	AD7689_InitializeSPI1();//AD7689初始化
 N	LCD_Initializtion();//液晶屏初始化	
 N	EEPROM_READ_Coeff();//读取校准参数
-N	//IWDG_Inte();
+N	IWDG_Inte();
 N	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
 X	Flash_Read32BitDatas(((uint32_t)0x080E0000),40,InFlashSave);
-N
+N	if(jkflag > 1)
+N	{
+N		jkflag = 1;
+N		Write_Limits();
+N	}
 N//	MYDMA_Config();
 N//    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 N//    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器

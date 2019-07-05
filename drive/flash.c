@@ -785,6 +785,10 @@ void EEPROM_READ_Coeff(void)
 	dis_gate_v=EEPROM_READ_Byte(0xF7);
 	dis_gate_v=dis_gate_v<<8;
 	dis_gate_v=dis_gate_v+EEPROM_READ_Byte(0xF8);
+	
+	jkflag=EEPROM_READ_Byte(0xF9);
+	jkflag=jkflag<<8;
+	jkflag=jkflag+EEPROM_READ_Byte(0xFA);
     
     
     opv1=EEPROM_READ_Byte(0x8E);
@@ -995,6 +999,10 @@ void Write_Limits(void)
 	data_8bit = dis_gate_v >> 8;
 	EEPROM_WriteByte(0xF7, data_8bit);
 	EEPROM_WriteByte(0xF8, dis_gate_v);
+	
+	data_8bit = jkflag >> 8;
+	EEPROM_WriteByte(0xF9, data_8bit);
+	EEPROM_WriteByte(0xFA, jkflag);
 }
 
 void Write_btype(void)

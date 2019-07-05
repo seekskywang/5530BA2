@@ -96,10 +96,12 @@ StartSector = Flash_GetSector(address);  //获取FLASH的Sector编号
 EndSector = Flash_GetSector(address+4*length);
 for (i = StartSector; i < EndSector+1; i += 8)  //每次FLASH编号增加8，可参考上边FLASH Sector的定义。
 {
-if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1);
+if (FLASH_EraseSector(i, VoltageRange_3) != FLASH_COMPLETE) while (1) IWDG_ReloadCounter();;
+	IWDG_ReloadCounter();
 }
 for(i=0; i<length; i++)
 {
+	IWDG_ReloadCounter();
 if (FLASH_ProgramWord(address, data_32[i]) == FLASH_COMPLETE)   //将DATA_32写入相应的地址。
 {
    address = address + 4;

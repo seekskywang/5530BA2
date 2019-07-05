@@ -154,7 +154,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetFont(&GUI_Fontsymbol);
         GUI_UC_SetEncodeUTF8();
         GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
-        GUI_DispStringAt("Jinko", 5, 1);//SET
+        if(jkflag == 1)
+		{
+			GUI_DispStringAt("Jinko", 5, 1);//SET
+		}
         GUI_SetColor(GUI_WHITE);
         GUI_SetFont(&GUI_FontHZ20S);
         GUI_UC_SetEncodeUTF8();
@@ -169,14 +172,20 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_DispStringAt("仪器编号", 30, 150);
         GUI_SetColor(0x00BFFFFF);
         GUI_SetFont(&GUI_Font24_1);
-        GUI_DispStringAt("JK5530B", 140, 50);
-        GUI_DispStringAt("Ver:3.1", 140, 75);
+		if(jkflag == 1)
+		{
+			GUI_DispStringAt("JK5530B", 140, 50);
+		}else if(jkflag == 0){
+			GUI_DispStringAt("5530B", 140, 50);
+		}
+        GUI_DispStringAt("Ver:3.2", 140, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
 		//2.9增加动态测试协议
 		//3.0修复截止电压电流输入只有2位有效数字bug
 		//3.1增加U盘IAP
+		//3.2增加看门狗
         GUI_DispStringAt("Ver:1.3", 140, 100);
         GUI_DispStringAt("-", 191, 125);
         GUI_DispStringAt("-", 227, 125);

@@ -470,7 +470,7 @@ FLASH_Status FLASH_EraseSector(uint32_t FLASH_Sector, uint8_t VoltageRange)
 {
   uint32_t tmp_psize = 0x0;
   FLASH_Status status = FLASH_COMPLETE;
-
+  IWDG_ReloadCounter();
   /* Check the parameters */
   assert_param(IS_FLASH_SECTOR(FLASH_Sector));
   assert_param(IS_VOLTAGERANGE(VoltageRange));

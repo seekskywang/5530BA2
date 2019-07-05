@@ -40,6 +40,7 @@ extern vu8 test_start;
 extern vu8 step;
 RCC_ClocksTypeDef rcc;
 vu16 sendload;
+vu8 jkflag;
 extern vu8 cdc_sw;
 vu8 ocf;
 vu8 vflag;
@@ -82,7 +83,12 @@ void MainTask(void)
 	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
 	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 	Flag_Swtich_ON=0;
-    CreateSTARTER();
+	if(jkflag == 1)
+	{
+		CreateSTARTER();
+	}else if(jkflag == 0){
+		CreateR();
+	}
 ////	CreateR();//开机进入内阻测试界面
 //// 	flag_Load_CC=1;//开机负载默认进入CC模式
 //// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC

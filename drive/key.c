@@ -1306,6 +1306,19 @@ void Key_Funtion(void)
                             BEEP_Tiggr();//触发蜂鸣�?
                             break;
                         }
+						case face_cal:
+						{
+							if(jkflag == 0)
+							{
+								jkflag = 1;
+								Write_Limits();
+							}else{
+								jkflag = 0;
+								Write_Limits();
+							}
+							KeyCounter = 0;
+                            BEEP_Tiggr();//触发蜂鸣�?
+						}break;
 
                     }
                 }
@@ -1781,6 +1794,7 @@ void Key_Funtion(void)
 								C_SW(0);
 							}
 						}break;
+						
                     }
                     KeyCounter = 0;
                     BEEP_Tiggr();//
