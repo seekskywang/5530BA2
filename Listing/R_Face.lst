@@ -56678,56 +56678,72 @@ N		}else{
 N			rcomp = R_VLUE;
 X			rcomp = Run_Control[13];
 N		}
-N        if(rcomp > set_max_r || rcomp < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
-X        if(rcomp > Run_Control[16] || rcomp < Run_Control[17] || DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15])
-N        {
-N            if(para_set4 == set_4_on){
-X            if(para_set4 == 0xff){
-N                BEEP_Tiggr();
-N            }
-N            TM1650_SET_LED(0x68,0x70);//FAIL灯
-N            GPIO_SetBits(GPIOD,GPIO_Pin_12);//
-X            GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-N            if(R_VLUE > set_max_r || R_VLUE < set_min_r)
-X            if(Run_Control[13] > Run_Control[16] || Run_Control[13] < Run_Control[17])
-N            {
-N                hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-X                hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
-N                TEXT_SetTextColor(hItem, GUI_RED);
-X                TEXT_SetTextColor(hItem, 0x000000FF);
-N            }else{
-N                hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-X                hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
-N                TEXT_SetTextColor(hItem, GUI_GREEN);
-X                TEXT_SetTextColor(hItem, 0x0000FF00);
-N            }
-N            if(DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v){
-X            if(DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15]){
-N                hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-X                hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
-N                TEXT_SetTextColor(hItem, GUI_RED);
-X                TEXT_SetTextColor(hItem, 0x000000FF);
-N            }else{
-N                hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-X                hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
-N                TEXT_SetTextColor(hItem, GUI_GREEN);
-X                TEXT_SetTextColor(hItem, 0x0000FF00);
-N            }
-N        }else{
-N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
-N            TEXT_SetTextColor(hItem, GUI_GREEN);
-X            TEXT_SetTextColor(hItem, 0x0000FF00);
-N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
-N            TEXT_SetTextColor(hItem, GUI_GREEN);
-X            TEXT_SetTextColor(hItem, 0x0000FF00);
-N            
-N            GPIO_ResetBits(GPIOD,GPIO_Pin_12);
-X            GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-N            TM1650_SET_LED(0x48,0x71);
-N            TM1650_SET_LED(0x68,0xF2);//PASS灯
-N        }
+N		if(rcomp != 0)
+N		{
+N			if(rcomp > set_max_r || rcomp < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
+X			if(rcomp > Run_Control[16] || rcomp < Run_Control[17] || DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15])
+N			{
+N				if(para_set4 == set_4_on){
+X				if(para_set4 == 0xff){
+N					BEEP_Tiggr();
+N				}
+N				TM1650_SET_LED(0x68,0x70);//FAIL灯
+N				GPIO_SetBits(GPIOD,GPIO_Pin_12);//
+X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
+N				if(R_VLUE > set_max_r || R_VLUE < set_min_r)
+X				if(Run_Control[13] > Run_Control[16] || Run_Control[13] < Run_Control[17])
+N				{
+N					hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+X					hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
+N					TEXT_SetTextColor(hItem, GUI_RED);
+X					TEXT_SetTextColor(hItem, 0x000000FF);
+N				}else{
+N					hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+X					hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
+N					TEXT_SetTextColor(hItem, GUI_GREEN);
+X					TEXT_SetTextColor(hItem, 0x0000FF00);
+N				}
+N				if(DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v){
+X				if(DISS_Voltage*1000 > Run_Control[14] || DISS_Voltage*1000 < Run_Control[15]){
+N					hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+X					hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
+N					TEXT_SetTextColor(hItem, GUI_RED);
+X					TEXT_SetTextColor(hItem, 0x000000FF);
+N				}else{
+N					hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+X					hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
+N					TEXT_SetTextColor(hItem, GUI_GREEN);
+X					TEXT_SetTextColor(hItem, 0x0000FF00);
+N				}
+N			}else{
+N				hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+X				hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
+N				TEXT_SetTextColor(hItem, GUI_GREEN);
+X				TEXT_SetTextColor(hItem, 0x0000FF00);
+N				hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+X				hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
+N				TEXT_SetTextColor(hItem, GUI_GREEN);
+X				TEXT_SetTextColor(hItem, 0x0000FF00);
+N				
+N				GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
+N				TM1650_SET_LED(0x48,0x71);
+N				TM1650_SET_LED(0x68,0xF2);//PASS灯
+N			}
+N		}else{
+N			hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+X			hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8D));
+N			TEXT_SetTextColor(hItem, GUI_GREEN);
+X			TEXT_SetTextColor(hItem, 0x0000FF00);
+N			hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+X			hItem = WM_GetDialogItem(hWinR, (0x800 + 0x8E));
+N			TEXT_SetTextColor(hItem, GUI_GREEN);
+X			TEXT_SetTextColor(hItem, 0x0000FF00);
+N			
+N			TM1650_SET_LED(0x68,0x70);
+N			GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
+X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
+N		}
 N    }else{
 N        if(finish == 0)
 N        {

@@ -59,7 +59,7 @@ static void ee_Delay( vu32 nCount)	 //ݲեքғʱگ˽
 void MainTask(void) 
 { 
 //	unsigned char  ucKeyCode;
-    static int read1963;
+    static int read1963,read1964;
     static int scancount;
 
     
@@ -161,6 +161,9 @@ void MainTask(void)
                 sLCD_WR_REG(0xf1);
                 ee_Delay(30);
                 read1963 =sLCD_Read_Data();
+				sLCD_WR_REG(0xE6);
+                ee_Delay(30);
+                read1964=sLCD_Read_Data();
                 scancount = 0;
             }else{
                 scancount++;
