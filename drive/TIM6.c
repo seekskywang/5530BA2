@@ -121,6 +121,7 @@ void TIM4_IRQHandler(void)
     if(TIM_GetITStatus(TIM4,TIM_IT_Update)==SET) //????
     {
         TIM_ClearITPendingBit(TIM4,TIM_IT_Update); //清除中断标志位
+		
         IWDG_ReloadCounter();
         if(page_sw != face_starter)
         {
