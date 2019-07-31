@@ -178,7 +178,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		}else if(jkflag == 0){
 			GUI_DispStringAt("5530B", 140, 50);
 		}
-        GUI_DispStringAt("Ver:3.2", 140, 75);
+        GUI_DispStringAt("Ver:3.3", 140, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
@@ -186,6 +186,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//3.0修复截止电压电流输入只有2位有效数字bug
 		//3.1增加U盘IAP
 		//3.2增加看门狗
+		//3.3修复充放电截止电压设置bug,
         GUI_DispStringAt("Ver:1.3", 140, 100);
         GUI_DispStringAt("-", 191, 125);
         GUI_DispStringAt("-", 227, 125);

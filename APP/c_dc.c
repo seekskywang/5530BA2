@@ -1791,7 +1791,7 @@ void CDC_SET(void)
 				cov1 = atoi(set_limit)*100;					
 			}else if(dot_flag != 0){
 				memset(buf, '\0', sizeof(buf));
-				strncpy(buf,set_limit,dot_flag + 2);
+				strncpy(buf,set_limit,dot_flag + 3);
 				cov1 = atof(buf)*100;
 			}
 			if(cov1 > 6200)
