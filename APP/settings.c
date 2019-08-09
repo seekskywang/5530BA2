@@ -22,7 +22,7 @@ WM_HWIN hWinset;
 extern int count_num(int data);
 int32_t InFlashSave[40];
 vu8 test_mode;
-
+vu8 lang;
 /*********************************************************************
 *
 *       Defines
@@ -67,7 +67,8 @@ vu8 test_mode;
 #define ID_TEXT_155     (GUI_ID_USER + 0x0136)
 #define ID_TEXT_156     (GUI_ID_USER + 0x0137)
 #define ID_TEXT_157     (GUI_ID_USER + 0x0138)
-
+#define ID_TEXT_165     (GUI_ID_USER + 0x0140)
+#define ID_TEXT_166     (GUI_ID_USER + 0x0141)
 
 #define ID_TimerTime5    6
 // USER START (Optionally insert additional defines)
@@ -123,7 +124,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate5[] = {
   { TEXT_CreateIndirect, "Text", ID_TEXT_93, 360, 150, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_94, 360, 175, 120, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_95, 360, 200, 120, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 125, 100, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_165, 260, 225, 100, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_166, 360, 225, 80, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 225, 100, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_134, 360, 125, 80, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_129, 300, 2, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
@@ -551,9 +554,31 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         sprintf(buf,"%.1f",temp);
         TEXT_SetText(hItem,buf);
         
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+		TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+		GUI_UC_SetEncodeUTF8();
+		TEXT_SetText(hItem,"语言");
         
 
-        
+         if(lang == 0)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+            TEXT_SetBkColor(hItem,GUI_BLACK);
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"中文");
+            WM_InvalidateWindow(hWinset);
+        }else{
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_166);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            TEXT_SetBkColor(hItem,GUI_BLACK);
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"ENGLISH");
+            WM_InvalidateWindow(hWinset);
+        }
         
         
 

@@ -53230,7 +53230,7 @@ XGUI_HWIN hWinset;
 Nextern int count_num(int data);
 Nint32_t InFlashSave[40];
 Nvu8 test_mode;
-N
+Nvu8 lang;
 N/*********************************************************************
 N*
 N*       Defines
@@ -53275,7 +53275,8 @@ N#define ID_TEXT_154     (GUI_ID_USER + 0x0135)
 N#define ID_TEXT_155     (GUI_ID_USER + 0x0136)
 N#define ID_TEXT_156     (GUI_ID_USER + 0x0137)
 N#define ID_TEXT_157     (GUI_ID_USER + 0x0138)
-N
+N#define ID_TEXT_165     (GUI_ID_USER + 0x0140)
+N#define ID_TEXT_166     (GUI_ID_USER + 0x0141)
 N
 N#define ID_TimerTime5    6
 N// USER START (Optionally insert additional defines)
@@ -53365,8 +53366,12 @@ N  { TEXT_CreateIndirect, "Text", ID_TEXT_94, 360, 175, 120, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0102), 360, 175, 120, 20, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect, "Text", ID_TEXT_95, 360, 200, 120, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0103), 360, 200, 120, 20, 0, 0x0, 0 },
-N  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 125, 100, 20, 0, 0x0, 0 },
-X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0122), 260, 125, 100, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_165, 260, 225, 100, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0140), 260, 225, 100, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_166, 360, 225, 80, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0141), 360, 225, 80, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 225, 100, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0122), 260, 225, 100, 20, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect, "Text", ID_TEXT_134, 360, 125, 80, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0123), 360, 125, 80, 20, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect,   "Text",   ID_TEXT_129, 300, 2, 80, 20, 0, 0x0, 0 },
@@ -53908,9 +53913,39 @@ N        TEXT_SetFont(hItem,&GUI_Font24_1);//�趨�ı�����
 N        sprintf(buf,"%.1f",temp);
 N        TEXT_SetText(hItem,buf);
 N        
+N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
+N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N		TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N		GUI_UC_SetEncodeUTF8();
+N		TEXT_SetText(hItem,"语言");
 N        
 N
-N        
+N         if(lang == 0)
+N        {
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N            TEXT_SetBkColor(hItem,GUI_BLACK);
+X            TEXT_SetBkColor(hItem,0x00000000);
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"中文");
+N            WM_InvalidateWindow(hWinset);
+N        }else{
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_166);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0141));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            TEXT_SetBkColor(hItem,GUI_BLACK);
+X            TEXT_SetBkColor(hItem,0x00000000);
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"ENGLISH");
+N            WM_InvalidateWindow(hWinset);
+N        }
 N        
 N        
 N
@@ -57888,7 +57923,7 @@ N            break;
 N        }
 N	}
 N        
-W "..\APP\settings.c" 3222 8 variable "i"  was declared but never referenced
+W "..\APP\settings.c" 3247 8 variable "i"  was declared but never referenced
 N}
 N//系统设置界面数据输入
 Nvoid INPUT_NUM(char* num);            
