@@ -701,6 +701,7 @@ void EEPROM_READ_Coeff(void)
     buffer = EEPROM_READ_Byte(0x79);
     para_set1 = EEPROM_READ_Byte(0x61);
     test_mode = EEPROM_READ_Byte(0xB4);
+	lang = EEPROM_READ_Byte(0xFB);
     year1 = EEPROM_READ_Byte(0x7C);
     year2 = EEPROM_READ_Byte(0x7D);
     year3 = EEPROM_READ_Byte(0x7E);
@@ -859,6 +860,7 @@ void Wrtite_S(void)//??BEEP???FLASH?
 {
 	EEPROM_WriteByte(0x61, para_set1);
     EEPROM_WriteByte(0xB4, test_mode);
+	EEPROM_WriteByte(0xFB, lang);
 }
 
 /******************************************************************************/

@@ -49173,6 +49173,7 @@ N#define set_86          85
 N#define set_87          86
 N#define set_88          87
 N#define set_89          88
+N#define set_90          89
 N/*
 N************************************************************************
 N*						��������ʶ���
@@ -49761,6 +49762,7 @@ S#define set_86          85
 S#define set_87          86
 S#define set_88          87
 S#define set_89          88
+S#define set_90          89
 S/*
 S************************************************************************
 S*						��������ʶ���
@@ -52454,6 +52456,7 @@ S#define set_86          85
 S#define set_87          86
 S#define set_88          87
 S#define set_89          88
+S#define set_90          89
 S/*
 S************************************************************************
 S*						��������ʶ���
@@ -53366,14 +53369,14 @@ N  { TEXT_CreateIndirect, "Text", ID_TEXT_94, 360, 175, 120, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0102), 360, 175, 120, 20, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect, "Text", ID_TEXT_95, 360, 200, 120, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0103), 360, 200, 120, 20, 0, 0x0, 0 },
-N  { TEXT_CreateIndirect, "Text", ID_TEXT_165, 260, 225, 100, 20, 0, 0x0, 0 },
-X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0140), 260, 225, 100, 20, 0, 0x0, 0 },
-N  { TEXT_CreateIndirect, "Text", ID_TEXT_166, 360, 225, 80, 20, 0, 0x0, 0 },
-X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0141), 360, 225, 80, 20, 0, 0x0, 0 },
-N  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 225, 100, 20, 0, 0x0, 0 },
-X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0122), 260, 225, 100, 20, 0, 0x0, 0 },
-N  { TEXT_CreateIndirect, "Text", ID_TEXT_134, 360, 125, 80, 20, 0, 0x0, 0 },
-X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0123), 360, 125, 80, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_165, 260, 150, 100, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0140), 260, 150, 100, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_166, 360, 150, 80, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0141), 360, 150, 80, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_133, 260, 125, 100, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0122), 260, 125, 100, 20, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_134, 360, 125, 100, 20, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0123), 360, 125, 100, 20, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect,   "Text",   ID_TEXT_129, 300, 2, 80, 20, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect,   "Text",   (0x800 + 0x10A), 300, 2, 80, 20, 0, 0x0, 0 },
 N  // USER START (Optionally insert additional widgets)
@@ -53435,13 +53438,24 @@ N	if(jkflag == 1)
 N	{
 N		GUI_DispStringAt("Jinko", 5, 1);//SET
 N	}
-N	GUI_SetColor(GUI_WHITE);
-X	GUI_SetColor(0x00FFFFFF);
-N	GUI_SetFont(&GUI_FontHZ20S);
-N	GUI_UC_SetEncodeUTF8();
-N	GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
-X	GUI_SetTextMode((1<<1));
-N	GUI_DispStringAt("系统设置", 130, 3);//SET
+N	if(lang == 0)
+N    {
+N        GUI_SetColor(GUI_WHITE);
+X        GUI_SetColor(0x00FFFFFF);
+N        GUI_SetFont(&GUI_FontHZ20S);
+N        GUI_UC_SetEncodeUTF8();
+N        GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
+X        GUI_SetTextMode((1<<1));
+N        GUI_DispStringAt("系统设置", 130, 3);//SET
+N    }else{
+N        GUI_SetColor(GUI_WHITE);
+X        GUI_SetColor(0x00FFFFFF);
+N        GUI_SetFont(&GUI_Font20_ASCII);
+N        GUI_UC_SetEncodeUTF8();
+N        GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
+X        GUI_SetTextMode((1<<1));
+N        GUI_DispStringAt("System Settings", 130, 3);//SET
+N    }
 N 	GUI_SetColor(GUI_WHITE);//ʨ׃ǰްɫΪїɫ
 X 	GUI_SetColor(0x00FFFFFF);
 N 	GUI_SetFont(&GUI_Font24_1);//
@@ -53518,98 +53532,197 @@ N// 		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
 N// 		GUI_UC_SetEncodeUTF8();
 N// 		BUTTON_SetText(hItem,"充放电");
 N	
-N	
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_31);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x36));
-N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-N		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-N		GUI_UC_SetEncodeUTF8();
-N		BUTTON_SetText(hItem,"内阻测试");
-N	
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_32);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x37));
-N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-N		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-N		GUI_UC_SetEncodeUTF8();
-N		BUTTON_SetText(hItem,"程控负载");
+N		if(lang == 0)
+N        {
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_31);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x36));
+N	//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+N			BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+N			GUI_UC_SetEncodeUTF8();
+N			BUTTON_SetText(hItem,"内阻测试");
 N		
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_33);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x38));
-N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-N		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-N		GUI_UC_SetEncodeUTF8();
-N		BUTTON_SetText(hItem,"程控电源");
-N		
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_34);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x39));
-N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-N		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-N		GUI_UC_SetEncodeUTF8();
-N		BUTTON_SetText(hItem,"充放电"); 
-N		
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_35);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3A));
-N//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-N		BUTTON_SetFont      (hItem,&GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-N		GUI_UC_SetEncodeUTF8();
-N		BUTTON_SetText(hItem,"曲线");
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_32);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x37));
+N	//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+N			BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+N			GUI_UC_SetEncodeUTF8();
+N			BUTTON_SetText(hItem,"程控负载");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_33);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x38));
+N	//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+N			BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+N			GUI_UC_SetEncodeUTF8();
+N			BUTTON_SetText(hItem,"程控电源");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_34);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x39));
+N	//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+N			BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+N			GUI_UC_SetEncodeUTF8();
+N			BUTTON_SetText(hItem,"充放电"); 
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_35);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3A));
+N	//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+N			BUTTON_SetFont      (hItem,&GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+N			GUI_UC_SetEncodeUTF8();
+N			BUTTON_SetText(hItem,"曲线");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_21);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2B));
+N			TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00000000);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			TEXT_SetBkColor(hItem,0x00BFFFFF);
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"分选开关");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_22);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2C));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"过流测试");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_23);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2D));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"报警声音");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_24);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2E));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"电压上下限");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_25);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2F));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"负载电压上下限");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_26);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x30));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"内阻上限");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_27);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x31));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"内阻下限");
+N		}else{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_31);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x36));
+N            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+X            BUTTON_SetTextColor(hItem,0,0x00000000);
+N            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+N            GUI_UC_SetEncodeUTF8();
+N            BUTTON_SetText(hItem,"I.R. TEST");
 N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_21);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2B));
-N		TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00000000);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N        TEXT_SetBkColor(hItem,0x00BFFFFF);
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"分选开关");
-N		
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_22);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2C));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"过流测试");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_23);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2D));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"报警声音");
-N		
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_24);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2E));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"电压上下限");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_25);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2F));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"负载电压上下限");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_26);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x30));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"内阻上限");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_27);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x31));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"内阻下限");
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_32);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x37));
+N            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+X            BUTTON_SetTextColor(hItem,0,0x00000000);
+N            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+N            GUI_UC_SetEncodeUTF8();
+N            BUTTON_SetText(hItem,"LOAD");
+N            
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_33);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x38));
+N            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+X            BUTTON_SetTextColor(hItem,0,0x00000000);
+N            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+N            GUI_UC_SetEncodeUTF8();
+N            BUTTON_SetText(hItem,"POWER");
+N            
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_34);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x39));
+N            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+X            BUTTON_SetTextColor(hItem,0,0x00000000);
+N            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+N            GUI_UC_SetEncodeUTF8();
+N            BUTTON_SetText(hItem,"C&DC"); 
+N            
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_35);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3A));
+N            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+X            BUTTON_SetTextColor(hItem,0,0x00000000);
+N            BUTTON_SetFont      (hItem,&GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+N            GUI_UC_SetEncodeUTF8();
+N            BUTTON_SetText(hItem,"GRAPH");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_21);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2B));
+N            TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"Comp");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_22);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2C));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"Overflow");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_23);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2D));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"Beep");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_24);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2E));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"V Range");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_25);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x2F));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"L.V Range");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_26);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x30));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"UL I.R.");
+N            
+N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_27);
+X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x31));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"LL I.R.");
+N		}
 N        
 N        switch(para_set1){
 N            case set_1_on:
@@ -53691,51 +53804,133 @@ N                TEXT_SetText(hItem,"OFF");
 N                break;
 N            }
 N        }
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_31);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3B));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"过流上下限");
-N
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_32);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3C));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"充电电流上下限");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_90);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9E));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"电池类型");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_133);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0122));
-N        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X        TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N        GUI_UC_SetEncodeUTF8();
-N        TEXT_SetText(hItem,"测试模式");
-N        
-N        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_134);
-X        hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0123));
-N        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X        TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N        GUI_UC_SetEncodeUTF8();
-N        if(test_mode == 1)
+N		
+N		if(lang == 0)
 N        {
-N            TEXT_SetText(hItem,"精准");
-N        }else if(test_mode == 0){
-N            TEXT_SetText(hItem,"快速");
-N        }
-N        
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_31);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3B));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"过流上下限");
+N
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_32);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3C));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"充电电流上下限");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_90);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9E));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"电池类型");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_133);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0122));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"测试模式");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_134);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0123));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			if(test_mode == 1)
+N			{
+N				TEXT_SetText(hItem,"精准");
+N			}else if(test_mode == 0){
+N				TEXT_SetText(hItem,"快速");
+N			}
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_166);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0141));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"中文");
+N            WM_InvalidateWindow(hWinset);
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"语言");
+N        }else{
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_31);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3B));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"OC Range");
+N
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_32);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x3C));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"C.C Range");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_90);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9E));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"B.Type");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_133);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0122));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"Mode");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_134);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0123));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			if(test_mode == 1)
+N			{
+N				TEXT_SetText(hItem,"ACCURATE");
+N			}else if(test_mode == 0){
+N				TEXT_SetText(hItem,"FAST");
+N			}
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_166);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0141));
+N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N            GUI_UC_SetEncodeUTF8();
+N            TEXT_SetText(hItem,"ENGLISH");
+N            WM_InvalidateWindow(hWinset);
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
+N			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X			TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N			TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N			GUI_UC_SetEncodeUTF8();
+N			TEXT_SetText(hItem,"Language");
+N		}
 N        
 N        
 N        
@@ -53750,9 +53945,16 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_91);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9F));
 N                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                GUI_UC_SetEncodeUTF8();
-N                TEXT_SetText(hItem,"锂电池");
+N                if(lang ==0)
+N                {
+N                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"锂电池");
+N                }else{
+N                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"Lion");
+N				}
 N                break;
 N            }
 N            case NiMH:
@@ -53762,9 +53964,16 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_91);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9F));
 N                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                GUI_UC_SetEncodeUTF8();
-N                TEXT_SetText(hItem,"镍氢电池");
+N                if(lang ==0)
+N                {
+N                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"镍氢电池");
+N                }else{
+N                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"NiMH");
+N                }
 N                break;
 N            }
 N            case NiCd:
@@ -53774,9 +53983,16 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_91);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9F));
 N                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                GUI_UC_SetEncodeUTF8();
-N                TEXT_SetText(hItem,"镍镉电池");
+N                if(lang == 0)
+N                {
+N                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"镍镉电池");
+N                }else{
+N                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"NiCd");
+N                }
 N                break;
 N            }
 N            case SLA:
@@ -53786,9 +54002,16 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_91);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9F));
 N                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                GUI_UC_SetEncodeUTF8();
-N                TEXT_SetText(hItem,"小型铅酸电池");
+N                if(lang == 0)
+N                {
+N                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"小型铅酸电池");
+N                }else{
+N                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"SLA");
+N                }
 N                break;
 N            }
 N            case LiMH:
@@ -53798,9 +54021,16 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_91);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x9F));
 N                TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                GUI_UC_SetEncodeUTF8();
-N                TEXT_SetText(hItem,"锂锰电池");
+N                if(lang == 0)
+N                {
+N                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"锂锰电池");
+N                }else{
+N                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                    GUI_UC_SetEncodeUTF8();
+N                    TEXT_SetText(hItem,"LiMH");
+N                }
 N                break;
 N            }
 N            
@@ -53913,39 +54143,9 @@ N        TEXT_SetFont(hItem,&GUI_Font24_1);//�趨�ı�����
 N        sprintf(buf,"%.1f",temp);
 N        TEXT_SetText(hItem,buf);
 N        
-N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
-X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
-N		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X		TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N		TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N		GUI_UC_SetEncodeUTF8();
-N		TEXT_SetText(hItem,"语言");
+N		
 N        
 N
-N         if(lang == 0)
-N        {
-N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_165);
-X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0140));
-N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N            TEXT_SetBkColor(hItem,GUI_BLACK);
-X            TEXT_SetBkColor(hItem,0x00000000);
-N            GUI_UC_SetEncodeUTF8();
-N            TEXT_SetText(hItem,"中文");
-N            WM_InvalidateWindow(hWinset);
-N        }else{
-N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_166);
-X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0141));
-N            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
-N            TEXT_SetBkColor(hItem,GUI_BLACK);
-X            TEXT_SetBkColor(hItem,0x00000000);
-N            GUI_UC_SetEncodeUTF8();
-N            TEXT_SetText(hItem,"ENGLISH");
-N            WM_InvalidateWindow(hWinset);
-N        }
 N        
 N        
 N
@@ -54256,6 +54456,29 @@ X                        GUI_HWIN hItem;
 N//                        WM_InvalidateWindow(hWinset);
 N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_133);
 X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0122));
+N                        TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+X                        TEXT_SetBkColor(hItem,0xFFFFFFF);
+N                        TEXT_SetTextColor(hItem, GUI_WHITE);
+X                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N               
+N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_165);
+X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0140));
+N                        TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+N                        TEXT_SetTextColor(hItem, GUI_BLACK);
+X                        TEXT_SetTextColor(hItem, 0x00000000);
+N
+N                        set_sw = set_90;
+X                        set_sw = 89;
+N                        break;
+N                    }
+N					case set_90:
+X					case 89:
+N                    {
+N                        WM_HWIN hItem;
+X                        GUI_HWIN hItem;
+N//                        WM_InvalidateWindow(hWinset);
+N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_165);
+X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0140));
 N                        TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
 X                        TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                        TEXT_SetTextColor(hItem, GUI_WHITE);
@@ -54910,14 +55133,14 @@ X                        TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                        TEXT_SetTextColor(hItem, GUI_WHITE);
 X                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
 N               
-N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_133);
-X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0122));
+N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_165);
+X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0140));
 N                        TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
 N                        TEXT_SetTextColor(hItem, GUI_BLACK);
 X                        TEXT_SetTextColor(hItem, 0x00000000);
 N
-N                        set_sw = set_73;
-X                        set_sw = 72;
+N                        set_sw = set_90;
+X                        set_sw = 89;
 N                        break;
 N                    }
 N                    case set_9:
@@ -54987,6 +55210,29 @@ X                        TEXT_SetTextColor(hItem, 0x00000000);
 N
 N                        set_sw = set_42;
 X                        set_sw = 41;
+N                        break;
+N                    }
+N					 case set_90:
+X					 case 89:
+N                    {
+N                        WM_HWIN hItem;
+X                        GUI_HWIN hItem;
+N//                        WM_InvalidateWindow(hWinset);
+N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_165);
+X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0140));
+N                        TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
+X                        TEXT_SetBkColor(hItem,0xFFFFFFF);
+N                        TEXT_SetTextColor(hItem, GUI_WHITE);
+X                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N               
+N                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_133);
+X                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0122));
+N                        TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
+N                        TEXT_SetTextColor(hItem, GUI_BLACK);
+X                        TEXT_SetTextColor(hItem, 0x00000000);
+N
+N                        set_sw = set_73;
+X                        set_sw = 72;
 N                        break;
 N                    }
 N					
@@ -56851,9 +57097,16 @@ N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
 N                            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                            TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                            GUI_UC_SetEncodeUTF8();
-N                            TEXT_SetText(hItem,"快速");
+N							if(lang == 0)
+N							{
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();							
+N								TEXT_SetText(hItem,"快速");
+N							}else{
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();							
+N								TEXT_SetText(hItem,"FAST");
+N							}
 N                            test_mode = 0;
 N                            Wrtite_S();
 N                        }else if(test_mode == 0){
@@ -56863,13 +57116,52 @@ N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
 N                            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
 X                            TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                            GUI_UC_SetEncodeUTF8();
-N                            TEXT_SetText(hItem,"精准");
+N                            if(lang == 0)
+N							{
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();							
+N								TEXT_SetText(hItem,"精准");
+N							}else{
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();							
+N								TEXT_SetText(hItem,"ACCURATE");
+N							}
 N                            test_mode = 1;
 N                            Wrtite_S();
 N                        }
 N                    }break;
+N					
+N					case set_90:
+X					case 89:
+N                    {
+N                        if(lang == 1)
+N                        {
+N                            WM_HWIN hItem;
+X                            GUI_HWIN hItem;
+N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                            TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                            GUI_UC_SetEncodeUTF8();
+N                            TEXT_SetText(hItem,"中文");
+N                            lang = 0;
+N                            Wrtite_S();
+N                        }else{
+N                            WM_HWIN hItem;
+X                            GUI_HWIN hItem;
+N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                            GUI_UC_SetEncodeUTF8();
+N                            TEXT_SetText(hItem,"ENGLISH");
+N                            lang = 1;
+N                            Wrtite_S();
+N                        }
+N                    }break;
+N					
 N                    case set_42:
 X                    case 41:
 N                    {
@@ -56892,6 +57184,10 @@ N
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
 N                            TEXT_SetText(hItem,"");
+N						
+N							hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X							hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            TEXT_SetText(hItem,"");
 N                            if(b_type > 5)
 N                            {
 N                                b_type = 1;
@@ -56902,181 +57198,376 @@ N                            {
 N                                case Lion:
 X                                case 1:
 N                                {
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍氢电池");
-N                                
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N									if(lang == 0)
+N                                    {
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍氢电池");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiMH");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"SLA");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    break;
 N                                }
 N                                case NiMH:
 X                                case 2:
 N                                {
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂电池");
-N                                
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {   
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂电池");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"Lion");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"SLA");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    break;
 N                                }
 N                                case NiCd:
 X                                case 3:
 N                                {
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂电池");
-N                                
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂电池");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"Lion");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"SLA");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    break;
 N                                }
 N                                case SLA:
 X                                case 4:
 N                                {
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂电池");
-N                                
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂电池");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"Lion");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    break;
 N                                }
 N                                case LiMH:
 X                                case 5:
 N                                {
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"锂电池");
-N                                
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"锂电池");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_92);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0100));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"Lion");
 N                                    
-N                                    hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
-X                                    hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
-N                                    TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                    GUI_UC_SetEncodeUTF8();
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_93);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0101));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        TEXT_SetBkColor(hItem,GUI_BLACK);
+X                                        TEXT_SetBkColor(hItem,0x00000000);
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_94);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0102));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                        
+N                                        hItem = WM_GetDialogItem(hWinset, ID_TEXT_95);
+X                                        hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0103));
+N                                        TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X                                        TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N                                        GUI_UC_SetEncodeUTF8();
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    break;
 N                                }
 N                            }
@@ -57086,6 +57577,7 @@ N                            set_sw = set_43;
 X                            set_sw = 42;
 N                            break;                        
 N                    }
+N					
 N                    case set_43:
 X                    case 42:
 N                    {
@@ -57102,14 +57594,51 @@ X                            TEXT_SetTextColor(hItem, 0x00000000);
 N                        
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
-N                            if(test_mode == 1)
-N                            {
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"精准");
-N                            }else if(test_mode == 0){
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"快速");
-N                            }
+N							if(lang == 0)
+N							{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"精准");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"快速");
+N								}
+N							}else{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"ACCURATE");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"FAST");
+N								}
+N							}
+N							
+N							hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X							hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            if(lang == 0)
+N							{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"中文");
+N							}else{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"ENGLISH");
+N							}
 N                                                   
 N                            switch(buffer)
 N                            {
@@ -57122,9 +57651,16 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂电池");
-N                                    b_type = Lion;      
-X                                    b_type = 1;      
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"Lion");
+N                                    }
+N                                    b_type = Lion;
+X                                    b_type = 1;
 N                                    break;
 N                                }
 N                                case NiMH:
@@ -57136,7 +57672,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                    }
 N                                    b_type = NiMH;
 X                                    b_type = 2;
 N                                    break;
@@ -57150,7 +57693,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                    }
 N                                    b_type = NiCd;
 X                                    b_type = 3;
 N                                    break;
@@ -57164,7 +57714,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    b_type = SLA;
 X                                    b_type = 4;
 N                                    break;
@@ -57178,7 +57735,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    b_type = LiMH;
 X                                    b_type = 5;
 N                                    break;
@@ -57221,15 +57785,51 @@ X                            TEXT_SetTextColor(hItem, 0x00000000);
 N                        
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
-N                            if(test_mode == 1)
-N                            {
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"精准");
-N                            }else if(test_mode == 0){
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"快速");
-N                            }
-N                        
+N                            if(lang == 0)
+N							{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"精准");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"快速");
+N								}
+N							}else{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"ACCURATE");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"FAST");
+N								}
+N							}
+N							
+N							hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X							hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            if(lang == 0)
+N							{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"中文");
+N							}else{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"ENGLISH");
+N							}
 N                            switch(buffer)
 N                            {
 N                                case Lion:
@@ -57241,7 +57841,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"Lion");
+N                                    }
 N                                    b_type = Lion;
 X                                    b_type = 1;
 N                                    break;
@@ -57255,7 +57862,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                    }
 N                                    b_type = NiMH;
 X                                    b_type = 2;
 N                                    break;
@@ -57269,7 +57883,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                    }
 N                                    b_type = NiCd;
 X                                    b_type = 3;
 N                                    break;
@@ -57283,7 +57904,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    b_type = SLA;
 X                                    b_type = 4;
 N                                    break;
@@ -57297,7 +57925,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    b_type = LiMH;
 X                                    b_type = 5;
 N                                    break;
@@ -57342,15 +57977,51 @@ X                            TEXT_SetTextColor(hItem, 0x00000000);
 N                        
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
-N                            if(test_mode == 1)
-N                            {
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"精准");
-N                            }else if(test_mode == 0){
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"快速");
-N                            }
+N                            if(lang == 0)
+N							{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"精准");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"快速");
+N								}
+N							}else{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"ACCURATE");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"FAST");
+N								}
+N							}
 N                        
+N							hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X							hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            if(lang == 0)
+N							{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"中文");
+N							}else{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"ENGLISH");
+N							}
 N                            switch(buffer)
 N                            {
 N                                case Lion:
@@ -57362,7 +58033,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"Lion");
+N                                    }
 N                                    b_type = Lion;
 X                                    b_type = 1;
 N                                    break;
@@ -57376,7 +58054,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                    }
 N                                    b_type = NiMH;
 X                                    b_type = 2;
 N                                    break;
@@ -57390,7 +58075,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                    }
 N                                    b_type = NiCd;
 X                                    b_type = 3;
 N                                    break;
@@ -57404,7 +58096,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    b_type = SLA;
 X                                    b_type = 4;
 N                                    break;
@@ -57418,7 +58117,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    b_type = LiMH;
 X                                    b_type = 5;
 N                                    break;
@@ -57463,15 +58169,52 @@ X                            TEXT_SetTextColor(hItem, 0x00000000);
 N                        
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
-N                            if(test_mode == 1)
-N                            {
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"精准");
-N                            }else if(test_mode == 0){
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"快速");
-N                            }
+N                            if(lang == 0)
+N							{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"精准");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"快速");
+N								}
+N							}else{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"ACCURATE");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"FAST");
+N								}
+N							}
 N                        
+N							hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X							hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N                            if(lang == 0)
+N							{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"中文");
+N							}else{
+N								WM_HWIN hItem;
+X								GUI_HWIN hItem;
+N								hItem = WM_GetDialogItem(hWinset, ID_TEXT_166);
+X								hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0141));
+N								TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+X								TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N								TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N								GUI_UC_SetEncodeUTF8();
+N								TEXT_SetText(hItem,"ENGLISH");
+N							}
+N							
 N                            switch(buffer)
 N                            {
 N                                case Lion:
@@ -57483,7 +58226,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"Lion");
+N                                    }
 N                                    b_type = Lion;
 X                                    b_type = 1;
 N                                    break;
@@ -57497,7 +58247,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                    }
 N                                    b_type = NiMH;
 X                                    b_type = 2;
 N                                    break;
@@ -57511,7 +58268,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                    }
 N                                    b_type = NiCd;
 X                                    b_type = 3;
 N                                    break;
@@ -57525,7 +58289,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    b_type = SLA;
 X                                    b_type = 4;
 N                                    break;
@@ -57539,7 +58310,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    b_type = LiMH;
 X                                    b_type = 5;
 N                                    break;
@@ -57584,14 +58362,26 @@ X                            TEXT_SetTextColor(hItem, 0x00000000);
 N                        
 N                            hItem = WM_GetDialogItem(hWinset, ID_TEXT_134);
 X                            hItem = WM_GetDialogItem(hWinset, (0x800 + 0x0123));
-N                            if(test_mode == 1)
-N                            {
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"精准");
-N                            }else if(test_mode == 0){
-N                                TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-N                                TEXT_SetText(hItem,"快速");
-N                            }
+N                            if(lang == 0)
+N							{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"精准");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+N									TEXT_SetText(hItem,"快速");
+N								}
+N							}else{
+N								if(test_mode == 1)
+N								{
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"ACCURATE");
+N								}else if(test_mode == 0){
+N									TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+N									TEXT_SetText(hItem,"FAST");
+N								}
+N							}
 N                        
 N                            switch(buffer)
 N                            {
@@ -57604,7 +58394,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"Lion");
+N                                    }
 N                                    b_type = Lion;
 X                                    b_type = 1;
 N                                    break;
@@ -57618,7 +58415,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍氢电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍氢电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiMH");
+N                                    }
 N                                    b_type = NiMH;
 X                                    b_type = 2;
 N                                    break;
@@ -57632,7 +58436,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"镍镉电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"镍镉电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"NiCd");
+N                                    }
 N                                    b_type = NiCd;
 X                                    b_type = 3;
 N                                    break;
@@ -57646,7 +58457,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"小型铅酸电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"小型铅酸电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"SLA");
+N                                    }
 N                                    b_type = SLA;
 X                                    b_type = 4;
 N                                    break;
@@ -57660,7 +58478,14 @@ N                                    TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//
 X                                    TEXT_SetBkColor(hItem,0xFFFFFFF);
 N                                    TEXT_SetTextColor(hItem, GUI_WHITE);
 X                                    TEXT_SetTextColor(hItem, 0x00FFFFFF);
-N                                    TEXT_SetText(hItem,"锂锰电池");
+N                                    if(lang == 0)
+N                                    {
+N                                        TEXT_SetFont(hItem,&GUI_Fontset_font);
+N                                        TEXT_SetText(hItem,"锂锰电池");
+N                                    }else{
+N                                        TEXT_SetFont(hItem,&GUI_Font20_ASCII);
+N                                        TEXT_SetText(hItem,"LiMH");
+N                                    }
 N                                    b_type = LiMH;
 X                                    b_type = 5;
 N                                    break;
@@ -57923,7 +58748,7 @@ N            break;
 N        }
 N	}
 N        
-W "..\APP\settings.c" 3247 8 variable "i"  was declared but never referenced
+W "..\APP\settings.c" 3931 8 variable "i"  was declared but never referenced
 N}
 N//系统设置界面数据输入
 Nvoid INPUT_NUM(char* num);            

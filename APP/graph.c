@@ -122,11 +122,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 	{
 		GUI_DispStringAt("Jinko", 5, 1);//SET
 	}
-	GUI_SetColor(GUI_WHITE);
-	GUI_SetFont(&GUI_FontHZ20S);
-	GUI_UC_SetEncodeUTF8();
-	GUI_SetTextMode(GUI_TM_TRANS);//�����ı�ģʽΪ��ɫ͸��
-	GUI_DispStringAt("测量显示", 130, 3);
+	if(lang == 0)
+    {
+        GUI_SetColor(GUI_WHITE);
+        GUI_SetFont(&GUI_FontHZ20S);
+        GUI_UC_SetEncodeUTF8();
+        GUI_SetTextMode(GUI_TM_TRANS);//设置文本模式为底色透明
+        GUI_DispStringAt("测量显示", 130, 3);//SET
+    }else{
+        GUI_SetColor(GUI_WHITE);
+        GUI_SetFont(&GUI_Font20_ASCII);
+        GUI_DispStringAt("DISPLAY", 130, 3);
+    }
     GUI_SetFont(&GUI_Font24_1);
     GUI_DispStringAt("V(V)", 5,65);
     GUI_DispStringAt("I(A)", 5,110);
@@ -183,41 +190,70 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 // 		GUI_UC_SetEncodeUTF8();
 // 		BUTTON_SetText(hItem,"充放电");
 		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_164);
-		TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
-		TEXT_SetFont(hItem,&GUI_FontHZ14);
-		TEXT_SetText(hItem,"");
-	
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_19);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//����������ɫΪ��ɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//�趨��ť�ı�����
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"内阻测试");
-	
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_20);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//����������ɫΪ��ɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//�趨��ť�ı�����
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"程控负载");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_21);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//����������ɫΪ��ɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//�趨��ť�ı�����
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"程控电源");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_22);        
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//����������ɫΪ��ɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//�趨��ť�ı�����
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"充放电");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_23);
-        BUTTON_SetPressed(hItem,1);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//����������ɫΪ��ɫ
-		BUTTON_SetFont      (hItem,&GUI_FontHZ16);//�趨��ť�ı�����
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"曲线");
+		if(lang == 0)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_19);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"内阻测试");
+        
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_20);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"程控负载");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_21);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"程控电源");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_22);        
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"充放电");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_23);
+            BUTTON_SetPressed(hItem,1);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,&GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"曲线");
+        }else{
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_19);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"I.R. TEST");
+        
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_20);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"LOAD");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_21);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"POWER");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_22);        
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"C&DC");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_23);
+            BUTTON_SetPressed(hItem,1);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,&GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"GRAPH");
+        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_128);
         TEXT_SetTextColor(hItem, GUI_GREEN);//����������ɫ

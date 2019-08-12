@@ -101,22 +101,22 @@ extern struct bitDefine
 */
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate7[] = {
   { WINDOW_CreateIndirect, "SYSINFO", ID_WINDOW_8, 0, 0, 480, 272, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_99, 140, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_100, 152, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_101, 164, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_102, 176, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_103, 200, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_104, 212, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_105, 236, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_106, 248, 125, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_107, 176, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_108, 188, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_109, 200, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_110, 212, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_111, 224, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_112, 236, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_113, 140, 150, 12, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_114, 152, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_99, 140+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_100, 152+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_101, 164+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_102, 176+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_103, 200+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_104, 212+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_105, 236+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_106, 248+40, 125, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_107, 176+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_108, 188+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_109, 200+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_110, 212+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_111, 224+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_112, 236+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_113, 140+40, 150, 12, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_114, 152+40, 150, 12, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_136, 192, 200, 80, 20, 0, 0x0, 0 },
   // USER START (Optionally insert additional widgets)
   // USER END
@@ -158,27 +158,43 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		{
 			GUI_DispStringAt("Jinko", 5, 1);//SET
 		}
-        GUI_SetColor(GUI_WHITE);
-        GUI_SetFont(&GUI_FontHZ20S);
-        GUI_UC_SetEncodeUTF8();
-        GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
-        GUI_DispStringAt("系统信息", 130, 3);//SET
-        GUI_SetColor(GUI_LIGHTBLUE);
-        GUI_SetFont(&GUI_Fontset_font);
-        GUI_DispStringAt("仪器型号", 30, 50);
-        GUI_DispStringAt("软件版本", 30, 75);
-        GUI_DispStringAt("硬件版本", 30, 100);
-        GUI_DispStringAt("生产日期", 30, 125);
-        GUI_DispStringAt("仪器编号", 30, 150);
+        if(lang == 0)
+        {  
+            GUI_SetColor(GUI_WHITE);
+            GUI_SetFont(&GUI_FontHZ20S);
+            GUI_UC_SetEncodeUTF8();
+            GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
+            GUI_DispStringAt("系统信息", 130, 3);//SET
+            GUI_SetColor(GUI_LIGHTBLUE);
+            GUI_SetFont(&GUI_Fontset_font);
+            GUI_DispStringAt("仪器型号", 30, 50);
+            GUI_DispStringAt("软件版本", 30, 75);
+            GUI_DispStringAt("硬件版本", 30, 100);
+            GUI_DispStringAt("生产日期", 30, 125);
+            GUI_DispStringAt("仪器编号", 30, 150);
+        }else{
+            GUI_SetColor(GUI_WHITE);
+            GUI_SetFont(&GUI_Font20_ASCII);
+            GUI_UC_SetEncodeUTF8();
+            GUI_SetTextMode(GUI_TM_TRANS);//ʨ׃τѾģʽΪ֗ɫ͸ķ
+            GUI_DispStringAt("System Information", 130, 3);//SET
+            GUI_SetColor(GUI_LIGHTBLUE);
+            GUI_SetFont(&GUI_Font20_ASCII);
+            GUI_DispStringAt("Instrument Model", 30, 50);
+            GUI_DispStringAt("Software Version", 30, 75);
+            GUI_DispStringAt("Hardware Version", 30, 100);
+            GUI_DispStringAt("Production Date", 30, 125);
+            GUI_DispStringAt("Serial NO.", 30, 150);
+        }
         GUI_SetColor(0x00BFFFFF);
         GUI_SetFont(&GUI_Font24_1);
 		if(jkflag == 1)
 		{
-			GUI_DispStringAt("JK5530B", 140, 50);
+			GUI_DispStringAt("JK5530B", 140+40, 50);
 		}else if(jkflag == 0){
-			GUI_DispStringAt("5530B", 140, 50);
+			GUI_DispStringAt("5530B", 140+40, 50);
 		}
-        GUI_DispStringAt("Ver:3.3", 140, 75);
+        GUI_DispStringAt("Ver:3.3", 140+40, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
@@ -187,10 +203,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//3.1增加U盘IAP
 		//3.2增加看门狗
 		//3.3修复充放电截止电压设置bug,
-        GUI_DispStringAt("Ver:1.3", 140, 100);
-        GUI_DispStringAt("-", 191, 125);
-        GUI_DispStringAt("-", 227, 125);
-        GUI_DispStringAt("A", 164, 150);
+        GUI_DispStringAt("Ver:1.3", 140+40, 100);
+        GUI_DispStringAt("-", 191+40, 125);
+        GUI_DispStringAt("-", 227+40, 125);
+        GUI_DispStringAt("A", 164+40, 150);
 //        DrawLock();
 	break;
 	case WM_TIMER:

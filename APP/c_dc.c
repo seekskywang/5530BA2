@@ -253,10 +253,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_DispStringAt("C",380+60, 2);       
 //        DrawLockc();
         
-        GUI_SetColor(GUI_WHITE);
-        GUI_SetFont(&GUI_Fontset_font);
-        GUI_DispStringAt("充电",115, 4);
-        GUI_DispStringAt("放电",255, 4);
+		if(lang == 0)
+		{
+			GUI_SetColor(GUI_WHITE);
+			GUI_SetFont(&GUI_Fontset_font);
+			GUI_DispStringAt("充电",115, 4);
+			GUI_DispStringAt("放电",255, 4);
+		}else{
+			GUI_SetColor(GUI_WHITE);
+			GUI_SetFont(&GUI_Font20_ASCII);
+			GUI_DispStringAt("C",115, 4);
+			GUI_DispStringAt("DC",255, 4);
+		}
         GUI_SetFont(&GUI_Font24_1);
         GUI_DispStringAt(":",320, 3);
         GUI_DispStringAt(":",350, 3);
@@ -396,9 +404,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             if(status_flash == 0){
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
                 TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
-                TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
-                GUI_UC_SetEncodeUTF8();
-                TEXT_SetText(hItem,"充电中");
+                if(lang == 0)
+                {
+                    TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
+                    GUI_UC_SetEncodeUTF8();
+                    TEXT_SetText(hItem,"充电中");
+                }else{
+                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+                    GUI_UC_SetEncodeUTF8();
+                    TEXT_SetText(hItem,"Charging");
+                }
                 status_flash = 1;
             }else{
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
@@ -671,9 +686,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             if(status_flash == 0){
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
                 TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
-                TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
-                GUI_UC_SetEncodeUTF8();        
-                TEXT_SetText(hItem,"放电中");
+                if(lang == 0)
+                {
+                    TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
+                    GUI_UC_SetEncodeUTF8();        
+                    TEXT_SetText(hItem,"放电中");
+                }else{
+                    TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+                    GUI_UC_SetEncodeUTF8();        
+                    TEXT_SetText(hItem,"Discharging");
+                }
                 status_flash = 1;
             }else{
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
@@ -820,36 +842,70 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		TEXT_SetFont(hItem,&GUI_FontHZ14);
 		TEXT_SetText(hItem,"");
 
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_25);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"内阻测试");
-	
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_26);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"程控负载");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_27);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"程控电源");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_28);
-        BUTTON_SetPressed(hItem,1);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-		BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"充放电");
-		
-		hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_29);
-//		BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
-		BUTTON_SetFont      (hItem,&GUI_FontHZ16);//ʨ֨дťτѾؖͥ
-		GUI_UC_SetEncodeUTF8();
-		BUTTON_SetText(hItem,"曲线");
+		if(lang ==0)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_25);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"内阻测试");
+        
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_26);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"程控负载");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_27);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"程控电源");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_28);
+            BUTTON_SetPressed(hItem,1);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"充放电");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_29);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,&GUI_FontHZ16);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"曲线");
+        }else{
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_25);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"I.R. TEST");
+        
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_26);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"LOAD");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_27);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"POWER");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_28);
+            BUTTON_SetPressed(hItem,1);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,    &GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"C&DC");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_29);
+            BUTTON_SetTextColor(hItem,0,GUI_BLACK);//ʨ׃ؖͥҕɫΪۚɫ
+            BUTTON_SetFont      (hItem,&GUI_Font16B_ASCII);//ʨ֨дťτѾؖͥ
+            GUI_UC_SetEncodeUTF8();
+            BUTTON_SetText(hItem,"GRAPH");
+        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_17);
 		TEXT_SetTextColor(hItem, GUI_LIGHTGRAY);//设置字体颜色
@@ -875,42 +931,45 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		GUI_UC_SetEncodeUTF8();
 		TEXT_SetText(hItem,"A");
         
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_50);
-		TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
-        TEXT_SetBkColor(hItem,0x00BFFFFF);
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8(); 
-		TEXT_SetText(hItem,"输出电压");        
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_51);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"限制电流");
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_58);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"截止电压");
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_59);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"截止电流");
-        
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_52);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"负载电流");
+		if(lang == 0)
+        {
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_50);
+			TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
+			TEXT_SetBkColor(hItem,0x00BFFFFF);
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8(); 
+			TEXT_SetText(hItem,"输出电压");        
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_51);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"限制电流");
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_58);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"截止电压");
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_59);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"截止电流");
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_52);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"负载电流");
 
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_60);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"截止电压");
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_60);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"截止电压");
+		
         
 //         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_61);
 // 		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
@@ -918,12 +977,61 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 // 		GUI_UC_SetEncodeUTF8();
 // 		TEXT_SetText(hItem,"截止电流");
         
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_53);
-		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
-		GUI_UC_SetEncodeUTF8();
-		TEXT_SetText(hItem,"循环次数");
-        
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_53);
+			TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+			TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+			GUI_UC_SetEncodeUTF8();
+			TEXT_SetText(hItem,"循环次数");
+        }else{
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_50);
+            TEXT_SetTextColor(hItem, GUI_BLACK);//设置字体颜色
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8(); 
+            TEXT_SetText(hItem,"Output V");        
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_51);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"Limiting C");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_58);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"Cutoff V");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_59);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"Cutoff C");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_52);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"Load C");
+
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_60);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"Cutoff V");
+            
+    //         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_61);
+    // 		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+    //         TEXT_SetFont(hItem,&GUI_Fontset_font);//设定文本字体
+    // 		GUI_UC_SetEncodeUTF8();
+    // 		TEXT_SetText(hItem,"截止电流");
+            
+            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_53);
+            TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();
+            TEXT_SetText(hItem,"LOOPS");
+		}
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_54);
         sprintf(buf,"%.2f",dis_output_v);
 		TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
@@ -1005,9 +1113,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_69);
         TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
-        GUI_UC_SetEncodeUTF8();        
-        TEXT_SetText(hItem,"充电");
+        if(lang == 0)
+        {
+            TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
+            GUI_UC_SetEncodeUTF8();        
+            TEXT_SetText(hItem,"充电");
+        }else{
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();        
+            TEXT_SetText(hItem,"Charge");
+        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_77);
         TEXT_SetTextColor(hItem, GUI_GREEN);//设置字体颜色
@@ -1035,9 +1150,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_70);
         TEXT_SetTextColor(hItem, GUI_WHITE);//设置字体颜色
-        TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
-        GUI_UC_SetEncodeUTF8();        
-        TEXT_SetText(hItem,"放电");
+        if(lang == 0)
+        {
+            TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
+            GUI_UC_SetEncodeUTF8();        
+            TEXT_SetText(hItem,"放电");
+        }else{
+            TEXT_SetFont(hItem,&GUI_Font20_ASCII);//设定文本字体
+            GUI_UC_SetEncodeUTF8();        
+            TEXT_SetText(hItem,"Discharge");
+        }
         
         hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_127);
         TEXT_SetTextColor(hItem, GUI_GREEN);//ʨ׃ؖͥҕɫ
