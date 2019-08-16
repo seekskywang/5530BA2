@@ -8,6 +8,7 @@
 #include "key.h"
 #include "string.h"
 #include "beep.h"
+#include "internalflash.h"
 
 WM_HWIN hWincal;
 WM_HWIN Createcal(void);
@@ -660,67 +661,265 @@ void LoadCCal(u8 step)
 		Modify_C_READ = Contr_Laod;//
 		Modify_A_ACT = inputvalue;
     }else if(step == 2){
-        vu32 var16;
-				vu32 var32a;
-				vu32 var32b;
-				
-				vu32 var16a;
-				vu32 var32c;
-				vu32 var32d;
-				
-				Modify_B_READ = Imon1_value;
-				Modify_D_READ = Contr_Laod;
-				Modify_B_ACT = inputvalue;
-				
-				var32a = Modify_B_ACT;
-				var32a = var32a - Modify_A_ACT;
-				var32a = var32a << 12;
-				var16 = Modify_B_READ - Modify_A_READ;
-				var32a = var32a / var16;
-				REG_Load_A = var32a;
-				var32a = Modify_B_ACT;
-				var32a = var32a << 12;
-				var32b = Modify_B_READ;
-				var32b = var32b * REG_Load_A;
-				if (var32a < var32b)
-				{
-					var32b = var32b - var32a;
-					REG_LoadA_Offset = var32b;
-					Polar1 |= 0x01;
-				}
-				else 
-				{
-					var32a = var32a - var32b;
-					REG_LoadA_Offset = var32a;
-					Polar1 &= ~0x01;					
-				}
-	//---------------------------------------------------------------------------------//
-				var32c = Modify_B_ACT; 
-				var32c = var32c - Modify_A_ACT;
-				var32c = var32c << 12;
-				var16a=Modify_D_READ-Modify_C_READ;
-				var16a=var16a*2;
-				var32c=var32c/var16a;
-				SET_LoadA = var32c;
-				var32c = Modify_B_ACT;
-				var32c = var32c << 12;
-				var32d = SET_LoadA;
-				var32d = var32d * (Modify_D_READ*2);
-				if (var32c < var32d)
-				{
-					var32d = var32d - var32c;
-					SET_LoadA_Offset = var32d;
-					Polar1 |= 0x04;
-				}
-				else 
-				{
-					var32c = var32c - var32d;
-					SET_LoadA_Offset = var32c;
-					Polar1 &= ~0x04;
-				}
-				Flash_Write_all ();	
-				Flag_DAC_OFF =0;
-    }
+       vu32 var16;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu32 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_B_READ = Imon1_value;
+		Modify_D_READ = Contr_Laod;
+		Modify_B_ACT = inputvalue;
+		
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 12;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_Load_A = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 12;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_Load_A;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_LoadA_Offset = var32b;
+			Polar1 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_LoadA_Offset = var32a;
+			Polar1 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; 
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 12;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_LoadA = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 12;
+		var32d = SET_LoadA;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_LoadA_Offset = var32d;
+			Polar1 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_LoadA_Offset = var32c;
+			Polar1 &= ~0x04;
+		}
+		Flash_Write_all ();	
+		Flag_DAC_OFF =0;
+    }else if(step == 3){
+		Modify_A_READ = Imon1_value;//
+		Modify_C_READ = Contr_Laod;//
+		Modify_A_ACT = inputvalue;
+	}else if(step == 4){
+		vu32 var16;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu32 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_B_READ = Imon1_value;
+		Modify_D_READ = Contr_Laod;
+		Modify_B_ACT = inputvalue;
+		
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 12;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_Load_A1 = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 12;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_Load_A1;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_LoadA_Offset1 = var32b;
+			Polar1 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_LoadA_Offset1 = var32a;
+			Polar1 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; 
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 12;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_LoadA1 = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 12;
+		var32d = SET_LoadA1;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_LoadA_Offset1 = var32d;
+			Polar1 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_LoadA_Offset1 = var32c;
+			Polar1 &= ~0x04;
+		}
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+//			Flash_Write_all ();	
+		Flag_DAC_OFF =0;
+	}else if(step == 5){
+		Modify_A_READ = Imon1_value;//
+		Modify_C_READ = Contr_Laod;//
+		Modify_A_ACT = inputvalue;
+	}else if(step == 6){
+		vu32 var16;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu32 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_B_READ = Imon1_value;
+		Modify_D_READ = Contr_Laod;
+		Modify_B_ACT = inputvalue;
+		
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 12;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_Load_A2 = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 12;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_Load_A2;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_LoadA_Offset2 = var32b;
+			Polar1 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_LoadA_Offset2 = var32a;
+			Polar1 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; 
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 12;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_LoadA2 = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 12;
+		var32d = SET_LoadA2;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_LoadA_Offset2 = var32d;
+			Polar1 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_LoadA_Offset2 = var32c;
+			Polar1 &= ~0x04;
+		}
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+//			Flash_Write_all ();	
+		Flag_DAC_OFF =0;
+	}else if(step == 7){
+		Modify_A_READ = Imon1_value;//
+		Modify_C_READ = Contr_Laod;//
+		Modify_A_ACT = inputvalue;
+	}else if(step == 8){
+		vu32 var16;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu32 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_B_READ = Imon1_value;
+		Modify_D_READ = Contr_Laod;
+		Modify_B_ACT = inputvalue;
+		
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 12;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_Load_AH = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 12;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_Load_AH;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_LoadA_OffsetH = var32b;
+			Polar1 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_LoadA_OffsetH = var32a;
+			Polar1 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; 
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 12;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_LoadAH = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 12;
+		var32d = SET_LoadAH;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_LoadA_OffsetH = var32d;
+			Polar1 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_LoadA_OffsetH = var32c;
+			Polar1 &= ~0x04;
+		}
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+//			Flash_Write_all ();	
+		Flag_DAC_OFF =0;
+	}
 }
 
 void PowVCal(u8 step)
@@ -796,128 +995,128 @@ void PowVCal(u8 step)
 		Modify_A_ACT = inputvalue;
     }else if(step == 4){
         vu16 var16;
-			vu32 var32a;
-			vu32 var32b;
-			
-			vu16 var16a;
-			vu32 var32c;
-			vu32 var32d;
-			
-			Modify_D_READ = Contr_Voltage;
-			Modify_B_READ = Vmon_value;
-			Modify_B_ACT = inputvalue;
-			var32a = Modify_B_ACT;
-			var32a = var32a - Modify_A_ACT;
-			var32a = var32a << 14;
-			var16 = Modify_B_READ - Modify_A_READ;
-			var32a = var32a / var16;
-			REG_POWERV1 = var32a;
-			var32a = Modify_B_ACT;
-			var32a = var32a << 14;
-			var32b = Modify_B_READ;
-			var32b = var32b * REG_POWERV1;
-			if (var32a < var32b)
-			{
-				var32b = var32b - var32a;
-				REG_POWERV_Offset1 = var32b;
-				Polar5 |= 0x01;
-			}
-			else 
-			{
-				var32a = var32a - var32b;
-				REG_POWERV_Offset1 = var32a;
-				Polar5 &= ~0x01;					
-			}
-	//---------------------------------------------------------------------------------//
-			var32c = Modify_B_ACT; //????ǵ?
-			var32c = var32c - Modify_A_ACT;
-			var32c = var32c << 14;
-			var16a=Modify_D_READ-Modify_C_READ;
-			var16a=var16a*2;
-			var32c=var32c/var16a;
-			SET_POWERV = var32c;
-			var32c = Modify_B_ACT;
-			var32c = var32c << 14;
-			var32d = SET_POWERV;
-			var32d = var32d * (Modify_D_READ*2);
-			if (var32c < var32d)
-			{
-				var32d = var32d - var32c;
-				SET_POWERV_Offset = var32d;
-				Polar5 |= 0x04;
-			}
-			else 
-			{
-				var32c = var32c - var32d;
-				SET_POWERV_Offset = var32c;
-				Polar5 &= ~0x04;
-			}
-			Flash_Write_all ();	
-			Flag_DAC_OFF=0;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu16 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_D_READ = Contr_Voltage;
+		Modify_B_READ = Vmon_value;
+		Modify_B_ACT = inputvalue;
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 14;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_POWERV1 = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 14;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_POWERV1;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_POWERV_Offset1 = var32b;
+			Polar5 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_POWERV_Offset1 = var32a;
+			Polar5 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; //????��?
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 14;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_POWERV1 = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 14;
+		var32d = SET_POWERV1;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_POWERV_Offset1 = var32d;
+			Polar5 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_POWERV_Offset1 = var32c;
+			Polar5 &= ~0x04;
+		}
+		Flash_Write_all ();	
+		Flag_DAC_OFF=0;
     }else if(step == 5){
         Modify_A_READ = Vmon_value;//??d
 		Modify_C_READ = Contr_Voltage;//???d
 		Modify_A_ACT = inputvalue;
     }else if(step == 6){
         vu16 var16;
-			vu32 var32a;
-			vu32 var32b;
-			
-			vu16 var16a;
-			vu32 var32c;
-			vu32 var32d;
-			
-			Modify_D_READ = Contr_Voltage;
-			Modify_B_READ = Vmon_value;
-			Modify_B_ACT = inputvalue;
-			var32a = Modify_B_ACT;
-			var32a = var32a - Modify_A_ACT;
-			var32a = var32a << 14;
-			var16 = Modify_B_READ - Modify_A_READ;
-			var32a = var32a / var16;
-			REG_POWERV2 = var32a;
-			var32a = Modify_B_ACT;
-			var32a = var32a << 14;
-			var32b = Modify_B_READ;
-			var32b = var32b * REG_POWERV2;
-			if (var32a < var32b)
-			{
-				var32b = var32b - var32a;
-				REG_POWERV_Offset2 = var32b;
-				Polar5 |= 0x01;
-			}
-			else 
-			{
-				var32a = var32a - var32b;
-				REG_POWERV_Offset2 = var32a;
-				Polar5 &= ~0x01;					
-			}
-	//---------------------------------------------------------------------------------//
-			var32c = Modify_B_ACT; //????ǵ?
-			var32c = var32c - Modify_A_ACT;
-			var32c = var32c << 14;
-			var16a=Modify_D_READ-Modify_C_READ;
-			var16a=var16a*2;
-			var32c=var32c/var16a;
-			SET_POWERV = var32c;
-			var32c = Modify_B_ACT;
-			var32c = var32c << 14;
-			var32d = SET_POWERV;
-			var32d = var32d * (Modify_D_READ*2);
-			if (var32c < var32d)
-			{
-				var32d = var32d - var32c;
-				SET_POWERV_Offset = var32d;
-				Polar5 |= 0x04;
-			}
-			else 
-			{
-				var32c = var32c - var32d;
-				SET_POWERV_Offset = var32c;
-				Polar5 &= ~0x04;
-			}
-			Flash_Write_all ();	
-			Flag_DAC_OFF=0;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu16 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_D_READ = Contr_Voltage;
+		Modify_B_READ = Vmon_value;
+		Modify_B_ACT = inputvalue;
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 14;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_POWERV2 = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 14;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_POWERV2;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_POWERV_Offset2 = var32b;
+			Polar5 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_POWERV_Offset2 = var32a;
+			Polar5 &= ~0x01;					
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; //????��?
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 14;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_POWERV2 = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 14;
+		var32d = SET_POWERV2;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_POWERV_Offset2 = var32d;
+			Polar5 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_POWERV_Offset2 = var32c;
+			Polar5 &= ~0x04;
+		}
+		Flash_Write_all ();	
+		Flag_DAC_OFF=0;
     }
 }
 
@@ -962,5 +1161,72 @@ void PowCCal(u8 step)
         }
         Flash_Write_all ();	
         Flag_DAC_OFF=0;
-    }
+    }else if (step == 3)			   //?d?ǵ?
+	{
+		Modify_A_READ = Imon_value;//??d
+		Modify_C_READ = Contr_Current;//???d
+		Modify_A_ACT = inputvalue;
+	}else if (step == 4)			   //?d?ǵ???
+	{
+		vu16 var16;
+		vu32 var32a;
+		vu32 var32b;
+		
+		vu16 var16a;
+		vu32 var32c;
+		vu32 var32d;
+		
+		Modify_D_READ = Contr_Current;
+		Modify_B_READ = Imon_value;
+		Modify_B_ACT = inputvalue;
+		var32a = Modify_B_ACT;
+		var32a = var32a - Modify_A_ACT;
+		var32a = var32a << 14;
+		var16 = Modify_B_READ - Modify_A_READ;
+		var32a = var32a / var16;
+		REG_POWERA1 = var32a;
+		var32a = Modify_B_ACT;
+		var32a = var32a << 14;
+		var32b = Modify_B_READ;
+		var32b = var32b * REG_POWERA1;
+		if (var32a < var32b)
+		{
+			var32b = var32b - var32a;
+			REG_POWERA_Offset1 = var32b;
+			Polar4 |= 0x01;
+		}
+		else 
+		{
+			var32a = var32a - var32b;
+			REG_POWERA_Offset1 = var32a;
+			Polar4 &= ~0x01;					//?d????ª?ǵ???
+		}
+//---------------------------------------------------------------------------------//
+		var32c = Modify_B_ACT; //???dǵ?
+		var32c = var32c - Modify_A_ACT;
+		var32c = var32c << 14;
+		var16a=Modify_D_READ-Modify_C_READ;
+		var16a=var16a*2;
+		var32c=var32c/var16a;
+		SET_POWERA1 = var32c;
+		var32c = Modify_B_ACT;
+		var32c = var32c << 14;
+		var32d = SET_POWERA1;
+		var32d = var32d * (Modify_D_READ*2);
+		if (var32c < var32d)
+		{
+			var32d = var32d - var32c;
+			SET_POWERA_Offset1 = var32d;
+			Polar4 |= 0x04;
+		}
+		else 
+		{
+			var32c = var32c - var32d;
+			SET_POWERA_Offset1 = var32c;
+			Polar4 &= ~0x04;
+		}
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+//			Flash_Write_all ();	
+		Flag_DAC_OFF=0;
+	}
 }

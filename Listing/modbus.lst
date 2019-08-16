@@ -37536,76 +37536,146 @@ X			DISS_Voltage=Run_Control[10];
 N			DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 N		}
 N	}else{
-N		if(Vmon1_value < 4300)
-N		{		
-N			V_SW(0);//电压低档位
-N			DISS_Voltage = 0;
-N			i=0;
-N		}else{										
-N			if(DISS_Voltage > 10)
+N		if(page_sw == face_menu)
+X		if(page_sw == 2)
+N		{
+N			if(pow_v > 1000)
+X			if(Run_Control[38] > 1000)
 N			{
-N				V_SW(1);//电压高档位
-N				if(r_raly == 1)
-N				{
-N					var32 = Vmon1_value;
-N				}else if(r_raly == 0){
-N					var32 = Vmon1_value - 2;
-N				}
-N//				var32 = Vmon1_value;
-N				var32 = var32 * REG_CorrectionV1;  
-X				var32 = var32 * Correct_Parametet[13];  
-N				if ((Polar & 0x01) == 0x01)		  
-X				if ((correct_por[0] & 0x01) == 0x01)		  
-N				{
-N					if (var32 < REG_ReadV_Offset1) 
-X					if (var32 < Correct_Strong[13]) 
+N				V_SW(1);//电压高档�?
+N					if(r_raly == 1)
 N					{
-N						var32 = 0;
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 2;
 N					}
-N					else var32 = var32 - REG_ReadV_Offset1;
-X					else var32 = var32 - Correct_Strong[13];
-N				}
-N				else var32 = var32 + REG_ReadV_Offset1;
-X				else var32 = var32 + Correct_Strong[13];
-N				var32 = var32 >> 12;
-N				if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-N				Voltage = var32;
-X				Run_Control[10] = var32;
-N				DISS_Voltage=Voltage;
-X				DISS_Voltage=Run_Control[10];
-N				DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
-N				
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV1;  
+X					var32 = var32 * Correct_Parametet[13];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset1) 
+X						if (var32 < Correct_Strong[13]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset1;
+X						else var32 = var32 - Correct_Strong[13];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset1;
+X					else var32 = var32 + Correct_Strong[13];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 N			}else{
-N				V_SW(0);//电压低档位
-N				if(r_raly == 1)
-N				{
-N					var32 = Vmon1_value;
-N				}else if(r_raly == 0){
-N					var32 = Vmon1_value - 3;
-N				}
-N//				var32 = Vmon1_value;
-N				var32 = var32 * REG_CorrectionV;  
-X				var32 = var32 * Correct_Parametet[0];  
-N				if ((Polar & 0x01) == 0x01)		  
-X				if ((correct_por[0] & 0x01) == 0x01)		  
-N				{
-N					if (var32 < REG_ReadV_Offset) 
-X					if (var32 < Correct_Strong[0]) 
+N				V_SW(0);//电压低档�?
+N					if(r_raly == 1)
 N					{
-N						var32 = 0;
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 3;
 N					}
-N					else var32 = var32 - REG_ReadV_Offset;
-X					else var32 = var32 - Correct_Strong[0];
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV;  
+X					var32 = var32 * Correct_Parametet[0];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset) 
+X						if (var32 < Correct_Strong[0]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset;
+X						else var32 = var32 - Correct_Strong[0];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset;
+X					else var32 = var32 + Correct_Strong[0];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+N			}
+N		}else{
+N			if(Vmon1_value < 4300)
+N			{		
+N				V_SW(0);//电压低档位
+N				DISS_Voltage = 0;
+N				i=0;
+N			}else{										
+N				if(DISS_Voltage > 10)
+N				{
+N					V_SW(1);//电压高档位
+N					if(r_raly == 1)
+N					{
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 2;
+N					}
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV1;  
+X					var32 = var32 * Correct_Parametet[13];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset1) 
+X						if (var32 < Correct_Strong[13]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset1;
+X						else var32 = var32 - Correct_Strong[13];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset1;
+X					else var32 = var32 + Correct_Strong[13];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+N					
+N				}else{
+N					V_SW(0);//电压低档位
+N					if(r_raly == 1)
+N					{
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 3;
+N					}
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV;  
+X					var32 = var32 * Correct_Parametet[0];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset) 
+X						if (var32 < Correct_Strong[0]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset;
+X						else var32 = var32 - Correct_Strong[0];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset;
+X					else var32 = var32 + Correct_Strong[0];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 N				}
-N				else var32 = var32 + REG_ReadV_Offset;
-X				else var32 = var32 + Correct_Strong[0];
-N				var32 = var32 >> 12;
-N				if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-N				Voltage = var32;
-X				Run_Control[10] = var32;
-N				DISS_Voltage=Voltage;
-X				DISS_Voltage=Run_Control[10];
-N				DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 N			}
 N		}
 N	}
@@ -37670,7 +37740,7 @@ X		Run_Control[12] = var32;
 N		DISS_Current=Laod_Current;
 X		DISS_Current=Run_Control[12];
 N		DISS_Current=DISS_Current/1000;//������ʾ����
-W "..\drive\modbus.c" 1282 6 single-precision operand implicitly converted to double-precision
+W "..\drive\modbus.c" 1336 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Current > 0.1)
 N		{
 N			var32 = Imon1_value;
@@ -37696,7 +37766,7 @@ N			DISS_Current=Laod_Current;
 X			DISS_Current=Run_Control[12];
 N			DISS_Current=DISS_Current/1000;//݆̣Дʾ֧·
 N		}
-W "..\drive\modbus.c" 1300 6 single-precision operand implicitly converted to double-precision
+W "..\drive\modbus.c" 1354 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Current > 0.9)
 N		{
 N			var32 = Imon1_value;

@@ -89,3 +89,4 @@
 ..\output\cal.o: ..\Include\my_register.h
 ..\output\cal.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\cal.o: ..\Include\beep.h
+..\output\cal.o: ..\Include\internalflash.h

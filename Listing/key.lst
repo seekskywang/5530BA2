@@ -51685,10 +51685,11 @@ N                                LoadVCal(1);
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 100;
-X                                Run_Control[1] = 100;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N//                                SET_Voltage = 100;
+N//                                SET_Current = 1000;
+N								Contr_Voltage = 0x0312;
+N								Flag_DAC_OFF=1;								
+X								(flagB . bit3)=1;								
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -51696,13 +51697,16 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 1;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 369 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 371 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(1);
 N                            }else if(calmode == mode_loadc){
 X                            }else if(calmode == 4){
 N                                IO_OFF();
-N                                SET_Current_Laod = 1000;
-X                                Run_Control[4] = 1000;
+N//                                SET_Current_Laod = 1000;
+N								C_SW(0);
+N								Contr_Laod = 0x0a12;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                                flag_Load_CC = 1;
@@ -51713,10 +51717,9 @@ N                                calstep = 1;
 N                            }else if(calmode == mode_powc){
 X                            }else if(calmode == 5){
 N                                IO_OFF();
-N                                SET_Voltage = 1000;
-X                                Run_Control[1] = 1000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Current = 0x078d;
+N								Flag_DAC_OFF=1;  
+X								(flagB . bit3)=1;  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -51724,7 +51727,7 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 1;
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 385 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 390 33 function "inputcal" declared implicitly
 N                                inputcal("1");
 N                            }
 N                            KeyCounter = 0;
@@ -51790,7 +51793,7 @@ N                            if(admin == 1)
 N                            {
 N                                INPUT_INFO(2);    
 N                            }else if(cal == 1){
-W "..\drive\key.c" 442 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 447 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(2);
 N                            }else{
 N                                pass += 2;
@@ -51805,15 +51808,14 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 454 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 459 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(2);
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 1000;
-X                                Run_Control[1] = 1000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Voltage = 0x1338;
+N								Flag_DAC_OFF=1;	  
+X								(flagB . bit3)=1;	  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -51821,13 +51823,16 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 2;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 463 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 468 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(2);
 N                            }else if(calmode == mode_loadc){
 X                            }else if(calmode == 4){
 N                                IO_OFF();
-N                                SET_Current_Laod = 5000;
-X                                Run_Control[4] = 5000;
+N//                                SET_Current_Laod = 5000;
+N								C_SW(0);
+N								Contr_Laod = 0x120c;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
 N                                flag_Load_CC = 1;
@@ -51838,10 +51843,9 @@ N                                calstep = 2;
 N                            }else if(calmode == mode_powc){
 X                            }else if(calmode == 5){
 N                                IO_OFF();
-N                                SET_Voltage = 1000;
-X                                Run_Control[1] = 1000;
-N                                SET_Current = 5000;  
-X                                Run_Control[2] = 5000;  
+N                                Contr_Current = 0x1a5f;
+N								Flag_DAC_OFF=1;  
+X								(flagB . bit3)=1;  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -51849,7 +51853,7 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 2;
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 479 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 487 33 function "inputcal" declared implicitly
 N                                inputcal("2");
 N                            }
 N                            KeyCounter = 0;
@@ -51916,7 +51920,7 @@ N                            if(admin == 1)
 N                            {
 N                                INPUT_INFO(3);    
 N                            }else if(cal == 1){
-W "..\drive\key.c" 537 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 545 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(3);
 N                            }else{
 N                                pass += 3;
@@ -51931,15 +51935,40 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 549 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 557 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(3);
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(0);
+N								Contr_Laod = 0x13f8;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 3;
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 1000;
-X                                Run_Control[1] = 1000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Voltage = 0x1489;
+N								Flag_DAC_OFF=1;	 
+X								(flagB . bit3)=1;	 
+N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N                                calstep = 3;
+N                            }else if(calmode == mode_powc){
+X                            }else if(calmode == 5){
+N                                IO_OFF();
+N                                Contr_Current = 0x1c00;
+N								Flag_DAC_OFF=1;  
+X								(flagB . bit3)=1;  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -51947,11 +51976,11 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 3;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 558 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 583 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(3);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 560 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 585 33 function "inputcal" declared implicitly
 N                                inputcal("3");
 N                            }
 N                            KeyCounter = 0;
@@ -52015,7 +52044,7 @@ N                            if(admin == 1)
 N                            {
 N                                INPUT_INFO(4);    
 N                            }else if(cal == 1){
-W "..\drive\key.c" 615 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 640 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(4);
 N                            }else{
 N                                pass += 4;
@@ -52030,15 +52059,40 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 627 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 652 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(4);
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(0);
+N								Contr_Laod = 0x35e5;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 4;
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 3000;
-X                                Run_Control[1] = 3000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Voltage = 0x3788;
+N								Flag_DAC_OFF=1;	  
+X								(flagB . bit3)=1;	  
+N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N                                calstep = 4;
+N                            }else if(calmode == mode_powc){
+X                            }else if(calmode == 5){
+N                                IO_OFF();
+N                                Contr_Current = 0x6ad9;
+N								Flag_DAC_OFF=1;  
+X								(flagB . bit3)=1;  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -52046,11 +52100,11 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 4;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 636 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 678 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(4);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 638 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 680 33 function "inputcal" declared implicitly
 N                                inputcal("4");
 N                            }
 N                            KeyCounter = 0;
@@ -52114,7 +52168,7 @@ N                            if(admin == 1)
 N                            {
 N                                INPUT_INFO(5);    
 N                            }else if(cal == 1){
-W "..\drive\key.c" 693 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 735 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(5);
 N                            }else{
 N                                pass += 5;
@@ -52129,15 +52183,29 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 705 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 747 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(5);
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(0);
+N								Contr_Laod = 0x5a1f;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 5;
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 3000;
-X                                Run_Control[1] = 3000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Voltage = 0x398a;
+N								Flag_DAC_OFF=1;	  
+X								(flagB . bit3)=1;	  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -52145,11 +52213,11 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 5;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 714 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 766 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(5);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 716 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 768 33 function "inputcal" declared implicitly
 N                                inputcal("5");
 N                            }
 N                            KeyCounter = 0;
@@ -52213,7 +52281,7 @@ N                            if(admin == 1)
 N                            {
 N                                INPUT_INFO(6);    
 N                            }else if(cal == 1){
-W "..\drive\key.c" 771 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 823 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(6);
 N                            }
 N                            KeyCounter = 0;
@@ -52226,15 +52294,29 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 781 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 833 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(6);
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(0);
+N								Contr_Laod = 0x75ad;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 6;
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                IO_OFF();
-N                                SET_Voltage = 6000;
-X                                Run_Control[1] = 6000;
-N                                SET_Current = 1000;  
-X                                Run_Control[2] = 1000;  
+N                                Contr_Voltage = 0x6c88;
+N								Flag_DAC_OFF=1;	  
+X								(flagB . bit3)=1;	  
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -52242,11 +52324,11 @@ X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x4
 N                                calstep = 6;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 790 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 852 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(6);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 792 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 854 33 function "inputcal" declared implicitly
 N                                inputcal("6");
 N                            }
 N                            KeyCounter = 0;
@@ -52325,13 +52407,28 @@ X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(1);
+N								Contr_Laod = 0x1805;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 7;
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 859 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 931 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(7);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 861 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 933 33 function "inputcal" declared implicitly
 N                                inputcal("7");
 N                            }
 N                            KeyCounter = 0;
@@ -52407,16 +52504,31 @@ X                            if(calmode == 2)
 N                            {
 N                                GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压档位切换
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x1000));
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N                                IO_OFF();
+N//                                SET_Current_Laod = 5000;
+N								C_SW(1);
+N								Contr_Laod = 0x2bfb;
+N								Flag_DAC_OFF=1;
+X								(flagB . bit3)=1;
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N                                flag_Load_CC = 1;
+X                                (flagD . bit7) = 1;
+N                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                                calstep = 8;
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 928 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 1010 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(8);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 930 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 1012 33 function "inputcal" declared implicitly
 N                                inputcal("8");
 N                            }
 N                            KeyCounter = 0;
@@ -52490,18 +52602,18 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 993 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 1075 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(9);
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 997 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 1079 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(9);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 999 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 1081 33 function "inputcal" declared implicitly
 N                                inputcal("9");
 N                            }
 N                            KeyCounter = 0;
@@ -52577,18 +52689,18 @@ N                        {
 N                            if(calmode == mode_load)
 X                            if(calmode == 2)
 N                            {
-W "..\drive\key.c" 1064 33 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 1146 33 function "LoadVCal" declared implicitly
 N                                LoadVCal(0);
 N                            }else if(calmode == mode_pow){
 X                            }else if(calmode == 3){
 N                                
 N                            }else if(calmode == mode_r ){
 X                            }else if(calmode == 1 ){
-W "..\drive\key.c" 1068 33 function "Rlow_cal" declared implicitly
+W "..\drive\key.c" 1150 33 function "Rlow_cal" declared implicitly
 N                                Rlow_cal(0);
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 1070 33 function "inputcal" declared implicitly
+W "..\drive\key.c" 1152 33 function "inputcal" declared implicitly
 N                                inputcal("0");
 N                            }
 N                            KeyCounter = 0;
@@ -52657,7 +52769,7 @@ N					switch(page_sw){
 N                        case face_menu:
 X                        case 2:
 N                        {
-W "..\drive\key.c" 1129 29 function "DEL_POW" declared implicitly
+W "..\drive\key.c" 1211 29 function "DEL_POW" declared implicitly
 N                            DEL_POW();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣噿
@@ -52666,7 +52778,7 @@ N                        }
 N                        case face_set:
 X                        case 5:
 N                        {
-W "..\drive\key.c" 1136 29 function "DEL_NUM" declared implicitly
+W "..\drive\key.c" 1218 29 function "DEL_NUM" declared implicitly
 N                            DEL_NUM();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣噿
@@ -52675,7 +52787,7 @@ N                        }
 N                        case face_load:
 X                        case 4:
 N                        {
-W "..\drive\key.c" 1143 29 function "DEL_LOAD" declared implicitly
+W "..\drive\key.c" 1225 29 function "DEL_LOAD" declared implicitly
 N                            DEL_LOAD();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣噿
@@ -52687,7 +52799,7 @@ N                        {
 N                            if(para_set2 == set_2_on)
 X                            if(para_set2 == 0xff)
 N                            {
-W "..\drive\key.c" 1152 33 function "DEL_C" declared implicitly
+W "..\drive\key.c" 1234 33 function "DEL_C" declared implicitly
 N                                DEL_C();
 N                                KeyCounter = 0;
 N                                BEEP_Tiggr();//触发蜂鸣噿
@@ -52697,7 +52809,7 @@ N                        }
 N                        case face_cdc:
 X                        case 1:
 N                        {
-W "..\drive\key.c" 1160 29 function "DEL_CDC" declared implicitly
+W "..\drive\key.c" 1242 29 function "DEL_CDC" declared implicitly
 N                            DEL_CDC();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣噿
@@ -52761,6 +52873,22 @@ N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
 N                            break;
 N                        }
+N						case face_cal:
+X						case 8:
+N                        {
+N                            if(calmode == mode_pow){
+X                            if(calmode == 3){
+N								Contr_Voltage -= 100;
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N								Contr_Laod -= 100;
+N                            }else if(calmode == mode_powc){
+X                            }else if(calmode == 5){
+N                                Contr_Current -= 100;
+N                            }
+N                            KeyCounter = 0;
+N                            BEEP_Tiggr();//触发蜂鸣噿
+N                        }break;
 N                    }
 N                }
 N                break;
@@ -52799,7 +52927,22 @@ N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
 N                            break;
 N                        }
-N                        
+N                        case face_cal:
+X                        case 8:
+N                        {
+N                            if(calmode == mode_pow){
+X                            if(calmode == 3){
+N								Contr_Voltage += 100;
+N                            }else if(calmode == mode_loadc){
+X                            }else if(calmode == 4){
+N								Contr_Laod += 100;
+N                            }else if(calmode == mode_powc){
+X                            }else if(calmode == 5){
+N                                Contr_Current += 100;
+N                            }
+N                            KeyCounter = 0;
+N                            BEEP_Tiggr();//触发蜂鸣噿
+N                        }break;
 N                    }
 N                }
 N                break;
@@ -52812,7 +52955,7 @@ X                        case 2:
 N                        {
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
-W "..\drive\key.c" 1264 29 function "MENU_OP_UP" declared implicitly
+W "..\drive\key.c" 1369 29 function "MENU_OP_UP" declared implicitly
 N                            MENU_OP_UP();
 N                            break;
 N                        }                    
@@ -52821,7 +52964,7 @@ X                        case 4:
 N                        {
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
-W "..\drive\key.c" 1271 29 function "LOAD_OP_UP" declared implicitly
+W "..\drive\key.c" 1376 29 function "LOAD_OP_UP" declared implicitly
 N                            LOAD_OP_UP();
 N                            break;
 N                        }
@@ -52839,7 +52982,7 @@ N                        {
 N                            if(para_set2 == set_2_on/* && oc_mode ==0*/)
 X                            if(para_set2 == 0xff )
 N                            {
-W "..\drive\key.c" 1285 33 function "OC_OP_UP" declared implicitly
+W "..\drive\key.c" 1390 33 function "OC_OP_UP" declared implicitly
 N                                OC_OP_UP();
 N                                KeyCounter = 0;
 N                                BEEP_Tiggr();//触发蜂鸣�?
@@ -52894,7 +53037,7 @@ X                        case 2:
 N                        {
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
-W "..\drive\key.c" 1334 29 function "MENU_OP_DOWN" declared implicitly
+W "..\drive\key.c" 1439 29 function "MENU_OP_DOWN" declared implicitly
 N                            MENU_OP_DOWN();
 N                            break;
 N                        }  
@@ -52903,7 +53046,7 @@ X                        case 4:
 N                        {
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
-W "..\drive\key.c" 1341 29 function "LOAD_OP_DOWN" declared implicitly
+W "..\drive\key.c" 1446 29 function "LOAD_OP_DOWN" declared implicitly
 N                            LOAD_OP_DOWN();
 N                            break;
 N                        }
@@ -52921,7 +53064,7 @@ N                        {
 N                            if(para_set2 == set_2_on/* && oc_mode ==0*/)
 X                            if(para_set2 == 0xff )
 N                            {
-W "..\drive\key.c" 1355 33 function "OC_OP_DOWN" declared implicitly
+W "..\drive\key.c" 1460 33 function "OC_OP_DOWN" declared implicitly
 N                                OC_OP_DOWN();
 N                                KeyCounter = 0;
 N                                BEEP_Tiggr();//触发蜂鸣�?
@@ -52975,7 +53118,7 @@ N                    switch(page_sw){
 N                        case face_menu:
 X                        case 2:
 N                        {
-W "..\drive\key.c" 1401 29 function "MENU_SET" declared implicitly
+W "..\drive\key.c" 1506 29 function "MENU_SET" declared implicitly
 N                            MENU_SET();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
@@ -52995,7 +53138,7 @@ N                        {
 N                            if(para_set2 == set_2_on)
 X                            if(para_set2 == 0xff)
 N                            {
-W "..\drive\key.c" 1417 33 function "OC_SET" declared implicitly
+W "..\drive\key.c" 1522 33 function "OC_SET" declared implicitly
 N                                OC_SET();
 N                                KeyCounter = 0;
 N                                BEEP_Tiggr();//触发蜂鸣�?
@@ -53005,7 +53148,7 @@ N                        }
 N                        case face_load:
 X                        case 4:
 N                        {
-W "..\drive\key.c" 1425 29 function "LOAD_SET" declared implicitly
+W "..\drive\key.c" 1530 29 function "LOAD_SET" declared implicitly
 N                            LOAD_SET();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
@@ -53022,7 +53165,7 @@ N                        }
 N                        case face_sys_info:
 X                        case 7:
 N                        {
-W "..\drive\key.c" 1439 29 function "CFM_PASS" declared implicitly
+W "..\drive\key.c" 1544 29 function "CFM_PASS" declared implicitly
 N                            CFM_PASS();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
@@ -53046,7 +53189,7 @@ N                                    r_raly = 1;
 N                                }
 N                            }else if(calmode == input){
 X                            }else if(calmode == 6){
-W "..\drive\key.c" 1457 33 function "confirmcal" declared implicitly
+W "..\drive\key.c" 1562 33 function "confirmcal" declared implicitly
 N                                confirmcal();
 N                            }else if(calmode == mode_load){
 X                            }else if(calmode == 2){
@@ -53138,7 +53281,7 @@ N                            WM_DeleteWindow(load_wind);
 N                            WM_DeleteWindow(hWinsysinfo);
 N                            WM_DeleteWindow(hWincdc);
 N                            WM_DeleteWindow(hWinset);
-W "..\drive\key.c" 1541 29 function "CreateCDC" declared implicitly
+W "..\drive\key.c" 1646 29 function "CreateCDC" declared implicitly
 N                            CreateCDC();
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//触发蜂鸣�?
@@ -53276,7 +53419,7 @@ X                            if(pow_sw==1)
 N                            {
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_1);//�رյ�Դ���
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1655 9 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1760 9 function "Delay_ms" declared implicitly
 N								Delay_ms(1000);
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_13);//�رյ�Դ����̵���
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -53315,7 +53458,7 @@ N
 N                               charge_step = 1;
 N                               GPIO_ResetBits(GPIOC,GPIO_Pin_13);//�򿪵�Դ����̵���
 X                               GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\drive\key.c" 1681 11 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1786 11 function "Delay_ms" declared implicitly
 N							   Delay_ms(500);
 N                               GPIO_SetBits(GPIOC,GPIO_Pin_1);//�򿪵�Դ���
 X                               GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
@@ -53327,7 +53470,7 @@ N                            }else{
 N                               
 N                               GPIO_ResetBits(GPIOC,GPIO_Pin_1);//�رյ�Դ���
 X                               GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1688 9 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1793 9 function "Delay_ms" declared implicitly
 N								Delay_ms(500);
 N                               GPIO_SetBits(GPIOC,GPIO_Pin_13);//�رյ�Դ����̵���
 X                               GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -53348,46 +53491,46 @@ N                        {
 N                            if(calmode == mode_pow)
 X                            if(calmode == 3)
 N                            {
-N                                if(calstep == 1)
-N                                {
-W "..\drive\key.c" 1705 37 function "PowVCal" declared implicitly
-N                                    PowVCal(1);
-N                                }else if(calstep == 2){
-W "..\drive\key.c" 1707 37 function "PowVCal" declared implicitly
-N                                    PowVCal(2);
-N                                }else if(calstep == 3){
-W "..\drive\key.c" 1709 37 function "PowVCal" declared implicitly
-N                                    PowVCal(3);
-N                                }else if(calstep == 4){
-W "..\drive\key.c" 1711 37 function "PowVCal" declared implicitly
-N                                    PowVCal(4);
-N                                }else if(calstep == 5){
-W "..\drive\key.c" 1713 37 function "PowVCal" declared implicitly
-N                                    PowVCal(5);
-N                                }else if(calstep == 6){
-W "..\drive\key.c" 1715 37 function "PowVCal" declared implicitly
-N                                    PowVCal(6);
-N                                }
+W "..\drive\key.c" 1808 9 function "PowVCal" declared implicitly
+N								PowVCal(calstep);
+N//                                if(calstep == 1)
+N//                                {
+N//                                    PowVCal(1);
+N//                                }else if(calstep == 2){
+N//                                    PowVCal(2);
+N//                                }else if(calstep == 3){
+N//                                    PowVCal(3);
+N//                                }else if(calstep == 4){
+N//                                    PowVCal(4);
+N//                                }else if(calstep == 5){
+N//                                    PowVCal(5);
+N//                                }else if(calstep == 6){
+N//                                    PowVCal(6);
+N//                                }
 N                            }else if(calmode == mode_loadc){
 X                            }else if(calmode == 4){
-N                                if(calstep == 1)
-N                                {
-W "..\drive\key.c" 1720 37 function "LoadCCal" declared implicitly
-N                                    LoadCCal(1);
-N                                }else if(calstep == 2){
-W "..\drive\key.c" 1722 37 function "LoadCCal" declared implicitly
-N                                    LoadCCal(2);
-N                                }
+W "..\drive\key.c" 1824 9 function "LoadCCal" declared implicitly
+N								LoadCCal(calstep);
+N//                                if(calstep == 1)
+N//                                {
+N//                                    LoadCCal(1);
+N//                                }else if(calstep == 2){
+N//                                    LoadCCal(2);
+N//                                }
 N                            }else if(calmode == mode_powc){
 X                            }else if(calmode == 5){
-N                                if(calstep == 1)
-N                                {
-W "..\drive\key.c" 1727 37 function "PowCCal" declared implicitly
-N                                    PowCCal(1);
-N                                }else if(calstep == 2){
-W "..\drive\key.c" 1729 37 function "PowCCal" declared implicitly
-N                                    PowCCal(2);
-N                                }
+W "..\drive\key.c" 1832 9 function "PowCCal" declared implicitly
+N								PowCCal(calstep);
+N//                                if(calstep == 1)
+N//                                {
+N//                                    PowCCal(1);
+N//                                }else if(calstep == 2){
+N//                                    PowCCal(2);
+N//                                }else if(calstep == 3){
+N//                                    PowCCal(3);
+N//                                }else if(calstep == 4){
+N//                                    PowCCal(4);
+N//                                }
 N                            }
 N                            KeyCounter = 0;
 N                            BEEP_Tiggr();//
@@ -53395,7 +53538,7 @@ N                        }break;
 N						case face_sys_info:
 X						case 7:
 N                        {
-N							JumpBoot(55);
+N//							JumpBoot(55);
 N						}break;
 N                    }
 N                    
@@ -53507,7 +53650,7 @@ N                    GPIO_SetBits(GPIOA,GPIO_Pin_15);//���Ӹ���OFF
 X                    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);//�رյ�Դ���
 X                    GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1827 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1939 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//�رյ�Դ����̵��
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -53530,7 +53673,7 @@ N                    CreateWindow2();
 N                    t_onoff = 0;
 N                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 X                    GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1846 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1958 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -53567,11 +53710,11 @@ N                    WM_DeleteWindow(hWincdc);
 N                    WM_DeleteWindow(hWinset);
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//�رյ�Դ���
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1877 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1989 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//�رյ�Դ����̵��
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\drive\key.c" 1879 21 function "CreateCDC" declared implicitly
+W "..\drive\key.c" 1991 21 function "CreateCDC" declared implicitly
 N                    CreateCDC(); 
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//
@@ -53604,11 +53747,11 @@ N                    WM_DeleteWindow(hWincdc);
 N                    WM_DeleteWindow(hWinset);
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//�رյ�Դ���
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1908 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 2020 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//�رյ�Դ����̵��
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\drive\key.c" 1910 21 function "Createsysinfo" declared implicitly
+W "..\drive\key.c" 2022 21 function "Createsysinfo" declared implicitly
 N                    Createsysinfo();
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//触发蜂鸣�?

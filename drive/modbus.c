@@ -1166,62 +1166,116 @@ void Transformation_ADC(void)
 			DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 		}
 	}else{
-		if(Vmon1_value < 4300)
-		{		
-			V_SW(0);//电压低档位
-			DISS_Voltage = 0;
-			i=0;
-		}else{										
-			if(DISS_Voltage > 10)
+		if(page_sw == face_menu)
+		{
+			if(pow_v > 1000)
 			{
-				V_SW(1);//电压高档位
-				if(r_raly == 1)
-				{
-					var32 = Vmon1_value;
-				}else if(r_raly == 0){
-					var32 = Vmon1_value - 2;
-				}
-//				var32 = Vmon1_value;
-				var32 = var32 * REG_CorrectionV1;  
-				if ((Polar & 0x01) == 0x01)		  
-				{
-					if (var32 < REG_ReadV_Offset1) 
+				V_SW(1);//电压高档�?
+					if(r_raly == 1)
 					{
-						var32 = 0;
+						var32 = Vmon1_value;
+					}else if(r_raly == 0){
+						var32 = Vmon1_value - 2;
 					}
-					else var32 = var32 - REG_ReadV_Offset1;
-				}
-				else var32 = var32 + REG_ReadV_Offset1;
-				var32 = var32 >> 12;
-				if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-				Voltage = var32;
-				DISS_Voltage=Voltage;
-				DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
-				
+	//				var32 = Vmon1_value;
+					var32 = var32 * REG_CorrectionV1;  
+					if ((Polar & 0x01) == 0x01)		  
+					{
+						if (var32 < REG_ReadV_Offset1) 
+						{
+							var32 = 0;
+						}
+						else var32 = var32 - REG_ReadV_Offset1;
+					}
+					else var32 = var32 + REG_ReadV_Offset1;
+					var32 = var32 >> 12;
+					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+					Voltage = var32;
+					DISS_Voltage=Voltage;
+					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 			}else{
-				V_SW(0);//电压低档位
-				if(r_raly == 1)
-				{
-					var32 = Vmon1_value;
-				}else if(r_raly == 0){
-					var32 = Vmon1_value - 3;
-				}
-//				var32 = Vmon1_value;
-				var32 = var32 * REG_CorrectionV;  
-				if ((Polar & 0x01) == 0x01)		  
-				{
-					if (var32 < REG_ReadV_Offset) 
+				V_SW(0);//电压低档�?
+					if(r_raly == 1)
 					{
-						var32 = 0;
+						var32 = Vmon1_value;
+					}else if(r_raly == 0){
+						var32 = Vmon1_value - 3;
 					}
-					else var32 = var32 - REG_ReadV_Offset;
+	//				var32 = Vmon1_value;
+					var32 = var32 * REG_CorrectionV;  
+					if ((Polar & 0x01) == 0x01)		  
+					{
+						if (var32 < REG_ReadV_Offset) 
+						{
+							var32 = 0;
+						}
+						else var32 = var32 - REG_ReadV_Offset;
+					}
+					else var32 = var32 + REG_ReadV_Offset;
+					var32 = var32 >> 12;
+					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+					Voltage = var32;
+					DISS_Voltage=Voltage;
+					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+			}
+		}else{
+			if(Vmon1_value < 4300)
+			{		
+				V_SW(0);//电压低档位
+				DISS_Voltage = 0;
+				i=0;
+			}else{										
+				if(DISS_Voltage > 10)
+				{
+					V_SW(1);//电压高档位
+					if(r_raly == 1)
+					{
+						var32 = Vmon1_value;
+					}else if(r_raly == 0){
+						var32 = Vmon1_value - 2;
+					}
+	//				var32 = Vmon1_value;
+					var32 = var32 * REG_CorrectionV1;  
+					if ((Polar & 0x01) == 0x01)		  
+					{
+						if (var32 < REG_ReadV_Offset1) 
+						{
+							var32 = 0;
+						}
+						else var32 = var32 - REG_ReadV_Offset1;
+					}
+					else var32 = var32 + REG_ReadV_Offset1;
+					var32 = var32 >> 12;
+					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+					Voltage = var32;
+					DISS_Voltage=Voltage;
+					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+					
+				}else{
+					V_SW(0);//电压低档位
+					if(r_raly == 1)
+					{
+						var32 = Vmon1_value;
+					}else if(r_raly == 0){
+						var32 = Vmon1_value - 3;
+					}
+	//				var32 = Vmon1_value;
+					var32 = var32 * REG_CorrectionV;  
+					if ((Polar & 0x01) == 0x01)		  
+					{
+						if (var32 < REG_ReadV_Offset) 
+						{
+							var32 = 0;
+						}
+						else var32 = var32 - REG_ReadV_Offset;
+					}
+					else var32 = var32 + REG_ReadV_Offset;
+					var32 = var32 >> 12;
+					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+					Voltage = var32;
+					DISS_Voltage=Voltage;
+					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 				}
-				else var32 = var32 + REG_ReadV_Offset;
-				var32 = var32 >> 12;
-				if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-				Voltage = var32;
-				DISS_Voltage=Voltage;
-				DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 			}
 		}
 	}

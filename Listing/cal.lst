@@ -53160,6 +53160,65 @@ N/******************************************************************/
 N#endif
 N/******************* (C) COPYRIGHT 2015 AVER *****END OF FILE***************************/
 L 11 "..\APP\cal.c" 2
+N#include "internalflash.h"
+L 1 "..\Include\internalflash.h" 1
+N#ifndef __INTERNALFLASH_H__
+N#define __INTERNALFLASH_H__
+N
+N#include "stm32f4xx.h"
+N
+N/* Base address of the Flash sectors */
+N#define ADDR_FLASH_SECTOR_0     ((uint32_t)0x08000000) /* Base @ of Sector 0, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_1     ((uint32_t)0x08004000) /* Base @ of Sector 1, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_2     ((uint32_t)0x08008000) /* Base @ of Sector 2, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_3     ((uint32_t)0x0800C000) /* Base @ of Sector 3, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_4     ((uint32_t)0x08010000) /* Base @ of Sector 4, 64 Kbytes */
+N#define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000) /* Base @ of Sector 5, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000) /* Base @ of Sector 6, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000) /* Base @ of Sector 7, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000) /* Base @ of Sector 8, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_9     ((uint32_t)0x080A0000) /* Base @ of Sector 9, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base @ of Sector 10, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
+N
+N#define FLASH_USER_START_ADDR ADDR_FLASH_SECTOR_11	//用户起始地址，暂定为第十个扇区的起始地址
+N
+N//用户根据自己的需要设置
+N#define STM32_FLASH_SIZE 1024 	 		//所选STM32的FLASH容量大小(单位为K)
+N#define STM32_FLASH_WREN 1              //使能FLASH写入(0，不是能;1，使能)
+N//////////////////////////////////////////////////////////////////////////////////////////////////////
+N
+N//FLASH起始地址
+N#define STM32_FLASH_BASE 0x08000000 	//STM32 FLASH的起始地址
+N//FLASH解锁键值
+N 
+N
+Nu16 STMFLASH_ReadHalfWord(u32 faddr);		  //读出半字  
+Nvoid STMFLASH_WriteLenByte(u32 WriteAddr,u32 DataToWrite,u16 Len);	//指定地址开始写入指定长度的数据
+Nu32 STMFLASH_ReadLenByte(u32 ReadAddr,u16 Len);						//指定地址开始读取指定长度数据
+Nvoid STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//从指定地址开始写入指定长度的数据
+Nvoid STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//从指定地址开始读出指定长度的数据
+N
+N//测试写入
+Nvoid Test_Write(u32 WriteAddr,u16 WriteData);	
+N
+N//API
+Nuint16_t Flash_GetSector(uint32_t Address);
+Nvoid Flash_EraseSector(uint16_t SectorNum);
+N
+Nvoid Flash_Write32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+Nvoid Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+N
+Nvoid Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+Nvoid Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+N
+Nvoid Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+Nvoid Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+N
+N
+W "..\Include\internalflash.h" 55 7 last line of file ends without a newline
+N#endif
+L 12 "..\APP\cal.c" 2
 N
 NWM_HWIN hWincal;
 XGUI_HWIN hWincal;
@@ -53268,7 +53327,7 @@ N//         GUI_DispStringAt("Ver:1.2", 140, 100);
 N//         GUI_DispStringAt("-", 191, 125);
 N//         GUI_DispStringAt("-", 227, 125);
 N//         GUI_DispStringAt("A", 164, 150);
-W "..\APP\cal.c" 102 9 function "DrawLock" declared implicitly
+W "..\APP\cal.c" 103 9 function "DrawLock" declared implicitly
 N        DrawLock();
 N	break;
 N	case WM_TIMER:
@@ -53497,7 +53556,7 @@ N
 N	  hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_138);
 X	  hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0128));
 N      GUI_UC_SetEncodeUTF8();
-W "..\APP\cal.c" 271 26 argument is incompatible with corresponding format string conversion
+W "..\APP\cal.c" 272 26 argument is incompatible with corresponding format string conversion
 N      sprintf(buf,"%.3f",0);
 N      TEXT_SetText(hItem,buf);
 N      TEXT_SetTextColor(hItem, 0x00BFFFFF);
@@ -53506,7 +53565,7 @@ N
 N	  hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_139);
 X	  hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0129));
 N      GUI_UC_SetEncodeUTF8();
-W "..\APP\cal.c" 278 26 argument is incompatible with corresponding format string conversion
+W "..\APP\cal.c" 279 26 argument is incompatible with corresponding format string conversion
 N      sprintf(buf,"%.3f",0);
 N      TEXT_SetText(hItem,buf);
 N      TEXT_SetTextColor(hItem, 0x00BFFFFF);
@@ -53685,7 +53744,7 @@ N                Polar3 &= ~0x01;
 X                correct_por[3] &= ~0x01;
 N            }
 N//---------------------------------------------------------------------------------------//
-W "..\APP\cal.c" 439 13 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 440 13 function "Flash_Write_all" declared implicitly
 N            Flash_Write_all();	//参数写进FLASH
 N            flag_OverV=0;
 X            (flagG . bit1)=0;
@@ -53742,7 +53801,7 @@ N                Polar3 &= ~0x01;
 X                correct_por[3] &= ~0x01;
 N            }
 N//---------------------------------------------------------------------------------------//
-W "..\APP\cal.c" 484 13 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 485 13 function "Flash_Write_all" declared implicitly
 N            Flash_Write_all();	//参数写进FLASH
 N            flag_OverV=0;
 X            (flagG . bit1)=0;
@@ -53797,7 +53856,7 @@ N                Polar3 &= ~0x01;
 X                correct_por[3] &= ~0x01;
 N            }
 N//---------------------------------------------------------------------------------------//
-W "..\APP\cal.c" 528 13 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 529 13 function "Flash_Write_all" declared implicitly
 N            Flash_Write_all();	//参数写进FLASH
 N            flag_OverV=0;
 X            (flagG . bit1)=0;
@@ -53852,7 +53911,7 @@ X            Correct_Strong[0] = var32a;
 N            Polar &= ~0x01;
 X            correct_por[0] &= ~0x01;
 N        }
-W "..\APP\cal.c" 574 9 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 575 9 function "Flash_Write_all" declared implicitly
 N        Flash_Write_all();	//??д?FLASH
 N//        Flag_DAC_OFF=0;
 N    }else if(step == 3){
@@ -53897,7 +53956,7 @@ X            Correct_Strong[13] = var32a;
 N            Polar &= ~0x01;
 X            correct_por[0] &= ~0x01;
 N        }
-W "..\APP\cal.c" 612 9 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 613 9 function "Flash_Write_all" declared implicitly
 N        Flash_Write_all();	//??д?FLASH
 N//        Flag_DAC_OFF=0;
 N    }else if(step == 5){
@@ -53942,7 +54001,7 @@ X            Correct_Strong[14] = var32a;
 N            Polar &= ~0x01;
 X            correct_por[0] &= ~0x01;
 N        }
-W "..\APP\cal.c" 650 9 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 651 9 function "Flash_Write_all" declared implicitly
 N        Flash_Write_all();	//??д?FLASH
 N//        Flag_DAC_OFF=0;
 N    }
@@ -53956,81 +54015,321 @@ N        Modify_A_READ = Imon1_value;//
 N		Modify_C_READ = Contr_Laod;//
 N		Modify_A_ACT = inputvalue;
 N    }else if(step == 2){
-N        vu32 var16;
-N				vu32 var32a;
-N				vu32 var32b;
-N				
-N				vu32 var16a;
-N				vu32 var32c;
-N				vu32 var32d;
-N				
-N				Modify_B_READ = Imon1_value;
-N				Modify_D_READ = Contr_Laod;
-N				Modify_B_ACT = inputvalue;
-N				
-N				var32a = Modify_B_ACT;
-N				var32a = var32a - Modify_A_ACT;
-N				var32a = var32a << 12;
-N				var16 = Modify_B_READ - Modify_A_READ;
-N				var32a = var32a / var16;
-N				REG_Load_A = var32a;
-X				Correct_Parametet[1] = var32a;
-N				var32a = Modify_B_ACT;
-N				var32a = var32a << 12;
-N				var32b = Modify_B_READ;
-N				var32b = var32b * REG_Load_A;
-X				var32b = var32b * Correct_Parametet[1];
-N				if (var32a < var32b)
-N				{
-N					var32b = var32b - var32a;
-N					REG_LoadA_Offset = var32b;
-X					Correct_Strong[1] = var32b;
-N					Polar1 |= 0x01;
-X					correct_por[1] |= 0x01;
-N				}
-N				else 
-N				{
-N					var32a = var32a - var32b;
-N					REG_LoadA_Offset = var32a;
-X					Correct_Strong[1] = var32a;
-N					Polar1 &= ~0x01;					
-X					correct_por[1] &= ~0x01;					
-N				}
-N	//---------------------------------------------------------------------------------//
-N				var32c = Modify_B_ACT; 
-N				var32c = var32c - Modify_A_ACT;
-N				var32c = var32c << 12;
-N				var16a=Modify_D_READ-Modify_C_READ;
-N				var16a=var16a*2;
-N				var32c=var32c/var16a;
-N				SET_LoadA = var32c;
-X				Correct_Parametet[2] = var32c;
-N				var32c = Modify_B_ACT;
-N				var32c = var32c << 12;
-N				var32d = SET_LoadA;
-X				var32d = Correct_Parametet[2];
-N				var32d = var32d * (Modify_D_READ*2);
-N				if (var32c < var32d)
-N				{
-N					var32d = var32d - var32c;
-N					SET_LoadA_Offset = var32d;
-X					Correct_Strong[2] = var32d;
-N					Polar1 |= 0x04;
-X					correct_por[1] |= 0x04;
-N				}
-N				else 
-N				{
-N					var32c = var32c - var32d;
-N					SET_LoadA_Offset = var32c;
-X					Correct_Strong[2] = var32c;
-N					Polar1 &= ~0x04;
-X					correct_por[1] &= ~0x04;
-N				}
-W "..\APP\cal.c" 721 5 function "Flash_Write_all" declared implicitly
-N				Flash_Write_all ();	
-N				Flag_DAC_OFF =0;
-X				(flagB . bit3) =0;
-N    }
+N       vu32 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu32 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_B_READ = Imon1_value;
+N		Modify_D_READ = Contr_Laod;
+N		Modify_B_ACT = inputvalue;
+N		
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 12;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_Load_A = var32a;
+X		Correct_Parametet[1] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 12;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_Load_A;
+X		var32b = var32b * Correct_Parametet[1];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_LoadA_Offset = var32b;
+X			Correct_Strong[1] = var32b;
+N			Polar1 |= 0x01;
+X			correct_por[1] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_LoadA_Offset = var32a;
+X			Correct_Strong[1] = var32a;
+N			Polar1 &= ~0x01;					
+X			correct_por[1] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; 
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 12;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_LoadA = var32c;
+X		Correct_Parametet[2] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 12;
+N		var32d = SET_LoadA;
+X		var32d = Correct_Parametet[2];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_LoadA_Offset = var32d;
+X			Correct_Strong[2] = var32d;
+N			Polar1 |= 0x04;
+X			correct_por[1] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_LoadA_Offset = var32c;
+X			Correct_Strong[2] = var32c;
+N			Polar1 &= ~0x04;
+X			correct_por[1] &= ~0x04;
+N		}
+W "..\APP\cal.c" 722 3 function "Flash_Write_all" declared implicitly
+N		Flash_Write_all ();	
+N		Flag_DAC_OFF =0;
+X		(flagB . bit3) =0;
+N    }else if(step == 3){
+N		Modify_A_READ = Imon1_value;//
+N		Modify_C_READ = Contr_Laod;//
+N		Modify_A_ACT = inputvalue;
+N	}else if(step == 4){
+N		vu32 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu32 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_B_READ = Imon1_value;
+N		Modify_D_READ = Contr_Laod;
+N		Modify_B_ACT = inputvalue;
+N		
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 12;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_Load_A1 = var32a;
+X		InFlashSave[6] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 12;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_Load_A1;
+X		var32b = var32b * InFlashSave[6];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_LoadA_Offset1 = var32b;
+X			InFlashSave[8] = var32b;
+N			Polar1 |= 0x01;
+X			correct_por[1] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_LoadA_Offset1 = var32a;
+X			InFlashSave[8] = var32a;
+N			Polar1 &= ~0x01;					
+X			correct_por[1] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; 
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 12;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_LoadA1 = var32c;
+X		InFlashSave[7] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 12;
+N		var32d = SET_LoadA1;
+X		var32d = InFlashSave[7];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_LoadA_Offset1 = var32d;
+X			InFlashSave[9] = var32d;
+N			Polar1 |= 0x04;
+X			correct_por[1] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_LoadA_Offset1 = var32c;
+X			InFlashSave[9] = var32c;
+N			Polar1 &= ~0x04;
+X			correct_por[1] &= ~0x04;
+N		}
+N		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N		Flag_DAC_OFF =0;
+X		(flagB . bit3) =0;
+N	}else if(step == 5){
+N		Modify_A_READ = Imon1_value;//
+N		Modify_C_READ = Contr_Laod;//
+N		Modify_A_ACT = inputvalue;
+N	}else if(step == 6){
+N		vu32 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu32 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_B_READ = Imon1_value;
+N		Modify_D_READ = Contr_Laod;
+N		Modify_B_ACT = inputvalue;
+N		
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 12;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_Load_A2 = var32a;
+X		InFlashSave[10] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 12;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_Load_A2;
+X		var32b = var32b * InFlashSave[10];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_LoadA_Offset2 = var32b;
+X			InFlashSave[12] = var32b;
+N			Polar1 |= 0x01;
+X			correct_por[1] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_LoadA_Offset2 = var32a;
+X			InFlashSave[12] = var32a;
+N			Polar1 &= ~0x01;					
+X			correct_por[1] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; 
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 12;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_LoadA2 = var32c;
+X		InFlashSave[11] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 12;
+N		var32d = SET_LoadA2;
+X		var32d = InFlashSave[11];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_LoadA_Offset2 = var32d;
+X			InFlashSave[13] = var32d;
+N			Polar1 |= 0x04;
+X			correct_por[1] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_LoadA_Offset2 = var32c;
+X			InFlashSave[13] = var32c;
+N			Polar1 &= ~0x04;
+X			correct_por[1] &= ~0x04;
+N		}
+N		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N		Flag_DAC_OFF =0;
+X		(flagB . bit3) =0;
+N	}else if(step == 7){
+N		Modify_A_READ = Imon1_value;//
+N		Modify_C_READ = Contr_Laod;//
+N		Modify_A_ACT = inputvalue;
+N	}else if(step == 8){
+N		vu32 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu32 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_B_READ = Imon1_value;
+N		Modify_D_READ = Contr_Laod;
+N		Modify_B_ACT = inputvalue;
+N		
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 12;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_Load_AH = var32a;
+X		InFlashSave[14] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 12;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_Load_AH;
+X		var32b = var32b * InFlashSave[14];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_LoadA_OffsetH = var32b;
+X			InFlashSave[16] = var32b;
+N			Polar1 |= 0x01;
+X			correct_por[1] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_LoadA_OffsetH = var32a;
+X			InFlashSave[16] = var32a;
+N			Polar1 &= ~0x01;					
+X			correct_por[1] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; 
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 12;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_LoadAH = var32c;
+X		InFlashSave[15] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 12;
+N		var32d = SET_LoadAH;
+X		var32d = InFlashSave[15];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_LoadA_OffsetH = var32d;
+X			InFlashSave[17] = var32d;
+N			Polar1 |= 0x04;
+X			correct_por[1] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_LoadA_OffsetH = var32c;
+X			InFlashSave[17] = var32c;
+N			Polar1 &= ~0x04;
+X			correct_por[1] &= ~0x04;
+N		}
+N		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N		Flag_DAC_OFF =0;
+X		(flagB . bit3) =0;
+N	}
 N}
 N
 Nvoid PowVCal(u8 step)
@@ -54110,7 +54409,7 @@ X				Correct_Strong[9] = var32c;
 N				Polar5 &= ~0x04;
 X				correct_por[5] &= ~0x04;
 N			}
-W "..\APP\cal.c" 791 4 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 990 4 function "Flash_Write_all" declared implicitly
 N			Flash_Write_all ();	
 N			Flag_DAC_OFF=0;
 X			(flagB . bit3)=0;
@@ -54120,156 +54419,156 @@ N		Modify_C_READ = Contr_Voltage;//???d
 N		Modify_A_ACT = inputvalue;
 N    }else if(step == 4){
 N        vu16 var16;
-N			vu32 var32a;
-N			vu32 var32b;
-N			
-N			vu16 var16a;
-N			vu32 var32c;
-N			vu32 var32d;
-N			
-N			Modify_D_READ = Contr_Voltage;
-N			Modify_B_READ = Vmon_value;
-N			Modify_B_ACT = inputvalue;
-N			var32a = Modify_B_ACT;
-N			var32a = var32a - Modify_A_ACT;
-N			var32a = var32a << 14;
-N			var16 = Modify_B_READ - Modify_A_READ;
-N			var32a = var32a / var16;
-N			REG_POWERV1 = var32a;
-X			Correct_Parametet[15] = var32a;
-N			var32a = Modify_B_ACT;
-N			var32a = var32a << 14;
-N			var32b = Modify_B_READ;
-N			var32b = var32b * REG_POWERV1;
-X			var32b = var32b * Correct_Parametet[15];
-N			if (var32a < var32b)
-N			{
-N				var32b = var32b - var32a;
-N				REG_POWERV_Offset1 = var32b;
-X				Correct_Strong[15] = var32b;
-N				Polar5 |= 0x01;
-X				correct_por[5] |= 0x01;
-N			}
-N			else 
-N			{
-N				var32a = var32a - var32b;
-N				REG_POWERV_Offset1 = var32a;
-X				Correct_Strong[15] = var32a;
-N				Polar5 &= ~0x01;					
-X				correct_por[5] &= ~0x01;					
-N			}
-N	//---------------------------------------------------------------------------------//
-N			var32c = Modify_B_ACT; //????堑?
-N			var32c = var32c - Modify_A_ACT;
-N			var32c = var32c << 14;
-N			var16a=Modify_D_READ-Modify_C_READ;
-N			var16a=var16a*2;
-N			var32c=var32c/var16a;
-N			SET_POWERV = var32c;
-X			Correct_Parametet[9] = var32c;
-N			var32c = Modify_B_ACT;
-N			var32c = var32c << 14;
-N			var32d = SET_POWERV;
-X			var32d = Correct_Parametet[9];
-N			var32d = var32d * (Modify_D_READ*2);
-N			if (var32c < var32d)
-N			{
-N				var32d = var32d - var32c;
-N				SET_POWERV_Offset = var32d;
-X				Correct_Strong[9] = var32d;
-N				Polar5 |= 0x04;
-X				correct_por[5] |= 0x04;
-N			}
-N			else 
-N			{
-N				var32c = var32c - var32d;
-N				SET_POWERV_Offset = var32c;
-X				Correct_Strong[9] = var32c;
-N				Polar5 &= ~0x04;
-X				correct_por[5] &= ~0x04;
-N			}
-W "..\APP\cal.c" 855 4 function "Flash_Write_all" declared implicitly
-N			Flash_Write_all ();	
-N			Flag_DAC_OFF=0;
-X			(flagB . bit3)=0;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu16 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_D_READ = Contr_Voltage;
+N		Modify_B_READ = Vmon_value;
+N		Modify_B_ACT = inputvalue;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 14;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_POWERV1 = var32a;
+X		Correct_Parametet[15] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 14;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_POWERV1;
+X		var32b = var32b * Correct_Parametet[15];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_POWERV_Offset1 = var32b;
+X			Correct_Strong[15] = var32b;
+N			Polar5 |= 0x01;
+X			correct_por[5] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_POWERV_Offset1 = var32a;
+X			Correct_Strong[15] = var32a;
+N			Polar5 &= ~0x01;					
+X			correct_por[5] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; //????У?
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 14;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_POWERV1 = var32c;
+X		Correct_Parametet[19] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 14;
+N		var32d = SET_POWERV1;
+X		var32d = Correct_Parametet[19];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_POWERV_Offset1 = var32d;
+X			Correct_Strong[19] = var32d;
+N			Polar5 |= 0x04;
+X			correct_por[5] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_POWERV_Offset1 = var32c;
+X			Correct_Strong[19] = var32c;
+N			Polar5 &= ~0x04;
+X			correct_por[5] &= ~0x04;
+N		}
+W "..\APP\cal.c" 1054 3 function "Flash_Write_all" declared implicitly
+N		Flash_Write_all ();	
+N		Flag_DAC_OFF=0;
+X		(flagB . bit3)=0;
 N    }else if(step == 5){
 N        Modify_A_READ = Vmon_value;//??d
 N		Modify_C_READ = Contr_Voltage;//???d
 N		Modify_A_ACT = inputvalue;
 N    }else if(step == 6){
 N        vu16 var16;
-N			vu32 var32a;
-N			vu32 var32b;
-N			
-N			vu16 var16a;
-N			vu32 var32c;
-N			vu32 var32d;
-N			
-N			Modify_D_READ = Contr_Voltage;
-N			Modify_B_READ = Vmon_value;
-N			Modify_B_ACT = inputvalue;
-N			var32a = Modify_B_ACT;
-N			var32a = var32a - Modify_A_ACT;
-N			var32a = var32a << 14;
-N			var16 = Modify_B_READ - Modify_A_READ;
-N			var32a = var32a / var16;
-N			REG_POWERV2 = var32a;
-X			Correct_Parametet[16] = var32a;
-N			var32a = Modify_B_ACT;
-N			var32a = var32a << 14;
-N			var32b = Modify_B_READ;
-N			var32b = var32b * REG_POWERV2;
-X			var32b = var32b * Correct_Parametet[16];
-N			if (var32a < var32b)
-N			{
-N				var32b = var32b - var32a;
-N				REG_POWERV_Offset2 = var32b;
-X				Correct_Strong[16] = var32b;
-N				Polar5 |= 0x01;
-X				correct_por[5] |= 0x01;
-N			}
-N			else 
-N			{
-N				var32a = var32a - var32b;
-N				REG_POWERV_Offset2 = var32a;
-X				Correct_Strong[16] = var32a;
-N				Polar5 &= ~0x01;					
-X				correct_por[5] &= ~0x01;					
-N			}
-N	//---------------------------------------------------------------------------------//
-N			var32c = Modify_B_ACT; //????堑?
-N			var32c = var32c - Modify_A_ACT;
-N			var32c = var32c << 14;
-N			var16a=Modify_D_READ-Modify_C_READ;
-N			var16a=var16a*2;
-N			var32c=var32c/var16a;
-N			SET_POWERV = var32c;
-X			Correct_Parametet[9] = var32c;
-N			var32c = Modify_B_ACT;
-N			var32c = var32c << 14;
-N			var32d = SET_POWERV;
-X			var32d = Correct_Parametet[9];
-N			var32d = var32d * (Modify_D_READ*2);
-N			if (var32c < var32d)
-N			{
-N				var32d = var32d - var32c;
-N				SET_POWERV_Offset = var32d;
-X				Correct_Strong[9] = var32d;
-N				Polar5 |= 0x04;
-X				correct_por[5] |= 0x04;
-N			}
-N			else 
-N			{
-N				var32c = var32c - var32d;
-N				SET_POWERV_Offset = var32c;
-X				Correct_Strong[9] = var32c;
-N				Polar5 &= ~0x04;
-X				correct_por[5] &= ~0x04;
-N			}
-W "..\APP\cal.c" 919 4 function "Flash_Write_all" declared implicitly
-N			Flash_Write_all ();	
-N			Flag_DAC_OFF=0;
-X			(flagB . bit3)=0;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu16 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_D_READ = Contr_Voltage;
+N		Modify_B_READ = Vmon_value;
+N		Modify_B_ACT = inputvalue;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 14;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_POWERV2 = var32a;
+X		Correct_Parametet[16] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 14;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_POWERV2;
+X		var32b = var32b * Correct_Parametet[16];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_POWERV_Offset2 = var32b;
+X			Correct_Strong[16] = var32b;
+N			Polar5 |= 0x01;
+X			correct_por[5] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_POWERV_Offset2 = var32a;
+X			Correct_Strong[16] = var32a;
+N			Polar5 &= ~0x01;					
+X			correct_por[5] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; //????У?
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 14;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_POWERV2 = var32c;
+X		Correct_Parametet[20] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 14;
+N		var32d = SET_POWERV2;
+X		var32d = Correct_Parametet[20];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_POWERV_Offset2 = var32d;
+X			Correct_Strong[20] = var32d;
+N			Polar5 |= 0x04;
+X			correct_por[5] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_POWERV_Offset2 = var32c;
+X			Correct_Strong[20] = var32c;
+N			Polar5 &= ~0x04;
+X			correct_por[5] &= ~0x04;
+N		}
+W "..\APP\cal.c" 1118 3 function "Flash_Write_all" declared implicitly
+N		Flash_Write_all ();	
+N		Flag_DAC_OFF=0;
+X		(flagB . bit3)=0;
 N    }
 N}
 N
@@ -54318,10 +54617,91 @@ X            Correct_Strong[10] = var32a;
 N            Polar3 &= ~0x04;					
 X            correct_por[3] &= ~0x04;					
 N        }
-W "..\APP\cal.c" 963 9 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 1162 9 function "Flash_Write_all" declared implicitly
 N        Flash_Write_all ();	
 N        Flag_DAC_OFF=0;
 X        (flagB . bit3)=0;
-N    }
-W "..\APP\cal.c" 966 2 last line of file ends without a newline
+N    }else if (step == 3)			   //?d?堑?
+N	{
+N		Modify_A_READ = Imon_value;//??d
+N		Modify_C_READ = Contr_Current;//???d
+N		Modify_A_ACT = inputvalue;
+N	}else if (step == 4)			   //?d?堑???
+N	{
+N		vu16 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu16 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_D_READ = Contr_Current;
+N		Modify_B_READ = Imon_value;
+N		Modify_B_ACT = inputvalue;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 14;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_POWERA1 = var32a;
+X		InFlashSave[22] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 14;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_POWERA1;
+X		var32b = var32b * InFlashSave[22];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_POWERA_Offset1 = var32b;
+X			InFlashSave[24] = var32b;
+N			Polar4 |= 0x01;
+X			correct_por[4] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_POWERA_Offset1 = var32a;
+X			InFlashSave[24] = var32a;
+N			Polar4 &= ~0x01;					//?d????陋?堑???
+X			correct_por[4] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; //???d堑?
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 14;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_POWERA1 = var32c;
+X		InFlashSave[23] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 14;
+N		var32d = SET_POWERA1;
+X		var32d = InFlashSave[23];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_POWERA_Offset1 = var32d;
+X			InFlashSave[25] = var32d;
+N			Polar4 |= 0x04;
+X			correct_por[4] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_POWERA_Offset1 = var32c;
+X			InFlashSave[25] = var32c;
+N			Polar4 &= ~0x04;
+X			correct_por[4] &= ~0x04;
+N		}
+N		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N		Flag_DAC_OFF=0;
+X		(flagB . bit3)=0;
+N	}
+W "..\APP\cal.c" 1232 2 last line of file ends without a newline
 N}

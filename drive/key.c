@@ -360,8 +360,10 @@ void Key_Funtion(void)
                                 LoadVCal(1);
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 100;
-                                SET_Current = 1000;  
+//                                SET_Voltage = 100;
+//                                SET_Current = 1000;
+								Contr_Voltage = 0x0312;
+								Flag_DAC_OFF=1;								
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 1;
@@ -369,15 +371,18 @@ void Key_Funtion(void)
                                 Rlow_cal(1);
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
-                                SET_Current_Laod = 1000;
+//                                SET_Current_Laod = 1000;
+								C_SW(0);
+								Contr_Laod = 0x0a12;
+								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
                                 calstep = 1;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
-                                SET_Voltage = 1000;
-                                SET_Current = 1000;  
+                                Contr_Current = 0x078d;
+								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 1;
@@ -454,8 +459,8 @@ void Key_Funtion(void)
                                 LoadVCal(2);
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 1000;
-                                SET_Current = 1000;  
+                                Contr_Voltage = 0x1338;
+								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 2;
@@ -463,15 +468,18 @@ void Key_Funtion(void)
                                 Rlow_cal(2);
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
-                                SET_Current_Laod = 5000;
+//                                SET_Current_Laod = 5000;
+								C_SW(0);
+								Contr_Laod = 0x120c;
+								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
                                 calstep = 2;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
-                                SET_Voltage = 1000;
-                                SET_Current = 5000;  
+                                Contr_Current = 0x1a5f;
+								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 2;
@@ -547,10 +555,27 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
                                 LoadVCal(3);
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(0);
+								Contr_Laod = 0x13f8;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 3;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 1000;
-                                SET_Current = 1000;  
+                                Contr_Voltage = 0x1489;
+								Flag_DAC_OFF=1;	 
+                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
+                                calstep = 3;
+                            }else if(calmode == mode_powc){
+                                IO_OFF();
+                                Contr_Current = 0x1c00;
+								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 3;
@@ -625,10 +650,27 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
                                 LoadVCal(4);
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(0);
+								Contr_Laod = 0x35e5;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 4;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 3000;
-                                SET_Current = 1000;  
+                                Contr_Voltage = 0x3788;
+								Flag_DAC_OFF=1;	  
+                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
+                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
+                                calstep = 4;
+                            }else if(calmode == mode_powc){
+                                IO_OFF();
+                                Contr_Current = 0x6ad9;
+								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 4;
@@ -703,10 +745,20 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
                                 LoadVCal(5);
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(0);
+								Contr_Laod = 0x5a1f;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 5;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 3000;
-                                SET_Current = 1000;  
+                                Contr_Voltage = 0x398a;
+								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 5;
@@ -779,10 +831,20 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
                                 LoadVCal(6);
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(0);
+								Contr_Laod = 0x75ad;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 6;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
-                                SET_Voltage = 6000;
-                                SET_Current = 1000;  
+                                Contr_Voltage = 0x6c88;
+								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
                                 calstep = 6;
@@ -855,6 +917,16 @@ void Key_Funtion(void)
                                 GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压档位切换
                             }else if(calmode == mode_pow){
                                 
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(1);
+								Contr_Laod = 0x1805;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 7;
                             }else if(calmode == mode_r ){
                                 Rlow_cal(7);
                             }else if(calmode == input){
@@ -922,6 +994,16 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
                                 GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压档位切换
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+//                                SET_Current_Laod = 5000;
+								C_SW(1);
+								Contr_Laod = 0x2bfb;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+                                calstep = 8;
                             }else if(calmode == mode_pow){
                                 
                             }else if(calmode == mode_r ){
@@ -1216,6 +1298,18 @@ void Key_Funtion(void)
                             BEEP_Tiggr();//触发蜂鸣�?
                             break;
                         }
+						case face_cal:
+                        {
+                            if(calmode == mode_pow){
+								Contr_Voltage -= 100;
+                            }else if(calmode == mode_loadc){
+								Contr_Laod -= 100;
+                            }else if(calmode == mode_powc){
+                                Contr_Current -= 100;
+                            }
+                            KeyCounter = 0;
+                            BEEP_Tiggr();//触发蜂鸣噿
+                        }break;
                     }
                 }
                 break;
@@ -1250,7 +1344,18 @@ void Key_Funtion(void)
                             BEEP_Tiggr();//触发蜂鸣�?
                             break;
                         }
-                        
+                        case face_cal:
+                        {
+                            if(calmode == mode_pow){
+								Contr_Voltage += 100;
+                            }else if(calmode == mode_loadc){
+								Contr_Laod += 100;
+                            }else if(calmode == mode_powc){
+                                Contr_Current += 100;
+                            }
+                            KeyCounter = 0;
+                            BEEP_Tiggr();//触发蜂鸣噿
+                        }break;
                     }
                 }
                 break;
@@ -1700,41 +1805,48 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_pow)
                             {
-                                if(calstep == 1)
-                                {
-                                    PowVCal(1);
-                                }else if(calstep == 2){
-                                    PowVCal(2);
-                                }else if(calstep == 3){
-                                    PowVCal(3);
-                                }else if(calstep == 4){
-                                    PowVCal(4);
-                                }else if(calstep == 5){
-                                    PowVCal(5);
-                                }else if(calstep == 6){
-                                    PowVCal(6);
-                                }
+								PowVCal(calstep);
+//                                if(calstep == 1)
+//                                {
+//                                    PowVCal(1);
+//                                }else if(calstep == 2){
+//                                    PowVCal(2);
+//                                }else if(calstep == 3){
+//                                    PowVCal(3);
+//                                }else if(calstep == 4){
+//                                    PowVCal(4);
+//                                }else if(calstep == 5){
+//                                    PowVCal(5);
+//                                }else if(calstep == 6){
+//                                    PowVCal(6);
+//                                }
                             }else if(calmode == mode_loadc){
-                                if(calstep == 1)
-                                {
-                                    LoadCCal(1);
-                                }else if(calstep == 2){
-                                    LoadCCal(2);
-                                }
+								LoadCCal(calstep);
+//                                if(calstep == 1)
+//                                {
+//                                    LoadCCal(1);
+//                                }else if(calstep == 2){
+//                                    LoadCCal(2);
+//                                }
                             }else if(calmode == mode_powc){
-                                if(calstep == 1)
-                                {
-                                    PowCCal(1);
-                                }else if(calstep == 2){
-                                    PowCCal(2);
-                                }
+								PowCCal(calstep);
+//                                if(calstep == 1)
+//                                {
+//                                    PowCCal(1);
+//                                }else if(calstep == 2){
+//                                    PowCCal(2);
+//                                }else if(calstep == 3){
+//                                    PowCCal(3);
+//                                }else if(calstep == 4){
+//                                    PowCCal(4);
+//                                }
                             }
                             KeyCounter = 0;
                             BEEP_Tiggr();//
                         }break;
 						case face_sys_info:
                         {
-							JumpBoot(55);
+//							JumpBoot(55);
 						}break;
                     }
                     

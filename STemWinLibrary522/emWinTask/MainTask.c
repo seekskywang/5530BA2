@@ -45,6 +45,8 @@ extern vu8 cdc_sw;
 vu8 ocf;
 vu8 vflag;
 vu8 cflag;
+extern u8 calmode;
+
 static void ee_Delay( vu32 nCount)	 //ݲեքғʱگ˽
 {
 	for(; nCount != 0; nCount--);
@@ -136,7 +138,7 @@ void MainTask(void)
 				}
 				
 			}else{
-				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on))
+				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
 				{
 					if(sendload < 250)
 					{
