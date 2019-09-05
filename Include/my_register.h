@@ -223,6 +223,7 @@ void dma_rec(vu16 buf,u16 ndtr);
 extern float disloadv;
 extern u16 disrvalue;
 extern vu8 cflag;
+
 #define set_max_lv						InFlashSave[0]
 #define set_min_lv						InFlashSave[1]
 #define set_max_pc						InFlashSave[2]

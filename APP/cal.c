@@ -115,6 +115,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_137);
             GUI_UC_SetEncodeUTF8();
+			if(vflag == 0)
+			{ 
+				TEXT_SetTextColor(hItem, GUI_GREEN);
+				
+			}else{
+				TEXT_SetTextColor(hItem, GUI_RED);
+			}
         //  sprintf(buf,"%.3f",0);
             TEXT_SetText(hItem,"è´Ÿè½½ç”µåŽ‹");
             
@@ -1125,42 +1132,68 @@ void PowCCal(u8 step)
     if(step == 1)
     {
         Modify_A_READ = Imon_value;
+		Modify_C_READ = Contr_Current;
 		Modify_A_ACT = inputvalue;
     }else if(step == 2){
         vu16 var16;
-        vu32 var32a;
-        vu32 var32b;
-        
-        vu16 var16a;
-        vu32 var32c;
-        vu32 var32d;
-        
-        Modify_B_READ = Imon_value;
-        Modify_B_ACT = inputvalue;
-        var32a = Modify_B_ACT;
-        var32a = var32a - Modify_A_ACT;
-        var32a = var32a << 14;
-        var16 = Modify_B_READ - Modify_A_READ;
-        var32a = var32a / var16;
-        CON_POWERA = var32a;
-        var32a = Modify_B_ACT;
-        var32a = var32a << 14;
-        var32b = Modify_B_READ;
-        var32b = var32b * CON_POWERA;
-        if (var32a < var32b)
-        {
-            var32b = var32b - var32a;
-            CON_POWERA_Offset = var32b;
-            Polar3 |= 0x04;
-        }
-        else 
-        {
-            var32a = var32a - var32b;
-            CON_POWERA_Offset = var32a;
-            Polar3 &= ~0x04;					
-        }
-        Flash_Write_all ();	
-        Flag_DAC_OFF=0;
+			vu32 var32a;
+			vu32 var32b;
+			
+			vu16 var16a;
+			vu32 var32c;
+			vu32 var32d;
+			
+			Modify_D_READ = Contr_Current;
+			Modify_B_READ = Imon_value;
+			Modify_B_ACT = inputvalue;
+			var32a = Modify_B_ACT;
+			var32a = var32a - Modify_A_ACT;
+			var32a = var32a << 14;
+			var16 = Modify_B_READ - Modify_A_READ;
+			var32a = var32a / var16;
+			REG_POWERA = var32a;
+			var32a = Modify_B_ACT;
+			var32a = var32a << 14;
+			var32b = Modify_B_READ;
+			var32b = var32b * REG_POWERA;
+			if (var32a < var32b)
+			{
+				var32b = var32b - var32a;
+				REG_POWERA_Offset = var32b;
+				Polar4 |= 0x01;
+			}
+			else 
+			{
+				var32a = var32a - var32b;
+				REG_POWERA_Offset = var32a;
+				Polar4 &= ~0x01;					//?¡¤????¡ê?§µ???
+			}
+	//---------------------------------------------------------------------------------//
+			var32c = Modify_B_ACT; //???¡¤§µ?
+			var32c = var32c - Modify_A_ACT;
+			var32c = var32c << 14;
+			var16a=Modify_D_READ-Modify_C_READ;
+			var16a=var16a*2;
+			var32c=var32c/var16a;
+			SET_POWERA = var32c;
+			var32c = Modify_B_ACT;
+			var32c = var32c << 14;
+			var32d = SET_POWERA;
+			var32d = var32d * (Modify_D_READ*2);
+			if (var32c < var32d)
+			{
+				var32d = var32d - var32c;
+				SET_POWERA_Offset = var32d;
+				Polar4 |= 0x04;
+			}
+			else 
+			{
+				var32c = var32c - var32d;
+				SET_POWERA_Offset = var32c;
+				Polar4 &= ~0x04;
+			}
+			Flash_Write_all ();	
+			Flag_DAC_OFF=0;
     }else if (step == 3)			   //?d?Çµ?
 	{
 		Modify_A_READ = Imon_value;//??d

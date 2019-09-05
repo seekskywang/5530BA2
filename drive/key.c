@@ -363,6 +363,7 @@ void Key_Funtion(void)
 //                                SET_Voltage = 100;
 //                                SET_Current = 1000;
 								Contr_Voltage = 0x0312;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;								
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -381,6 +382,7 @@ void Key_Funtion(void)
                                 calstep = 1;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
+								Contr_Voltage = 0x0312;
                                 Contr_Current = 0x078d;
 								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
@@ -460,6 +462,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_pow){
                                 IO_OFF();
                                 Contr_Voltage = 0x1338;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -478,6 +481,7 @@ void Key_Funtion(void)
                                 calstep = 2;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
+								Contr_Voltage = 0x0312;
                                 Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
@@ -560,6 +564,7 @@ void Key_Funtion(void)
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
 								Contr_Laod = 0x13f8;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -574,6 +579,7 @@ void Key_Funtion(void)
                                 calstep = 3;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
+								Contr_Voltage = 0x0312;
                                 Contr_Current = 0x1c00;
 								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
@@ -655,6 +661,7 @@ void Key_Funtion(void)
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
 								Contr_Laod = 0x35e5;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -669,6 +676,7 @@ void Key_Funtion(void)
                                 calstep = 4;
                             }else if(calmode == mode_powc){
                                 IO_OFF();
+								Contr_Voltage = 0x0312;
                                 Contr_Current = 0x6ad9;
 								Flag_DAC_OFF=1;  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
@@ -757,6 +765,7 @@ void Key_Funtion(void)
                                 calstep = 5;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
+								Contr_Current = 0x1a5f;
                                 Contr_Voltage = 0x398a;
 								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
@@ -843,6 +852,7 @@ void Key_Funtion(void)
                                 calstep = 6;
                             }else if(calmode == mode_pow){
                                 IO_OFF();
+								Contr_Current = 0x1a5f;
                                 Contr_Voltage = 0x6c88;
 								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
