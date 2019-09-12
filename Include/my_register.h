@@ -250,7 +250,7 @@ extern vu8 cflag;
 #define SET_POWERA1			   			InFlashSave[23]//??CC???·?????
 #define REG_POWERA_Offset1  			InFlashSave[24]//??CC???·???
 #define SET_POWERA_Offset1  			InFlashSave[25]//??CC???·?????
-
+#define vrange							InFlashSave[26]
 
 #define SLAVE_REG_P00		0x0000       //R_VOLU
 #define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -453,6 +453,7 @@ extern vu16 coff[6];
 #define set_88          87
 #define set_89          88
 #define set_90          89
+#define set_91          90
 /*
 ************************************************************************
 *						参数设置识别符

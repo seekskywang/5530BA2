@@ -1281,6 +1281,12 @@ void Key_Funtion(void)
                 {
                     vu8 l;
                     switch(page_sw){
+						case face_r:
+						{
+							OC_OP_LEFT();
+							KeyCounter = 0;
+                            BEEP_Tiggr();//触发蜂鸣�?
+						}break;
                         case face_set:  //系统设置
                         {
                             SET_OP_LEFT();  //设置选项切换
@@ -1327,6 +1333,12 @@ void Key_Funtion(void)
                 {
                     vu8 l;
                     switch(page_sw){
+						case face_r:
+						{
+							OC_OP_RIGHT();
+							KeyCounter = 0;
+                            BEEP_Tiggr();//触发蜂鸣�?
+						}break;
                         case face_set:  //系统设置
                         {
                             SET_OP_RIGHT();  //设置选项切换

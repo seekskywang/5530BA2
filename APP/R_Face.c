@@ -16,7 +16,7 @@
 #include "key.h"
 #include "string.h"
 #include "beep.h"
-
+#include "internalflash.h"
 
 
 WM_HWIN hWinR;
@@ -145,6 +145,8 @@ extern struct bitDefine
 #define ID_TEXT_152     (GUI_ID_USER + 0x0136)
 #define ID_TEXT_153     (GUI_ID_USER + 0x0137)
 #define ID_TEXT_160     (GUI_ID_USER + 0x013B)
+#define ID_TEXT_167     (GUI_ID_USER + 0x0142)
+
 
 #define ID_TimerTime    1
 // USER START (Optionally insert additional defines)
@@ -203,6 +205,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { TEXT_CreateIndirect, "Text", ID_TEXT_152, 270, 40, 60, 15, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_153, 335, 40, 40, 15, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Text", ID_TEXT_160, 380, 8, 20, 15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text", ID_TEXT_167, 400, 200, 80, 15, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_13, 83, 226, 77, 45, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_14, 163, 226, 77, 45, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Button", ID_BUTTON_15, 243, 226, 77, 45, 0, 0x0, 0 },
@@ -674,6 +677,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_124);       
         sprintf(buf,"%.1f",temp);
         TEXT_SetText(hItem,buf);
+		
+		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+		if(vrange == 0)
+		{
+			TEXT_SetText(hItem,"电压档L");
+		}else{
+			TEXT_SetText(hItem,"电压档H");
+		}
 		WM_RestartTimer(pMsg->Data.v, 20);//复位定时器数值越大刷新时间越短
 	}
 	break;
@@ -951,6 +962,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					TEXT_SetBkColor(hItem,0x00BFFFFF);
 					TEXT_SetTextColor(hItem, GUI_BLACK);
 					TEXT_SetFont(hItem, &GUI_FontHZ14);
+					
+					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+					GUI_UC_SetEncodeUTF8();
+					if(vrange == 1)
+					{
+						TEXT_SetText(hItem, "电压档H");
+					}else{
+						TEXT_SetText(hItem, "电压档L");
+					}
+					TEXT_SetTextColor(hItem, GUI_WHITE);
+					TEXT_SetFont(hItem, &GUI_FontHZ14);
+					
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
 					GUI_UC_SetEncodeUTF8();
@@ -1005,6 +1028,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					TEXT_SetText(hItem, "CD TEST");
 					TEXT_SetBkColor(hItem,0x00BFFFFF);
 					TEXT_SetTextColor(hItem, GUI_BLACK);
+					TEXT_SetFont(hItem, &GUI_Font16_1);
+					
+					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+					GUI_UC_SetEncodeUTF8();
+					if(vrange == 1)
+					{
+						TEXT_SetText(hItem, "VH");
+					}else{
+						TEXT_SetText(hItem, "VL");
+					}
+					TEXT_SetTextColor(hItem, GUI_WHITE);
 					TEXT_SetFont(hItem, &GUI_Font16_1);
 				}
 				
@@ -1400,6 +1434,172 @@ void OC_OP_DOWN(void)
         }
     }
     
+}
+
+void OC_OP_RIGHT(void)
+{
+	switch(oc_sw)
+    {
+		case set_81:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_152);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+		
+        case set_72:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_1);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+        
+        case set_20:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_44);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+        case set_21:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_45);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+        case set_64:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_118);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+        case set_70:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_43);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+		case set_75:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_145);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+        case set_76:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_146);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+		case set_77:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_147);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_91;
+            break;
+        }
+    }
+}
+
+void OC_OP_LEFT(void)
+{
+	switch(oc_sw)
+    {
+		case set_91:
+        {
+            WM_HWIN hItem;
+//            WM_InvalidateWindow(hWinR);
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+            TEXT_SetTextColor(hItem, GUI_WHITE);
+            
+            hItem = WM_GetDialogItem(hWinR, ID_TEXT_152);
+            TEXT_SetBkColor(hItem,0x00BFFFFF);
+            TEXT_SetTextColor(hItem, GUI_BLACK);
+            
+            oc_sw = set_81;
+            break;
+        }
+	}
 }
 
 void OC_OP_UP(void);
@@ -1931,6 +2131,16 @@ void OC_SET(void) {
             dot_flag = 0;
             break;
         }
+		case set_91:
+		{
+			if(vrange == 0)
+			{
+				vrange = 1;
+			}else{
+				vrange = 0;
+			}
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		}break;
     }
 }
 void DEL_C(void){

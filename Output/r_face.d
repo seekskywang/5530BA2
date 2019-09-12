@@ -89,3 +89,4 @@
 ..\output\r_face.o: ..\Include\my_register.h
 ..\output\r_face.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\r_face.o: ..\Include\beep.h
+..\output\r_face.o: ..\Include\internalflash.h

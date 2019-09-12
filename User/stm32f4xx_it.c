@@ -1177,7 +1177,7 @@ static void MODS_52H(void)
 
  	if (MODS_CDC(reg, value) == 1)
  	{
- 		;
+		
  	}
  	else
  	{

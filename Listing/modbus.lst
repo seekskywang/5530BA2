@@ -35104,7 +35104,7 @@ N#define REG_POWERA1			   			InFlashSave[22]//??CC???·???
 N#define SET_POWERA1			   			InFlashSave[23]//??CC???·?????
 N#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???·???
 N#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???·?????
-N
+N#define vrange							InFlashSave[26]
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35307,6 +35307,7 @@ N#define set_87          86
 N#define set_88          87
 N#define set_89          88
 N#define set_90          89
+N#define set_91          90
 N/*
 N************************************************************************
 N*						参数设置识别符
@@ -35749,7 +35750,7 @@ S#define REG_POWERA1			   			InFlashSave[22]//??CC???·???
 S#define SET_POWERA1			   			InFlashSave[23]//??CC???·?????
 S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???·???
 S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???·?????
-S
+S#define vrange							InFlashSave[26]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35952,6 +35953,7 @@ S#define set_87          86
 S#define set_88          87
 S#define set_89          88
 S#define set_90          89
+S#define set_91          90
 S/*
 S************************************************************************
 S*						参数设置识别符
@@ -37606,6 +37608,74 @@ N					DISS_Voltage=Voltage;
 X					DISS_Voltage=Run_Control[10];
 N					DISS_Voltage=DISS_Voltage/1000;//輪蹋袛示支压
 N			}
+N		}else if(page_sw == face_r && para_set2 == set_2_on)
+X		}else if(page_sw == 3 && para_set2 == 0xff)
+N		{
+N			if(vrange == 1)
+X			if(InFlashSave[26] == 1)
+N			{
+N				V_SW(1);//鐢靛帇楂樻。浣?
+N					if(r_raly == 1)
+N					{
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 2;
+N					}
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV1;  
+X					var32 = var32 * Correct_Parametet[13];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset1) 
+X						if (var32 < Correct_Strong[13]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset1;
+X						else var32 = var32 - Correct_Strong[13];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset1;
+X					else var32 = var32 + Correct_Strong[13];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mV訑袀去拢
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//輪蹋袛示支压
+N			}else{
+N				V_SW(0);//鐢靛帇浣庢。浣?
+N					if(r_raly == 1)
+N					{
+N						var32 = Vmon1_value;
+N					}else if(r_raly == 0){
+N						var32 = Vmon1_value - 3;
+N					}
+N	//				var32 = Vmon1_value;
+N					var32 = var32 * REG_CorrectionV;  
+X					var32 = var32 * Correct_Parametet[0];  
+N					if ((Polar & 0x01) == 0x01)		  
+X					if ((correct_por[0] & 0x01) == 0x01)		  
+N					{
+N						if (var32 < REG_ReadV_Offset) 
+X						if (var32 < Correct_Strong[0]) 
+N						{
+N							var32 = 0;
+N						}
+N						else var32 = var32 - REG_ReadV_Offset;
+X						else var32 = var32 - Correct_Strong[0];
+N					}
+N					else var32 = var32 + REG_ReadV_Offset;
+X					else var32 = var32 + Correct_Strong[0];
+N					var32 = var32 >> 12;
+N					if (var32 < 30) var32 = 0;				  //40mV訑袀去拢
+N					Voltage = var32;
+X					Run_Control[10] = var32;
+N					DISS_Voltage=Voltage;
+X					DISS_Voltage=Run_Control[10];
+N					DISS_Voltage=DISS_Voltage/1000;//輪蹋袛示支压
+N			}
 N		}else{
 N			if(Vmon1_value < 4300)
 N			{		
@@ -37742,7 +37812,7 @@ X		Run_Control[12] = var32;
 N		DISS_Current=Laod_Current;
 X		DISS_Current=Run_Control[12];
 N		DISS_Current=DISS_Current/1000;//计算显示电流
-W "..\drive\modbus.c" 1336 6 single-precision operand implicitly converted to double-precision
+W "..\drive\modbus.c" 1388 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Current > 0.1)
 N		{
 N			var32 = Imon1_value;
@@ -37768,7 +37838,7 @@ N			DISS_Current=Laod_Current;
 X			DISS_Current=Run_Control[12];
 N			DISS_Current=DISS_Current/1000;//輪蹋袛示支路
 N		}
-W "..\drive\modbus.c" 1354 6 single-precision operand implicitly converted to double-precision
+W "..\drive\modbus.c" 1406 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Current > 0.9)
 N		{
 N			var32 = Imon1_value;

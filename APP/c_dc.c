@@ -157,7 +157,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate4[] = {
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_54, 415, 30, 65, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_55, 415, 55, 65, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_56, 415, 142, 65, 20, 0, 0x0, 0 },
-  { TEXT_CreateIndirect,   "Text",   ID_TEXT_57, 415, 205, 26, 20, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   "Text",   ID_TEXT_57, 410, 205, 30, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_62, 415, 80, 65, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_63, 415, 105, 65, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_64, 415, 167, 65, 20, 0, 0x0, 0 },
@@ -180,7 +180,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate4[] = {
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_79, 444, 205, 40, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_127, 330+60, 4, 80, 20, 0, 0x0, 0 },
   { TEXT_CreateIndirect,   "Text",   ID_TEXT_131, 5, 225, 80, 30, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_163, 380+80, 8, 20, 15, 0, 0x0, 0 },
+  { TEXT_CreateIndirect,   "Text",   ID_TEXT_163, 380+80, 8, 20, 15, 0, 0x0, 0 },
 
   // USER START (Optionally insert additional widgets)
   // USER END

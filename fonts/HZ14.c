@@ -485,8 +485,48 @@ GUI_CONST_STORAGE unsigned char acGUI_FontHZ14_653E[ 28] = { /* code 653E */
   __X_____,__X_____,
   __XXXXXX,XXX_____,
   ________,________};
+  
 
-GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontHZ14_CharInfo[27] = {
+GUI_CONST_STORAGE unsigned char acGUI_FontHZ14_6863[ 28] = { /* code 6863 */
+  __X_____,X_______,
+  __X_X___,X___X___,
+  __X__X__,X__X____,
+  XXXX__X_,X_X_____,
+  __X_XXXX,XXXXX___,
+  __X_____,____X___,
+  _XXX____,____X___,
+  _XX_X___,____X___,
+  X_X__XXX,XXXXX___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_____,____X___,
+  __X_XXXX,XXXXX___,
+  __X_____,____X___};
+
+GUI_CONST_STORAGE unsigned char acGUI_FontHZ14_0048[  9] = { /* code 0048, LATIN CAPITAL LETTER H */
+  XXX_XXX_,
+  _X___X__,
+  _X___X__,
+  _X___X__,
+  _XXXXX__,
+  _X___X__,
+  _X___X__,
+  _X___X__,
+  XXX_XXX_};
+
+GUI_CONST_STORAGE unsigned char acGUI_FontHZ14_004C[  9] = { /* code 004C, LATIN CAPITAL LETTER L */
+  XXX_____,
+  _X______,
+  _X______,
+  _X______,
+  _X______,
+  _X______,
+  _X______,
+  _X___X__,
+  XXXXXX__};
+
+
+GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontHZ14_CharInfo[30] = {
    {  13,  13,   0,   1,  14, acGUI_FontHZ14_538B } /* code 538B */
   ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_59CB } /* code 59CB */
   ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_5F0F } /* code 5F0F */
@@ -514,12 +554,37 @@ GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontHZ14_CharInfo[27] = {
   ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_5F00 } /* code 5F00 */
   ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_653E } /* code 653E */
   ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_9501 } /* code 9501 */
+  ,{   7,   9,   0,   3,   7, acGUI_FontHZ14_0048 } /* code 0048, LATIN CAPITAL LETTER H */
+  ,{   6,   9,   0,   3,   7, acGUI_FontHZ14_004C } /* code 004C, LATIN CAPITAL LETTER L */
+  ,{  13,  14,   0,   0,  14, acGUI_FontHZ14_6863 } /* code 6863 */
 };
+
+GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontHZ14_Prop30 = {
+   0x6863 /* first character */
+  ,0x6863 /* last character  */
+  ,&GUI_FontHZ14_CharInfo[  29] /* address of first character */
+  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontHZ14_Prop29 = {
+   0x004C /* first character */
+  ,0x004C /* last character  */
+  ,&GUI_FontHZ14_CharInfo[  28] /* address of first character */
+  ,&GUI_FontHZ14_Prop30 /* pointer to next GUI_FONT_PROP_EXT */
+};
+
+GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontHZ14_Prop28 = {
+   0x0048 /* first character */
+  ,0x0048 /* last character  */
+  ,&GUI_FontHZ14_CharInfo[  27] /* address of first character */
+  ,&GUI_FontHZ14_Prop29 /* pointer to next GUI_FONT_PROP_EXT */
+};
+
 GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontHZ14_Prop27 = {
    0x9501 /* first character */
   ,0x9501 /* last character  */
   ,&GUI_FontHZ14_CharInfo[  26] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  ,&GUI_FontHZ14_Prop28 /* pointer to next GUI_FONT_PROP_EXT */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontHZ14_Prop26 = {

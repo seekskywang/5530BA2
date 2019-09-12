@@ -48972,7 +48972,7 @@ N#define REG_POWERA1			   			InFlashSave[22]//??CC???°§???
 N#define SET_POWERA1			   			InFlashSave[23]//??CC???°§?????
 N#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???°§???
 N#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???°§?????
-N
+N#define vrange							InFlashSave[26]
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -49175,6 +49175,7 @@ N#define set_87          86
 N#define set_88          87
 N#define set_89          88
 N#define set_90          89
+N#define set_91          90
 N/*
 N************************************************************************
 N*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -49562,7 +49563,7 @@ S#define REG_POWERA1			   			InFlashSave[22]//??CC???°§???
 S#define SET_POWERA1			   			InFlashSave[23]//??CC???°§?????
 S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???°§???
 S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???°§?????
-S
+S#define vrange							InFlashSave[26]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -49765,6 +49766,7 @@ S#define set_87          86
 S#define set_88          87
 S#define set_89          88
 S#define set_90          89
+S#define set_91          90
 S/*
 S************************************************************************
 S*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -52257,7 +52259,7 @@ S#define REG_POWERA1			   			InFlashSave[22]//??CC???°§???
 S#define SET_POWERA1			   			InFlashSave[23]//??CC???°§?????
 S#define REG_POWERA_Offset1  			InFlashSave[24]//??CC???°§???
 S#define SET_POWERA_Offset1  			InFlashSave[25]//??CC???°§?????
-S
+S#define vrange							InFlashSave[26]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -52460,6 +52462,7 @@ S#define set_87          86
 S#define set_88          87
 S#define set_89          88
 S#define set_90          89
+S#define set_91          90
 S/*
 S************************************************************************
 S*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -53171,7 +53174,65 @@ N/******************************************************************/
 N#endif
 N/******************* (C) COPYRIGHT 2015 AVER *****END OF FILE***************************/
 L 19 "..\APP\R_Face.c" 2
+N#include "internalflash.h"
+L 1 "..\Include\internalflash.h" 1
+N#ifndef __INTERNALFLASH_H__
+N#define __INTERNALFLASH_H__
 N
+N#include "stm32f4xx.h"
+N
+N/* Base address of the Flash sectors */
+N#define ADDR_FLASH_SECTOR_0     ((uint32_t)0x08000000) /* Base @ of Sector 0, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_1     ((uint32_t)0x08004000) /* Base @ of Sector 1, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_2     ((uint32_t)0x08008000) /* Base @ of Sector 2, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_3     ((uint32_t)0x0800C000) /* Base @ of Sector 3, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_4     ((uint32_t)0x08010000) /* Base @ of Sector 4, 64 Kbytes */
+N#define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000) /* Base @ of Sector 5, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000) /* Base @ of Sector 6, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000) /* Base @ of Sector 7, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000) /* Base @ of Sector 8, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_9     ((uint32_t)0x080A0000) /* Base @ of Sector 9, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base @ of Sector 10, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
+N
+N#define FLASH_USER_START_ADDR ADDR_FLASH_SECTOR_11	//”√ªß∆ ºµÿ÷∑£¨‘›∂®Œ™µ⁄ Æ∏ˆ…»«¯µƒ∆ ºµÿ÷∑
+N
+N//”√ªß∏˘æ›◊‘º∫µƒ–Ë“™…Ë÷√
+N#define STM32_FLASH_SIZE 1024 	 		//À˘—°STM32µƒFLASH»›¡ø¥Û–°(µ•ŒªŒ™K)
+N#define STM32_FLASH_WREN 1              // πƒ‹FLASH–¥»Î(0£¨≤ª «ƒ‹;1£¨ πƒ‹)
+N//////////////////////////////////////////////////////////////////////////////////////////////////////
+N
+N//FLASH∆ ºµÿ÷∑
+N#define STM32_FLASH_BASE 0x08000000 	//STM32 FLASHµƒ∆ ºµÿ÷∑
+N//FLASHΩ‚À¯º¸÷µ
+N 
+N
+Nu16 STMFLASH_ReadHalfWord(u32 faddr);		  //∂¡≥ˆ∞Î◊÷  
+Nvoid STMFLASH_WriteLenByte(u32 WriteAddr,u32 DataToWrite,u16 Len);	//÷∏∂®µÿ÷∑ø™ º–¥»Î÷∏∂®≥§∂»µƒ ˝æ›
+Nu32 STMFLASH_ReadLenByte(u32 ReadAddr,u16 Len);						//÷∏∂®µÿ÷∑ø™ º∂¡»°÷∏∂®≥§∂» ˝æ›
+Nvoid STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//¥”÷∏∂®µÿ÷∑ø™ º–¥»Î÷∏∂®≥§∂»µƒ ˝æ›
+Nvoid STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//¥”÷∏∂®µÿ÷∑ø™ º∂¡≥ˆ÷∏∂®≥§∂»µƒ ˝æ›
+N
+N//≤‚ ‘–¥»Î
+Nvoid Test_Write(u32 WriteAddr,u16 WriteData);	
+N
+N//API
+Nuint16_t Flash_GetSector(uint32_t Address);
+Nvoid Flash_EraseSector(uint16_t SectorNum);
+N
+Nvoid Flash_Write32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+Nvoid Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+N
+Nvoid Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+Nvoid Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+N
+Nvoid Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+Nvoid Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+N
+N
+W "..\Include\internalflash.h" 55 7 last line of file ends without a newline
+N#endif
+L 20 "..\APP\R_Face.c" 2
 N
 N
 NWM_HWIN hWinR;
@@ -53306,6 +53367,8 @@ N#define ID_TEXT_151     (GUI_ID_USER + 0x0135)
 N#define ID_TEXT_152     (GUI_ID_USER + 0x0136)
 N#define ID_TEXT_153     (GUI_ID_USER + 0x0137)
 N#define ID_TEXT_160     (GUI_ID_USER + 0x013B)
+N#define ID_TEXT_167     (GUI_ID_USER + 0x0142)
+N
 N
 N#define ID_TimerTime    1
 N// USER START (Optionally insert additional defines)
@@ -53401,6 +53464,8 @@ N  { TEXT_CreateIndirect, "Text", ID_TEXT_153, 335, 40, 40, 15, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0137), 335, 40, 40, 15, 0, 0x0, 0 },
 N  { TEXT_CreateIndirect, "Text", ID_TEXT_160, 380, 8, 20, 15, 0, 0x0, 0 },
 X  { TEXT_CreateIndirect, "Text", (0x800 + 0x013B), 380, 8, 20, 15, 0, 0x0, 0 },
+N  { TEXT_CreateIndirect, "Text", ID_TEXT_167, 400, 200, 80, 15, 0, 0x0, 0 },
+X  { TEXT_CreateIndirect, "Text", (0x800 + 0x0142), 400, 200, 80, 15, 0, 0x0, 0 },
 N  { BUTTON_CreateIndirect, "Button", ID_BUTTON_13, 83, 226, 77, 45, 0, 0x0, 0 },
 X  { BUTTON_CreateIndirect, "Button", (0x800 + 0x19), 83, 226, 77, 45, 0, 0x0, 0 },
 N  { BUTTON_CreateIndirect, "Button", ID_BUTTON_14, 163, 226, 77, 45, 0, 0x0, 0 },
@@ -53730,14 +53795,14 @@ N				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 
 X				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && Run_Control[13] > 20 && con_flag == 0)
 N				{
 N					con_flag = 1;
-W "..\APP\R_Face.c" 478 14 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 481 14 single-precision operand implicitly converted to double-precision
 N					time1 = (float)GUI_GetTime()/500.0;
 N				}
 N				if(con_flag == 1)
 N				{
 N					if(test_mode == 0)
 N					{
-W "..\APP\R_Face.c" 484 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 487 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 0.5)
 N						{
 N							if(staticcdc == 1)
@@ -53756,7 +53821,7 @@ X							r = Run_Control[13];
 N							v = DISS_Voltage;
 N						}
 N					}else if(test_mode == 1){
-W "..\APP\R_Face.c" 499 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 502 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 N						{
 N							if(staticcdc == 1)
@@ -53788,7 +53853,7 @@ N                    GUI_SetFont(&GUI_Font20_ASCII);
 N                    TEXT_SetText(hItem, "Untested");
 N                }
 N				
-W "..\APP\R_Face.c" 526 8 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 529 8 single-precision operand implicitly converted to double-precision
 N				if(DISS_Voltage < 0.3)
 N                {
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -53926,7 +53991,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 642 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 645 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -53969,6 +54034,16 @@ N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_124);
 X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0109));       
 N        sprintf(buf,"%.1f",temp);
 N        TEXT_SetText(hItem,buf);
+N		
+N		hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+X		hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0142));
+N		if(vrange == 0)
+X		if(InFlashSave[26] == 0)
+N		{
+N			TEXT_SetText(hItem,"ÁîµÂéãÊ°£L");
+N		}else{
+N			TEXT_SetText(hItem,"ÁîµÂéãÊ°£H");
+N		}
 N		WM_RestartTimer(pMsg->Data.v, 20);//Â§ç‰ΩçÂÆöÊó∂Âô®Êï∞ÂÄºË∂äÂ§ßÂà∑Êñ∞Êó∂Èó¥Ë∂äÁü≠
 N	}
 N	break;
@@ -54328,6 +54403,21 @@ N					TEXT_SetBkColor(hItem,0x00BFFFFF);
 N					TEXT_SetTextColor(hItem, GUI_BLACK);
 X					TEXT_SetTextColor(hItem, 0x00000000);
 N					TEXT_SetFont(hItem, &GUI_FontHZ14);
+N					
+N					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+X					hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0142));
+N					GUI_UC_SetEncodeUTF8();
+N					if(vrange == 1)
+X					if(InFlashSave[26] == 1)
+N					{
+N						TEXT_SetText(hItem, "ÁîµÂéãÊ°£H");
+N					}else{
+N						TEXT_SetText(hItem, "ÁîµÂéãÊ°£L");
+N					}
+N					TEXT_SetTextColor(hItem, GUI_WHITE);
+X					TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N					TEXT_SetFont(hItem, &GUI_FontHZ14);
+N					
 N				}else{
 N					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_1);
 X					hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x14));
@@ -54400,6 +54490,20 @@ N					TEXT_SetText(hItem, "CD TEST");
 N					TEXT_SetBkColor(hItem,0x00BFFFFF);
 N					TEXT_SetTextColor(hItem, GUI_BLACK);
 X					TEXT_SetTextColor(hItem, 0x00000000);
+N					TEXT_SetFont(hItem, &GUI_Font16_1);
+N					
+N					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_167);
+X					hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x0142));
+N					GUI_UC_SetEncodeUTF8();
+N					if(vrange == 1)
+X					if(InFlashSave[26] == 1)
+N					{
+N						TEXT_SetText(hItem, "VH");
+N					}else{
+N						TEXT_SetText(hItem, "VL");
+N					}
+N					TEXT_SetTextColor(hItem, GUI_WHITE);
+X					TEXT_SetTextColor(hItem, 0x00FFFFFF);
 N					TEXT_SetFont(hItem, &GUI_Font16_1);
 N				}
 N				
@@ -54703,7 +54807,7 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1240 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1274 5 function "setmode_r" declared implicitly
 N    setmode_r();
 N	C_SW(1);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//ÁîµÂ≠êË¥üËΩΩOFF
@@ -54942,6 +55046,252 @@ N            break;
 N        }
 N    }
 N    
+N}
+N
+Nvoid OC_OP_RIGHT(void)
+N{
+N	switch(oc_sw)
+N    {
+N		case set_81:
+X		case 80:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_152);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0136));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N		
+N        case set_72:
+X        case 71:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_1);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x14));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N        
+N        case set_20:
+X        case 19:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_44);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x69));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N        case set_21:
+X        case 20:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_45);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6A));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N        case set_64:
+X        case 63:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_118);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0108));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N        case set_70:
+X        case 69:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_43);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x68));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N		case set_75:
+X		case 74:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_145);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x012F));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N        case set_76:
+X        case 75:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_146);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0130));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N		case set_77:
+X		case 76:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_147);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0131));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_91;
+X            oc_sw = 90;
+N            break;
+N        }
+N    }
+N}
+N
+Nvoid OC_OP_LEFT(void)
+N{
+N	switch(oc_sw)
+N    {
+N		case set_91:
+X		case 90:
+N        {
+N            WM_HWIN hItem;
+X            GUI_HWIN hItem;
+N//            WM_InvalidateWindow(hWinR);
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_167);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0142));
+N            TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);
+X            TEXT_SetBkColor(hItem,0xFFFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_WHITE);
+X            TEXT_SetTextColor(hItem, 0x00FFFFFF);
+N            
+N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_152);
+X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x0136));
+N            TEXT_SetBkColor(hItem,0x00BFFFFF);
+N            TEXT_SetTextColor(hItem, GUI_BLACK);
+X            TEXT_SetTextColor(hItem, 0x00000000);
+N            
+N            oc_sw = set_81;
+X            oc_sw = 80;
+N            break;
+N        }
+N	}
 N}
 N
 Nvoid OC_OP_UP(void);
@@ -55461,7 +55811,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1766 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1966 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55477,7 +55827,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1779 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1979 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -55681,6 +56031,21 @@ N            bit = 0;
 N            dot_flag = 0;
 N            break;
 N        }
+N		case set_91:
+X		case 90:
+N		{
+N			if(vrange == 0)
+X			if(InFlashSave[26] == 0)
+N			{
+N				vrange = 1;
+X				InFlashSave[26] = 1;
+N			}else{
+N				vrange = 0;
+X				InFlashSave[26] = 0;
+N			}
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N		}break;
 N    }
 N}
 Nvoid DEL_C(void){
@@ -55828,7 +56193,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 1937 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 2147 5 variable "i"  was declared but never referenced
 N}
 N
 N//ÂÜÖÈòªÈ°µÈù¢Êï∞Â≠óËæìÂÖ•
@@ -56707,8 +57072,8 @@ N        crec2 = 0;
 N        rpow = 1;
 N		step =5;
 N    }
-W "..\APP\R_Face.c" 2911 27 single-precision operand implicitly converted to double-precision
-W "..\APP\R_Face.c" 2911 78 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3121 27 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3121 78 single-precision operand implicitly converted to double-precision
 N    if(((crec1 < crec2 && crec2 > 0.3) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
 X    if(((crec1 < crec2 && crec2 > 0.3) || v -  DISS_Voltage > v*0.9) && para_set2 == 0xff)
 N    {
@@ -56763,7 +57128,7 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 2956 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3166 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.9 && para_set2 == 0xff)
 N    {
@@ -56884,7 +57249,7 @@ N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-W "..\APP\R_Face.c" 3052 6 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3262 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Voltage < 0.3)
 N		{
 N			rcomp = 0;
