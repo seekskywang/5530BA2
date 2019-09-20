@@ -573,6 +573,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_pow){
                                 IO_OFF();
                                 Contr_Voltage = 0x1489;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;	 
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
@@ -670,6 +671,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_pow){
                                 IO_OFF();
                                 Contr_Voltage = 0x3788;
+								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;	  
                                 GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出

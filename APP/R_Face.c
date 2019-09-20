@@ -506,6 +506,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 								step = 1;
 							}else{
 								step = 4;
+								C_SW(1);
 								SET_Current_Laod = set_init_c;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 							}
@@ -579,6 +580,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			}else if(test_start == 1){
 				if(step == 0)
 				{
+					finish = 0;
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_98);
 					 if(lang == 0)
 					{
@@ -3118,7 +3120,7 @@ void OC_CHECK(void){
         rpow = 1;
 		step =5;
     }
-    if(((crec1 < crec2 && crec2 > 0.3) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
+    if(((crec1 < crec2 && crec2 > 1) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
     {
         if(oc_mode == 0)
         {
@@ -3138,6 +3140,7 @@ void OC_CHECK(void){
             crec1 = 0;
             crec2 = 0;
             rpow = 1;
+			ocf = 0;
 			step =5;
         }else if(oc_mode == 1){
             oc_data = crec2;
@@ -3149,6 +3152,7 @@ void OC_CHECK(void){
             oc_test = 0;
             crec1 = 0;
             crec2 = 0;
+			ocf = 0;
             rpow = 1;
 			step =5;
         }
@@ -3184,6 +3188,7 @@ void OC_ADD(void){
             crec2 = 0;
             rpow = 1;
 			step =5;
+			ocf = 0;
 			
         }else if(oc_mode == 1){
             oc_data = crec2;
@@ -3194,6 +3199,7 @@ void OC_ADD(void){
             finish = 1;
             crec1 = 0;
             crec2 = 0;
+			ocf = 0;
             oc_test = 0;
             rpow = 1;
 			step =5;
@@ -3228,6 +3234,7 @@ void OC_ADD(void){
                 crec1 = 0;
                 crec2 = 0;
                 oc_test = 0;
+				ocf = 0;
                 rpow = 1;
 				step =5;
             }
@@ -3247,6 +3254,7 @@ void OC_ADD(void){
                 crec2 = 0;
                 oc_test = 0;
                 rpow = 1;
+				ocf = 0;
 				step =5;
             }
         }       

@@ -46,6 +46,7 @@ vu8 ocf;
 vu8 vflag;
 vu8 cflag;
 extern u8 calmode;
+extern vu8 con_flag;
 
 static void ee_Delay( vu32 nCount)	 //ݲեքғʱگ˽
 {
@@ -117,13 +118,14 @@ void MainTask(void)
 					DAC8531_Send(Contr_Laod);
 				}else{
 					
-					if(test_start == 1)
+					if(test_start == 1 && con_flag == 1 && step != 0)
 					{
 						if(step == 3 || (step == 4 && ocf == 0))
 						{
-							DAC8531_Send(0);
+							sendload = 0;
+							DAC8531_Send(sendload);
 						}else{
-							if(sendload < 250)
+							if(sendload < 500)
 							{
 								sendload = sendload + 10;
 							}else{

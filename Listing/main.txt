@@ -5,176 +5,216 @@
                           AREA ||i.main||, CODE, READONLY, ALIGN=2
 
                   main PROC
-;;;59     
-;;;60     int main(void)
+;;;60     
+;;;61     int main(void)
 000000  b510              PUSH     {r4,lr}
-;;;61     {
-;;;62     	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x20000);
+;;;62     {
+;;;63     	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x20000);
 000002  f44f3100          MOV      r1,#0x20000
 000006  0288              LSLS     r0,r1,#10
 000008  f7fffffe          BL       NVIC_SetVectorTable
-;;;63     	__enable_irq();
+;;;64     	__enable_irq();
 00000c  b662              CPSIE    i
-;;;64     	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);//开启CRC时钟，STEMWIN授权使用
+;;;65     	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);//开启CRC时钟，STEMWIN授权使用
 00000e  2101              MOVS     r1,#1
 000010  0308              LSLS     r0,r1,#12
 000012  f7fffffe          BL       RCC_AHB1PeriphClockCmd
-;;;65     	RCC_Configuration();
+;;;66     	RCC_Configuration();
 000016  f7fffffe          BL       RCC_Configuration
-;;;66     	SysTick_Init();
+;;;67     	SysTick_Init();
 00001a  f7fffffe          BL       SysTick_Init
-;;;67     	GPIO_Conf();
+;;;68     	GPIO_Conf();
 00001e  f7fffffe          BL       GPIO_Conf
-;;;68     	TIM1_PWM_Config();
+;;;69     	TIM1_PWM_Config();
 000022  f7fffffe          BL       TIM1_PWM_Config
-;;;69     	TIM2_PWM_Config();
+;;;70     	TIM2_PWM_Config();
 000026  f7fffffe          BL       TIM2_PWM_Config
-;;;70         TIM4_Int_Init(2-1,8400-1);
+;;;71         TIM4_Int_Init(2-1,8400-1);
 00002a  f24204cf          MOV      r4,#0x20cf
 00002e  4621              MOV      r1,r4
 000030  2001              MOVS     r0,#1
 000032  f7fffffe          BL       TIM4_Int_Init
-;;;71         TIM3_Int_Init(10000-1,8400-1);
+;;;72         TIM3_Int_Init(10000-1,8400-1);
 000036  4621              MOV      r1,r4
 000038  f242700f          MOV      r0,#0x270f
 00003c  f7fffffe          BL       TIM3_Int_Init
-;;;72         TIM5_Int_Init(90-1,8400-1);
+;;;73         TIM5_Int_Init(90-1,8400-1);
 000040  4621              MOV      r1,r4
 000042  2059              MOVS     r0,#0x59
 000044  f7fffffe          BL       TIM5_Int_Init
-;;;73     	TIM6_Config();
+;;;74     	TIM6_Config();
 000048  f7fffffe          BL       TIM6_Config
-;;;74     	ADC1_DMA_Init();
+;;;75     	ADC1_DMA_Init();
 00004c  f7fffffe          BL       ADC1_DMA_Init
-;;;75     	USART_Configuration();
+;;;76     	USART_Configuration();
 000050  f7fffffe          BL       USART_Configuration
-;;;76         USART3_Configuration();
+;;;77         USART3_Configuration();
 000054  f7fffffe          BL       USART3_Configuration
-;;;77     	i2c_CfgGpio();//24C01引脚初始化
+;;;78     	i2c_CfgGpio();//24C01引脚初始化
 000058  f7fffffe          BL       i2c_CfgGpio
-;;;78     	TM1650_GPIO_INT();		/*TM1650引脚初始化 */  
+;;;79     	TM1650_GPIO_INT();		/*TM1650引脚初始化 */  
 00005c  f7fffffe          BL       TM1650_GPIO_INT
-;;;79     	DAC8531_GPIOCoing();//DAC初始化
+;;;80     	DAC8531_GPIOCoing();//DAC初始化
 000060  f7fffffe          BL       DAC8531_GPIOCoing
-;;;80     	AD7689_InitializeSPI1();//AD7689初始化
+;;;81     	AD7689_InitializeSPI1();//AD7689初始化
 000064  f7fffffe          BL       AD7689_InitializeSPI1
-;;;81     	LCD_Initializtion();//液晶屏初始化	
+;;;82     	LCD_Initializtion();//液晶屏初始化	
 000068  f7fffffe          BL       LCD_Initializtion
-;;;82     	EEPROM_READ_Coeff();//读取校准参数
+;;;83     	EEPROM_READ_Coeff();//读取校准参数
 00006c  f7fffffe          BL       EEPROM_READ_Coeff
-;;;83     	IWDG_Inte();
+;;;84     	IWDG_Inte();
 000070  f7fffffe          BL       IWDG_Inte
-;;;84     	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
-000074  4a08              LDR      r2,|L1.152|
+;;;85     	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
+000074  4a09              LDR      r2,|L1.156|
 000076  2128              MOVS     r1,#0x28
-000078  4808              LDR      r0,|L1.156|
+000078  4809              LDR      r0,|L1.160|
 00007a  f7fffffe          BL       Flash_Read32BitDatas
-;;;85     	if(jkflag > 1)
-00007e  4808              LDR      r0,|L1.160|
+;;;86     	if(jkflag > 1)
+00007e  4809              LDR      r0,|L1.164|
 000080  7801              LDRB     r1,[r0,#0]  ; jkflag
 000082  2901              CMP      r1,#1
 000084  d903              BLS      |L1.142|
-;;;86     	{
-;;;87     		jkflag = 1;
+;;;87     	{
+;;;88     		jkflag = 1;
 000086  2101              MOVS     r1,#1
 000088  7001              STRB     r1,[r0,#0]
-;;;88     		Write_Limits();
+;;;89     		Write_Limits();
 00008a  f7fffffe          BL       Write_Limits
                   |L1.142|
-;;;89     	}
-;;;90     //	MYDMA_Config();
-;;;91     //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
-;;;92     //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
-;;;93     	MainTask();
-00008e  f7fffffe          BL       MainTask
-;;;94     }
-000092  2000              MOVS     r0,#0
-000094  bd10              POP      {r4,pc}
-;;;95     
+;;;90     	}
+;;;91     	setcompare();
+00008e  f7fffffe          BL       setcompare
+;;;92     //	MYDMA_Config();
+;;;93     //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
+;;;94     //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
+;;;95     	MainTask();
+000092  f7fffffe          BL       MainTask
+;;;96     }
+000096  2000              MOVS     r0,#0
+000098  bd10              POP      {r4,pc}
+;;;97     
                           ENDP
 
-000096  0000              DCW      0x0000
-                  |L1.152|
-                          DCD      InFlashSave
+00009a  0000              DCW      0x0000
                   |L1.156|
-                          DCD      0x080e0000
+                          DCD      InFlashSave
                   |L1.160|
+                          DCD      0x080e0000
+                  |L1.164|
                           DCD      jkflag
+
+                          AREA ||i.setcompare||, CODE, READONLY, ALIGN=2
+
+                  setcompare PROC
+;;;97     
+;;;98     void setcompare(void)
+000000  b510              PUSH     {r4,lr}
+;;;99     {
+;;;100    	u8 i;
+;;;101    	for(i=0;i<44;i++)
+000002  2000              MOVS     r0,#0
+;;;102    	{
+;;;103    		if(Run_Control[i] == 65535)
+000004  4907              LDR      r1,|L2.36|
+000006  f64f73ff          MOV      r3,#0xffff
+00000a  2200              MOVS     r2,#0
+                  |L2.12|
+00000c  f8514020          LDR      r4,[r1,r0,LSL #2]
+000010  429c              CMP      r4,r3
+000012  d101              BNE      |L2.24|
+;;;104    		{
+;;;105    			Run_Control[i] = 0;
+000014  f8412020          STR      r2,[r1,r0,LSL #2]
+                  |L2.24|
+000018  1c40              ADDS     r0,r0,#1              ;101
+00001a  b2c0              UXTB     r0,r0                 ;101
+00001c  282c              CMP      r0,#0x2c              ;101
+00001e  d3f5              BCC      |L2.12|
+;;;106    		}
+;;;107    	}
+;;;108    }
+000020  bd10              POP      {r4,pc}
+;;;109    
+                          ENDP
+
+000022  0000              DCW      0x0000
+                  |L2.36|
+                          DCD      Run_Control
 
                           AREA ||.data||, DATA, ALIGN=2
 
                   DISS_Voltage
                           DCD      0x00000000
 
-                          AREA ||area_number.5||, DATA, ALIGN=2
-
-                          EXPORTAS ||area_number.5||, ||.data||
-                  DISS_POW_Voltage
-                          DCD      0x00000000
-
                           AREA ||area_number.6||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.6||, ||.data||
-                  DISS_Current
+                  DISS_POW_Voltage
                           DCD      0x00000000
 
                           AREA ||area_number.7||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.7||, ||.data||
-                  DISS_POW_Current
+                  DISS_Current
                           DCD      0x00000000
 
                           AREA ||area_number.8||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.8||, ||.data||
+                  DISS_POW_Current
+                          DCD      0x00000000
+
+                          AREA ||area_number.9||, DATA, ALIGN=2
+
+                          EXPORTAS ||area_number.9||, ||.data||
                   disloadv
                           DCD      0x00000000
 
-                          AREA ||area_number.9||, DATA, ALIGN=1
-
-                          EXPORTAS ||area_number.9||, ||.data||
-                  disrvalue
-000000  0000              DCB      0x00,0x00
-
-                          AREA ||area_number.10||, DATA, ALIGN=2
+                          AREA ||area_number.10||, DATA, ALIGN=1
 
                           EXPORTAS ||area_number.10||, ||.data||
-                  flagA
-                          DCD      0x00000000
+                  disrvalue
+000000  0000              DCB      0x00,0x00
 
                           AREA ||area_number.11||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.11||, ||.data||
-                  flagB
+                  flagA
                           DCD      0x00000000
 
                           AREA ||area_number.12||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.12||, ||.data||
-                  flagC
+                  flagB
                           DCD      0x00000000
 
                           AREA ||area_number.13||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.13||, ||.data||
-                  flagD
+                  flagC
                           DCD      0x00000000
 
                           AREA ||area_number.14||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.14||, ||.data||
-                  flagE
+                  flagD
                           DCD      0x00000000
 
                           AREA ||area_number.15||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.15||, ||.data||
-                  flagF
+                  flagE
                           DCD      0x00000000
 
                           AREA ||area_number.16||, DATA, ALIGN=2
 
                           EXPORTAS ||area_number.16||, ||.data||
+                  flagF
+                          DCD      0x00000000
+
+                          AREA ||area_number.17||, DATA, ALIGN=2
+
+                          EXPORTAS ||area_number.17||, ||.data||
                   flagG
                           DCD      0x00000000
 

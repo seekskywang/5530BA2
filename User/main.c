@@ -34,6 +34,7 @@ float DISS_Current;//负载电流
 float DISS_POW_Current;//稳压电源电流
 float disloadv;
 u16 disrvalue;
+void setcompare(void);
 
 //FIL   *file;
 //UINT  br, bw;
@@ -87,11 +88,23 @@ int main(void)
 		jkflag = 1;
 		Write_Limits();
 	}
+	setcompare();
 //	MYDMA_Config();
 //    GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 //    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
 	MainTask();
 }
 
+void setcompare(void)
+{
+	u8 i;
+	for(i=0;i<44;i++)
+	{
+		if(Run_Control[i] == 65535)
+		{
+			Run_Control[i] = 0;
+		}
+	}
+}
 
 /******************* (C) COPYRIGHT 2017 STMicroelectronics *****END OF FILE****/

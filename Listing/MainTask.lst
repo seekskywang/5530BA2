@@ -52037,6 +52037,7 @@ Nvu8 ocf;
 Nvu8 vflag;
 Nvu8 cflag;
 Nextern u8 calmode;
+Nextern vu8 con_flag;
 N
 Nstatic void ee_Delay( vu32 nCount)	 //Ý²Õ¥Ö„Ò“Ê±Ú¯Ë½
 N{
@@ -52095,7 +52096,7 @@ N	Flag_Swtich_ON=0;
 X	(flagA . bit6)=0;
 N	if(jkflag == 1)
 N	{
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 90 3 function "CreateSTARTER" declared implicitly
+W "..\STemWinLibrary522\emWinTask\MainTask.c" 91 3 function "CreateSTARTER" declared implicitly
 N		CreateSTARTER();
 N	}else if(jkflag == 0){
 N		CreateR();
@@ -52129,13 +52130,14 @@ N				{
 N					DAC8531_Send(Contr_Laod);
 N				}else{
 N					
-N					if(test_start == 1)
+N					if(test_start == 1 && con_flag == 1 && step != 0)
 N					{
 N						if(step == 3 || (step == 4 && ocf == 0))
 N						{
-N							DAC8531_Send(0);
+N							sendload = 0;
+N							DAC8531_Send(sendload);
 N						}else{
-N							if(sendload < 250)
+N							if(sendload < 500)
 N							{
 N								sendload = sendload + 10;
 N							}else{
@@ -52231,7 +52233,7 @@ N		BEEP_Ring();//·äÃùÆ÷
 N		GUI_Delay(2);//GUIË¢ÐÂ
 N	}
 N  
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 64 25 variable "read1964"  was set but never used
+W "..\STemWinLibrary522\emWinTask\MainTask.c" 65 25 variable "read1964"  was set but never used
 N}
 N
 Nvoid V_SW(u8 i)

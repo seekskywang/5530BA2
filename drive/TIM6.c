@@ -205,8 +205,9 @@ void TIM4_IRQHandler(void)
 					step = 4;
 				}
 			 }else if(step == 4){
+				 stepcount ++;
 				OC_CHECK();
-				stepcount ++;
+				
 				if(stepcount == steptime*10)
 				{
 					OC_ADD();
@@ -269,6 +270,8 @@ void TIM4_IRQHandler(void)
 				}
 			 }else if(step == 0 && powcount == 0)
 			 {
+				 SET_Current_Laod = set_init_c;
+				 rpow= 0;
 				 powcount = 0;
 				 IO_OFF();
 			 }

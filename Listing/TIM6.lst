@@ -50754,8 +50754,9 @@ X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 
 N					step = 4;
 N				}
 N			 }else if(step == 4){
+N				 stepcount ++;
 N				OC_CHECK();
-N				stepcount ++;
+N				
 N				if(stepcount == steptime*10)
 N				{
 N					OC_ADD();
@@ -50778,7 +50779,7 @@ N					powcount++;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 226 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 227 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50811,10 +50812,10 @@ X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//Ö§Ø“ØºÕ˜On
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				}
-W "..\drive\TIM6.c" 246 30 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 247 30 single-precision operand implicitly converted to double-precision
 N				if(((v - DISS_Voltage) > v*0.6)/* || (DISS_Current < 0.05)*/)
 N				{
-W "..\drive\TIM6.c" 248 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 249 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					step = 7;
 N				}else{
@@ -50836,7 +50837,7 @@ N	//                 shortv = DISS_Voltage;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 264 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 265 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50846,8 +50847,11 @@ N//					IO_OFF();
 N				}
 N			 }else if(step == 0 && powcount == 0)
 N			 {
+N				 SET_Current_Laod = set_init_c;
+X				 Run_Control[4] = Run_Control[22];
+N				 rpow= 0;
 N				 powcount = 0;
-W "..\drive\TIM6.c" 273 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 276 6 function "IO_OFF" declared implicitly
 N				 IO_OFF();
 N			 }
 N		}
@@ -50881,7 +50885,7 @@ X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x0
 N            }
 N            crec2 = crec1;
 N            crec1 = DISS_Current;
-W "..\drive\TIM6.c" 296 33 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 299 33 single-precision operand implicitly converted to double-precision
 N            if(crec1 < crec2 && crec2 > 0.3)
 N            {     
 N                oc_data = crec2;
@@ -50934,7 +50938,7 @@ N                powcount = 0;
 N                powflag = 0;
 N                GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 338 5 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 341 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N                GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷ 
 X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50968,11 +50972,11 @@ X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }
-W "..\drive\TIM6.c" 359 43 single-precision operand implicitly converted to double-precision
-W "..\drive\TIM6.c" 359 59 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 362 43 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 362 59 single-precision operand implicitly converted to double-precision
 N            if(((shortv - DISS_Voltage) > shortv*0.6) || (DISS_Current < 0.05))
 N            {
-W "..\drive\TIM6.c" 361 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 364 17 function "IO_OFF" declared implicitly
 N                IO_OFF();
 N                usartshortflag = 0;               
 N                g_tModS.TxBuf[17] = (short_time/10)>>8;
@@ -51003,7 +51007,7 @@ N                SET_Current_Laod = 1000;
 X                Run_Control[4] = 1000;
 N                powcount = 0;
 N                finishflag = 0;
-W "..\drive\TIM6.c" 386 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 389 17 function "IO_OFF" declared implicitly
 N                IO_OFF();                
 N            }
 N        }
@@ -51205,7 +51209,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodepow,6);
-W "..\drive\TIM6.c" 561 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 564 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N						}
 N						sendmodeflag = 0;
@@ -51228,7 +51232,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodeload,6);
-W "..\drive\TIM6.c" 582 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 585 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							
 N						}
@@ -51260,7 +51264,7 @@ N							if(rmtrig[2] == 1)
 N							{
 N								SendToPC(2);
 N							}
-W "..\drive\TIM6.c" 612 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 615 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							MODS_SendWithCRC(sendmodestop,6);
 N							Delay_ms(50);
@@ -51519,7 +51523,7 @@ N
 N	/* åˆ†æžåº”ç”¨å±‚åè®?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 848 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 851 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -51534,7 +51538,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* å¿…é¡»æ¸…é›¶è®¡æ•°å™¨ï¼Œæ–¹ä¾¿ä¸‹æ¬¡å¸§åŒæ­?*/
-W "..\drive\TIM6.c" 783 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 784 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 786 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 787 18 variable "crc1"  was declared but never referenced
 N}
 N
