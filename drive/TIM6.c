@@ -252,9 +252,9 @@ void TIM4_IRQHandler(void)
 					short_time++;                
 				}
 			 }else if(step == 7){
-				 if(powcount < 4000)
+				 if(powcount < 6000)
 				{
-					SET_Voltage =(int)v*100+200;
+					SET_Voltage =(int)v*100+300;
 					SET_Current = 1000;
 					GPIO_ResetBits(GPIOC,GPIO_Pin_13);//ղߪ֧ԴˤԶ݌֧Ƿ
 					GPIO_SetBits(GPIOC,GPIO_Pin_1);//ղߪ֧ԴˤԶ
