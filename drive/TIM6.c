@@ -70,6 +70,7 @@ extern float static_lv;
 extern vu8 staticcdc;
 extern vu8 step;
 extern vu16 sendload;
+extern vu8 con_flag;
 u8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
 u8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
 u8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
@@ -266,14 +267,18 @@ void TIM4_IRQHandler(void)
 				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
 					powcount = 0;
 					step = 0;
+					con_flag = 0;
+					SET_Current_Laod = set_init_c;
+					C_SW(0);
 //					IO_OFF();                
 				}
 			 }else if(step == 0 && powcount == 0)
 			 {
+				 
 				 SET_Current_Laod = set_init_c;
 				 rpow= 0;
 				 powcount = 0;
-				 IO_OFF();
+//				 IO_OFF();
 			 }
 		}
         

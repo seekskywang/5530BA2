@@ -490,7 +490,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							{
 								step = 1;
 							}else{
+								C_SW(1);
 								step = 4;
+								flag_Load_CC = 1;                              
+								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 								SET_Current_Laod = set_init_c;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 							}
@@ -505,8 +508,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							{
 								step = 1;
 							}else{
-								step = 4;
 								C_SW(1);
+								step = 4;
+								flag_Load_CC = 1;                              
+								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC									
 								SET_Current_Laod = set_init_c;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 							}
