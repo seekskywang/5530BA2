@@ -54,6 +54,7 @@ extern vu8 c_rec;
 extern vu8 load_sw;
 extern u8 load_mode;
 extern u8 sendmodeflag;
+extern float v;
 u8 rmtrig[3];
 extern __IO int32_t OS_TimeMS;
 static void MODS_03H(void);
@@ -478,7 +479,8 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 	switch (reg_addr)									/* ÅÐ¶Ï¼Ä´æÆ÷µØÖ· */
 	{
         case SLAVE_REG_P00:
-			C_SW(1);
+//			C_SW(1);
+			v= DISS_Voltage;
 			value =	R_VLUE;	
 			break;
 		case SLAVE_REG_P01:

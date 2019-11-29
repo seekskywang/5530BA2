@@ -14647,6 +14647,10 @@ Ntypedef unsigned           int uint_fast32_t;
 Ntypedef unsigned       __INT64 uint_fast64_t;
 Xtypedef unsigned       __int64 uint_fast64_t;
 N
+N//typedef unsigned long  vu32;
+N//typedef unsigned short vu16;
+N//typedef unsigned char  vu8;
+N
 N    /* 7.18.1.4 integer types capable of holding object pointers */
 N#if __sizeof_ptr == 8
 X#if 4 == 8
@@ -53809,16 +53813,15 @@ N							if(staticcdc == 1)
 N							{
 N								step = 1;
 N							}else{
-N								C_SW(1);
-N								step = 4;
-N								flag_Load_CC = 1;                              
-X								(flagD . bit7) = 1;                              
-N								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
-X								GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N//								C_SW(1);
+N								step = 4;							
+N//								flag_Load_CC = 1;                              
+N//								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 N								SET_Current_Laod = set_init_c;
 X								Run_Control[4] = Run_Control[22];
 N								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 X								GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N								ocf = 1;
 N							}
 N							test_start = 1;
 N							r = R_VLUE;
@@ -53826,23 +53829,22 @@ X							r = Run_Control[13];
 N							v = DISS_Voltage;
 N						}
 N					}else if(test_mode == 1){
-W "..\APP\R_Face.c" 505 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 506 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 N						{
 N							if(staticcdc == 1)
 N							{
 N								step = 1;
 N							}else{
-N								C_SW(1);
+N//								C_SW(1);
 N								step = 4;
-N								flag_Load_CC = 1;                              
-X								(flagD . bit7) = 1;                              
-N								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC									
-X								GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N//								flag_Load_CC = 1;                              
+N//								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC									
 N								SET_Current_Laod = set_init_c;
 X								Run_Control[4] = Run_Control[22];
 N								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
 X								GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N								ocf = 1;
 N							}
 N							test_start = 1;
 N							r = R_VLUE;
@@ -53863,7 +53865,7 @@ N                    GUI_SetFont(&GUI_Font20_ASCII);
 N                    TEXT_SetText(hItem, "Untested");
 N                }
 N				
-W "..\APP\R_Face.c" 535 8 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 537 8 single-precision operand implicitly converted to double-precision
 N				if(DISS_Voltage < 0.3)
 N                {
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54002,7 +54004,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 652 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 654 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54818,9 +54820,9 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1281 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1283 5 function "setmode_r" declared implicitly
 N    setmode_r();
-N	C_SW(1);
+N	C_SW(0);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 N//    GPIO_SetBits(GPIOB,GPIO_Pin_13);
 N//    r_raly = 1;
@@ -55822,7 +55824,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1973 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1975 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55838,7 +55840,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1986 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1988 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -56204,7 +56206,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 2154 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 2156 5 variable "i"  was declared but never referenced
 N}
 N
 N//内阻页面数字输入
@@ -57056,9 +57058,15 @@ Nvoid OC_CHECK(void){
 N    WM_HWIN hItem;
 X    GUI_HWIN hItem;
 N    char sbs_c[6];
-N    float change_sbs_c;   
-N    crec2 = crec1;
-N    crec1 = DISS_Current;    
+N    float change_sbs_c;
+N	
+N//    crec2 = crec1;
+N    crec1 = DISS_Current;  
+N	if(crec1 > crec2)
+N	{
+N		crec2 = crec1;
+N	}
+N
 N    if(DISS_Voltage * DISS_Current > 200)
 N    {
 N         oc_data = crec2;
@@ -57083,9 +57091,9 @@ N        crec2 = 0;
 N        rpow = 1;
 N		step =5;
 N    }
-W "..\APP\R_Face.c" 3128 76 single-precision operand implicitly converted to double-precision
-N    if(((crec1 < crec2 && crec2 > 1) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
-X    if(((crec1 < crec2 && crec2 > 1) || v -  DISS_Voltage > v*0.9) && para_set2 == 0xff)
+W "..\APP\R_Face.c" 3136 28 single-precision operand implicitly converted to double-precision
+N    if((v - DISS_Voltage > v*0.4) && para_set2 == set_2_on)
+X    if((v - DISS_Voltage > v*0.4) && para_set2 == 0xff)
 N    {
 N        if(oc_mode == 0)
 N        {
@@ -57140,97 +57148,81 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 3175 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3183 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.9 && para_set2 == 0xff)
 N    {
-N        if(oc_mode == 0)
-N        {
-N            //        oc_data = (float)(SET_Current_Laod+csum)/1000;       
-N            oc_data = crec2;
-N            SET_Current_Laod = set_init_c;
-X            Run_Control[4] = Run_Control[22];
-N            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
-X            hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6C));
-N            change_sbs_c = (float)set_sbs_c/1000;
-X            change_sbs_c = (float)Run_Control[23]/1000;
-N            sprintf(sbs_c,"%.3f",change_sbs_c);
-N            TEXT_SetText(hItem,sbs_c);
-N            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-X            GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
-N            t_onoff = 0;
-N            stepcount = 0;
-N            oct_sw = oct_off;
-X            oct_sw = 0;
-N            oc_test = 0;
-N            finish = 1;
-N            crec1 = 0;
-N            crec2 = 0;
-N            rpow = 1;
-N			step =5;
-N			ocf = 0;
-N			
-N        }else if(oc_mode == 1){
-N            oc_data = crec2;
-N            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-X            GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
-N            t_onoff = 0;
-N            stepcount = 0;
-N            oct_sw = oct_off;
-X            oct_sw = 0;
-N            finish = 1;
-N            crec1 = 0;
-N            crec2 = 0;
-N			ocf = 0;
-N            oc_test = 0;
-N            rpow = 1;
-N			step =5;
-N        }
+N//        if(oc_mode == 0)
+N//        {
+N//            //        oc_data = (float)(SET_Current_Laod+csum)/1000;       
+N//            oc_data = crec2;
+N//            SET_Current_Laod = set_init_c;
+N//            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+N//            change_sbs_c = (float)set_sbs_c/1000;
+N//            sprintf(sbs_c,"%.3f",change_sbs_c);
+N//            TEXT_SetText(hItem,sbs_c);
+N//            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+N//            t_onoff = 0;
+N//            stepcount = 0;
+N//            oct_sw = oct_off;
+N//            oc_test = 0;
+N//            finish = 1;
+N//            crec1 = 0;
+N//            crec2 = 0;
+N//            rpow = 1;
+N//			step =5;
+N//			ocf = 0;
+N//			
+N//        }else if(oc_mode == 1){
+N//            oc_data = crec2;
+N//            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+N//            t_onoff = 0;
+N//            stepcount = 0;
+N//            oct_sw = oct_off;
+N//            finish = 1;
+N//            crec1 = 0;
+N//            crec2 = 0;
+N//			ocf = 0;
+N//            oc_test = 0;
+N//            rpow = 1;
+N//			step =5;
+N//        }
 N
 N    }else{
 N        if(oc_mode == 0)
 N        {
 N			
-N			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
-X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-N			GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
-X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N//			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
+N//			GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
 N//                GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
-N			flag_Load_CC = 1;
-X			(flagD . bit7) = 1;
-N			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
-X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
-N			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
-X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
-N			ocf = 1;
+N//			flag_Load_CC = 1;
+N//			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+N//			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+N			
+N			if(cflag == 1)
 N            SET_Current_Laod = SET_Current_Laod + set_sbs_c;
 X            Run_Control[4] = Run_Control[4] + Run_Control[23];
 N            
-N            if(crec1 < crec2)
-N            {
-N                oc_data = crec2;
-N                SET_Current_Laod = set_init_c;
-X                Run_Control[4] = Run_Control[22];
-N                hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
-X                hItem = WM_GetDialogItem(hWinR, (0x800 + 0x6C));
-N                change_sbs_c = (float)set_sbs_c/1000;
-X                change_sbs_c = (float)Run_Control[23]/1000;
-N                sprintf(sbs_c,"%.3f",change_sbs_c);
-N                TEXT_SetText(hItem,sbs_c);
-N                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF  
-X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
-N                t_onoff = 0;
-N                stepcount = 0;
-N                oct_sw = oct_off;
-X                oct_sw = 0;
-N                finish = 1;
-N                crec1 = 0;
-N                crec2 = 0;
-N                oc_test = 0;
-N				ocf = 0;
-N                rpow = 1;
-N				step =5;
-N            }
+N//            if(crec1 < crec2)
+N//            {
+N//                oc_data = crec2;
+N//                SET_Current_Laod = set_init_c;
+N//                hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+N//                change_sbs_c = (float)set_sbs_c/1000;
+N//                sprintf(sbs_c,"%.3f",change_sbs_c);
+N//                TEXT_SetText(hItem,sbs_c);
+N//                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF  
+N//                t_onoff = 0;
+N//                stepcount = 0;
+N//                oct_sw = oct_off;
+N//                finish = 1;
+N//                crec1 = 0;
+N//                crec2 = 0;
+N//                oc_test = 0;
+N//				ocf = 0;
+N//                rpow = 1;
+N//				step =5;
+N//            }
 N        }else if(oc_mode == 1){
 N            SET_Voltage_Laod = 0;
 X            Run_Control[3] = 0;
@@ -57255,6 +57247,9 @@ N				step =5;
 N            }
 N        }       
 N    }        
+W "..\APP\R_Face.c" 3178 13 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 3179 10 variable "sbs_c"  was declared but never referenced
+W "..\APP\R_Face.c" 3180 11 variable "change_sbs_c"  was declared but never referenced
 N}
 N
 Nvoid test_r(void)
@@ -57265,7 +57260,7 @@ N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-W "..\APP\R_Face.c" 3275 6 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3284 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Voltage < 0.3)
 N		{
 N			rcomp = 0;

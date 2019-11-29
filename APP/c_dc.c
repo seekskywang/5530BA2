@@ -205,7 +205,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   
   char buf[5];    
   
-  float dis_load_c = (float)SET_Current_Laod/1000;
+  float dis_load_c = (float)cdc_dc/1000;
   float dis_output_v = (float)SET_Voltage/100;
   float dis_output_c = (float)SET_Current/1000;
   float dis_c_cutoff_v = (float)cov1/100;

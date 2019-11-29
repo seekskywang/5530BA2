@@ -71,6 +71,7 @@ extern vu8 staticcdc;
 extern vu8 step;
 extern vu16 sendload;
 extern vu8 con_flag;
+extern vu8 ocf;
 u8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
 u8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
 u8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
@@ -160,6 +161,7 @@ void TIM4_IRQHandler(void)
 		 {
 			 if(step == 1)
 			 {
+//				 C_SW(0);
 				if(powcount < 10000)
 				{
 					SET_Current_Laod = set_static_lc;
@@ -170,8 +172,9 @@ void TIM4_IRQHandler(void)
 					powcount++;																		
 				}else{
 					powcount = 0;
-					
+					C_SW(0);
 					IO_OFF();
+					
 					step = 2;
 				}
 			 }else if(step == 2){
@@ -196,13 +199,15 @@ void TIM4_IRQHandler(void)
 			 }else if(step == 3){
 				if(powcount < 5000)
 				{
+//					C_SW(1);
 					powcount++;
 				}else{
 					
 					powcount = 0;	
-					sendload = 200;				
+//					sendload = 200;				
 					SET_Current_Laod = set_init_c;
-					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鎵撳紑璐熻浇
+					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鎵撳紑璐熻浇+
+					ocf = 1;
 					step = 4;
 				}
 			 }else if(step == 4){
@@ -253,7 +258,7 @@ void TIM4_IRQHandler(void)
 					short_time++;                
 				}
 			 }else if(step == 7){
-				 if(powcount < 6000)
+				 if(powcount < 2000)
 				{
 					SET_Voltage =(int)v*100+300;
 					SET_Current = 1000;
@@ -270,8 +275,20 @@ void TIM4_IRQHandler(void)
 					con_flag = 0;
 					SET_Current_Laod = set_init_c;
 					C_SW(0);
+//					GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+//					Delay_ms(500);
 //					IO_OFF();                
 				}
+			 }else if(step == 8){
+				 powcount++;
+				 if(powcount == 5000)
+				 {
+//					 GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+				 }else if(powcount == 10000){
+					 step = 0;
+					 powcount = 0;
+				 }
+				 
 			 }else if(step == 0 && powcount == 0)
 			 {
 				 
@@ -299,9 +316,12 @@ void TIM4_IRQHandler(void)
                 flag_Load_CC = 0;
                 GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
             }
-            crec2 = crec1;
-            crec1 = DISS_Current;
-            if(crec1 < crec2 && crec2 > 0.3)
+            crec1 = DISS_Current;  
+			if(crec1 > crec2)
+			{
+				crec2 = crec1;
+			}
+            if(v - DISS_Voltage > v*0.4)
             {     
                 oc_data = crec2;
                 g_tModS.TxBuf[13] = (int)(oc_data*1000)>>8;
@@ -391,7 +411,8 @@ void TIM4_IRQHandler(void)
                 SET_Current_Laod = 1000;
                 powcount = 0;
                 finishflag = 0;
-                IO_OFF();                
+                IO_OFF(); 
+				C_SW(0);
             }
         }
     }    

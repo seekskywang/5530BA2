@@ -106,9 +106,20 @@ void MainTask(void)
 	{
 		TIM_SetCompare1(TIM2,Contr_Current);//稳压电源电流DAC
 		TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
+//		DAC8531_Send(sendload);//加载DAC值
 		if(usartocflag == 1)
 		{
-			DAC8531_Send(Contr_Laod);//加载DAC值
+			if(sendload < 250)
+			{
+				sendload = sendload + 1;
+			}else{
+//									if(SET_Current_Laod > 2000)
+//									{
+					C_SW(1);
+//									}
+				sendload = Contr_Laod;
+			}
+			DAC8531_Send(sendload);
 		}else{
 //			Slow_Start();
 			if(page_sw == face_r)
@@ -120,18 +131,34 @@ void MainTask(void)
 					
 					if(test_start == 1 && con_flag == 1 && step != 0)
 					{
-						if(step == 3 || (step == 4 && ocf == 0))
+						if(step == 2 || step == 3 || (step == 4 && ocf == 0))
 						{
 							sendload = 0;
 							DAC8531_Send(sendload);
 						}else{
-							if(sendload < 500)
-							{
-								sendload = sendload + 10;
-							}else{
-								sendload = Contr_Laod;
-							}
-							DAC8531_Send(sendload);
+							
+//							if(SET_Current_Laod < 2500)
+//							{
+//								if(sendload < 250)
+//								{
+//									sendload = sendload + 10;
+//								}else{
+//									sendload = Contr_Laod;
+//								}
+//								DAC8531_Send(sendload);
+//							}else{
+								if(sendload < 250)
+								{
+									sendload = sendload + 1;
+								}else{
+//									if(SET_Current_Laod > 2000)
+//									{
+										C_SW(1);
+//									}
+									sendload = Contr_Laod;
+								}
+								DAC8531_Send(sendload);
+//							}
 						}
 					}else{	
 						sendload = 0;
@@ -142,13 +169,25 @@ void MainTask(void)
 			}else{
 				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
 				{
-					if(sendload < 250)
+					if(SET_Current_Laod < 2500)
 					{
-						sendload = sendload + 10;
+						if(sendload < 250)
+						{
+							sendload = sendload + 10;
+						}else{
+							sendload = Contr_Laod;
+						}
+						DAC8531_Send(sendload);
 					}else{
-						sendload = Contr_Laod;
+						if(sendload < 1000)
+						{
+							sendload = sendload + 10;
+						}else{
+							C_SW(1);
+							sendload = Contr_Laod;
+						}
+						DAC8531_Send(sendload);
 					}
-					DAC8531_Send(sendload);
 				}else{
 					sendload = 0;
 					DAC8531_Send(sendload);

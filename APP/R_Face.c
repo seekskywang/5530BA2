@@ -490,12 +490,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							{
 								step = 1;
 							}else{
-								C_SW(1);
-								step = 4;
-								flag_Load_CC = 1;                              
-								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+//								C_SW(1);
+								step = 4;							
+//								flag_Load_CC = 1;                              
+//								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 								SET_Current_Laod = set_init_c;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+								ocf = 1;
 							}
 							test_start = 1;
 							r = R_VLUE;
@@ -508,12 +509,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 							{
 								step = 1;
 							}else{
-								C_SW(1);
+//								C_SW(1);
 								step = 4;
-								flag_Load_CC = 1;                              
-								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC									
+//								flag_Load_CC = 1;                              
+//								GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC									
 								SET_Current_Laod = set_init_c;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);
+								ocf = 1;
 							}
 							test_start = 1;
 							r = R_VLUE;
@@ -1279,7 +1281,7 @@ WM_HWIN CreateR(void) {
   track = face_r;
     con_flag = 0;
     setmode_r();
-	C_SW(1);
+	C_SW(0);
 //    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 //    GPIO_SetBits(GPIOB,GPIO_Pin_13);
 //    r_raly = 1;
@@ -3103,9 +3105,15 @@ void INPUT_C(char* num){
 void OC_CHECK(void){
     WM_HWIN hItem;
     char sbs_c[6];
-    float change_sbs_c;   
-    crec2 = crec1;
-    crec1 = DISS_Current;    
+    float change_sbs_c;
+	
+//    crec2 = crec1;
+    crec1 = DISS_Current;  
+	if(crec1 > crec2)
+	{
+		crec2 = crec1;
+	}
+
     if(DISS_Voltage * DISS_Current > 200)
     {
          oc_data = crec2;
@@ -3125,7 +3133,7 @@ void OC_CHECK(void){
         rpow = 1;
 		step =5;
     }
-    if(((crec1 < crec2 && crec2 > 1) || v - /*DISS_Voltage*/DISS_Voltage > v*0.9) && para_set2 == set_2_on)
+    if((v - DISS_Voltage > v*0.4) && para_set2 == set_2_on)
     {
         if(oc_mode == 0)
         {
@@ -3174,75 +3182,76 @@ void OC_ADD(void){
              
     if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
     {
-        if(oc_mode == 0)
-        {
-            //        oc_data = (float)(SET_Current_Laod+csum)/1000;       
-            oc_data = crec2;
-            SET_Current_Laod = set_init_c;
-            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
-            change_sbs_c = (float)set_sbs_c/1000;
-            sprintf(sbs_c,"%.3f",change_sbs_c);
-            TEXT_SetText(hItem,sbs_c);
-            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-            t_onoff = 0;
-            stepcount = 0;
-            oct_sw = oct_off;
-            oc_test = 0;
-            finish = 1;
-            crec1 = 0;
-            crec2 = 0;
-            rpow = 1;
-			step =5;
-			ocf = 0;
-			
-        }else if(oc_mode == 1){
-            oc_data = crec2;
-            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-            t_onoff = 0;
-            stepcount = 0;
-            oct_sw = oct_off;
-            finish = 1;
-            crec1 = 0;
-            crec2 = 0;
-			ocf = 0;
-            oc_test = 0;
-            rpow = 1;
-			step =5;
-        }
+//        if(oc_mode == 0)
+//        {
+//            //        oc_data = (float)(SET_Current_Laod+csum)/1000;       
+//            oc_data = crec2;
+//            SET_Current_Laod = set_init_c;
+//            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+//            change_sbs_c = (float)set_sbs_c/1000;
+//            sprintf(sbs_c,"%.3f",change_sbs_c);
+//            TEXT_SetText(hItem,sbs_c);
+//            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+//            t_onoff = 0;
+//            stepcount = 0;
+//            oct_sw = oct_off;
+//            oc_test = 0;
+//            finish = 1;
+//            crec1 = 0;
+//            crec2 = 0;
+//            rpow = 1;
+//			step =5;
+//			ocf = 0;
+//			
+//        }else if(oc_mode == 1){
+//            oc_data = crec2;
+//            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+//            t_onoff = 0;
+//            stepcount = 0;
+//            oct_sw = oct_off;
+//            finish = 1;
+//            crec1 = 0;
+//            crec2 = 0;
+//			ocf = 0;
+//            oc_test = 0;
+//            rpow = 1;
+//			step =5;
+//        }
 
     }else{
         if(oc_mode == 0)
         {
 			
-			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
-			GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
+//			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
+//			GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器
 //                GPIO_ResetBits(GPIOC,GPIO_Pin_12);//CC
-			flag_Load_CC = 1;
-			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
-			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
-			ocf = 1;
+//			flag_Load_CC = 1;
+//			GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+//			GPIO_ResetBits(GPIOA,GPIO_Pin_15);//电子负载On
+			
+			if(cflag == 1)
             SET_Current_Laod = SET_Current_Laod + set_sbs_c;
             
-            if(crec1 < crec2)
-            {
-                oc_data = crec2;
-                SET_Current_Laod = set_init_c;
-                hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
-                change_sbs_c = (float)set_sbs_c/1000;
-                sprintf(sbs_c,"%.3f",change_sbs_c);
-                TEXT_SetText(hItem,sbs_c);
-                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF  
-                t_onoff = 0;
-                stepcount = 0;
-                oct_sw = oct_off;
-                finish = 1;
-                crec1 = 0;
-                crec2 = 0;
-                oc_test = 0;
-				ocf = 0;
-                rpow = 1;
-				step =5;
-            }
+//            if(crec1 < crec2)
+//            {
+//                oc_data = crec2;
+//                SET_Current_Laod = set_init_c;
+//                hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+//                change_sbs_c = (float)set_sbs_c/1000;
+//                sprintf(sbs_c,"%.3f",change_sbs_c);
+//                TEXT_SetText(hItem,sbs_c);
+//                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF  
+//                t_onoff = 0;
+//                stepcount = 0;
+//                oct_sw = oct_off;
+//                finish = 1;
+//                crec1 = 0;
+//                crec2 = 0;
+//                oc_test = 0;
+//				ocf = 0;
+//                rpow = 1;
+//				step =5;
+//            }
         }else if(oc_mode == 1){
             SET_Voltage_Laod = 0;
             crec2 = crec1;

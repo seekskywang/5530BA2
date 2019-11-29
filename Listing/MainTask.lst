@@ -14695,6 +14695,10 @@ Ntypedef unsigned           int uint_fast32_t;
 Ntypedef unsigned       __INT64 uint_fast64_t;
 Xtypedef unsigned       __int64 uint_fast64_t;
 N
+N//typedef unsigned long  vu32;
+N//typedef unsigned short vu16;
+N//typedef unsigned char  vu8;
+N
 N    /* 7.18.1.4 integer types capable of holding object pointers */
 N#if __sizeof_ptr == 8
 X#if 4 == 8
@@ -52117,9 +52121,20 @@ N		TIM_SetCompare1(TIM2,Contr_Current);//稳压电源电流DAC
 X		TIM_SetCompare1(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),Contr_Current);
 N		TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
 X		TIM_SetCompare2(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),Contr_Voltage);
+N//		DAC8531_Send(sendload);//加载DAC值
 N		if(usartocflag == 1)
 N		{
-N			DAC8531_Send(Contr_Laod);//加载DAC值
+N			if(sendload < 250)
+N			{
+N				sendload = sendload + 1;
+N			}else{
+N//									if(SET_Current_Laod > 2000)
+N//									{
+N					C_SW(1);
+N//									}
+N				sendload = Contr_Laod;
+N			}
+N			DAC8531_Send(sendload);
 N		}else{
 N//			Slow_Start();
 N			if(page_sw == face_r)
@@ -52132,18 +52147,34 @@ N				}else{
 N					
 N					if(test_start == 1 && con_flag == 1 && step != 0)
 N					{
-N						if(step == 3 || (step == 4 && ocf == 0))
+N						if(step == 2 || step == 3 || (step == 4 && ocf == 0))
 N						{
 N							sendload = 0;
 N							DAC8531_Send(sendload);
 N						}else{
-N							if(sendload < 500)
-N							{
-N								sendload = sendload + 10;
-N							}else{
-N								sendload = Contr_Laod;
-N							}
-N							DAC8531_Send(sendload);
+N							
+N//							if(SET_Current_Laod < 2500)
+N//							{
+N//								if(sendload < 250)
+N//								{
+N//									sendload = sendload + 10;
+N//								}else{
+N//									sendload = Contr_Laod;
+N//								}
+N//								DAC8531_Send(sendload);
+N//							}else{
+N								if(sendload < 250)
+N								{
+N									sendload = sendload + 1;
+N								}else{
+N//									if(SET_Current_Laod > 2000)
+N//									{
+N										C_SW(1);
+N//									}
+N									sendload = Contr_Laod;
+N								}
+N								DAC8531_Send(sendload);
+N//							}
 N						}
 N					}else{	
 N						sendload = 0;
@@ -52155,13 +52186,26 @@ N			}else{
 N				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
 X				if(load_sw == 1 || (mode_sw == 2 && cdc_sw == 1) || (calmode == 4))
 N				{
-N					if(sendload < 250)
+N					if(SET_Current_Laod < 2500)
+X					if(Run_Control[4] < 2500)
 N					{
-N						sendload = sendload + 10;
+N						if(sendload < 250)
+N						{
+N							sendload = sendload + 10;
+N						}else{
+N							sendload = Contr_Laod;
+N						}
+N						DAC8531_Send(sendload);
 N					}else{
-N						sendload = Contr_Laod;
+N						if(sendload < 1000)
+N						{
+N							sendload = sendload + 10;
+N						}else{
+N							C_SW(1);
+N							sendload = Contr_Laod;
+N						}
+N						DAC8531_Send(sendload);
 N					}
-N					DAC8531_Send(sendload);
 N				}else{
 N					sendload = 0;
 N					DAC8531_Send(sendload);

@@ -78,6 +78,7 @@ extern vu8 test_start;
 extern vu8 step;
 extern vu16 r;
 extern vu8 staticcdc;
+extern vu16 sendload;
 
 //=================================================================
 extern struct bitDefine
@@ -123,6 +124,7 @@ void Right_Move(void);
 void Setvalue_Add(void);
 void IO_OFF(void);
 extern u8 calmode;
+u8 cswflag;
 /* é”®å€¼å®šä¹?*/
 #define        KEY_1                		 0X4E     //
 #define        KEY_2                		 0X56     //
@@ -1328,6 +1330,12 @@ void Key_Funtion(void)
                             KeyCounter = 0;
                             BEEP_Tiggr();//è§¦å‘èœ‚é¸£å™¿
                         }break;
+						case face_load:							
+						{
+							sendload -= 100;
+							KeyCounter = 0;
+                            BEEP_Tiggr();
+						}break;
                     }
                 }
                 break;
@@ -1380,6 +1388,12 @@ void Key_Funtion(void)
                             KeyCounter = 0;
                             BEEP_Tiggr();//è§¦å‘èœ‚é¸£å™¿
                         }break;
+						case face_load:							
+						{
+							sendload += 100;
+							KeyCounter = 0;
+                            BEEP_Tiggr();
+						}break;
                     }
                 }
                 break;
@@ -1716,7 +1730,8 @@ void Key_Funtion(void)
 							if(para_set2 == set_2_on)
 							{
 								 if(test_start == 0 && DISS_Voltage > gate_v)
-								 {								 
+								 {
+									
 									test_start = 1;
 									r = R_VLUE;
 									v = DISS_Voltage;
@@ -1747,15 +1762,19 @@ void Key_Funtion(void)
     //                         }
                             if(load_sw==load_on)
                             {
+								cswflag = 1;
+								
                                 Flag_Swtich_ON=0;
 								GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷
                                 GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
                                 c_rec = 0;
                                 mode_sw = 0;
                                 load_sw = load_off;
+								C_SW(0);
                             }
                             else if(load_sw==load_off)
                             {
+								cswflag = 0;
 								if(flag_Load_CC == 0)
                                 {
 									GPIO_ResetBits(GPIOC,GPIO_Pin_13);//´ò¿ªµçÔ´Êä³ö¼ÌµçÆ÷

@@ -14645,6 +14645,10 @@ Ntypedef unsigned           int uint_fast32_t;
 Ntypedef unsigned       __INT64 uint_fast64_t;
 Xtypedef unsigned       __int64 uint_fast64_t;
 N
+N//typedef unsigned long  vu32;
+N//typedef unsigned short vu16;
+N//typedef unsigned char  vu8;
+N
 N    /* 7.18.1.4 integer types capable of holding object pointers */
 N#if __sizeof_ptr == 8
 X#if 4 == 8
@@ -53243,6 +53247,7 @@ Nextern vu8 mode_sw;
 Nextern vu8 oc_mode;
 Nu8 load_mode;
 Nfloat load_cutoffv;
+Nextern u8 cswflag;
 Nextern struct bitDefine
 N{
 N    unsigned bit0: 1;
@@ -53347,6 +53352,7 @@ N  int     NCode;
 N  int     Id;
 N  char    buf[6];
 N  static vu8 status_flash;
+N  static u16 swcount;
 N  float   dis_load_c = (float)SET_Current_Laod/1000;
 X  float   dis_load_c = (float)Run_Control[4]/1000;
 N  float   dis_load_v = (float)SET_Voltage_Laod/1000;
@@ -53468,6 +53474,19 @@ N//            WM_InvalidateWindow(load_wind);
 N//        }
 N//         if(clear_flag3 == 1)
 N//         {
+N//		if(cswflag == 1)
+N//		{
+N//			swcount ++;
+N//			if(swcount == 1)
+N//			{
+N//				GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+N//			}else if(swcount == 30){
+N//				GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+N//			}else if(swcount == 60){
+N//				cswflag = 0;
+N//				swcount = 0;
+N//			}
+N//		}
 N		if(lock == 1)
 N		{
 N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_162);
@@ -53479,7 +53498,7 @@ X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013D));
 N			TEXT_SetText(hItem,"");
 N		}
 N		
-W "..\APP\load_Face.c" 220 16 single-precision operand implicitly converted to double-precision
+W "..\APP\load_Face.c" 235 16 single-precision operand implicitly converted to double-precision
 N            if(DISS_Voltage < 0.3)
 N            {
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_84);
@@ -54054,11 +54073,12 @@ N  default:
 N    WM_DefaultProc(pMsg);
 N    break;
 N  }
-W "..\APP\load_Face.c" 109 16 variable "olvbuff"  was declared but never referenced
-W "..\APP\load_Face.c" 109 24 variable "oldv"  was declared but never referenced
-W "..\APP\load_Face.c" 110 16 variable "testc1"  was declared but never referenced
-W "..\APP\load_Face.c" 110 23 variable "testc2"  was declared but never referenced
-W "..\APP\load_Face.c" 110 30 variable "testres"  was declared but never referenced
+W "..\APP\load_Face.c" 108 14 variable "swcount"  was declared but never referenced
+W "..\APP\load_Face.c" 111 16 variable "olvbuff"  was declared but never referenced
+W "..\APP\load_Face.c" 111 24 variable "oldv"  was declared but never referenced
+W "..\APP\load_Face.c" 112 16 variable "testc1"  was declared but never referenced
+W "..\APP\load_Face.c" 112 23 variable "testc2"  was declared but never referenced
+W "..\APP\load_Face.c" 112 30 variable "testres"  was declared but never referenced
 N}
 N
 NWM_HWIN CreateWindow2(void) {
@@ -54067,7 +54087,7 @@ N  if(page_sw == face_graph)
 X  if(page_sw == 0)
 N  {      
 N  }else{
-W "..\APP\load_Face.c" 689 7 function "IO_OFF" declared implicitly
+W "..\APP\load_Face.c" 704 7 function "IO_OFF" declared implicitly
 N      IO_OFF();
 N  }
 N  page_sw = face_load;
@@ -54080,13 +54100,13 @@ N  load_cutoffv = (float)set_load_cutoffv/1000;
 X  load_cutoffv = (float)InFlashSave[4]/1000;
 N  SET_Current_Laod = load_c;
 X  Run_Control[4] = Run_Control[37];
-N  if(SET_Current_Laod > 2500)
-X  if(Run_Control[4] > 2500)
-N  {
-N	  C_SW(1);
-N  }else{
-N	  C_SW(0);
-N  }
+N   C_SW(0);
+N//  if(SET_Current_Laod > 2500)
+N//  {
+N//	  C_SW(1);
+N//  }else{
+N//	  C_SW(0);
+N//  }
 N  pass = 0;  
 N  mode_sw = mode_load;
 X  mode_sw = 2;
@@ -54319,13 +54339,12 @@ X			if(Run_Control[37] > 30000 || (float)Run_Control[37]/1000 * DISS_Voltage > 2
 N                load_c = 0;
 X                Run_Control[37] = 0;
 N            }
-N			if(load_c > 2500)
-X			if(Run_Control[37] > 2500)
-N			{
-N				C_SW(1);
-N			}else{
-N				C_SW(0);
-N			}
+N//			if(load_c > 2500)
+N//			{
+N//				C_SW(1);
+N//			}else{
+N//				C_SW(0);
+N//			}
 N            SET_Current_Laod = load_c;            
 X            Run_Control[4] = Run_Control[37];            
 N//            if(load_c > 3000)

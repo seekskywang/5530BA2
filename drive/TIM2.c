@@ -203,4 +203,15 @@ void Temp_Comapre(void)	  //温度来控制风扇
 		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
 		flag_FAN_ON=0;
 	}
+	
+//	if(NTC_value<=2250 || NTC_value > 5000)
+//	{
+//		GPIO_SetBits(GPIOE,GPIO_Pin_6);//开启风扇
+//		flag_FAN_ON=1;
+//	}
+//	else if(NTC_value>=2400 && NTC_value <=5000)
+//	{
+//		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
+//		flag_FAN_ON=0;
+//	}
 }

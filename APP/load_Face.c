@@ -25,6 +25,7 @@ extern vu8 mode_sw;
 extern vu8 oc_mode;
 u8 load_mode;
 float load_cutoffv;
+extern u8 cswflag;
 extern struct bitDefine
 {
     unsigned bit0: 1;
@@ -104,6 +105,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
   int     Id;
   char    buf[6];
   static vu8 status_flash;
+  static u16 swcount;
   float   dis_load_c = (float)SET_Current_Laod/1000;
   float   dis_load_v = (float)SET_Voltage_Laod/1000;
   static float olvbuff,oldv;
@@ -208,6 +210,19 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
 //        }
 //         if(clear_flag3 == 1)
 //         {
+//		if(cswflag == 1)
+//		{
+//			swcount ++;
+//			if(swcount == 1)
+//			{
+//				GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+//			}else if(swcount == 30){
+//				GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+//			}else if(swcount == 60){
+//				cswflag = 0;
+//				swcount = 0;
+//			}
+//		}
 		if(lock == 1)
 		{
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_162);
@@ -693,12 +708,13 @@ WM_HWIN CreateWindow2(void) {
   set_sw = set_24;
   load_cutoffv = (float)set_load_cutoffv/1000;
   SET_Current_Laod = load_c;
-  if(SET_Current_Laod > 2500)
-  {
-	  C_SW(1);
-  }else{
-	  C_SW(0);
-  }
+   C_SW(0);
+//  if(SET_Current_Laod > 2500)
+//  {
+//	  C_SW(1);
+//  }else{
+//	  C_SW(0);
+//  }
   pass = 0;  
   mode_sw = mode_load;
   SET_Voltage_Laod = load_v; 
@@ -860,12 +876,12 @@ void LOAD_SET(void) {
 			if(load_c > 30000 || (float)load_c/1000 * DISS_Voltage > 200){
                 load_c = 0;
             }
-			if(load_c > 2500)
-			{
-				C_SW(1);
-			}else{
-				C_SW(0);
-			}
+//			if(load_c > 2500)
+//			{
+//				C_SW(1);
+//			}else{
+//				C_SW(0);
+//			}
             SET_Current_Laod = load_c;            
 //            if(load_c > 3000)
 //			{
