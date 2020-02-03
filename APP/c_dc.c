@@ -243,8 +243,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetColor(GUI_LIGHTGRAY);
         GUI_DispStringAt("C:", 28, 190);
         GUI_SetColor(GUI_LIGHTGRAY);
-        GUI_DispStringAt("m", 217, 196);
-        GUI_DispStringAt("AH", 238, 187);
+        GUI_DispStringAt("m", 217+24, 196);
+        GUI_DispStringAt("AH", 238+24, 187);
         
         GUI_SetColor(GUI_GREEN);
         GUI_SetFont(&GUI_Fontunit);
@@ -346,7 +346,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             battery_c = cbc_raw;
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
-            sprintf(buf,"%05d",battery_c);
+            sprintf(buf,"%06d",battery_c);
             TEXT_SetText(hItem,buf);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_77);
@@ -603,7 +603,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             {
                 if(DISS_Voltage >= (float)cov1/100 && cov1 != 0)//若测量电流小于截止电流
                 {
-                    SET_Current = 100;
+					SET_Voltage = cov1;
+//                    SET_Current = 100;
                     charge_step =2;
                 }
             }else if(charge_step == 2){
@@ -674,7 +675,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             
             battery_c = bc_raw;
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
-            sprintf(buf,"%05d",battery_c);
+            sprintf(buf,"%06d",battery_c);
             TEXT_SetText(hItem,buf);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_69);
@@ -732,7 +733,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     count = 1;
                     cdc_sw = cdc_off;
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
-                    sprintf(buf,"%05d",battery_c);
+                    sprintf(buf,"%06d",battery_c);
                     TEXT_SetText(hItem,buf);
                     
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
@@ -768,7 +769,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //                     Mode_SW_CONT(0x03);//切换至电源模式
                     GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
                      hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
-                     sprintf(buf,"%05d",battery_c);
+                     sprintf(buf,"%06d",battery_c);
                      TEXT_SetText(hItem,buf);
 					SET_Voltage = opv1;
 					 SET_Current = opc1;

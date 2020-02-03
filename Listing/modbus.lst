@@ -36204,6 +36204,7 @@ N/*************************变量定义***********************************/
 Nvu32 Run_Control[49];
 Nvu8 ADDR;
 Nextern struct MODS_T g_tModS;
+Nextern vu8 pow_sw;
 N//============================函数声明===============================//
 Nvu16 Hardware_CRC(vu8 *p_buffer,vu8 count);
 N//===========================MODBUS协议=============================//
@@ -37816,8 +37817,7 @@ X		Run_Control[12] = var32;
 N		DISS_Current=Laod_Current;
 X		DISS_Current=Run_Control[12];
 N		DISS_Current=DISS_Current/1000;//计算显示电流
-W "..\drive\modbus.c" 1388 6 single-precision operand implicitly converted to double-precision
-N		if(DISS_Current > 0.1)
+N		if(DISS_Current > 1)
 N		{
 N			var32 = Imon1_value;
 N			var32 = var32 * REG_Load_A1;  
@@ -37842,8 +37842,7 @@ N			DISS_Current=Laod_Current;
 X			DISS_Current=Run_Control[12];
 N			DISS_Current=DISS_Current/1000;//輪蹋袛示支路
 N		}
-W "..\drive\modbus.c" 1406 6 single-precision operand implicitly converted to double-precision
-N		if(DISS_Current > 0.9)
+N		if(DISS_Current > 5)
 N		{
 N			var32 = Imon1_value;
 N			var32 = var32 * REG_Load_A2;  
@@ -37891,24 +37890,31 @@ X		Run_Control[12] = var32;
 N		DISS_Current=Laod_Current;
 X		DISS_Current=Run_Control[12];
 N		DISS_Current=DISS_Current/1000;//輪蹋袛示支路
-N//		if(DISS_Current > 10)
-N//		{
-N//			var32 = Imon1_value;
-N//		var32 = var32 * REG_Load_AH1;  
-N//		if ((Polar1 & 0x01) == 0x01)		  
-N//		{
-N//			if (var32 < REG_LoadA_OffsetH1) 
-N//			{
-N//				var32 = 0;
-N//			}
-N//			else var32 = var32 - REG_LoadA_OffsetH1;
-N//		}
-N//		else var32 = var32 + REG_LoadA_OffsetH1;
-N//		var32 = var32 >> 12;
-N//		Laod_Current = var32;
-N//		DISS_Current=Laod_Current;
-N//		DISS_Current=DISS_Current/1000;//輪蹋袛示支路
-N//		}
+N		if(DISS_Current > 20)
+N		{
+N			var32 = Imon1_value;
+N		var32 = var32 * REG_Load_AH1;  
+X		var32 = var32 * InFlashSave[18];  
+N		if ((Polar1 & 0x01) == 0x01)		  
+X		if ((correct_por[1] & 0x01) == 0x01)		  
+N		{
+N			if (var32 < REG_LoadA_OffsetH1) 
+X			if (var32 < InFlashSave[20]) 
+N			{
+N				var32 = 0;
+N			}
+N			else var32 = var32 - REG_LoadA_OffsetH1;
+X			else var32 = var32 - InFlashSave[20];
+N		}
+N		else var32 = var32 + REG_LoadA_OffsetH1;
+X		else var32 = var32 + InFlashSave[20];
+N		var32 = var32 >> 12;
+N		Laod_Current = var32;
+X		Run_Control[12] = var32;
+N		DISS_Current=Laod_Current;
+X		DISS_Current=Run_Control[12];
+N		DISS_Current=DISS_Current/1000;//輪蹋袛示支路
+N		}
 N	}
 N	var32 = 0;	
 N	/*************************负载电压和电流控制转换**************************************/
@@ -37917,8 +37923,8 @@ X	if((flagD . bit7)==1)
 N	{
 N		if(cflag == 0)
 N		{
-N			if(SET_Current_Laod <= 100)
-X			if(Run_Control[4] <= 100)
+N			if(SET_Current_Laod <= 1000)
+X			if(Run_Control[4] <= 1000)
 N			{
 N				var32 = SET_Current_Laod;
 X				var32 = Run_Control[4];
@@ -37946,8 +37952,8 @@ X				if(Run_Control[4]==0)
 N				{
 N					Contr_Laod=0;
 N				}
-N			}else if(SET_Current_Laod <= 900){
-X			}else if(Run_Control[4] <= 900){
+N			}else if(SET_Current_Laod <= 5000){
+X			}else if(Run_Control[4] <= 5000){
 N				var32 = SET_Current_Laod;
 X				var32 = Run_Control[4];
 N				var32=var32<<12;   
@@ -38004,8 +38010,9 @@ N					Contr_Laod=0;
 N				}
 N			}
 N		}else{
-N//			if(SET_Current_Laod <= 10000)
-N//			{
+N			if(SET_Current_Laod <= 20000)
+X			if(Run_Control[4] <= 20000)
+N			{
 N				var32 = SET_Current_Laod;
 X				var32 = Run_Control[4];
 N				var32=var32<<12;   
@@ -38032,26 +38039,34 @@ X				if(Run_Control[4]==0)
 N				{
 N					Contr_Laod=0;
 N				}
-N//			}else{
-N//				var32 = SET_Current_Laod;
-N//				var32=var32<<12;   
-N//				if ((Polar1 & 0x04) == 0)			   
-N//				{
-N//					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
-N//					else var32 = var32 - SET_LoadA_OffsetH1;
-N//				}
-N//				else var32 = var32 + SET_LoadA_OffsetH1;
-N//				var32 = var32/SET_LoadAH1;
-N//				var32=var32>>1;
-N//				if(Flag_DAC_OFF==0)
-N//				{
-N//					Contr_Laod = var32;
-N//				}
-N//				if(SET_Current_Laod==0)
-N//				{
-N//					Contr_Laod=0;
-N//				}
-N//			}
+N			}else{
+N				var32 = SET_Current_Laod;
+X				var32 = Run_Control[4];
+N				var32=var32<<12;   
+N				if ((Polar1 & 0x04) == 0)			   
+X				if ((correct_por[1] & 0x04) == 0)			   
+N				{
+N					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
+X					if (var32 < InFlashSave[21]) var32 = 0;
+N					else var32 = var32 - SET_LoadA_OffsetH1;
+X					else var32 = var32 - InFlashSave[21];
+N				}
+N				else var32 = var32 + SET_LoadA_OffsetH1;
+X				else var32 = var32 + InFlashSave[21];
+N				var32 = var32/SET_LoadAH1;
+X				var32 = var32/InFlashSave[19];
+N				var32=var32>>1;
+N				if(Flag_DAC_OFF==0)
+X				if((flagB . bit3)==0)
+N				{
+N					Contr_Laod = var32;
+N				}
+N				if(SET_Current_Laod==0)
+X				if(Run_Control[4]==0)
+N				{
+N					Contr_Laod=0;
+N				}
+N			}
 N		}
 N		var32 = 0;
 N	}
@@ -38307,75 +38322,79 @@ N//		DISS_POW_Current=Current;
 N//		DISS_POW_Current=DISS_POW_Current/1000;//计算显示电流
 N//	}
 N/**************************稳压电源设置电压转换******************************************/
-N	var32 = SET_Voltage;
-X	var32 = Run_Control[1];
-N    if(SET_Voltage < 1000)
-X    if(Run_Control[1] < 1000)
-N    {
-N        var32=var32<<14;   
-N         if ((Polar5 & 0x04) == 0)			   
-X         if ((correct_por[5] & 0x04) == 0)			   
-N         {
-N             if (var32 < SET_POWERV_Offset) var32 = 0;
-X             if (var32 < Correct_Strong[9]) var32 = 0;
-N             else var32 = var32 - SET_POWERV_Offset;
-X             else var32 = var32 - Correct_Strong[9];
-N         }
-N         else 
-N            var32 = var32 + SET_POWERV_Offset;
-X            var32 = var32 + Correct_Strong[9];
-N        var32 = var32/SET_POWERV;
-X        var32 = var32/Correct_Parametet[9];
-N        var32=var32>>1;
-N        Contr_Voltage = var32;
-N        if(SET_Voltage==0)
-X        if(Run_Control[1]==0)
-N        {
-N            Contr_Voltage=0;
-N        }
-N    }else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
-X    }else if(Run_Control[1] >= 1000 && Run_Control[1] < 3000){
-N        var32=var32<<14;   
-N//         if ((Polar5 & 0x04) == 0)			   
-N//         {
-N//             if (var32 < SET_POWERV_Offset1) var32 = 0;
-N//             else var32 = var32 - SET_POWERV_Offset1;
-N//         }
-N//         else 
-N            var32 = var32 + SET_POWERV_Offset1;
-X            var32 = var32 + Correct_Strong[19];
-N        var32 = var32/SET_POWERV1;
-X        var32 = var32/Correct_Parametet[19];
-N        var32=var32>>1;
-N        Contr_Voltage = var32;
-N        if(SET_Voltage==0)
-X        if(Run_Control[1]==0)
-N        {
-N            Contr_Voltage=0;
-N        }
-N    }else if(SET_Voltage >= 3000){
-X    }else if(Run_Control[1] >= 3000){
-N        var32=var32<<14;   
-N//         if ((Polar5 & 0x04) == 0)			   
-N//         {
-N//             if (var32 < SET_POWERV_Offset2) var32 = 0;
-N//             else var32 = var32 - SET_POWERV_Offset2;
-N//         }
-N//         else 
-N            var32 = var32 + SET_POWERV_Offset2;
-X            var32 = var32 + Correct_Strong[20];
-N        var32 = var32/SET_POWERV2;
-X        var32 = var32/Correct_Parametet[20];
-N        var32=var32>>1;
-N        Contr_Voltage = var32;
-N        if(SET_Voltage==0)
-X        if(Run_Control[1]==0)
-N        {
-N            Contr_Voltage=0;
-N        }
-N    }
-N	
-N	var32 = 0;
+N//	if(pow_sw == pow_off)
+N	{
+N		var32 = SET_Voltage;
+X		var32 = Run_Control[1];
+N		
+N		if(SET_Voltage < 1000)
+X		if(Run_Control[1] < 1000)
+N		{
+N			var32=var32<<14;   
+N			 if ((Polar5 & 0x04) == 0)			   
+X			 if ((correct_por[5] & 0x04) == 0)			   
+N			 {
+N				 if (var32 < SET_POWERV_Offset) var32 = 0;
+X				 if (var32 < Correct_Strong[9]) var32 = 0;
+N				 else var32 = var32 - SET_POWERV_Offset;
+X				 else var32 = var32 - Correct_Strong[9];
+N			 }
+N			 else 
+N				var32 = var32 + SET_POWERV_Offset;
+X				var32 = var32 + Correct_Strong[9];
+N			var32 = var32/SET_POWERV;
+X			var32 = var32/Correct_Parametet[9];
+N			var32=var32>>1;
+N			Contr_Voltage = var32;
+N			if(SET_Voltage==0)
+X			if(Run_Control[1]==0)
+N			{
+N				Contr_Voltage=0;
+N			}
+N		}else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
+X		}else if(Run_Control[1] >= 1000 && Run_Control[1] < 3000){
+N			var32=var32<<14;   
+N	//         if ((Polar5 & 0x04) == 0)			   
+N	//         {
+N	//             if (var32 < SET_POWERV_Offset1) var32 = 0;
+N	//             else var32 = var32 - SET_POWERV_Offset1;
+N	//         }
+N	//         else 
+N				var32 = var32 + SET_POWERV_Offset1;
+X				var32 = var32 + Correct_Strong[19];
+N			var32 = var32/SET_POWERV1;
+X			var32 = var32/Correct_Parametet[19];
+N			var32=var32>>1;
+N			Contr_Voltage = var32;
+N			if(SET_Voltage==0)
+X			if(Run_Control[1]==0)
+N			{
+N				Contr_Voltage=0;
+N			}
+N		}else if(SET_Voltage >= 3000){
+X		}else if(Run_Control[1] >= 3000){
+N			var32=var32<<14;   
+N	//         if ((Polar5 & 0x04) == 0)			   
+N	//         {
+N	//             if (var32 < SET_POWERV_Offset2) var32 = 0;
+N	//             else var32 = var32 - SET_POWERV_Offset2;
+N	//         }
+N	//         else 
+N				var32 = var32 + SET_POWERV_Offset2;
+X				var32 = var32 + Correct_Strong[20];
+N			var32 = var32/SET_POWERV2;
+X			var32 = var32/Correct_Parametet[20];
+N			var32=var32>>1;
+N			Contr_Voltage = var32;
+N			if(SET_Voltage==0)
+X			if(Run_Control[1]==0)
+N			{
+N				Contr_Voltage=0;
+N			}
+N		}
+N		
+N		var32 = 0;
+N	}
 N/**************************稳压电源设置电流转换**************************************/
 N	var32 = SET_Current;
 X	var32 = Run_Control[2];
@@ -38425,9 +38444,9 @@ N		}
 N	}
 N	
 N	var32 = 0;
-W "..\drive\modbus.c" 1116 16 variable "rave"  was declared but never referenced
-W "..\drive\modbus.c" 1117 15 variable "rcount"  was declared but never referenced
-W "..\drive\modbus.c" 1120 13 variable "i"  was set but never used
+W "..\drive\modbus.c" 1117 16 variable "rave"  was declared but never referenced
+W "..\drive\modbus.c" 1118 15 variable "rcount"  was declared but never referenced
+W "..\drive\modbus.c" 1121 13 variable "i"  was set but never used
 N}
 N/********************************************************************************
 N  * 名称 :   MODBUS_Conrtl

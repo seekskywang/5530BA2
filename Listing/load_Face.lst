@@ -53411,8 +53411,8 @@ X        GUI_SetColor(0x00D3D3D3);
 N        GUI_DispStringAt("C:", 28, 190);
 N        GUI_SetColor(GUI_LIGHTGRAY);
 X        GUI_SetColor(0x00D3D3D3);
-N        GUI_DispStringAt("m", 217, 196);
-N        GUI_DispStringAt("AH", 238, 187);
+N        GUI_DispStringAt("m", 217+24, 196);
+N        GUI_DispStringAt("AH", 238+24, 187);
 N        
 N        GUI_SetColor(GUI_GREEN);
 X        GUI_SetColor(0x0000FF00);
@@ -53554,12 +53554,17 @@ N            }
 N            battery_c = (int)bc_raw;
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_116);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x10D));
-N            sprintf(buf,"%05d",battery_c);    
+N            sprintf(buf,"%06d",battery_c);    
 N            TEXT_SetText(hItem,buf);
 N            
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_85);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x92));
-N            sprintf(buf,"%.3f",DISS_Current);        
+N			if(DISS_Current < 10)
+N			{
+N				sprintf(buf,"%.3f",DISS_Current);  
+N			}else{
+N				sprintf(buf,"%.2f",DISS_Current);  
+N			}				
 N            TEXT_SetText(hItem,buf);
 N            if(status_flash == 0){
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_89);
@@ -54087,7 +54092,7 @@ N  if(page_sw == face_graph)
 X  if(page_sw == 0)
 N  {      
 N  }else{
-W "..\APP\load_Face.c" 704 7 function "IO_OFF" declared implicitly
+W "..\APP\load_Face.c" 709 7 function "IO_OFF" declared implicitly
 N      IO_OFF();
 N  }
 N  page_sw = face_load;

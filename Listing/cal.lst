@@ -54348,6 +54348,86 @@ X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
 N//			Flash_Write_all ();	
 N		Flag_DAC_OFF =0;
 X		(flagB . bit3) =0;
+N	}else if(step == 9){
+N		Modify_A_READ = Imon1_value;//
+N		Modify_C_READ = Contr_Laod;//
+N		Modify_A_ACT = inputvalue;
+N	}else if(step == 10){
+N		vu32 var16;
+N		vu32 var32a;
+N		vu32 var32b;
+N		
+N		vu32 var16a;
+N		vu32 var32c;
+N		vu32 var32d;
+N		
+N		Modify_B_READ = Imon1_value;
+N		Modify_D_READ = Contr_Laod;
+N		Modify_B_ACT = inputvalue;
+N		
+N		var32a = Modify_B_ACT;
+N		var32a = var32a - Modify_A_ACT;
+N		var32a = var32a << 12;
+N		var16 = Modify_B_READ - Modify_A_READ;
+N		var32a = var32a / var16;
+N		REG_Load_AH1 = var32a;
+X		InFlashSave[18] = var32a;
+N		var32a = Modify_B_ACT;
+N		var32a = var32a << 12;
+N		var32b = Modify_B_READ;
+N		var32b = var32b * REG_Load_AH1;
+X		var32b = var32b * InFlashSave[18];
+N		if (var32a < var32b)
+N		{
+N			var32b = var32b - var32a;
+N			REG_LoadA_OffsetH1 = var32b;
+X			InFlashSave[20] = var32b;
+N			Polar1 |= 0x01;
+X			correct_por[1] |= 0x01;
+N		}
+N		else 
+N		{
+N			var32a = var32a - var32b;
+N			REG_LoadA_OffsetH1 = var32a;
+X			InFlashSave[20] = var32a;
+N			Polar1 &= ~0x01;					
+X			correct_por[1] &= ~0x01;					
+N		}
+N//---------------------------------------------------------------------------------//
+N		var32c = Modify_B_ACT; 
+N		var32c = var32c - Modify_A_ACT;
+N		var32c = var32c << 12;
+N		var16a=Modify_D_READ-Modify_C_READ;
+N		var16a=var16a*2;
+N		var32c=var32c/var16a;
+N		SET_LoadAH1 = var32c;
+X		InFlashSave[19] = var32c;
+N		var32c = Modify_B_ACT;
+N		var32c = var32c << 12;
+N		var32d = SET_LoadAH1;
+X		var32d = InFlashSave[19];
+N		var32d = var32d * (Modify_D_READ*2);
+N		if (var32c < var32d)
+N		{
+N			var32d = var32d - var32c;
+N			SET_LoadA_OffsetH1 = var32d;
+X			InFlashSave[21] = var32d;
+N			Polar1 |= 0x04;
+X			correct_por[1] |= 0x04;
+N		}
+N		else 
+N		{
+N			var32c = var32c - var32d;
+N			SET_LoadA_OffsetH1 = var32c;
+X			InFlashSave[21] = var32c;
+N			Polar1 &= ~0x04;
+X			correct_por[1] &= ~0x04;
+N		}
+N		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X		Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N//			Flash_Write_all ();	
+N		Flag_DAC_OFF =0;
+X		(flagB . bit3) =0;
 N	}
 N}
 N
@@ -54428,7 +54508,7 @@ X				Correct_Strong[9] = var32c;
 N				Polar5 &= ~0x04;
 X				correct_por[5] &= ~0x04;
 N			}
-W "..\APP\cal.c" 997 4 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 1063 4 function "Flash_Write_all" declared implicitly
 N			Flash_Write_all ();	
 N			Flag_DAC_OFF=0;
 X			(flagB . bit3)=0;
@@ -54506,7 +54586,7 @@ X			Correct_Strong[19] = var32c;
 N			Polar5 &= ~0x04;
 X			correct_por[5] &= ~0x04;
 N		}
-W "..\APP\cal.c" 1061 3 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 1127 3 function "Flash_Write_all" declared implicitly
 N		Flash_Write_all ();	
 N		Flag_DAC_OFF=0;
 X		(flagB . bit3)=0;
@@ -54584,7 +54664,7 @@ X			Correct_Strong[20] = var32c;
 N			Polar5 &= ~0x04;
 X			correct_por[5] &= ~0x04;
 N		}
-W "..\APP\cal.c" 1125 3 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 1191 3 function "Flash_Write_all" declared implicitly
 N		Flash_Write_all ();	
 N		Flag_DAC_OFF=0;
 X		(flagB . bit3)=0;
@@ -54668,7 +54748,7 @@ X				Correct_Strong[7] = var32c;
 N				Polar4 &= ~0x04;
 X				correct_por[4] &= ~0x04;
 N			}
-W "..\APP\cal.c" 1195 4 function "Flash_Write_all" declared implicitly
+W "..\APP\cal.c" 1261 4 function "Flash_Write_all" declared implicitly
 N			Flash_Write_all ();	
 N			Flag_DAC_OFF=0;
 X			(flagB . bit3)=0;
@@ -54754,5 +54834,5 @@ N//			Flash_Write_all ();
 N		Flag_DAC_OFF=0;
 X		(flagB . bit3)=0;
 N	}
-W "..\APP\cal.c" 1265 2 last line of file ends without a newline
+W "..\APP\cal.c" 1331 2 last line of file ends without a newline
 N}

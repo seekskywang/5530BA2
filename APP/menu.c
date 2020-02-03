@@ -87,10 +87,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   static vu8 status_flash;
   char buf[5];    
 
-  float dis_output_v = (float)SET_Voltage/100;
+  float dis_output_v = (float)pow_v/100;
   float dis_output_c = (float)SET_Current/1000;
-  static u8 cdelay;
-
+  static u8 cdelay,vdec;
+  
   
   // USER START (Optionally insert additional variables)
   // USER END
@@ -134,8 +134,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         GUI_SetColor(GUI_LIGHTGRAY);
         GUI_DispStringAt("C:", 28, 190);
         GUI_SetColor(GUI_LIGHTGRAY);
-        GUI_DispStringAt("m", 217, 196);
-        GUI_DispStringAt("AH", 238, 187);
+        GUI_DispStringAt("m", 217+24, 196);
+        GUI_DispStringAt("AH", 238+24, 187);
         
         GUI_SetColor(GUI_GREEN);
         GUI_SetFont(&GUI_Fontunit);
@@ -189,9 +189,16 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //        test_pow();
         if(pow_sw == pow_on)
         {
+//			if((int)(disloadv*1000) > SET_Voltage*10 && vdec > 30)
+//			{
+//				Contr_Voltage --;
+//				vdec = 0;
+//			}else{
+//				vdec ++;
+//			}
             battery_c = (int)bc_raw;
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_115);
-            sprintf(buf,"%05d",battery_c);      
+            sprintf(buf,"%06d",battery_c);      
             TEXT_SetText(hItem,buf);
              hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_87);
             sprintf(buf,"%.3f",DISS_POW_Current);        
@@ -199,7 +206,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             if(status_flash == 0){
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_88);
                 TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
-                if(lang == 0)
+                 if(lang == 0)
                 {
                     TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
                     GUI_UC_SetEncodeUTF8();        
@@ -583,6 +590,7 @@ WM_HWIN CreateWindow(void) {
   page_sw = face_menu;
   track = face_menu;
   set_sw = set_10;
+//  SET_Voltage = pow_v-12;
   SET_Voltage = pow_v;
   SET_Current = pow_c;
   pow_cutoffc = (float)set_pow_cutoffc/1000;
@@ -735,12 +743,14 @@ void MENU_SET(void)
 			{
 				pow_v = 6200;
 			}
-            SET_Voltage = pow_v;
-            if(SET_Voltage/100 * SET_Current/1000 > 250)
+			if(pow_v/100 * SET_Current/1000 > 200)
             {
-                SET_Voltage = 0;
+                pow_v = 0;
             }
-            dis_output_v = (float)SET_Voltage/100;
+//            SET_Voltage = pow_v - 12;
+			SET_Voltage = pow_v;
+            
+            dis_output_v = (float)pow_v/100;
             
             sprintf(buf,"%.2f",dis_output_v);
             TEXT_SetText(hItem,buf);
@@ -794,11 +804,12 @@ void MENU_SET(void)
             {
                 pow_c = 5000;               
             }
-			SET_Current = pow_c;
-            if(SET_Voltage/100 * SET_Current/1000 > 250)
+			if(pow_v/100 * pow_c/1000 > 200)
             {
-                SET_Current = 0;
+                pow_c = 0;
             }
+			SET_Current = pow_c;
+            
             dis_output_c = (float)SET_Current/1000;
             sprintf(buf,"%.3f",dis_output_c);
             TEXT_SetText(hItem,buf);            

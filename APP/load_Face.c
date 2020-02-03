@@ -153,8 +153,8 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
         GUI_SetColor(GUI_LIGHTGRAY);
         GUI_DispStringAt("C:", 28, 190);
         GUI_SetColor(GUI_LIGHTGRAY);
-        GUI_DispStringAt("m", 217, 196);
-        GUI_DispStringAt("AH", 238, 187);
+        GUI_DispStringAt("m", 217+24, 196);
+        GUI_DispStringAt("AH", 238+24, 187);
         
         GUI_SetColor(GUI_GREEN);
         GUI_SetFont(&GUI_Fontunit);
@@ -274,11 +274,16 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
             }
             battery_c = (int)bc_raw;
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_116);
-            sprintf(buf,"%05d",battery_c);    
+            sprintf(buf,"%06d",battery_c);    
             TEXT_SetText(hItem,buf);
             
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_85);
-            sprintf(buf,"%.3f",DISS_Current);        
+			if(DISS_Current < 10)
+			{
+				sprintf(buf,"%.3f",DISS_Current);  
+			}else{
+				sprintf(buf,"%.2f",DISS_Current);  
+			}				
             TEXT_SetText(hItem,buf);
             if(status_flash == 0){
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_89);

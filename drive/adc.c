@@ -566,5 +566,5 @@ void ADC_CH_Scan(void)//ÂË²¨
 	{
 		sum +=ADC1_Buffer[count];
 	}
-	NTC_value=sum/50;
+	NTC_value=sum/500;
 }

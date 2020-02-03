@@ -53468,8 +53468,8 @@ X        GUI_SetColor(0x00D3D3D3);
 N        GUI_DispStringAt("C:", 28, 190);
 N        GUI_SetColor(GUI_LIGHTGRAY);
 X        GUI_SetColor(0x00D3D3D3);
-N        GUI_DispStringAt("m", 217, 196);
-N        GUI_DispStringAt("AH", 238, 187);
+N        GUI_DispStringAt("m", 217+24, 196);
+N        GUI_DispStringAt("AH", 238+24, 187);
 N        
 N        GUI_SetColor(GUI_GREEN);
 X        GUI_SetColor(0x0000FF00);
@@ -53594,7 +53594,7 @@ N
 N            battery_c = cbc_raw;
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x81));
-N            sprintf(buf,"%05d",battery_c);
+N            sprintf(buf,"%06d",battery_c);
 N            TEXT_SetText(hItem,buf);
 N            
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_77);
@@ -53865,8 +53865,9 @@ N            {
 N                if(DISS_Voltage >= (float)cov1/100 && cov1 != 0)//若测量电流小于截止电流
 X                if(DISS_Voltage >= (float)coff[0]/100 && coff[0] != 0)
 N                {
-N                    SET_Current = 100;
-X                    Run_Control[2] = 100;
+N					SET_Voltage = cov1;
+X					Run_Control[1] = coff[0];
+N//                    SET_Current = 100;
 N                    charge_step =2;
 N                }
 N            }else if(charge_step == 2){
@@ -53949,7 +53950,7 @@ N
 N            battery_c = bc_raw;
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x81));
-N            sprintf(buf,"%05d",battery_c);
+N            sprintf(buf,"%06d",battery_c);
 N            TEXT_SetText(hItem,buf);
 N            
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_69);
@@ -54021,7 +54022,7 @@ N                    cdc_sw = cdc_off;
 X                    cdc_sw = 0;
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
 X                    hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x81));
-N                    sprintf(buf,"%05d",battery_c);
+N                    sprintf(buf,"%06d",battery_c);
 N                    TEXT_SetText(hItem,buf);
 N                    
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
@@ -54063,7 +54064,7 @@ N                    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 X                    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N                     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
 X                     hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x81));
-N                     sprintf(buf,"%05d",battery_c);
+N                     sprintf(buf,"%06d",battery_c);
 N                     TEXT_SetText(hItem,buf);
 N					SET_Voltage = opv1;
 X					Run_Control[1] = Run_Control[31];
@@ -54676,7 +54677,7 @@ X	  track = 1;
 N	  TM1650_SET_LED(0x68,0x70);
 N	  GPIO_ResetBits(GPIOD,GPIO_Pin_12);//İֆ+
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-W "..\APP\c_dc.c" 1247 4 function "IO_OFF" declared implicitly
+W "..\APP\c_dc.c" 1248 4 function "IO_OFF" declared implicitly
 N	  IO_OFF();//ȍ
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
@@ -56455,7 +56456,7 @@ N            break;
 N        }
 N        
 N    }    
-W "..\APP\c_dc.c" 2354 10 variable "loop_count"  was declared but never referenced
+W "..\APP\c_dc.c" 2355 10 variable "loop_count"  was declared but never referenced
 N}
 N
 Nint count_num(int data)

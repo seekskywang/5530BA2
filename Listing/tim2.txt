@@ -172,65 +172,65 @@
                   Temp_Comapre PROC
 ;;;193    /**************************************************************************************/
 ;;;194    void Temp_Comapre(void)	  //温度来控制风扇
-000000  b570              PUSH     {r4-r6,lr}
+000000  b510              PUSH     {r4,lr}
 ;;;195    {
-;;;196    	if(NTC_value<=1450 || NTC_value > 3000)
+;;;196    //	if(NTC_value<=1450 || NTC_value > 3000)
+;;;197    //	{
+;;;198    //		GPIO_SetBits(GPIOE,GPIO_Pin_6);//开启风扇
+;;;199    //		flag_FAN_ON=1;
+;;;200    //	}
+;;;201    //	else if(NTC_value>=1580 && NTC_value <=3000)
+;;;202    //	{
+;;;203    //		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
+;;;204    //		flag_FAN_ON=0;
+;;;205    //	}
+;;;206    	
+;;;207    	if(NTC_value<=2250 || NTC_value > 5000)
 000002  4912              LDR      r1,|L3.76|
 000004  880a              LDRH     r2,[r1,#0]  ; NTC_value
-000006  f24053aa          MOV      r3,#0x5aa
-;;;197    	{
-;;;198    		GPIO_SetBits(GPIOE,GPIO_Pin_6);//开启风扇
+000006  f64003ca          MOV      r3,#0x8ca
+;;;208    	{
+;;;209    		GPIO_SetBits(GPIOE,GPIO_Pin_6);//开启风扇
 00000a  4811              LDR      r0,|L3.80|
-;;;199    		flag_FAN_ON=1;
+;;;210    		flag_FAN_ON=1;
 00000c  4c11              LDR      r4,|L3.84|
-00000e  429a              CMP      r2,r3                 ;196
+00000e  429a              CMP      r2,r3                 ;207
 000010  d904              BLS      |L3.28|
-000012  880b              LDRH     r3,[r1,#0]            ;196  ; NTC_value
-000014  f64032b8          MOV      r2,#0xbb8             ;196
-000018  4293              CMP      r3,r2                 ;196
+000012  880b              LDRH     r3,[r1,#0]            ;207  ; NTC_value
+000014  f2413288          MOV      r2,#0x1388            ;207
+000018  4293              CMP      r3,r2                 ;207
 00001a  d907              BLS      |L3.44|
                   |L3.28|
-00001c  2140              MOVS     r1,#0x40              ;198
+00001c  2140              MOVS     r1,#0x40              ;209
 00001e  f7fffffe          BL       GPIO_SetBits
 000022  6820              LDR      r0,[r4,#0]  ; flagG
 000024  f0400020          ORR      r0,r0,#0x20
 000028  6020              STR      r0,[r4,#0]  ; flagG
                   |L3.42|
-;;;200    	}
-;;;201    	else if(NTC_value>=1580 && NTC_value <=3000)
-;;;202    	{
-;;;203    		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
-;;;204    		flag_FAN_ON=0;
-;;;205    	}
-;;;206    	
-;;;207    //	if(NTC_value<=2250 || NTC_value > 5000)
-;;;208    //	{
-;;;209    //		GPIO_SetBits(GPIOE,GPIO_Pin_6);//开启风扇
-;;;210    //		flag_FAN_ON=1;
-;;;211    //	}
-;;;212    //	else if(NTC_value>=2400 && NTC_value <=5000)
-;;;213    //	{
-;;;214    //		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
-;;;215    //		flag_FAN_ON=0;
-;;;216    //	}
+;;;211    	}
+;;;212    	else if(NTC_value>=2400 && NTC_value <=5000)
+;;;213    	{
+;;;214    		GPIO_ResetBits(GPIOE,GPIO_Pin_6);//关闭风扇
+;;;215    		flag_FAN_ON=0;
+;;;216    	}
 ;;;217    }
-00002a  bd70              POP      {r4-r6,pc}
+00002a  bd10              POP      {r4,pc}
                   |L3.44|
-00002c  880b              LDRH     r3,[r1,#0]            ;201  ; NTC_value
-00002e  f240652c          MOV      r5,#0x62c             ;201
-000032  42ab              CMP      r3,r5                 ;201
-000034  d3f9              BCC      |L3.42|
-000036  8809              LDRH     r1,[r1,#0]            ;201  ; NTC_value
-000038  4291              CMP      r1,r2                 ;201
-00003a  d8f6              BHI      |L3.42|
-00003c  2140              MOVS     r1,#0x40              ;203
-00003e  f7fffffe          BL       GPIO_ResetBits
-000042  6820              LDR      r0,[r4,#0]            ;204  ; flagG
-000044  f0200020          BIC      r0,r0,#0x20           ;204
-000048  6020              STR      r0,[r4,#0]            ;204  ; flagG
-00004a  bd70              POP      {r4-r6,pc}
+00002c  880b              LDRH     r3,[r1,#0]            ;212  ; NTC_value
+00002e  f5b36f16          CMP      r3,#0x960             ;212
+000032  d3fa              BCC      |L3.42|
+000034  8809              LDRH     r1,[r1,#0]            ;212  ; NTC_value
+000036  4291              CMP      r1,r2                 ;212
+000038  d8f7              BHI      |L3.42|
+00003a  2140              MOVS     r1,#0x40              ;214
+00003c  f7fffffe          BL       GPIO_ResetBits
+000040  6820              LDR      r0,[r4,#0]            ;215  ; flagG
+000042  f0200020          BIC      r0,r0,#0x20           ;215
+000046  6020              STR      r0,[r4,#0]            ;215  ; flagG
+000048  bd10              POP      {r4,pc}
                           ENDP
 
+00004a  0000              DCW      0x0000
                   |L3.76|
                           DCD      NTC_value
                   |L3.80|

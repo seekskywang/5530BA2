@@ -53332,12 +53332,12 @@ N  int     Id;
 N  static vu8 status_flash;
 N  char buf[5];    
 N
-N  float dis_output_v = (float)SET_Voltage/100;
-X  float dis_output_v = (float)Run_Control[1]/100;
+N  float dis_output_v = (float)pow_v/100;
+X  float dis_output_v = (float)Run_Control[38]/100;
 N  float dis_output_c = (float)SET_Current/1000;
 X  float dis_output_c = (float)Run_Control[2]/1000;
-N  static u8 cdelay;
-N
+N  static u8 cdelay,vdec;
+N  
 N  
 N  // USER START (Optionally insert additional variables)
 N  // USER END
@@ -53390,8 +53390,8 @@ X        GUI_SetColor(0x00D3D3D3);
 N        GUI_DispStringAt("C:", 28, 190);
 N        GUI_SetColor(GUI_LIGHTGRAY);
 X        GUI_SetColor(0x00D3D3D3);
-N        GUI_DispStringAt("m", 217, 196);
-N        GUI_DispStringAt("AH", 238, 187);
+N        GUI_DispStringAt("m", 217+24, 196);
+N        GUI_DispStringAt("AH", 238+24, 187);
 N        
 N        GUI_SetColor(GUI_GREEN);
 X        GUI_SetColor(0x0000FF00);
@@ -53454,10 +53454,17 @@ N//        test_pow();
 N        if(pow_sw == pow_on)
 X        if(pow_sw == 1)
 N        {
+N//			if((int)(disloadv*1000) > SET_Voltage*10 && vdec > 30)
+N//			{
+N//				Contr_Voltage --;
+N//				vdec = 0;
+N//			}else{
+N//				vdec ++;
+N//			}
 N            battery_c = (int)bc_raw;
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_115);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x10B));
-N            sprintf(buf,"%05d",battery_c);      
+N            sprintf(buf,"%06d",battery_c);      
 N            TEXT_SetText(hItem,buf);
 N             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_87);
 X             hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x94));
@@ -53468,7 +53475,7 @@ N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_88);
 X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x95));
 N                TEXT_SetTextColor(hItem, GUI_RED);//设置字体颜色
 X                TEXT_SetTextColor(hItem, 0x000000FF);
-N                if(lang == 0)
+N                 if(lang == 0)
 N                {
 N                    TEXT_SetFont(hItem,&GUI_FontHZ16);//设定文本字体
 N                    GUI_UC_SetEncodeUTF8();        
@@ -53921,6 +53928,7 @@ N  default:
 N    WM_DefaultProc(pMsg);
 N    break;
 N  }
+W "..\APP\menu.c" 92 20 variable "vdec"  was declared but never referenced
 N}
 N
 NWM_HWIN CreateWindow(void) {
@@ -53933,7 +53941,7 @@ N	  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\APP\menu.c" 578 4 function "Delay_ms" declared implicitly
+W "..\APP\menu.c" 585 4 function "Delay_ms" declared implicitly
 N	  Delay_ms(500);
 N	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -53946,6 +53954,7 @@ N  track = face_menu;
 X  track = 2;
 N  set_sw = set_10;
 X  set_sw = 9;
+N//  SET_Voltage = pow_v-12;
 N  SET_Voltage = pow_v;
 X  Run_Control[1] = Run_Control[38];
 N  SET_Current = pow_c;
@@ -54159,16 +54168,18 @@ N			{
 N				pow_v = 6200;
 X				Run_Control[38] = 6200;
 N			}
-N            SET_Voltage = pow_v;
-X            Run_Control[1] = Run_Control[38];
-N            if(SET_Voltage/100 * SET_Current/1000 > 250)
-X            if(Run_Control[1]/100 * Run_Control[2]/1000 > 250)
+N			if(pow_v/100 * SET_Current/1000 > 200)
+X			if(Run_Control[38]/100 * Run_Control[2]/1000 > 200)
 N            {
-N                SET_Voltage = 0;
-X                Run_Control[1] = 0;
+N                pow_v = 0;
+X                Run_Control[38] = 0;
 N            }
-N            dis_output_v = (float)SET_Voltage/100;
-X            dis_output_v = (float)Run_Control[1]/100;
+N//            SET_Voltage = pow_v - 12;
+N			SET_Voltage = pow_v;
+X			Run_Control[1] = Run_Control[38];
+N            
+N            dis_output_v = (float)pow_v/100;
+X            dis_output_v = (float)Run_Control[38]/100;
 N            
 N            sprintf(buf,"%.2f",dis_output_v);
 N            TEXT_SetText(hItem,buf);
@@ -54242,14 +54253,15 @@ N            {
 N                pow_c = 5000;               
 X                Run_Control[40] = 5000;               
 N            }
+N			if(pow_v/100 * pow_c/1000 > 200)
+X			if(Run_Control[38]/100 * Run_Control[40]/1000 > 200)
+N            {
+N                pow_c = 0;
+X                Run_Control[40] = 0;
+N            }
 N			SET_Current = pow_c;
 X			Run_Control[2] = Run_Control[40];
-N            if(SET_Voltage/100 * SET_Current/1000 > 250)
-X            if(Run_Control[1]/100 * Run_Control[2]/1000 > 250)
-N            {
-N                SET_Current = 0;
-X                Run_Control[2] = 0;
-N            }
+N            
 N            dis_output_c = (float)SET_Current/1000;
 X            dis_output_c = (float)Run_Control[2]/1000;
 N            sprintf(buf,"%.3f",dis_output_c);

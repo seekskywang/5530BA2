@@ -66,7 +66,7 @@
 000014  2801              CMP      r0,#1                 ;665
 000016  8909              LDRH     r1,[r1,#8]
 000018  b289              UXTH     r1,r1
-00001a  d054              BEQ      |L2.198|
+00001a  d058              BEQ      |L2.206|
 ;;;670        }else if(step == 2){
 ;;;671           vu32 var16;
 ;;;672    		vu32 var32a;
@@ -134,7 +134,7 @@
 000026  f8df83f8          LDR      r8,|L2.1056|
 00002a  4afe              LDR      r2,|L2.1060|
 00002c  2802              CMP      r0,#2                 ;670
-00002e  d053              BEQ      |L2.216|
+00002e  d057              BEQ      |L2.224|
 ;;;731        }else if(step == 3){
 000030  2803              CMP      r0,#3
 000032  d07d              BEQ      |L2.304|
@@ -285,7 +285,7 @@
 ;;;866    		Modify_A_ACT = inputvalue;
 ;;;867    	}else if(step == 8){
 00004c  2808              CMP      r0,#8
-00004e  d140              BNE      |L2.210|
+00004e  d074              BEQ      |L2.314|
 ;;;868    		vu32 var16;
 ;;;869    		vu32 var32a;
 ;;;870    		vu32 var32b;
@@ -295,76 +295,24 @@
 ;;;874    		vu32 var32d;
 ;;;875    		
 ;;;876    		Modify_B_READ = Imon1_value;
-000050  6820              LDR      r0,[r4,#0]  ; Imon1_value
-000052  f8ab0000          STRH     r0,[r11,#0]
 ;;;877    		Modify_D_READ = Contr_Laod;
-000056  8830              LDRH     r0,[r6,#0]  ; Contr_Laod
-000058  f8a90000          STRH     r0,[r9,#0]
 ;;;878    		Modify_B_ACT = inputvalue;
-00005c  f8a81000          STRH     r1,[r8,#0]
 ;;;879    		
 ;;;880    		var32a = Modify_B_ACT;
-000060  f8b80000          LDRH     r0,[r8,#0]  ; Modify_B_ACT
-000064  9005              STR      r0,[sp,#0x14]
 ;;;881    		var32a = var32a - Modify_A_ACT;
-000066  8819              LDRH     r1,[r3,#0]  ; Modify_A_ACT
-000068  9805              LDR      r0,[sp,#0x14]
-00006a  1a40              SUBS     r0,r0,r1
-00006c  9005              STR      r0,[sp,#0x14]
 ;;;882    		var32a = var32a << 12;
-00006e  9805              LDR      r0,[sp,#0x14]
-000070  0300              LSLS     r0,r0,#12
-000072  9005              STR      r0,[sp,#0x14]
 ;;;883    		var16 = Modify_B_READ - Modify_A_READ;
-000074  f8bb0000          LDRH     r0,[r11,#0]  ; Modify_B_READ
-000078  8829              LDRH     r1,[r5,#0]  ; Modify_A_READ
-00007a  1a40              SUBS     r0,r0,r1
-00007c  9006              STR      r0,[sp,#0x18]
 ;;;884    		var32a = var32a / var16;
-00007e  e9dd0105          LDRD     r0,r1,[sp,#0x14]
-000082  fbb0f0f1          UDIV     r0,r0,r1
-000086  9005              STR      r0,[sp,#0x14]
 ;;;885    		REG_Load_AH = var32a;
-000088  9805              LDR      r0,[sp,#0x14]
-00008a  f8ce0038          STR      r0,[lr,#0x38]  ; InFlashSave
 ;;;886    		var32a = Modify_B_ACT;
-00008e  f8b81000          LDRH     r1,[r8,#0]  ; Modify_B_ACT
-000092  9105              STR      r1,[sp,#0x14]
 ;;;887    		var32a = var32a << 12;
-000094  9905              LDR      r1,[sp,#0x14]
-000096  0309              LSLS     r1,r1,#12
-000098  9105              STR      r1,[sp,#0x14]
 ;;;888    		var32b = Modify_B_READ;
-00009a  f8bb1000          LDRH     r1,[r11,#0]  ; Modify_B_READ
-00009e  9104              STR      r1,[sp,#0x10]
 ;;;889    		var32b = var32b * REG_Load_AH;
-0000a0  9904              LDR      r1,[sp,#0x10]
-0000a2  4348              MULS     r0,r1,r0
-0000a4  9004              STR      r0,[sp,#0x10]
 ;;;890    		if (var32a < var32b)
-0000a6  e9dd1004          LDRD     r1,r0,[sp,#0x10]
-0000aa  4288              CMP      r0,r1
-0000ac  d27e              BCS      |L2.428|
 ;;;891    		{
 ;;;892    			var32b = var32b - var32a;
-0000ae  e9dd0104          LDRD     r0,r1,[sp,#0x10]
-0000b2  1a40              SUBS     r0,r0,r1
-0000b4  9004              STR      r0,[sp,#0x10]
 ;;;893    			REG_LoadA_OffsetH = var32b;
-0000b6  9804              LDR      r0,[sp,#0x10]
-0000b8  f8ce0040          STR      r0,[lr,#0x40]  ; InFlashSave
 ;;;894    			Polar1 |= 0x01;
-0000bc  7850              LDRB     r0,[r2,#1]  ; correct_por
-0000be  f0400001          ORR      r0,r0,#1
-0000c2  7050              STRB     r0,[r2,#1]
-0000c4  e204              B        |L2.1232|
-                  |L2.198|
-0000c6  6820              LDR      r0,[r4,#0]            ;667  ; Imon1_value
-0000c8  8028              STRH     r0,[r5,#0]            ;667
-0000ca  8830              LDRH     r0,[r6,#0]            ;668  ; Contr_Laod
-0000cc  f8ac0000          STRH     r0,[r12,#0]           ;668
-0000d0  8019              STRH     r1,[r3,#0]            ;669
-                  |L2.210|
 ;;;895    		}
 ;;;896    		else 
 ;;;897    		{
@@ -399,351 +347,471 @@
 ;;;926    		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 ;;;927    //			Flash_Write_all ();	
 ;;;928    		Flag_DAC_OFF =0;
-;;;929    	}
-;;;930    }
-0000d2  b007              ADD      sp,sp,#0x1c
-0000d4  e8bd8ff0          POP      {r4-r11,pc}
-                  |L2.216|
-0000d8  6820              LDR      r0,[r4,#0]            ;679  ; Imon1_value
-0000da  f8ab0000          STRH     r0,[r11,#0]           ;679
-0000de  8830              LDRH     r0,[r6,#0]            ;680  ; Contr_Laod
-0000e0  f8a90000          STRH     r0,[r9,#0]            ;680
-0000e4  f8a81000          STRH     r1,[r8,#0]            ;681
-0000e8  f8b80000          LDRH     r0,[r8,#0]            ;683  ; Modify_B_ACT
-0000ec  9005              STR      r0,[sp,#0x14]         ;683
-0000ee  8819              LDRH     r1,[r3,#0]            ;684  ; Modify_A_ACT
-0000f0  9805              LDR      r0,[sp,#0x14]         ;684
-0000f2  1a40              SUBS     r0,r0,r1              ;684
-0000f4  9005              STR      r0,[sp,#0x14]         ;684
-0000f6  9805              LDR      r0,[sp,#0x14]         ;685
-0000f8  0300              LSLS     r0,r0,#12             ;685
-0000fa  9005              STR      r0,[sp,#0x14]         ;685
-0000fc  f8bb0000          LDRH     r0,[r11,#0]           ;686  ; Modify_B_READ
-000100  8829              LDRH     r1,[r5,#0]            ;686  ; Modify_A_READ
-000102  1a40              SUBS     r0,r0,r1              ;686
-000104  9006              STR      r0,[sp,#0x18]         ;686
-000106  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;687
-00010a  fbb0f0f1          UDIV     r0,r0,r1              ;687
-00010e  9005              STR      r0,[sp,#0x14]         ;687
-000110  49c7              LDR      r1,|L2.1072|
-000112  9805              LDR      r0,[sp,#0x14]         ;688
-000114  6048              STR      r0,[r1,#4]            ;688  ; Correct_Parametet
-000116  f8b80000          LDRH     r0,[r8,#0]            ;689  ; Modify_B_ACT
-00011a  9005              STR      r0,[sp,#0x14]         ;689
-00011c  9805              LDR      r0,[sp,#0x14]         ;690
-00011e  0300              LSLS     r0,r0,#12             ;690
-000120  9005              STR      r0,[sp,#0x14]         ;690
-000122  f8bb0000          LDRH     r0,[r11,#0]           ;691  ; Modify_B_READ
-000126  9004              STR      r0,[sp,#0x10]         ;691
-000128  6848              LDR      r0,[r1,#4]            ;692  ; Correct_Parametet
-00012a  9c04              LDR      r4,[sp,#0x10]         ;692
-00012c  4360              MULS     r0,r4,r0              ;692
-00012e  e004              B        |L2.314|
+;;;929    	}else if(step == 9){
+000050  2809              CMP      r0,#9
+000052  d073              BEQ      |L2.316|
+;;;930    		Modify_A_READ = Imon1_value;//
+;;;931    		Modify_C_READ = Contr_Laod;//
+;;;932    		Modify_A_ACT = inputvalue;
+;;;933    	}else if(step == 10){
+000054  280a              CMP      r0,#0xa
+000056  d140              BNE      |L2.218|
+;;;934    		vu32 var16;
+;;;935    		vu32 var32a;
+;;;936    		vu32 var32b;
+;;;937    		
+;;;938    		vu32 var16a;
+;;;939    		vu32 var32c;
+;;;940    		vu32 var32d;
+;;;941    		
+;;;942    		Modify_B_READ = Imon1_value;
+000058  6820              LDR      r0,[r4,#0]  ; Imon1_value
+00005a  f8ab0000          STRH     r0,[r11,#0]
+;;;943    		Modify_D_READ = Contr_Laod;
+00005e  8830              LDRH     r0,[r6,#0]  ; Contr_Laod
+000060  f8a90000          STRH     r0,[r9,#0]
+;;;944    		Modify_B_ACT = inputvalue;
+000064  f8a81000          STRH     r1,[r8,#0]
+;;;945    		
+;;;946    		var32a = Modify_B_ACT;
+000068  f8b80000          LDRH     r0,[r8,#0]  ; Modify_B_ACT
+00006c  9005              STR      r0,[sp,#0x14]
+;;;947    		var32a = var32a - Modify_A_ACT;
+00006e  8819              LDRH     r1,[r3,#0]  ; Modify_A_ACT
+000070  9805              LDR      r0,[sp,#0x14]
+000072  1a40              SUBS     r0,r0,r1
+000074  9005              STR      r0,[sp,#0x14]
+;;;948    		var32a = var32a << 12;
+000076  9805              LDR      r0,[sp,#0x14]
+000078  0300              LSLS     r0,r0,#12
+00007a  9005              STR      r0,[sp,#0x14]
+;;;949    		var16 = Modify_B_READ - Modify_A_READ;
+00007c  f8bb0000          LDRH     r0,[r11,#0]  ; Modify_B_READ
+000080  8829              LDRH     r1,[r5,#0]  ; Modify_A_READ
+000082  1a40              SUBS     r0,r0,r1
+000084  9006              STR      r0,[sp,#0x18]
+;;;950    		var32a = var32a / var16;
+000086  e9dd0105          LDRD     r0,r1,[sp,#0x14]
+00008a  fbb0f0f1          UDIV     r0,r0,r1
+00008e  9005              STR      r0,[sp,#0x14]
+;;;951    		REG_Load_AH1 = var32a;
+000090  9805              LDR      r0,[sp,#0x14]
+000092  f8ce0048          STR      r0,[lr,#0x48]  ; InFlashSave
+;;;952    		var32a = Modify_B_ACT;
+000096  f8b81000          LDRH     r1,[r8,#0]  ; Modify_B_ACT
+00009a  9105              STR      r1,[sp,#0x14]
+;;;953    		var32a = var32a << 12;
+00009c  9905              LDR      r1,[sp,#0x14]
+00009e  0309              LSLS     r1,r1,#12
+0000a0  9105              STR      r1,[sp,#0x14]
+;;;954    		var32b = Modify_B_READ;
+0000a2  f8bb1000          LDRH     r1,[r11,#0]  ; Modify_B_READ
+0000a6  9104              STR      r1,[sp,#0x10]
+;;;955    		var32b = var32b * REG_Load_AH1;
+0000a8  9904              LDR      r1,[sp,#0x10]
+0000aa  4348              MULS     r0,r1,r0
+0000ac  9004              STR      r0,[sp,#0x10]
+;;;956    		if (var32a < var32b)
+0000ae  e9dd1004          LDRD     r1,r0,[sp,#0x10]
+0000b2  4288              CMP      r0,r1
+0000b4  d27d              BCS      |L2.434|
+;;;957    		{
+;;;958    			var32b = var32b - var32a;
+0000b6  e9dd0104          LDRD     r0,r1,[sp,#0x10]
+0000ba  1a40              SUBS     r0,r0,r1
+0000bc  9004              STR      r0,[sp,#0x10]
+;;;959    			REG_LoadA_OffsetH1 = var32b;
+0000be  9804              LDR      r0,[sp,#0x10]
+0000c0  f8ce0050          STR      r0,[lr,#0x50]  ; InFlashSave
+;;;960    			Polar1 |= 0x01;
+0000c4  7850              LDRB     r0,[r2,#1]  ; correct_por
+0000c6  f0400001          ORR      r0,r0,#1
+0000ca  7050              STRB     r0,[r2,#1]
+0000cc  e29f              B        |L2.1550|
+                  |L2.206|
+0000ce  6820              LDR      r0,[r4,#0]            ;667  ; Imon1_value
+0000d0  8028              STRH     r0,[r5,#0]            ;667
+0000d2  8830              LDRH     r0,[r6,#0]            ;668  ; Contr_Laod
+0000d4  f8ac0000          STRH     r0,[r12,#0]           ;668
+0000d8  8019              STRH     r1,[r3,#0]            ;669
+                  |L2.218|
+;;;961    		}
+;;;962    		else 
+;;;963    		{
+;;;964    			var32a = var32a - var32b;
+;;;965    			REG_LoadA_OffsetH1 = var32a;
+;;;966    			Polar1 &= ~0x01;					
+;;;967    		}
+;;;968    //---------------------------------------------------------------------------------//
+;;;969    		var32c = Modify_B_ACT; 
+;;;970    		var32c = var32c - Modify_A_ACT;
+;;;971    		var32c = var32c << 12;
+;;;972    		var16a=Modify_D_READ-Modify_C_READ;
+;;;973    		var16a=var16a*2;
+;;;974    		var32c=var32c/var16a;
+;;;975    		SET_LoadAH1 = var32c;
+;;;976    		var32c = Modify_B_ACT;
+;;;977    		var32c = var32c << 12;
+;;;978    		var32d = SET_LoadAH1;
+;;;979    		var32d = var32d * (Modify_D_READ*2);
+;;;980    		if (var32c < var32d)
+;;;981    		{
+;;;982    			var32d = var32d - var32c;
+;;;983    			SET_LoadA_OffsetH1 = var32d;
+;;;984    			Polar1 |= 0x04;
+;;;985    		}
+;;;986    		else 
+;;;987    		{
+;;;988    			var32c = var32c - var32d;
+;;;989    			SET_LoadA_OffsetH1 = var32c;
+;;;990    			Polar1 &= ~0x04;
+;;;991    		}
+;;;992    		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+;;;993    //			Flash_Write_all ();	
+;;;994    		Flag_DAC_OFF =0;
+;;;995    	}
+;;;996    }
+0000da  b007              ADD      sp,sp,#0x1c
+0000dc  e8bd8ff0          POP      {r4-r11,pc}
+                  |L2.224|
+0000e0  6820              LDR      r0,[r4,#0]            ;679  ; Imon1_value
+0000e2  f8ab0000          STRH     r0,[r11,#0]           ;679
+0000e6  8830              LDRH     r0,[r6,#0]            ;680  ; Contr_Laod
+0000e8  f8a90000          STRH     r0,[r9,#0]            ;680
+0000ec  f8a81000          STRH     r1,[r8,#0]            ;681
+0000f0  f8b80000          LDRH     r0,[r8,#0]            ;683  ; Modify_B_ACT
+0000f4  9005              STR      r0,[sp,#0x14]         ;683
+0000f6  8819              LDRH     r1,[r3,#0]            ;684  ; Modify_A_ACT
+0000f8  9805              LDR      r0,[sp,#0x14]         ;684
+0000fa  1a40              SUBS     r0,r0,r1              ;684
+0000fc  9005              STR      r0,[sp,#0x14]         ;684
+0000fe  9805              LDR      r0,[sp,#0x14]         ;685
+000100  0300              LSLS     r0,r0,#12             ;685
+000102  9005              STR      r0,[sp,#0x14]         ;685
+000104  f8bb0000          LDRH     r0,[r11,#0]           ;686  ; Modify_B_READ
+000108  8829              LDRH     r1,[r5,#0]            ;686  ; Modify_A_READ
+00010a  1a40              SUBS     r0,r0,r1              ;686
+00010c  9006              STR      r0,[sp,#0x18]         ;686
+00010e  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;687
+000112  fbb0f0f1          UDIV     r0,r0,r1              ;687
+000116  9005              STR      r0,[sp,#0x14]         ;687
+000118  49c5              LDR      r1,|L2.1072|
+00011a  9805              LDR      r0,[sp,#0x14]         ;688
+00011c  6048              STR      r0,[r1,#4]            ;688  ; Correct_Parametet
+00011e  f8b80000          LDRH     r0,[r8,#0]            ;689  ; Modify_B_ACT
+000122  9005              STR      r0,[sp,#0x14]         ;689
+000124  9805              LDR      r0,[sp,#0x14]         ;690
+000126  0300              LSLS     r0,r0,#12             ;690
+000128  9005              STR      r0,[sp,#0x14]         ;690
+00012a  f8bb0000          LDRH     r0,[r11,#0]           ;691  ; Modify_B_READ
+00012e  e006              B        |L2.318|
                   |L2.304|
-000130  e068              B        |L2.516|
+000130  e06e              B        |L2.528|
                   |L2.306|
-000132  e06e              B        |L2.530|
+000132  e074              B        |L2.542|
                   |L2.308|
-000134  e100              B        |L2.824|
+000134  e106              B        |L2.836|
                   |L2.310|
-000136  e106              B        |L2.838|
+000136  e10c              B        |L2.850|
                   |L2.312|
-000138  e1b8              B        |L2.1196|
+000138  e1bd              B        |L2.1206|
                   |L2.314|
-00013a  9004              STR      r0,[sp,#0x10]         ;692
-00013c  e9dd5404          LDRD     r5,r4,[sp,#0x10]      ;693
-000140  48bc              LDR      r0,|L2.1076|
-000142  42ac              CMP      r4,r5                 ;693
-000144  d20a              BCS      |L2.348|
-000146  e9dd4504          LDRD     r4,r5,[sp,#0x10]      ;695
-00014a  1b64              SUBS     r4,r4,r5              ;695
-00014c  9404              STR      r4,[sp,#0x10]         ;695
-00014e  9c04              LDR      r4,[sp,#0x10]         ;696
-000150  6044              STR      r4,[r0,#4]            ;696  ; Correct_Strong
-000152  7854              LDRB     r4,[r2,#1]            ;697  ; correct_por
-000154  f0440401          ORR      r4,r4,#1              ;697
-000158  7054              STRB     r4,[r2,#1]            ;697
-00015a  e009              B        |L2.368|
-                  |L2.348|
-00015c  e9dd5404          LDRD     r5,r4,[sp,#0x10]      ;701
-000160  1b64              SUBS     r4,r4,r5              ;701
-000162  9405              STR      r4,[sp,#0x14]         ;701
-000164  9c05              LDR      r4,[sp,#0x14]         ;702
-000166  6044              STR      r4,[r0,#4]            ;702  ; Correct_Strong
-000168  7854              LDRB     r4,[r2,#1]            ;703  ; correct_por
-00016a  f0240401          BIC      r4,r4,#1              ;703
-00016e  7054              STRB     r4,[r2,#1]            ;703
-                  |L2.368|
-000170  f8b84000          LDRH     r4,[r8,#0]            ;706  ; Modify_B_ACT
-000174  9402              STR      r4,[sp,#8]            ;706
-000176  881b              LDRH     r3,[r3,#0]            ;707  ; Modify_A_ACT
-000178  9c02              LDR      r4,[sp,#8]            ;707
-00017a  1ae3              SUBS     r3,r4,r3              ;707
-00017c  9302              STR      r3,[sp,#8]            ;707
-00017e  9b02              LDR      r3,[sp,#8]            ;708
-000180  031b              LSLS     r3,r3,#12             ;708
-000182  9302              STR      r3,[sp,#8]            ;708
-000184  f8b93000          LDRH     r3,[r9,#0]            ;709  ; Modify_D_READ
-000188  f8bc4000          LDRH     r4,[r12,#0]           ;709  ; Modify_C_READ
-00018c  1b1b              SUBS     r3,r3,r4              ;709
-00018e  9303              STR      r3,[sp,#0xc]          ;709
-000190  9b03              LDR      r3,[sp,#0xc]          ;710
-000192  005b              LSLS     r3,r3,#1              ;710
-000194  9303              STR      r3,[sp,#0xc]          ;710
-000196  e9dd3402          LDRD     r3,r4,[sp,#8]         ;711
-00019a  fbb3f3f4          UDIV     r3,r3,r4              ;711
-00019e  9302              STR      r3,[sp,#8]            ;711
-0001a0  9b02              LDR      r3,[sp,#8]            ;712
-0001a2  608b              STR      r3,[r1,#8]            ;712  ; Correct_Parametet
-0001a4  f8b83000          LDRH     r3,[r8,#0]            ;713  ; Modify_B_ACT
-0001a8  9302              STR      r3,[sp,#8]            ;713
-0001aa  e000              B        |L2.430|
-                  |L2.428|
-0001ac  e185              B        |L2.1210|
-                  |L2.430|
-0001ae  9b02              LDR      r3,[sp,#8]            ;714
-0001b0  031b              LSLS     r3,r3,#12             ;714
-0001b2  9302              STR      r3,[sp,#8]            ;714
-0001b4  6889              LDR      r1,[r1,#8]            ;715  ; Correct_Parametet
-0001b6  9101              STR      r1,[sp,#4]            ;715
-0001b8  f8b93000          LDRH     r3,[r9,#0]            ;716  ; Modify_D_READ
-0001bc  9901              LDR      r1,[sp,#4]            ;716
-0001be  4359              MULS     r1,r3,r1              ;716
-0001c0  0049              LSLS     r1,r1,#1              ;716
-0001c2  9101              STR      r1,[sp,#4]            ;716
-0001c4  e9dd3101          LDRD     r3,r1,[sp,#4]         ;717
-0001c8  4299              CMP      r1,r3                 ;717
-0001ca  d20a              BCS      |L2.482|
-0001cc  e9dd1301          LDRD     r1,r3,[sp,#4]         ;719
-0001d0  1ac9              SUBS     r1,r1,r3              ;719
-0001d2  9101              STR      r1,[sp,#4]            ;719
-0001d4  9901              LDR      r1,[sp,#4]            ;720
-0001d6  6081              STR      r1,[r0,#8]            ;720  ; Correct_Strong
-0001d8  7850              LDRB     r0,[r2,#1]            ;721  ; correct_por
-0001da  f0400004          ORR      r0,r0,#4              ;721
-0001de  7050              STRB     r0,[r2,#1]            ;721
-0001e0  e009              B        |L2.502|
-                  |L2.482|
-0001e2  e9dd3101          LDRD     r3,r1,[sp,#4]         ;725
-0001e6  1ac9              SUBS     r1,r1,r3              ;725
-0001e8  9102              STR      r1,[sp,#8]            ;725
-0001ea  9902              LDR      r1,[sp,#8]            ;726
-0001ec  6081              STR      r1,[r0,#8]            ;726  ; Correct_Strong
-0001ee  7850              LDRB     r0,[r2,#1]            ;727  ; correct_por
-0001f0  f0200004          BIC      r0,r0,#4              ;727
-0001f4  7050              STRB     r0,[r2,#1]            ;727
-                  |L2.502|
-0001f6  f7fffffe          BL       Flash_Write_all
-0001fa  6838              LDR      r0,[r7,#0]            ;730  ; flagB
-0001fc  f0200008          BIC      r0,r0,#8              ;730
-000200  6038              STR      r0,[r7,#0]            ;730  ; flagB
-000202  e766              B        |L2.210|
-                  |L2.516|
-000204  6820              LDR      r0,[r4,#0]            ;732  ; Imon1_value
-000206  8028              STRH     r0,[r5,#0]            ;732
-000208  8830              LDRH     r0,[r6,#0]            ;733  ; Contr_Laod
-00020a  f8ac0000          STRH     r0,[r12,#0]           ;733
-00020e  8019              STRH     r1,[r3,#0]            ;734
-000210  e75f              B        |L2.210|
-                  |L2.530|
-000212  6820              LDR      r0,[r4,#0]            ;744  ; Imon1_value
-000214  f8ab0000          STRH     r0,[r11,#0]           ;744
-000218  8830              LDRH     r0,[r6,#0]            ;745  ; Contr_Laod
-00021a  f8a90000          STRH     r0,[r9,#0]            ;745
-00021e  f8a81000          STRH     r1,[r8,#0]            ;746
-000222  f8b80000          LDRH     r0,[r8,#0]            ;748  ; Modify_B_ACT
-000226  9005              STR      r0,[sp,#0x14]         ;748
-000228  8819              LDRH     r1,[r3,#0]            ;749  ; Modify_A_ACT
-00022a  9805              LDR      r0,[sp,#0x14]         ;749
-00022c  1a40              SUBS     r0,r0,r1              ;749
-00022e  9005              STR      r0,[sp,#0x14]         ;749
-000230  9805              LDR      r0,[sp,#0x14]         ;750
-000232  0300              LSLS     r0,r0,#12             ;750
-000234  9005              STR      r0,[sp,#0x14]         ;750
-000236  f8bb0000          LDRH     r0,[r11,#0]           ;751  ; Modify_B_READ
-00023a  8829              LDRH     r1,[r5,#0]            ;751  ; Modify_A_READ
-00023c  1a40              SUBS     r0,r0,r1              ;751
-00023e  9006              STR      r0,[sp,#0x18]         ;751
-000240  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;752
-000244  fbb0f0f1          UDIV     r0,r0,r1              ;752
-000248  9005              STR      r0,[sp,#0x14]         ;752
-00024a  9805              LDR      r0,[sp,#0x14]         ;753
-00024c  f8ce0018          STR      r0,[lr,#0x18]         ;753  ; InFlashSave
-000250  f8b81000          LDRH     r1,[r8,#0]            ;754  ; Modify_B_ACT
-000254  9105              STR      r1,[sp,#0x14]         ;754
-000256  9905              LDR      r1,[sp,#0x14]         ;755
-000258  0309              LSLS     r1,r1,#12             ;755
-00025a  9105              STR      r1,[sp,#0x14]         ;755
-00025c  f8bb1000          LDRH     r1,[r11,#0]           ;756  ; Modify_B_READ
-000260  9104              STR      r1,[sp,#0x10]         ;756
-000262  9904              LDR      r1,[sp,#0x10]         ;757
-000264  4348              MULS     r0,r1,r0              ;757
-000266  9004              STR      r0,[sp,#0x10]         ;757
-000268  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;758
-00026c  4288              CMP      r0,r1                 ;758
-00026e  d20b              BCS      |L2.648|
-000270  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;760
-000274  1a40              SUBS     r0,r0,r1              ;760
-000276  9004              STR      r0,[sp,#0x10]         ;760
-000278  9804              LDR      r0,[sp,#0x10]         ;761
-00027a  f8ce0020          STR      r0,[lr,#0x20]         ;761  ; InFlashSave
-00027e  7850              LDRB     r0,[r2,#1]            ;762  ; correct_por
-000280  f0400001          ORR      r0,r0,#1              ;762
-000284  7050              STRB     r0,[r2,#1]            ;762
-000286  e00a              B        |L2.670|
-                  |L2.648|
-000288  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;766
-00028c  1a40              SUBS     r0,r0,r1              ;766
-00028e  9005              STR      r0,[sp,#0x14]         ;766
-000290  9805              LDR      r0,[sp,#0x14]         ;767
-000292  f8ce0020          STR      r0,[lr,#0x20]         ;767  ; InFlashSave
-000296  7850              LDRB     r0,[r2,#1]            ;768  ; correct_por
-000298  f0200001          BIC      r0,r0,#1              ;768
-00029c  7050              STRB     r0,[r2,#1]            ;768
-                  |L2.670|
-00029e  f8b80000          LDRH     r0,[r8,#0]            ;771  ; Modify_B_ACT
-0002a2  9002              STR      r0,[sp,#8]            ;771
-0002a4  8819              LDRH     r1,[r3,#0]            ;772  ; Modify_A_ACT
-0002a6  9802              LDR      r0,[sp,#8]            ;772
-0002a8  1a40              SUBS     r0,r0,r1              ;772
-0002aa  9002              STR      r0,[sp,#8]            ;772
-0002ac  9802              LDR      r0,[sp,#8]            ;773
-0002ae  0300              LSLS     r0,r0,#12             ;773
-0002b0  9002              STR      r0,[sp,#8]            ;773
-0002b2  f8b90000          LDRH     r0,[r9,#0]            ;774  ; Modify_D_READ
-0002b6  f8bc1000          LDRH     r1,[r12,#0]           ;774  ; Modify_C_READ
-0002ba  1a40              SUBS     r0,r0,r1              ;774
-0002bc  9003              STR      r0,[sp,#0xc]          ;774
-0002be  9803              LDR      r0,[sp,#0xc]          ;775
-0002c0  0040              LSLS     r0,r0,#1              ;775
-0002c2  9003              STR      r0,[sp,#0xc]          ;775
-0002c4  e9dd0102          LDRD     r0,r1,[sp,#8]         ;776
-0002c8  fbb0f0f1          UDIV     r0,r0,r1              ;776
-0002cc  9002              STR      r0,[sp,#8]            ;776
-0002ce  9802              LDR      r0,[sp,#8]            ;777
-0002d0  f8ce001c          STR      r0,[lr,#0x1c]         ;777  ; InFlashSave
-0002d4  f8b81000          LDRH     r1,[r8,#0]            ;778  ; Modify_B_ACT
-0002d8  9102              STR      r1,[sp,#8]            ;778
-0002da  9902              LDR      r1,[sp,#8]            ;779
-0002dc  0309              LSLS     r1,r1,#12             ;779
-0002de  9102              STR      r1,[sp,#8]            ;779
-0002e0  9001              STR      r0,[sp,#4]            ;780
-0002e2  f8b91000          LDRH     r1,[r9,#0]            ;781  ; Modify_D_READ
-0002e6  9801              LDR      r0,[sp,#4]            ;781
-0002e8  4348              MULS     r0,r1,r0              ;781
-0002ea  0040              LSLS     r0,r0,#1              ;781
-0002ec  9001              STR      r0,[sp,#4]            ;781
-0002ee  e9dd1001          LDRD     r1,r0,[sp,#4]         ;782
-0002f2  4288              CMP      r0,r1                 ;782
-0002f4  d20b              BCS      |L2.782|
-0002f6  e9dd0101          LDRD     r0,r1,[sp,#4]         ;784
-0002fa  1a40              SUBS     r0,r0,r1              ;784
-0002fc  9001              STR      r0,[sp,#4]            ;784
-0002fe  9801              LDR      r0,[sp,#4]            ;785
-000300  f8ce0024          STR      r0,[lr,#0x24]         ;785  ; InFlashSave
-000304  7850              LDRB     r0,[r2,#1]            ;786  ; correct_por
-000306  f0400004          ORR      r0,r0,#4              ;786
-00030a  7050              STRB     r0,[r2,#1]            ;786
-00030c  e00a              B        |L2.804|
-                  |L2.782|
-00030e  e9dd1001          LDRD     r1,r0,[sp,#4]         ;790
-000312  1a40              SUBS     r0,r0,r1              ;790
-000314  9002              STR      r0,[sp,#8]            ;790
-000316  9802              LDR      r0,[sp,#8]            ;791
-000318  f8ce0024          STR      r0,[lr,#0x24]         ;791  ; InFlashSave
-00031c  7850              LDRB     r0,[r2,#1]            ;792  ; correct_por
-00031e  f0200004          BIC      r0,r0,#4              ;792
-000322  7050              STRB     r0,[r2,#1]            ;792
-                  |L2.804|
-000324  4a41              LDR      r2,|L2.1068|
-000326  2128              MOVS     r1,#0x28              ;794
-000328  4650              MOV      r0,r10                ;794
-00032a  f7fffffe          BL       Flash_Write32BitDatas
-00032e  6838              LDR      r0,[r7,#0]            ;796  ; flagB
-000330  f0200008          BIC      r0,r0,#8              ;796
-000334  6038              STR      r0,[r7,#0]            ;796  ; flagB
-000336  e6cc              B        |L2.210|
-                  |L2.824|
-000338  6820              LDR      r0,[r4,#0]            ;798  ; Imon1_value
-00033a  8028              STRH     r0,[r5,#0]            ;798
-00033c  8830              LDRH     r0,[r6,#0]            ;799  ; Contr_Laod
-00033e  f8ac0000          STRH     r0,[r12,#0]           ;799
-000342  8019              STRH     r1,[r3,#0]            ;800
-000344  e6c5              B        |L2.210|
-                  |L2.838|
-000346  6820              LDR      r0,[r4,#0]            ;810  ; Imon1_value
-000348  f8ab0000          STRH     r0,[r11,#0]           ;810
-00034c  8830              LDRH     r0,[r6,#0]            ;811  ; Contr_Laod
-00034e  f8a90000          STRH     r0,[r9,#0]            ;811
-000352  f8a81000          STRH     r1,[r8,#0]            ;812
-000356  f8b80000          LDRH     r0,[r8,#0]            ;814  ; Modify_B_ACT
-00035a  9005              STR      r0,[sp,#0x14]         ;814
-00035c  8819              LDRH     r1,[r3,#0]            ;815  ; Modify_A_ACT
-00035e  9805              LDR      r0,[sp,#0x14]         ;815
-000360  1a40              SUBS     r0,r0,r1              ;815
-000362  9005              STR      r0,[sp,#0x14]         ;815
-000364  9805              LDR      r0,[sp,#0x14]         ;816
-000366  0300              LSLS     r0,r0,#12             ;816
-000368  9005              STR      r0,[sp,#0x14]         ;816
-00036a  f8bb0000          LDRH     r0,[r11,#0]           ;817  ; Modify_B_READ
-00036e  8829              LDRH     r1,[r5,#0]            ;817  ; Modify_A_READ
-000370  1a40              SUBS     r0,r0,r1              ;817
-000372  9006              STR      r0,[sp,#0x18]         ;817
-000374  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;818
-000378  fbb0f0f1          UDIV     r0,r0,r1              ;818
-00037c  9005              STR      r0,[sp,#0x14]         ;818
-00037e  9805              LDR      r0,[sp,#0x14]         ;819
-000380  f8ce0028          STR      r0,[lr,#0x28]         ;819  ; InFlashSave
-000384  f8b81000          LDRH     r1,[r8,#0]            ;820  ; Modify_B_ACT
-000388  9105              STR      r1,[sp,#0x14]         ;820
-00038a  9905              LDR      r1,[sp,#0x14]         ;821
-00038c  0309              LSLS     r1,r1,#12             ;821
-00038e  9105              STR      r1,[sp,#0x14]         ;821
-000390  f8bb1000          LDRH     r1,[r11,#0]           ;822  ; Modify_B_READ
-000394  9104              STR      r1,[sp,#0x10]         ;822
-000396  9904              LDR      r1,[sp,#0x10]         ;823
-000398  4348              MULS     r0,r1,r0              ;823
-00039a  9004              STR      r0,[sp,#0x10]         ;823
-00039c  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;824
-0003a0  4288              CMP      r0,r1                 ;824
-0003a2  d20b              BCS      |L2.956|
-0003a4  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;826
-0003a8  1a40              SUBS     r0,r0,r1              ;826
-0003aa  9004              STR      r0,[sp,#0x10]         ;826
-0003ac  9804              LDR      r0,[sp,#0x10]         ;827
-0003ae  f8ce0030          STR      r0,[lr,#0x30]         ;827  ; InFlashSave
-0003b2  7850              LDRB     r0,[r2,#1]            ;828  ; correct_por
-0003b4  f0400001          ORR      r0,r0,#1              ;828
-0003b8  7050              STRB     r0,[r2,#1]            ;828
-0003ba  e00a              B        |L2.978|
-                  |L2.956|
-0003bc  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;832
-0003c0  1a40              SUBS     r0,r0,r1              ;832
-0003c2  9005              STR      r0,[sp,#0x14]         ;832
-0003c4  9805              LDR      r0,[sp,#0x14]         ;833
-0003c6  f8ce0030          STR      r0,[lr,#0x30]         ;833  ; InFlashSave
-0003ca  7850              LDRB     r0,[r2,#1]            ;834  ; correct_por
-0003cc  f0200001          BIC      r0,r0,#1              ;834
-0003d0  7050              STRB     r0,[r2,#1]            ;834
-                  |L2.978|
-0003d2  f8b80000          LDRH     r0,[r8,#0]            ;837  ; Modify_B_ACT
-0003d6  9002              STR      r0,[sp,#8]            ;837
-0003d8  8819              LDRH     r1,[r3,#0]            ;838  ; Modify_A_ACT
-0003da  9802              LDR      r0,[sp,#8]            ;838
-0003dc  1a40              SUBS     r0,r0,r1              ;838
-0003de  9002              STR      r0,[sp,#8]            ;838
-0003e0  9802              LDR      r0,[sp,#8]            ;839
-0003e2  0300              LSLS     r0,r0,#12             ;839
-0003e4  9002              STR      r0,[sp,#8]            ;839
-0003e6  f8b90000          LDRH     r0,[r9,#0]            ;840  ; Modify_D_READ
-0003ea  f8bc1000          LDRH     r1,[r12,#0]           ;840  ; Modify_C_READ
-0003ee  1a40              SUBS     r0,r0,r1              ;840
-0003f0  9003              STR      r0,[sp,#0xc]          ;840
-0003f2  9803              LDR      r0,[sp,#0xc]          ;841
-0003f4  0040              LSLS     r0,r0,#1              ;841
-0003f6  9003              STR      r0,[sp,#0xc]          ;841
-0003f8  e01e              B        |L2.1080|
-0003fa  0000              DCW      0x0000
+00013a  e1c3              B        |L2.1220|
+                  |L2.316|
+00013c  e255              B        |L2.1514|
+                  |L2.318|
+00013e  9004              STR      r0,[sp,#0x10]         ;691
+000140  6848              LDR      r0,[r1,#4]            ;692  ; Correct_Parametet
+000142  9c04              LDR      r4,[sp,#0x10]         ;692
+000144  4360              MULS     r0,r4,r0              ;692
+000146  9004              STR      r0,[sp,#0x10]         ;692
+000148  e9dd5404          LDRD     r5,r4,[sp,#0x10]      ;693
+00014c  48b9              LDR      r0,|L2.1076|
+00014e  42ac              CMP      r4,r5                 ;693
+000150  d20a              BCS      |L2.360|
+000152  e9dd4504          LDRD     r4,r5,[sp,#0x10]      ;695
+000156  1b64              SUBS     r4,r4,r5              ;695
+000158  9404              STR      r4,[sp,#0x10]         ;695
+00015a  9c04              LDR      r4,[sp,#0x10]         ;696
+00015c  6044              STR      r4,[r0,#4]            ;696  ; Correct_Strong
+00015e  7854              LDRB     r4,[r2,#1]            ;697  ; correct_por
+000160  f0440401          ORR      r4,r4,#1              ;697
+000164  7054              STRB     r4,[r2,#1]            ;697
+000166  e009              B        |L2.380|
+                  |L2.360|
+000168  e9dd5404          LDRD     r5,r4,[sp,#0x10]      ;701
+00016c  1b64              SUBS     r4,r4,r5              ;701
+00016e  9405              STR      r4,[sp,#0x14]         ;701
+000170  9c05              LDR      r4,[sp,#0x14]         ;702
+000172  6044              STR      r4,[r0,#4]            ;702  ; Correct_Strong
+000174  7854              LDRB     r4,[r2,#1]            ;703  ; correct_por
+000176  f0240401          BIC      r4,r4,#1              ;703
+00017a  7054              STRB     r4,[r2,#1]            ;703
+                  |L2.380|
+00017c  f8b84000          LDRH     r4,[r8,#0]            ;706  ; Modify_B_ACT
+000180  9402              STR      r4,[sp,#8]            ;706
+000182  881b              LDRH     r3,[r3,#0]            ;707  ; Modify_A_ACT
+000184  9c02              LDR      r4,[sp,#8]            ;707
+000186  1ae3              SUBS     r3,r4,r3              ;707
+000188  9302              STR      r3,[sp,#8]            ;707
+00018a  9b02              LDR      r3,[sp,#8]            ;708
+00018c  031b              LSLS     r3,r3,#12             ;708
+00018e  9302              STR      r3,[sp,#8]            ;708
+000190  f8b93000          LDRH     r3,[r9,#0]            ;709  ; Modify_D_READ
+000194  f8bc4000          LDRH     r4,[r12,#0]           ;709  ; Modify_C_READ
+000198  1b1b              SUBS     r3,r3,r4              ;709
+00019a  9303              STR      r3,[sp,#0xc]          ;709
+00019c  9b03              LDR      r3,[sp,#0xc]          ;710
+00019e  005b              LSLS     r3,r3,#1              ;710
+0001a0  9303              STR      r3,[sp,#0xc]          ;710
+0001a2  e9dd3402          LDRD     r3,r4,[sp,#8]         ;711
+0001a6  fbb3f3f4          UDIV     r3,r3,r4              ;711
+0001aa  9302              STR      r3,[sp,#8]            ;711
+0001ac  9b02              LDR      r3,[sp,#8]            ;712
+0001ae  608b              STR      r3,[r1,#8]            ;712  ; Correct_Parametet
+0001b0  e000              B        |L2.436|
+                  |L2.434|
+0001b2  e221              B        |L2.1528|
+                  |L2.436|
+0001b4  f8b83000          LDRH     r3,[r8,#0]            ;713  ; Modify_B_ACT
+0001b8  9302              STR      r3,[sp,#8]            ;713
+0001ba  9b02              LDR      r3,[sp,#8]            ;714
+0001bc  031b              LSLS     r3,r3,#12             ;714
+0001be  9302              STR      r3,[sp,#8]            ;714
+0001c0  6889              LDR      r1,[r1,#8]            ;715  ; Correct_Parametet
+0001c2  9101              STR      r1,[sp,#4]            ;715
+0001c4  f8b93000          LDRH     r3,[r9,#0]            ;716  ; Modify_D_READ
+0001c8  9901              LDR      r1,[sp,#4]            ;716
+0001ca  4359              MULS     r1,r3,r1              ;716
+0001cc  0049              LSLS     r1,r1,#1              ;716
+0001ce  9101              STR      r1,[sp,#4]            ;716
+0001d0  e9dd3101          LDRD     r3,r1,[sp,#4]         ;717
+0001d4  4299              CMP      r1,r3                 ;717
+0001d6  d20a              BCS      |L2.494|
+0001d8  e9dd1301          LDRD     r1,r3,[sp,#4]         ;719
+0001dc  1ac9              SUBS     r1,r1,r3              ;719
+0001de  9101              STR      r1,[sp,#4]            ;719
+0001e0  9901              LDR      r1,[sp,#4]            ;720
+0001e2  6081              STR      r1,[r0,#8]            ;720  ; Correct_Strong
+0001e4  7850              LDRB     r0,[r2,#1]            ;721  ; correct_por
+0001e6  f0400004          ORR      r0,r0,#4              ;721
+0001ea  7050              STRB     r0,[r2,#1]            ;721
+0001ec  e009              B        |L2.514|
+                  |L2.494|
+0001ee  e9dd3101          LDRD     r3,r1,[sp,#4]         ;725
+0001f2  1ac9              SUBS     r1,r1,r3              ;725
+0001f4  9102              STR      r1,[sp,#8]            ;725
+0001f6  9902              LDR      r1,[sp,#8]            ;726
+0001f8  6081              STR      r1,[r0,#8]            ;726  ; Correct_Strong
+0001fa  7850              LDRB     r0,[r2,#1]            ;727  ; correct_por
+0001fc  f0200004          BIC      r0,r0,#4              ;727
+000200  7050              STRB     r0,[r2,#1]            ;727
+                  |L2.514|
+000202  f7fffffe          BL       Flash_Write_all
+000206  6838              LDR      r0,[r7,#0]            ;730  ; flagB
+000208  f0200008          BIC      r0,r0,#8              ;730
+00020c  6038              STR      r0,[r7,#0]            ;730  ; flagB
+00020e  e764              B        |L2.218|
+                  |L2.528|
+000210  6820              LDR      r0,[r4,#0]            ;732  ; Imon1_value
+000212  8028              STRH     r0,[r5,#0]            ;732
+000214  8830              LDRH     r0,[r6,#0]            ;733  ; Contr_Laod
+000216  f8ac0000          STRH     r0,[r12,#0]           ;733
+00021a  8019              STRH     r1,[r3,#0]            ;734
+00021c  e75d              B        |L2.218|
+                  |L2.542|
+00021e  6820              LDR      r0,[r4,#0]            ;744  ; Imon1_value
+000220  f8ab0000          STRH     r0,[r11,#0]           ;744
+000224  8830              LDRH     r0,[r6,#0]            ;745  ; Contr_Laod
+000226  f8a90000          STRH     r0,[r9,#0]            ;745
+00022a  f8a81000          STRH     r1,[r8,#0]            ;746
+00022e  f8b80000          LDRH     r0,[r8,#0]            ;748  ; Modify_B_ACT
+000232  9005              STR      r0,[sp,#0x14]         ;748
+000234  8819              LDRH     r1,[r3,#0]            ;749  ; Modify_A_ACT
+000236  9805              LDR      r0,[sp,#0x14]         ;749
+000238  1a40              SUBS     r0,r0,r1              ;749
+00023a  9005              STR      r0,[sp,#0x14]         ;749
+00023c  9805              LDR      r0,[sp,#0x14]         ;750
+00023e  0300              LSLS     r0,r0,#12             ;750
+000240  9005              STR      r0,[sp,#0x14]         ;750
+000242  f8bb0000          LDRH     r0,[r11,#0]           ;751  ; Modify_B_READ
+000246  8829              LDRH     r1,[r5,#0]            ;751  ; Modify_A_READ
+000248  1a40              SUBS     r0,r0,r1              ;751
+00024a  9006              STR      r0,[sp,#0x18]         ;751
+00024c  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;752
+000250  fbb0f0f1          UDIV     r0,r0,r1              ;752
+000254  9005              STR      r0,[sp,#0x14]         ;752
+000256  9805              LDR      r0,[sp,#0x14]         ;753
+000258  f8ce0018          STR      r0,[lr,#0x18]         ;753  ; InFlashSave
+00025c  f8b81000          LDRH     r1,[r8,#0]            ;754  ; Modify_B_ACT
+000260  9105              STR      r1,[sp,#0x14]         ;754
+000262  9905              LDR      r1,[sp,#0x14]         ;755
+000264  0309              LSLS     r1,r1,#12             ;755
+000266  9105              STR      r1,[sp,#0x14]         ;755
+000268  f8bb1000          LDRH     r1,[r11,#0]           ;756  ; Modify_B_READ
+00026c  9104              STR      r1,[sp,#0x10]         ;756
+00026e  9904              LDR      r1,[sp,#0x10]         ;757
+000270  4348              MULS     r0,r1,r0              ;757
+000272  9004              STR      r0,[sp,#0x10]         ;757
+000274  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;758
+000278  4288              CMP      r0,r1                 ;758
+00027a  d20b              BCS      |L2.660|
+00027c  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;760
+000280  1a40              SUBS     r0,r0,r1              ;760
+000282  9004              STR      r0,[sp,#0x10]         ;760
+000284  9804              LDR      r0,[sp,#0x10]         ;761
+000286  f8ce0020          STR      r0,[lr,#0x20]         ;761  ; InFlashSave
+00028a  7850              LDRB     r0,[r2,#1]            ;762  ; correct_por
+00028c  f0400001          ORR      r0,r0,#1              ;762
+000290  7050              STRB     r0,[r2,#1]            ;762
+000292  e00a              B        |L2.682|
+                  |L2.660|
+000294  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;766
+000298  1a40              SUBS     r0,r0,r1              ;766
+00029a  9005              STR      r0,[sp,#0x14]         ;766
+00029c  9805              LDR      r0,[sp,#0x14]         ;767
+00029e  f8ce0020          STR      r0,[lr,#0x20]         ;767  ; InFlashSave
+0002a2  7850              LDRB     r0,[r2,#1]            ;768  ; correct_por
+0002a4  f0200001          BIC      r0,r0,#1              ;768
+0002a8  7050              STRB     r0,[r2,#1]            ;768
+                  |L2.682|
+0002aa  f8b80000          LDRH     r0,[r8,#0]            ;771  ; Modify_B_ACT
+0002ae  9002              STR      r0,[sp,#8]            ;771
+0002b0  8819              LDRH     r1,[r3,#0]            ;772  ; Modify_A_ACT
+0002b2  9802              LDR      r0,[sp,#8]            ;772
+0002b4  1a40              SUBS     r0,r0,r1              ;772
+0002b6  9002              STR      r0,[sp,#8]            ;772
+0002b8  9802              LDR      r0,[sp,#8]            ;773
+0002ba  0300              LSLS     r0,r0,#12             ;773
+0002bc  9002              STR      r0,[sp,#8]            ;773
+0002be  f8b90000          LDRH     r0,[r9,#0]            ;774  ; Modify_D_READ
+0002c2  f8bc1000          LDRH     r1,[r12,#0]           ;774  ; Modify_C_READ
+0002c6  1a40              SUBS     r0,r0,r1              ;774
+0002c8  9003              STR      r0,[sp,#0xc]          ;774
+0002ca  9803              LDR      r0,[sp,#0xc]          ;775
+0002cc  0040              LSLS     r0,r0,#1              ;775
+0002ce  9003              STR      r0,[sp,#0xc]          ;775
+0002d0  e9dd0102          LDRD     r0,r1,[sp,#8]         ;776
+0002d4  fbb0f0f1          UDIV     r0,r0,r1              ;776
+0002d8  9002              STR      r0,[sp,#8]            ;776
+0002da  9802              LDR      r0,[sp,#8]            ;777
+0002dc  f8ce001c          STR      r0,[lr,#0x1c]         ;777  ; InFlashSave
+0002e0  f8b81000          LDRH     r1,[r8,#0]            ;778  ; Modify_B_ACT
+0002e4  9102              STR      r1,[sp,#8]            ;778
+0002e6  9902              LDR      r1,[sp,#8]            ;779
+0002e8  0309              LSLS     r1,r1,#12             ;779
+0002ea  9102              STR      r1,[sp,#8]            ;779
+0002ec  9001              STR      r0,[sp,#4]            ;780
+0002ee  f8b91000          LDRH     r1,[r9,#0]            ;781  ; Modify_D_READ
+0002f2  9801              LDR      r0,[sp,#4]            ;781
+0002f4  4348              MULS     r0,r1,r0              ;781
+0002f6  0040              LSLS     r0,r0,#1              ;781
+0002f8  9001              STR      r0,[sp,#4]            ;781
+0002fa  e9dd1001          LDRD     r1,r0,[sp,#4]         ;782
+0002fe  4288              CMP      r0,r1                 ;782
+000300  d20b              BCS      |L2.794|
+000302  e9dd0101          LDRD     r0,r1,[sp,#4]         ;784
+000306  1a40              SUBS     r0,r0,r1              ;784
+000308  9001              STR      r0,[sp,#4]            ;784
+00030a  9801              LDR      r0,[sp,#4]            ;785
+00030c  f8ce0024          STR      r0,[lr,#0x24]         ;785  ; InFlashSave
+000310  7850              LDRB     r0,[r2,#1]            ;786  ; correct_por
+000312  f0400004          ORR      r0,r0,#4              ;786
+000316  7050              STRB     r0,[r2,#1]            ;786
+000318  e00a              B        |L2.816|
+                  |L2.794|
+00031a  e9dd1001          LDRD     r1,r0,[sp,#4]         ;790
+00031e  1a40              SUBS     r0,r0,r1              ;790
+000320  9002              STR      r0,[sp,#8]            ;790
+000322  9802              LDR      r0,[sp,#8]            ;791
+000324  f8ce0024          STR      r0,[lr,#0x24]         ;791  ; InFlashSave
+000328  7850              LDRB     r0,[r2,#1]            ;792  ; correct_por
+00032a  f0200004          BIC      r0,r0,#4              ;792
+00032e  7050              STRB     r0,[r2,#1]            ;792
+                  |L2.816|
+000330  4a3e              LDR      r2,|L2.1068|
+000332  2128              MOVS     r1,#0x28              ;794
+000334  4650              MOV      r0,r10                ;794
+000336  f7fffffe          BL       Flash_Write32BitDatas
+00033a  6838              LDR      r0,[r7,#0]            ;796  ; flagB
+00033c  f0200008          BIC      r0,r0,#8              ;796
+000340  6038              STR      r0,[r7,#0]            ;796  ; flagB
+000342  e6ca              B        |L2.218|
+                  |L2.836|
+000344  6820              LDR      r0,[r4,#0]            ;798  ; Imon1_value
+000346  8028              STRH     r0,[r5,#0]            ;798
+000348  8830              LDRH     r0,[r6,#0]            ;799  ; Contr_Laod
+00034a  f8ac0000          STRH     r0,[r12,#0]           ;799
+00034e  8019              STRH     r1,[r3,#0]            ;800
+000350  e6c3              B        |L2.218|
+                  |L2.850|
+000352  6820              LDR      r0,[r4,#0]            ;810  ; Imon1_value
+000354  f8ab0000          STRH     r0,[r11,#0]           ;810
+000358  8830              LDRH     r0,[r6,#0]            ;811  ; Contr_Laod
+00035a  f8a90000          STRH     r0,[r9,#0]            ;811
+00035e  f8a81000          STRH     r1,[r8,#0]            ;812
+000362  f8b80000          LDRH     r0,[r8,#0]            ;814  ; Modify_B_ACT
+000366  9005              STR      r0,[sp,#0x14]         ;814
+000368  8819              LDRH     r1,[r3,#0]            ;815  ; Modify_A_ACT
+00036a  9805              LDR      r0,[sp,#0x14]         ;815
+00036c  1a40              SUBS     r0,r0,r1              ;815
+00036e  9005              STR      r0,[sp,#0x14]         ;815
+000370  9805              LDR      r0,[sp,#0x14]         ;816
+000372  0300              LSLS     r0,r0,#12             ;816
+000374  9005              STR      r0,[sp,#0x14]         ;816
+000376  f8bb0000          LDRH     r0,[r11,#0]           ;817  ; Modify_B_READ
+00037a  8829              LDRH     r1,[r5,#0]            ;817  ; Modify_A_READ
+00037c  1a40              SUBS     r0,r0,r1              ;817
+00037e  9006              STR      r0,[sp,#0x18]         ;817
+000380  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;818
+000384  fbb0f0f1          UDIV     r0,r0,r1              ;818
+000388  9005              STR      r0,[sp,#0x14]         ;818
+00038a  9805              LDR      r0,[sp,#0x14]         ;819
+00038c  f8ce0028          STR      r0,[lr,#0x28]         ;819  ; InFlashSave
+000390  f8b81000          LDRH     r1,[r8,#0]            ;820  ; Modify_B_ACT
+000394  9105              STR      r1,[sp,#0x14]         ;820
+000396  9905              LDR      r1,[sp,#0x14]         ;821
+000398  0309              LSLS     r1,r1,#12             ;821
+00039a  9105              STR      r1,[sp,#0x14]         ;821
+00039c  f8bb1000          LDRH     r1,[r11,#0]           ;822  ; Modify_B_READ
+0003a0  9104              STR      r1,[sp,#0x10]         ;822
+0003a2  9904              LDR      r1,[sp,#0x10]         ;823
+0003a4  4348              MULS     r0,r1,r0              ;823
+0003a6  9004              STR      r0,[sp,#0x10]         ;823
+0003a8  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;824
+0003ac  4288              CMP      r0,r1                 ;824
+0003ae  d20b              BCS      |L2.968|
+0003b0  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;826
+0003b4  1a40              SUBS     r0,r0,r1              ;826
+0003b6  9004              STR      r0,[sp,#0x10]         ;826
+0003b8  9804              LDR      r0,[sp,#0x10]         ;827
+0003ba  f8ce0030          STR      r0,[lr,#0x30]         ;827  ; InFlashSave
+0003be  7850              LDRB     r0,[r2,#1]            ;828  ; correct_por
+0003c0  f0400001          ORR      r0,r0,#1              ;828
+0003c4  7050              STRB     r0,[r2,#1]            ;828
+0003c6  e00a              B        |L2.990|
+                  |L2.968|
+0003c8  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;832
+0003cc  1a40              SUBS     r0,r0,r1              ;832
+0003ce  9005              STR      r0,[sp,#0x14]         ;832
+0003d0  9805              LDR      r0,[sp,#0x14]         ;833
+0003d2  f8ce0030          STR      r0,[lr,#0x30]         ;833  ; InFlashSave
+0003d6  7850              LDRB     r0,[r2,#1]            ;834  ; correct_por
+0003d8  f0200001          BIC      r0,r0,#1              ;834
+0003dc  7050              STRB     r0,[r2,#1]            ;834
+                  |L2.990|
+0003de  f8b80000          LDRH     r0,[r8,#0]            ;837  ; Modify_B_ACT
+0003e2  9002              STR      r0,[sp,#8]            ;837
+0003e4  8819              LDRH     r1,[r3,#0]            ;838  ; Modify_A_ACT
+0003e6  9802              LDR      r0,[sp,#8]            ;838
+0003e8  1a40              SUBS     r0,r0,r1              ;838
+0003ea  9002              STR      r0,[sp,#8]            ;838
+0003ec  9802              LDR      r0,[sp,#8]            ;839
+0003ee  0300              LSLS     r0,r0,#12             ;839
+0003f0  9002              STR      r0,[sp,#8]            ;839
+0003f2  f8b90000          LDRH     r0,[r9,#0]            ;840  ; Modify_D_READ
+0003f6  f8bc1000          LDRH     r1,[r12,#0]           ;840  ; Modify_C_READ
+0003fa  e01d              B        |L2.1080|
                   |L2.1020|
                           DCD      Imon1_value
                   |L2.1024|
@@ -775,136 +843,265 @@
                   |L2.1076|
                           DCD      Correct_Strong
                   |L2.1080|
-000438  e9dd0102          LDRD     r0,r1,[sp,#8]         ;842
-00043c  fbb0f0f1          UDIV     r0,r0,r1              ;842
-000440  9002              STR      r0,[sp,#8]            ;842
-000442  9802              LDR      r0,[sp,#8]            ;843
-000444  f8ce002c          STR      r0,[lr,#0x2c]         ;843  ; InFlashSave
-000448  f8b81000          LDRH     r1,[r8,#0]            ;844  ; Modify_B_ACT
-00044c  9102              STR      r1,[sp,#8]            ;844
-00044e  9902              LDR      r1,[sp,#8]            ;845
-000450  0309              LSLS     r1,r1,#12             ;845
-000452  9102              STR      r1,[sp,#8]            ;845
-000454  9001              STR      r0,[sp,#4]            ;846
-000456  f8b91000          LDRH     r1,[r9,#0]            ;847  ; Modify_D_READ
-00045a  9801              LDR      r0,[sp,#4]            ;847
-00045c  4348              MULS     r0,r1,r0              ;847
-00045e  0040              LSLS     r0,r0,#1              ;847
-000460  9001              STR      r0,[sp,#4]            ;847
-000462  e9dd1001          LDRD     r1,r0,[sp,#4]         ;848
-000466  4288              CMP      r0,r1                 ;848
-000468  d20b              BCS      |L2.1154|
-00046a  e9dd0101          LDRD     r0,r1,[sp,#4]         ;850
-00046e  1a40              SUBS     r0,r0,r1              ;850
-000470  9001              STR      r0,[sp,#4]            ;850
-000472  9801              LDR      r0,[sp,#4]            ;851
-000474  f8ce0034          STR      r0,[lr,#0x34]         ;851  ; InFlashSave
-000478  7850              LDRB     r0,[r2,#1]            ;852  ; correct_por
-00047a  f0400004          ORR      r0,r0,#4              ;852
-00047e  7050              STRB     r0,[r2,#1]            ;852
-000480  e00a              B        |L2.1176|
-                  |L2.1154|
-000482  e9dd1001          LDRD     r1,r0,[sp,#4]         ;856
-000486  1a40              SUBS     r0,r0,r1              ;856
-000488  9002              STR      r0,[sp,#8]            ;856
-00048a  9802              LDR      r0,[sp,#8]            ;857
-00048c  f8ce0034          STR      r0,[lr,#0x34]         ;857  ; InFlashSave
-000490  7850              LDRB     r0,[r2,#1]            ;858  ; correct_por
-000492  f0200004          BIC      r0,r0,#4              ;858
-000496  7050              STRB     r0,[r2,#1]            ;858
-                  |L2.1176|
-000498  4a34              LDR      r2,|L2.1388|
-00049a  2128              MOVS     r1,#0x28              ;860
-00049c  4650              MOV      r0,r10                ;860
-00049e  f7fffffe          BL       Flash_Write32BitDatas
-0004a2  6838              LDR      r0,[r7,#0]            ;862  ; flagB
-0004a4  f0200008          BIC      r0,r0,#8              ;862
-0004a8  6038              STR      r0,[r7,#0]            ;862  ; flagB
-0004aa  e612              B        |L2.210|
-                  |L2.1196|
-0004ac  6820              LDR      r0,[r4,#0]            ;864  ; Imon1_value
-0004ae  8028              STRH     r0,[r5,#0]            ;864
-0004b0  8830              LDRH     r0,[r6,#0]            ;865  ; Contr_Laod
-0004b2  f8ac0000          STRH     r0,[r12,#0]           ;865
-0004b6  8019              STRH     r1,[r3,#0]            ;866
-0004b8  e60b              B        |L2.210|
-                  |L2.1210|
-0004ba  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;898
-0004be  1a40              SUBS     r0,r0,r1              ;898
-0004c0  9005              STR      r0,[sp,#0x14]         ;898
-0004c2  9805              LDR      r0,[sp,#0x14]         ;899
-0004c4  f8ce0040          STR      r0,[lr,#0x40]         ;899  ; InFlashSave
-0004c8  7850              LDRB     r0,[r2,#1]            ;900  ; correct_por
-0004ca  f0200001          BIC      r0,r0,#1              ;900
-0004ce  7050              STRB     r0,[r2,#1]            ;900
-                  |L2.1232|
-0004d0  f8b80000          LDRH     r0,[r8,#0]            ;903  ; Modify_B_ACT
-0004d4  9002              STR      r0,[sp,#8]            ;903
-0004d6  8819              LDRH     r1,[r3,#0]            ;904  ; Modify_A_ACT
-0004d8  9802              LDR      r0,[sp,#8]            ;904
-0004da  1a40              SUBS     r0,r0,r1              ;904
-0004dc  9002              STR      r0,[sp,#8]            ;904
-0004de  9802              LDR      r0,[sp,#8]            ;905
-0004e0  0300              LSLS     r0,r0,#12             ;905
-0004e2  9002              STR      r0,[sp,#8]            ;905
-0004e4  f8b90000          LDRH     r0,[r9,#0]            ;906  ; Modify_D_READ
-0004e8  f8bc1000          LDRH     r1,[r12,#0]           ;906  ; Modify_C_READ
-0004ec  1a40              SUBS     r0,r0,r1              ;906
-0004ee  9003              STR      r0,[sp,#0xc]          ;906
-0004f0  9803              LDR      r0,[sp,#0xc]          ;907
-0004f2  0040              LSLS     r0,r0,#1              ;907
-0004f4  9003              STR      r0,[sp,#0xc]          ;907
-0004f6  e9dd0102          LDRD     r0,r1,[sp,#8]         ;908
-0004fa  fbb0f0f1          UDIV     r0,r0,r1              ;908
-0004fe  9002              STR      r0,[sp,#8]            ;908
-000500  9802              LDR      r0,[sp,#8]            ;909
-000502  f8ce003c          STR      r0,[lr,#0x3c]         ;909  ; InFlashSave
-000506  f8b81000          LDRH     r1,[r8,#0]            ;910  ; Modify_B_ACT
-00050a  9102              STR      r1,[sp,#8]            ;910
-00050c  9902              LDR      r1,[sp,#8]            ;911
-00050e  0309              LSLS     r1,r1,#12             ;911
-000510  9102              STR      r1,[sp,#8]            ;911
-000512  9001              STR      r0,[sp,#4]            ;912
-000514  f8b91000          LDRH     r1,[r9,#0]            ;913  ; Modify_D_READ
-000518  9801              LDR      r0,[sp,#4]            ;913
-00051a  4348              MULS     r0,r1,r0              ;913
-00051c  0040              LSLS     r0,r0,#1              ;913
-00051e  9001              STR      r0,[sp,#4]            ;913
-000520  e9dd1001          LDRD     r1,r0,[sp,#4]         ;914
-000524  4288              CMP      r0,r1                 ;914
-000526  d20b              BCS      |L2.1344|
-000528  e9dd0101          LDRD     r0,r1,[sp,#4]         ;916
-00052c  1a40              SUBS     r0,r0,r1              ;916
-00052e  9001              STR      r0,[sp,#4]            ;916
-000530  9801              LDR      r0,[sp,#4]            ;917
-000532  f8ce0044          STR      r0,[lr,#0x44]         ;917  ; InFlashSave
-000536  7850              LDRB     r0,[r2,#1]            ;918  ; correct_por
-000538  f0400004          ORR      r0,r0,#4              ;918
-00053c  7050              STRB     r0,[r2,#1]            ;918
-00053e  e00a              B        |L2.1366|
-                  |L2.1344|
-000540  e9dd1001          LDRD     r1,r0,[sp,#4]         ;922
-000544  1a40              SUBS     r0,r0,r1              ;922
-000546  9002              STR      r0,[sp,#8]            ;922
-000548  9802              LDR      r0,[sp,#8]            ;923
-00054a  f8ce0044          STR      r0,[lr,#0x44]         ;923  ; InFlashSave
-00054e  7850              LDRB     r0,[r2,#1]            ;924  ; correct_por
-000550  f0200004          BIC      r0,r0,#4              ;924
-000554  7050              STRB     r0,[r2,#1]            ;924
-                  |L2.1366|
-000556  4a05              LDR      r2,|L2.1388|
-000558  2128              MOVS     r1,#0x28              ;926
-00055a  4650              MOV      r0,r10                ;926
-00055c  f7fffffe          BL       Flash_Write32BitDatas
-000560  6838              LDR      r0,[r7,#0]            ;928  ; flagB
-000562  f0200008          BIC      r0,r0,#8              ;928
-000566  6038              STR      r0,[r7,#0]            ;928  ; flagB
-000568  e5b3              B        |L2.210|
-;;;931    
+000438  1a40              SUBS     r0,r0,r1              ;840
+00043a  9003              STR      r0,[sp,#0xc]          ;840
+00043c  9803              LDR      r0,[sp,#0xc]          ;841
+00043e  0040              LSLS     r0,r0,#1              ;841
+000440  9003              STR      r0,[sp,#0xc]          ;841
+000442  e9dd0102          LDRD     r0,r1,[sp,#8]         ;842
+000446  fbb0f0f1          UDIV     r0,r0,r1              ;842
+00044a  9002              STR      r0,[sp,#8]            ;842
+00044c  9802              LDR      r0,[sp,#8]            ;843
+00044e  f8ce002c          STR      r0,[lr,#0x2c]         ;843  ; InFlashSave
+000452  f8b81000          LDRH     r1,[r8,#0]            ;844  ; Modify_B_ACT
+000456  9102              STR      r1,[sp,#8]            ;844
+000458  9902              LDR      r1,[sp,#8]            ;845
+00045a  0309              LSLS     r1,r1,#12             ;845
+00045c  9102              STR      r1,[sp,#8]            ;845
+00045e  9001              STR      r0,[sp,#4]            ;846
+000460  f8b91000          LDRH     r1,[r9,#0]            ;847  ; Modify_D_READ
+000464  9801              LDR      r0,[sp,#4]            ;847
+000466  4348              MULS     r0,r1,r0              ;847
+000468  0040              LSLS     r0,r0,#1              ;847
+00046a  9001              STR      r0,[sp,#4]            ;847
+00046c  e9dd1001          LDRD     r1,r0,[sp,#4]         ;848
+000470  4288              CMP      r0,r1                 ;848
+000472  d20b              BCS      |L2.1164|
+000474  e9dd0101          LDRD     r0,r1,[sp,#4]         ;850
+000478  1a40              SUBS     r0,r0,r1              ;850
+00047a  9001              STR      r0,[sp,#4]            ;850
+00047c  9801              LDR      r0,[sp,#4]            ;851
+00047e  f8ce0034          STR      r0,[lr,#0x34]         ;851  ; InFlashSave
+000482  7850              LDRB     r0,[r2,#1]            ;852  ; correct_por
+000484  f0400004          ORR      r0,r0,#4              ;852
+000488  7050              STRB     r0,[r2,#1]            ;852
+00048a  e00a              B        |L2.1186|
+                  |L2.1164|
+00048c  e9dd1001          LDRD     r1,r0,[sp,#4]         ;856
+000490  1a40              SUBS     r0,r0,r1              ;856
+000492  9002              STR      r0,[sp,#8]            ;856
+000494  9802              LDR      r0,[sp,#8]            ;857
+000496  f8ce0034          STR      r0,[lr,#0x34]         ;857  ; InFlashSave
+00049a  7850              LDRB     r0,[r2,#1]            ;858  ; correct_por
+00049c  f0200004          BIC      r0,r0,#4              ;858
+0004a0  7050              STRB     r0,[r2,#1]            ;858
+                  |L2.1186|
+0004a2  4a81              LDR      r2,|L2.1704|
+0004a4  2128              MOVS     r1,#0x28              ;860
+0004a6  4650              MOV      r0,r10                ;860
+0004a8  f7fffffe          BL       Flash_Write32BitDatas
+0004ac  6838              LDR      r0,[r7,#0]            ;862  ; flagB
+0004ae  f0200008          BIC      r0,r0,#8              ;862
+0004b2  6038              STR      r0,[r7,#0]            ;862  ; flagB
+0004b4  e611              B        |L2.218|
+                  |L2.1206|
+0004b6  6820              LDR      r0,[r4,#0]            ;864  ; Imon1_value
+0004b8  8028              STRH     r0,[r5,#0]            ;864
+0004ba  8830              LDRH     r0,[r6,#0]            ;865  ; Contr_Laod
+0004bc  f8ac0000          STRH     r0,[r12,#0]           ;865
+0004c0  8019              STRH     r1,[r3,#0]            ;866
+0004c2  e60a              B        |L2.218|
+                  |L2.1220|
+0004c4  6820              LDR      r0,[r4,#0]            ;876  ; Imon1_value
+0004c6  f8ab0000          STRH     r0,[r11,#0]           ;876
+0004ca  8830              LDRH     r0,[r6,#0]            ;877  ; Contr_Laod
+0004cc  f8a90000          STRH     r0,[r9,#0]            ;877
+0004d0  f8a81000          STRH     r1,[r8,#0]            ;878
+0004d4  f8b80000          LDRH     r0,[r8,#0]            ;880  ; Modify_B_ACT
+0004d8  9005              STR      r0,[sp,#0x14]         ;880
+0004da  8819              LDRH     r1,[r3,#0]            ;881  ; Modify_A_ACT
+0004dc  9805              LDR      r0,[sp,#0x14]         ;881
+0004de  1a40              SUBS     r0,r0,r1              ;881
+0004e0  9005              STR      r0,[sp,#0x14]         ;881
+0004e2  9805              LDR      r0,[sp,#0x14]         ;882
+0004e4  0300              LSLS     r0,r0,#12             ;882
+0004e6  9005              STR      r0,[sp,#0x14]         ;882
+0004e8  f8bb0000          LDRH     r0,[r11,#0]           ;883  ; Modify_B_READ
+0004ec  8829              LDRH     r1,[r5,#0]            ;883  ; Modify_A_READ
+0004ee  1a40              SUBS     r0,r0,r1              ;883
+0004f0  9006              STR      r0,[sp,#0x18]         ;883
+0004f2  e9dd0105          LDRD     r0,r1,[sp,#0x14]      ;884
+0004f6  fbb0f0f1          UDIV     r0,r0,r1              ;884
+0004fa  9005              STR      r0,[sp,#0x14]         ;884
+0004fc  9805              LDR      r0,[sp,#0x14]         ;885
+0004fe  f8ce0038          STR      r0,[lr,#0x38]         ;885  ; InFlashSave
+000502  f8b81000          LDRH     r1,[r8,#0]            ;886  ; Modify_B_ACT
+000506  9105              STR      r1,[sp,#0x14]         ;886
+000508  9905              LDR      r1,[sp,#0x14]         ;887
+00050a  0309              LSLS     r1,r1,#12             ;887
+00050c  9105              STR      r1,[sp,#0x14]         ;887
+00050e  f8bb1000          LDRH     r1,[r11,#0]           ;888  ; Modify_B_READ
+000512  9104              STR      r1,[sp,#0x10]         ;888
+000514  9904              LDR      r1,[sp,#0x10]         ;889
+000516  4348              MULS     r0,r1,r0              ;889
+000518  9004              STR      r0,[sp,#0x10]         ;889
+00051a  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;890
+00051e  4288              CMP      r0,r1                 ;890
+000520  d20b              BCS      |L2.1338|
+000522  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;892
+000526  1a40              SUBS     r0,r0,r1              ;892
+000528  9004              STR      r0,[sp,#0x10]         ;892
+00052a  9804              LDR      r0,[sp,#0x10]         ;893
+00052c  f8ce0040          STR      r0,[lr,#0x40]         ;893  ; InFlashSave
+000530  7850              LDRB     r0,[r2,#1]            ;894  ; correct_por
+000532  f0400001          ORR      r0,r0,#1              ;894
+000536  7050              STRB     r0,[r2,#1]            ;894
+000538  e00a              B        |L2.1360|
+                  |L2.1338|
+00053a  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;898
+00053e  1a40              SUBS     r0,r0,r1              ;898
+000540  9005              STR      r0,[sp,#0x14]         ;898
+000542  9805              LDR      r0,[sp,#0x14]         ;899
+000544  f8ce0040          STR      r0,[lr,#0x40]         ;899  ; InFlashSave
+000548  7850              LDRB     r0,[r2,#1]            ;900  ; correct_por
+00054a  f0200001          BIC      r0,r0,#1              ;900
+00054e  7050              STRB     r0,[r2,#1]            ;900
+                  |L2.1360|
+000550  f8b80000          LDRH     r0,[r8,#0]            ;903  ; Modify_B_ACT
+000554  9002              STR      r0,[sp,#8]            ;903
+000556  8819              LDRH     r1,[r3,#0]            ;904  ; Modify_A_ACT
+000558  9802              LDR      r0,[sp,#8]            ;904
+00055a  1a40              SUBS     r0,r0,r1              ;904
+00055c  9002              STR      r0,[sp,#8]            ;904
+00055e  9802              LDR      r0,[sp,#8]            ;905
+000560  0300              LSLS     r0,r0,#12             ;905
+000562  9002              STR      r0,[sp,#8]            ;905
+000564  f8b90000          LDRH     r0,[r9,#0]            ;906  ; Modify_D_READ
+000568  f8bc1000          LDRH     r1,[r12,#0]           ;906  ; Modify_C_READ
+00056c  1a40              SUBS     r0,r0,r1              ;906
+00056e  9003              STR      r0,[sp,#0xc]          ;906
+000570  9803              LDR      r0,[sp,#0xc]          ;907
+000572  0040              LSLS     r0,r0,#1              ;907
+000574  9003              STR      r0,[sp,#0xc]          ;907
+000576  e9dd0102          LDRD     r0,r1,[sp,#8]         ;908
+00057a  fbb0f0f1          UDIV     r0,r0,r1              ;908
+00057e  9002              STR      r0,[sp,#8]            ;908
+000580  9802              LDR      r0,[sp,#8]            ;909
+000582  f8ce003c          STR      r0,[lr,#0x3c]         ;909  ; InFlashSave
+000586  f8b81000          LDRH     r1,[r8,#0]            ;910  ; Modify_B_ACT
+00058a  9102              STR      r1,[sp,#8]            ;910
+00058c  9902              LDR      r1,[sp,#8]            ;911
+00058e  0309              LSLS     r1,r1,#12             ;911
+000590  9102              STR      r1,[sp,#8]            ;911
+000592  9001              STR      r0,[sp,#4]            ;912
+000594  f8b91000          LDRH     r1,[r9,#0]            ;913  ; Modify_D_READ
+000598  9801              LDR      r0,[sp,#4]            ;913
+00059a  4348              MULS     r0,r1,r0              ;913
+00059c  0040              LSLS     r0,r0,#1              ;913
+00059e  9001              STR      r0,[sp,#4]            ;913
+0005a0  e9dd1001          LDRD     r1,r0,[sp,#4]         ;914
+0005a4  4288              CMP      r0,r1                 ;914
+0005a6  d20b              BCS      |L2.1472|
+0005a8  e9dd0101          LDRD     r0,r1,[sp,#4]         ;916
+0005ac  1a40              SUBS     r0,r0,r1              ;916
+0005ae  9001              STR      r0,[sp,#4]            ;916
+0005b0  9801              LDR      r0,[sp,#4]            ;917
+0005b2  f8ce0044          STR      r0,[lr,#0x44]         ;917  ; InFlashSave
+0005b6  7850              LDRB     r0,[r2,#1]            ;918  ; correct_por
+0005b8  f0400004          ORR      r0,r0,#4              ;918
+0005bc  7050              STRB     r0,[r2,#1]            ;918
+0005be  e00a              B        |L2.1494|
+                  |L2.1472|
+0005c0  e9dd1001          LDRD     r1,r0,[sp,#4]         ;922
+0005c4  1a40              SUBS     r0,r0,r1              ;922
+0005c6  9002              STR      r0,[sp,#8]            ;922
+0005c8  9802              LDR      r0,[sp,#8]            ;923
+0005ca  f8ce0044          STR      r0,[lr,#0x44]         ;923  ; InFlashSave
+0005ce  7850              LDRB     r0,[r2,#1]            ;924  ; correct_por
+0005d0  f0200004          BIC      r0,r0,#4              ;924
+0005d4  7050              STRB     r0,[r2,#1]            ;924
+                  |L2.1494|
+0005d6  4a34              LDR      r2,|L2.1704|
+0005d8  2128              MOVS     r1,#0x28              ;926
+0005da  4650              MOV      r0,r10                ;926
+0005dc  f7fffffe          BL       Flash_Write32BitDatas
+0005e0  6838              LDR      r0,[r7,#0]            ;928  ; flagB
+0005e2  f0200008          BIC      r0,r0,#8              ;928
+0005e6  6038              STR      r0,[r7,#0]            ;928  ; flagB
+0005e8  e577              B        |L2.218|
+                  |L2.1514|
+0005ea  6820              LDR      r0,[r4,#0]            ;930  ; Imon1_value
+0005ec  8028              STRH     r0,[r5,#0]            ;930
+0005ee  8830              LDRH     r0,[r6,#0]            ;931  ; Contr_Laod
+0005f0  f8ac0000          STRH     r0,[r12,#0]           ;931
+0005f4  8019              STRH     r1,[r3,#0]            ;932
+0005f6  e570              B        |L2.218|
+                  |L2.1528|
+0005f8  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;964
+0005fc  1a40              SUBS     r0,r0,r1              ;964
+0005fe  9005              STR      r0,[sp,#0x14]         ;964
+000600  9805              LDR      r0,[sp,#0x14]         ;965
+000602  f8ce0050          STR      r0,[lr,#0x50]         ;965  ; InFlashSave
+000606  7850              LDRB     r0,[r2,#1]            ;966  ; correct_por
+000608  f0200001          BIC      r0,r0,#1              ;966
+00060c  7050              STRB     r0,[r2,#1]            ;966
+                  |L2.1550|
+00060e  f8b80000          LDRH     r0,[r8,#0]            ;969  ; Modify_B_ACT
+000612  9002              STR      r0,[sp,#8]            ;969
+000614  8819              LDRH     r1,[r3,#0]            ;970  ; Modify_A_ACT
+000616  9802              LDR      r0,[sp,#8]            ;970
+000618  1a40              SUBS     r0,r0,r1              ;970
+00061a  9002              STR      r0,[sp,#8]            ;970
+00061c  9802              LDR      r0,[sp,#8]            ;971
+00061e  0300              LSLS     r0,r0,#12             ;971
+000620  9002              STR      r0,[sp,#8]            ;971
+000622  f8b90000          LDRH     r0,[r9,#0]            ;972  ; Modify_D_READ
+000626  f8bc1000          LDRH     r1,[r12,#0]           ;972  ; Modify_C_READ
+00062a  1a40              SUBS     r0,r0,r1              ;972
+00062c  9003              STR      r0,[sp,#0xc]          ;972
+00062e  9803              LDR      r0,[sp,#0xc]          ;973
+000630  0040              LSLS     r0,r0,#1              ;973
+000632  9003              STR      r0,[sp,#0xc]          ;973
+000634  e9dd0102          LDRD     r0,r1,[sp,#8]         ;974
+000638  fbb0f0f1          UDIV     r0,r0,r1              ;974
+00063c  9002              STR      r0,[sp,#8]            ;974
+00063e  9802              LDR      r0,[sp,#8]            ;975
+000640  f8ce004c          STR      r0,[lr,#0x4c]         ;975  ; InFlashSave
+000644  f8b81000          LDRH     r1,[r8,#0]            ;976  ; Modify_B_ACT
+000648  9102              STR      r1,[sp,#8]            ;976
+00064a  9902              LDR      r1,[sp,#8]            ;977
+00064c  0309              LSLS     r1,r1,#12             ;977
+00064e  9102              STR      r1,[sp,#8]            ;977
+000650  9001              STR      r0,[sp,#4]            ;978
+000652  f8b91000          LDRH     r1,[r9,#0]            ;979  ; Modify_D_READ
+000656  9801              LDR      r0,[sp,#4]            ;979
+000658  4348              MULS     r0,r1,r0              ;979
+00065a  0040              LSLS     r0,r0,#1              ;979
+00065c  9001              STR      r0,[sp,#4]            ;979
+00065e  e9dd1001          LDRD     r1,r0,[sp,#4]         ;980
+000662  4288              CMP      r0,r1                 ;980
+000664  d20b              BCS      |L2.1662|
+000666  e9dd0101          LDRD     r0,r1,[sp,#4]         ;982
+00066a  1a40              SUBS     r0,r0,r1              ;982
+00066c  9001              STR      r0,[sp,#4]            ;982
+00066e  9801              LDR      r0,[sp,#4]            ;983
+000670  f8ce0054          STR      r0,[lr,#0x54]         ;983  ; InFlashSave
+000674  7850              LDRB     r0,[r2,#1]            ;984  ; correct_por
+000676  f0400004          ORR      r0,r0,#4              ;984
+00067a  7050              STRB     r0,[r2,#1]            ;984
+00067c  e00a              B        |L2.1684|
+                  |L2.1662|
+00067e  e9dd1001          LDRD     r1,r0,[sp,#4]         ;988
+000682  1a40              SUBS     r0,r0,r1              ;988
+000684  9002              STR      r0,[sp,#8]            ;988
+000686  9802              LDR      r0,[sp,#8]            ;989
+000688  f8ce0054          STR      r0,[lr,#0x54]         ;989  ; InFlashSave
+00068c  7850              LDRB     r0,[r2,#1]            ;990  ; correct_por
+00068e  f0200004          BIC      r0,r0,#4              ;990
+000692  7050              STRB     r0,[r2,#1]            ;990
+                  |L2.1684|
+000694  4a04              LDR      r2,|L2.1704|
+000696  2128              MOVS     r1,#0x28              ;992
+000698  4650              MOV      r0,r10                ;992
+00069a  f7fffffe          BL       Flash_Write32BitDatas
+00069e  6838              LDR      r0,[r7,#0]            ;994  ; flagB
+0006a0  f0200008          BIC      r0,r0,#8              ;994
+0006a4  6038              STR      r0,[r7,#0]            ;994  ; flagB
+0006a6  e518              B        |L2.218|
+;;;997    
                           ENDP
 
-00056a  0000              DCW      0x0000
-                  |L2.1388|
+                  |L2.1704|
                           DCD      InFlashSave
 
                           AREA ||i.LoadVCal||, CODE, READONLY, ALIGN=2
@@ -1277,16 +1474,16 @@
                           AREA ||i.PowCCal||, CODE, READONLY, ALIGN=2
 
                   PowCCal PROC
-;;;1129   
-;;;1130   void PowCCal(u8 step)
+;;;1195   
+;;;1196   void PowCCal(u8 step)
 000000  e92d4ff0          PUSH     {r4-r11,lr}
-;;;1131   {
+;;;1197   {
 000004  b087              SUB      sp,sp,#0x1c
-;;;1132       if(step == 1)
-;;;1133       {
-;;;1134           Modify_A_READ = Imon_value;
-;;;1135   		Modify_C_READ = Contr_Current;
-;;;1136   		Modify_A_ACT = inputvalue;
+;;;1198       if(step == 1)
+;;;1199       {
+;;;1200           Modify_A_READ = Imon_value;
+;;;1201   		Modify_C_READ = Contr_Current;
+;;;1202   		Modify_A_ACT = inputvalue;
 000006  49ad              LDR      r1,|L4.700|
 000008  4fa8              LDR      r7,|L4.684|
 00000a  4ea9              LDR      r6,|L4.688|
@@ -1295,413 +1492,413 @@
 000012  4da9              LDR      r5,|L4.696|
 000014  4baa              LDR      r3,|L4.704|
 000016  b289              UXTH     r1,r1
-000018  2801              CMP      r0,#1                 ;1132
+000018  2801              CMP      r0,#1                 ;1198
 00001a  d04b              BEQ      |L4.180|
-;;;1137       }else if(step == 2){
-;;;1138           vu16 var16;
-;;;1139   			vu32 var32a;
-;;;1140   			vu32 var32b;
-;;;1141   			
-;;;1142   			vu16 var16a;
-;;;1143   			vu32 var32c;
-;;;1144   			vu32 var32d;
-;;;1145   			
-;;;1146   			Modify_D_READ = Contr_Current;
-;;;1147   			Modify_B_READ = Imon_value;
+;;;1203       }else if(step == 2){
+;;;1204           vu16 var16;
+;;;1205   			vu32 var32a;
+;;;1206   			vu32 var32b;
+;;;1207   			
+;;;1208   			vu16 var16a;
+;;;1209   			vu32 var32c;
+;;;1210   			vu32 var32d;
+;;;1211   			
+;;;1212   			Modify_D_READ = Contr_Current;
+;;;1213   			Modify_B_READ = Imon_value;
 00001c  f8dfc2a4          LDR      r12,|L4.708|
-;;;1148   			Modify_B_ACT = inputvalue;
-;;;1149   			var32a = Modify_B_ACT;
-;;;1150   			var32a = var32a - Modify_A_ACT;
-;;;1151   			var32a = var32a << 14;
-;;;1152   			var16 = Modify_B_READ - Modify_A_READ;
-;;;1153   			var32a = var32a / var16;
-;;;1154   			REG_POWERA = var32a;
-;;;1155   			var32a = Modify_B_ACT;
-;;;1156   			var32a = var32a << 14;
-;;;1157   			var32b = Modify_B_READ;
-;;;1158   			var32b = var32b * REG_POWERA;
-;;;1159   			if (var32a < var32b)
-;;;1160   			{
-;;;1161   				var32b = var32b - var32a;
-;;;1162   				REG_POWERA_Offset = var32b;
-;;;1163   				Polar4 |= 0x01;
-;;;1164   			}
-;;;1165   			else 
-;;;1166   			{
-;;;1167   				var32a = var32a - var32b;
-;;;1168   				REG_POWERA_Offset = var32a;
-;;;1169   				Polar4 &= ~0x01;					//?¡¤????¡ê?§µ???
-;;;1170   			}
-;;;1171   	//---------------------------------------------------------------------------------//
-;;;1172   			var32c = Modify_B_ACT; //???¡¤§µ?
-;;;1173   			var32c = var32c - Modify_A_ACT;
-;;;1174   			var32c = var32c << 14;
-;;;1175   			var16a=Modify_D_READ-Modify_C_READ;
-;;;1176   			var16a=var16a*2;
-;;;1177   			var32c=var32c/var16a;
-;;;1178   			SET_POWERA = var32c;
-;;;1179   			var32c = Modify_B_ACT;
-;;;1180   			var32c = var32c << 14;
-;;;1181   			var32d = SET_POWERA;
-;;;1182   			var32d = var32d * (Modify_D_READ*2);
-;;;1183   			if (var32c < var32d)
-;;;1184   			{
-;;;1185   				var32d = var32d - var32c;
-;;;1186   				SET_POWERA_Offset = var32d;
-;;;1187   				Polar4 |= 0x04;
-;;;1188   			}
-;;;1189   			else 
-;;;1190   			{
-;;;1191   				var32c = var32c - var32d;
-;;;1192   				SET_POWERA_Offset = var32c;
-;;;1193   				Polar4 &= ~0x04;
-;;;1194   			}
-;;;1195   			Flash_Write_all ();	
-;;;1196   			Flag_DAC_OFF=0;
+;;;1214   			Modify_B_ACT = inputvalue;
+;;;1215   			var32a = Modify_B_ACT;
+;;;1216   			var32a = var32a - Modify_A_ACT;
+;;;1217   			var32a = var32a << 14;
+;;;1218   			var16 = Modify_B_READ - Modify_A_READ;
+;;;1219   			var32a = var32a / var16;
+;;;1220   			REG_POWERA = var32a;
+;;;1221   			var32a = Modify_B_ACT;
+;;;1222   			var32a = var32a << 14;
+;;;1223   			var32b = Modify_B_READ;
+;;;1224   			var32b = var32b * REG_POWERA;
+;;;1225   			if (var32a < var32b)
+;;;1226   			{
+;;;1227   				var32b = var32b - var32a;
+;;;1228   				REG_POWERA_Offset = var32b;
+;;;1229   				Polar4 |= 0x01;
+;;;1230   			}
+;;;1231   			else 
+;;;1232   			{
+;;;1233   				var32a = var32a - var32b;
+;;;1234   				REG_POWERA_Offset = var32a;
+;;;1235   				Polar4 &= ~0x01;					//?¡¤????¡ê?§µ???
+;;;1236   			}
+;;;1237   	//---------------------------------------------------------------------------------//
+;;;1238   			var32c = Modify_B_ACT; //???¡¤§µ?
+;;;1239   			var32c = var32c - Modify_A_ACT;
+;;;1240   			var32c = var32c << 14;
+;;;1241   			var16a=Modify_D_READ-Modify_C_READ;
+;;;1242   			var16a=var16a*2;
+;;;1243   			var32c=var32c/var16a;
+;;;1244   			SET_POWERA = var32c;
+;;;1245   			var32c = Modify_B_ACT;
+;;;1246   			var32c = var32c << 14;
+;;;1247   			var32d = SET_POWERA;
+;;;1248   			var32d = var32d * (Modify_D_READ*2);
+;;;1249   			if (var32c < var32d)
+;;;1250   			{
+;;;1251   				var32d = var32d - var32c;
+;;;1252   				SET_POWERA_Offset = var32d;
+;;;1253   				Polar4 |= 0x04;
+;;;1254   			}
+;;;1255   			else 
+;;;1256   			{
+;;;1257   				var32c = var32c - var32d;
+;;;1258   				SET_POWERA_Offset = var32c;
+;;;1259   				Polar4 &= ~0x04;
+;;;1260   			}
+;;;1261   			Flash_Write_all ();	
+;;;1262   			Flag_DAC_OFF=0;
 000020  4ca9              LDR      r4,|L4.712|
 000022  f8df92a8          LDR      r9,|L4.716|
 000026  f8df82a8          LDR      r8,|L4.720|
 00002a  4aaa              LDR      r2,|L4.724|
-00002c  f64f7aff          MOV      r10,#0xffff           ;1176
-000030  2802              CMP      r0,#2                 ;1137
+00002c  f64f7aff          MOV      r10,#0xffff           ;1242
+000030  2802              CMP      r0,#2                 ;1203
 000032  d048              BEQ      |L4.198|
-;;;1197       }else if (step == 3)			   //?d?Çµ?
+;;;1263       }else if (step == 3)			   //?d?Çµ?
 000034  2803              CMP      r0,#3
 000036  d07d              BEQ      |L4.308|
-;;;1198   	{
-;;;1199   		Modify_A_READ = Imon_value;//??d
-;;;1200   		Modify_C_READ = Contr_Current;//???d
-;;;1201   		Modify_A_ACT = inputvalue;
-;;;1202   	}else if (step == 4)			   //?d?Çµ???
+;;;1264   	{
+;;;1265   		Modify_A_READ = Imon_value;//??d
+;;;1266   		Modify_C_READ = Contr_Current;//???d
+;;;1267   		Modify_A_ACT = inputvalue;
+;;;1268   	}else if (step == 4)			   //?d?Çµ???
 000038  2804              CMP      r0,#4
 00003a  d141              BNE      |L4.192|
-;;;1203   	{
-;;;1204   		vu16 var16;
-;;;1205   		vu32 var32a;
-;;;1206   		vu32 var32b;
-;;;1207   		
-;;;1208   		vu16 var16a;
-;;;1209   		vu32 var32c;
-;;;1210   		vu32 var32d;
-;;;1211   		
-;;;1212   		Modify_D_READ = Contr_Current;
+;;;1269   	{
+;;;1270   		vu16 var16;
+;;;1271   		vu32 var32a;
+;;;1272   		vu32 var32b;
+;;;1273   		
+;;;1274   		vu16 var16a;
+;;;1275   		vu32 var32c;
+;;;1276   		vu32 var32d;
+;;;1277   		
+;;;1278   		Modify_D_READ = Contr_Current;
 00003c  f8bb0000          LDRH     r0,[r11,#0]  ; Contr_Current
 000040  f8a90000          STRH     r0,[r9,#0]
-;;;1213   		Modify_B_READ = Imon_value;
+;;;1279   		Modify_B_READ = Imon_value;
 000044  8838              LDRH     r0,[r7,#0]  ; Imon_value
 000046  f8ac0000          STRH     r0,[r12,#0]
-;;;1214   		Modify_B_ACT = inputvalue;
+;;;1280   		Modify_B_ACT = inputvalue;
 00004a  f8a81000          STRH     r1,[r8,#0]
-;;;1215   		var32a = Modify_B_ACT;
+;;;1281   		var32a = Modify_B_ACT;
 00004e  f8b80000          LDRH     r0,[r8,#0]  ; Modify_B_ACT
 000052  9005              STR      r0,[sp,#0x14]
-;;;1216   		var32a = var32a - Modify_A_ACT;
+;;;1282   		var32a = var32a - Modify_A_ACT;
 000054  8819              LDRH     r1,[r3,#0]  ; Modify_A_ACT
 000056  9805              LDR      r0,[sp,#0x14]
 000058  1a40              SUBS     r0,r0,r1
 00005a  9005              STR      r0,[sp,#0x14]
-;;;1217   		var32a = var32a << 14;
+;;;1283   		var32a = var32a << 14;
 00005c  9805              LDR      r0,[sp,#0x14]
 00005e  0380              LSLS     r0,r0,#14
 000060  9005              STR      r0,[sp,#0x14]
-;;;1218   		var16 = Modify_B_READ - Modify_A_READ;
+;;;1284   		var16 = Modify_B_READ - Modify_A_READ;
 000062  f8bc0000          LDRH     r0,[r12,#0]  ; Modify_B_READ
 000066  8831              LDRH     r1,[r6,#0]  ; Modify_A_READ
 000068  1a40              SUBS     r0,r0,r1
 00006a  9006              STR      r0,[sp,#0x18]
-;;;1219   		var32a = var32a / var16;
+;;;1285   		var32a = var32a / var16;
 00006c  f8bd1018          LDRH     r1,[sp,#0x18]
 000070  9805              LDR      r0,[sp,#0x14]
 000072  fbb0f0f1          UDIV     r0,r0,r1
 000076  9005              STR      r0,[sp,#0x14]
-;;;1220   		REG_POWERA1 = var32a;
+;;;1286   		REG_POWERA1 = var32a;
 000078  4997              LDR      r1,|L4.728|
 00007a  9805              LDR      r0,[sp,#0x14]
 00007c  6588              STR      r0,[r1,#0x58]  ; InFlashSave
-;;;1221   		var32a = Modify_B_ACT;
+;;;1287   		var32a = Modify_B_ACT;
 00007e  f8b86000          LDRH     r6,[r8,#0]  ; Modify_B_ACT
 000082  9605              STR      r6,[sp,#0x14]
-;;;1222   		var32a = var32a << 14;
+;;;1288   		var32a = var32a << 14;
 000084  9e05              LDR      r6,[sp,#0x14]
 000086  03b6              LSLS     r6,r6,#14
 000088  9605              STR      r6,[sp,#0x14]
-;;;1223   		var32b = Modify_B_READ;
+;;;1289   		var32b = Modify_B_READ;
 00008a  f8bc6000          LDRH     r6,[r12,#0]  ; Modify_B_READ
 00008e  9604              STR      r6,[sp,#0x10]
-;;;1224   		var32b = var32b * REG_POWERA1;
+;;;1290   		var32b = var32b * REG_POWERA1;
 000090  9e04              LDR      r6,[sp,#0x10]
 000092  4370              MULS     r0,r6,r0
 000094  9004              STR      r0,[sp,#0x10]
-;;;1225   		if (var32a < var32b)
+;;;1291   		if (var32a < var32b)
 000096  e9dd6004          LDRD     r6,r0,[sp,#0x10]
 00009a  42b0              CMP      r0,r6
 00009c  d27e              BCS      |L4.412|
-;;;1226   		{
-;;;1227   			var32b = var32b - var32a;
+;;;1292   		{
+;;;1293   			var32b = var32b - var32a;
 00009e  e9dd0604          LDRD     r0,r6,[sp,#0x10]
 0000a2  1b80              SUBS     r0,r0,r6
 0000a4  9004              STR      r0,[sp,#0x10]
-;;;1228   			REG_POWERA_Offset1 = var32b;
+;;;1294   			REG_POWERA_Offset1 = var32b;
 0000a6  9804              LDR      r0,[sp,#0x10]
 0000a8  6608              STR      r0,[r1,#0x60]  ; InFlashSave
-;;;1229   			Polar4 |= 0x01;
+;;;1295   			Polar4 |= 0x01;
 0000aa  7910              LDRB     r0,[r2,#4]  ; correct_por
 0000ac  f0400001          ORR      r0,r0,#1
 0000b0  7110              STRB     r0,[r2,#4]
 0000b2  e0af              B        |L4.532|
                   |L4.180|
-0000b4  8838              LDRH     r0,[r7,#0]            ;1134  ; Imon_value
-0000b6  8030              STRH     r0,[r6,#0]            ;1134
-0000b8  f8bb0000          LDRH     r0,[r11,#0]           ;1135  ; Contr_Current
-0000bc  8028              STRH     r0,[r5,#0]            ;1135
-0000be  8019              STRH     r1,[r3,#0]            ;1136
+0000b4  8838              LDRH     r0,[r7,#0]            ;1200  ; Imon_value
+0000b6  8030              STRH     r0,[r6,#0]            ;1200
+0000b8  f8bb0000          LDRH     r0,[r11,#0]           ;1201  ; Contr_Current
+0000bc  8028              STRH     r0,[r5,#0]            ;1201
+0000be  8019              STRH     r1,[r3,#0]            ;1202
                   |L4.192|
-;;;1230   		}
-;;;1231   		else 
-;;;1232   		{
-;;;1233   			var32a = var32a - var32b;
-;;;1234   			REG_POWERA_Offset1 = var32a;
-;;;1235   			Polar4 &= ~0x01;					//?d????Âª?Çµ???
-;;;1236   		}
-;;;1237   //---------------------------------------------------------------------------------//
-;;;1238   		var32c = Modify_B_ACT; //???dÇµ?
-;;;1239   		var32c = var32c - Modify_A_ACT;
-;;;1240   		var32c = var32c << 14;
-;;;1241   		var16a=Modify_D_READ-Modify_C_READ;
-;;;1242   		var16a=var16a*2;
-;;;1243   		var32c=var32c/var16a;
-;;;1244   		SET_POWERA1 = var32c;
-;;;1245   		var32c = Modify_B_ACT;
-;;;1246   		var32c = var32c << 14;
-;;;1247   		var32d = SET_POWERA1;
-;;;1248   		var32d = var32d * (Modify_D_READ*2);
-;;;1249   		if (var32c < var32d)
-;;;1250   		{
-;;;1251   			var32d = var32d - var32c;
-;;;1252   			SET_POWERA_Offset1 = var32d;
-;;;1253   			Polar4 |= 0x04;
-;;;1254   		}
-;;;1255   		else 
-;;;1256   		{
-;;;1257   			var32c = var32c - var32d;
-;;;1258   			SET_POWERA_Offset1 = var32c;
-;;;1259   			Polar4 &= ~0x04;
-;;;1260   		}
-;;;1261   		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
-;;;1262   //			Flash_Write_all ();	
-;;;1263   		Flag_DAC_OFF=0;
-;;;1264   	}
-;;;1265   }
+;;;1296   		}
+;;;1297   		else 
+;;;1298   		{
+;;;1299   			var32a = var32a - var32b;
+;;;1300   			REG_POWERA_Offset1 = var32a;
+;;;1301   			Polar4 &= ~0x01;					//?d????Âª?Çµ???
+;;;1302   		}
+;;;1303   //---------------------------------------------------------------------------------//
+;;;1304   		var32c = Modify_B_ACT; //???dÇµ?
+;;;1305   		var32c = var32c - Modify_A_ACT;
+;;;1306   		var32c = var32c << 14;
+;;;1307   		var16a=Modify_D_READ-Modify_C_READ;
+;;;1308   		var16a=var16a*2;
+;;;1309   		var32c=var32c/var16a;
+;;;1310   		SET_POWERA1 = var32c;
+;;;1311   		var32c = Modify_B_ACT;
+;;;1312   		var32c = var32c << 14;
+;;;1313   		var32d = SET_POWERA1;
+;;;1314   		var32d = var32d * (Modify_D_READ*2);
+;;;1315   		if (var32c < var32d)
+;;;1316   		{
+;;;1317   			var32d = var32d - var32c;
+;;;1318   			SET_POWERA_Offset1 = var32d;
+;;;1319   			Polar4 |= 0x04;
+;;;1320   		}
+;;;1321   		else 
+;;;1322   		{
+;;;1323   			var32c = var32c - var32d;
+;;;1324   			SET_POWERA_Offset1 = var32c;
+;;;1325   			Polar4 &= ~0x04;
+;;;1326   		}
+;;;1327   		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+;;;1328   //			Flash_Write_all ();	
+;;;1329   		Flag_DAC_OFF=0;
+;;;1330   	}
+;;;1331   }
 0000c0  b007              ADD      sp,sp,#0x1c
 0000c2  e8bd8ff0          POP      {r4-r11,pc}
                   |L4.198|
-0000c6  f8bb0000          LDRH     r0,[r11,#0]           ;1146  ; Contr_Current
-0000ca  f8a90000          STRH     r0,[r9,#0]            ;1146
-0000ce  8838              LDRH     r0,[r7,#0]            ;1147  ; Imon_value
-0000d0  f8ac0000          STRH     r0,[r12,#0]           ;1147
-0000d4  f8a81000          STRH     r1,[r8,#0]            ;1148
-0000d8  f8b80000          LDRH     r0,[r8,#0]            ;1149  ; Modify_B_ACT
-0000dc  9005              STR      r0,[sp,#0x14]         ;1149
-0000de  8819              LDRH     r1,[r3,#0]            ;1150  ; Modify_A_ACT
-0000e0  9805              LDR      r0,[sp,#0x14]         ;1150
-0000e2  1a40              SUBS     r0,r0,r1              ;1150
-0000e4  9005              STR      r0,[sp,#0x14]         ;1150
-0000e6  9805              LDR      r0,[sp,#0x14]         ;1151
-0000e8  0380              LSLS     r0,r0,#14             ;1151
-0000ea  9005              STR      r0,[sp,#0x14]         ;1151
-0000ec  f8bc0000          LDRH     r0,[r12,#0]           ;1152  ; Modify_B_READ
-0000f0  8831              LDRH     r1,[r6,#0]            ;1152  ; Modify_A_READ
-0000f2  1a40              SUBS     r0,r0,r1              ;1152
-0000f4  9006              STR      r0,[sp,#0x18]         ;1152
-0000f6  f8bd1018          LDRH     r1,[sp,#0x18]         ;1153
-0000fa  9805              LDR      r0,[sp,#0x14]         ;1153
-0000fc  fbb0f0f1          UDIV     r0,r0,r1              ;1153
-000100  9005              STR      r0,[sp,#0x14]         ;1153
+0000c6  f8bb0000          LDRH     r0,[r11,#0]           ;1212  ; Contr_Current
+0000ca  f8a90000          STRH     r0,[r9,#0]            ;1212
+0000ce  8838              LDRH     r0,[r7,#0]            ;1213  ; Imon_value
+0000d0  f8ac0000          STRH     r0,[r12,#0]           ;1213
+0000d4  f8a81000          STRH     r1,[r8,#0]            ;1214
+0000d8  f8b80000          LDRH     r0,[r8,#0]            ;1215  ; Modify_B_ACT
+0000dc  9005              STR      r0,[sp,#0x14]         ;1215
+0000de  8819              LDRH     r1,[r3,#0]            ;1216  ; Modify_A_ACT
+0000e0  9805              LDR      r0,[sp,#0x14]         ;1216
+0000e2  1a40              SUBS     r0,r0,r1              ;1216
+0000e4  9005              STR      r0,[sp,#0x14]         ;1216
+0000e6  9805              LDR      r0,[sp,#0x14]         ;1217
+0000e8  0380              LSLS     r0,r0,#14             ;1217
+0000ea  9005              STR      r0,[sp,#0x14]         ;1217
+0000ec  f8bc0000          LDRH     r0,[r12,#0]           ;1218  ; Modify_B_READ
+0000f0  8831              LDRH     r1,[r6,#0]            ;1218  ; Modify_A_READ
+0000f2  1a40              SUBS     r0,r0,r1              ;1218
+0000f4  9006              STR      r0,[sp,#0x18]         ;1218
+0000f6  f8bd1018          LDRH     r1,[sp,#0x18]         ;1219
+0000fa  9805              LDR      r0,[sp,#0x14]         ;1219
+0000fc  fbb0f0f1          UDIV     r0,r0,r1              ;1219
+000100  9005              STR      r0,[sp,#0x14]         ;1219
 000102  4976              LDR      r1,|L4.732|
-000104  9805              LDR      r0,[sp,#0x14]         ;1154
-000106  6188              STR      r0,[r1,#0x18]         ;1154  ; Correct_Parametet
-000108  f8b80000          LDRH     r0,[r8,#0]            ;1155  ; Modify_B_ACT
-00010c  9005              STR      r0,[sp,#0x14]         ;1155
-00010e  9805              LDR      r0,[sp,#0x14]         ;1156
-000110  0380              LSLS     r0,r0,#14             ;1156
-000112  9005              STR      r0,[sp,#0x14]         ;1156
-000114  f8bc0000          LDRH     r0,[r12,#0]           ;1157  ; Modify_B_READ
-000118  9004              STR      r0,[sp,#0x10]         ;1157
-00011a  6988              LDR      r0,[r1,#0x18]         ;1158  ; Correct_Parametet
-00011c  9e04              LDR      r6,[sp,#0x10]         ;1158
-00011e  4370              MULS     r0,r6,r0              ;1158
-000120  9004              STR      r0,[sp,#0x10]         ;1158
-000122  e9dd7604          LDRD     r7,r6,[sp,#0x10]      ;1159
+000104  9805              LDR      r0,[sp,#0x14]         ;1220
+000106  6188              STR      r0,[r1,#0x18]         ;1220  ; Correct_Parametet
+000108  f8b80000          LDRH     r0,[r8,#0]            ;1221  ; Modify_B_ACT
+00010c  9005              STR      r0,[sp,#0x14]         ;1221
+00010e  9805              LDR      r0,[sp,#0x14]         ;1222
+000110  0380              LSLS     r0,r0,#14             ;1222
+000112  9005              STR      r0,[sp,#0x14]         ;1222
+000114  f8bc0000          LDRH     r0,[r12,#0]           ;1223  ; Modify_B_READ
+000118  9004              STR      r0,[sp,#0x10]         ;1223
+00011a  6988              LDR      r0,[r1,#0x18]         ;1224  ; Correct_Parametet
+00011c  9e04              LDR      r6,[sp,#0x10]         ;1224
+00011e  4370              MULS     r0,r6,r0              ;1224
+000120  9004              STR      r0,[sp,#0x10]         ;1224
+000122  e9dd7604          LDRD     r7,r6,[sp,#0x10]      ;1225
 000126  486e              LDR      r0,|L4.736|
-000128  42be              CMP      r6,r7                 ;1159
+000128  42be              CMP      r6,r7                 ;1225
 00012a  d20c              BCS      |L4.326|
-00012c  e9dd6704          LDRD     r6,r7,[sp,#0x10]      ;1161
-000130  1bf6              SUBS     r6,r6,r7              ;1161
+00012c  e9dd6704          LDRD     r6,r7,[sp,#0x10]      ;1227
+000130  1bf6              SUBS     r6,r6,r7              ;1227
 000132  e000              B        |L4.310|
                   |L4.308|
 000134  e05d              B        |L4.498|
                   |L4.310|
-000136  9604              STR      r6,[sp,#0x10]         ;1161
-000138  9e04              LDR      r6,[sp,#0x10]         ;1162
-00013a  6186              STR      r6,[r0,#0x18]         ;1162  ; Correct_Strong
-00013c  7916              LDRB     r6,[r2,#4]            ;1163  ; correct_por
-00013e  f0460601          ORR      r6,r6,#1              ;1163
-000142  7116              STRB     r6,[r2,#4]            ;1163
+000136  9604              STR      r6,[sp,#0x10]         ;1227
+000138  9e04              LDR      r6,[sp,#0x10]         ;1228
+00013a  6186              STR      r6,[r0,#0x18]         ;1228  ; Correct_Strong
+00013c  7916              LDRB     r6,[r2,#4]            ;1229  ; correct_por
+00013e  f0460601          ORR      r6,r6,#1              ;1229
+000142  7116              STRB     r6,[r2,#4]            ;1229
 000144  e009              B        |L4.346|
                   |L4.326|
-000146  e9dd7604          LDRD     r7,r6,[sp,#0x10]      ;1167
-00014a  1bf6              SUBS     r6,r6,r7              ;1167
-00014c  9605              STR      r6,[sp,#0x14]         ;1167
-00014e  9e05              LDR      r6,[sp,#0x14]         ;1168
-000150  6186              STR      r6,[r0,#0x18]         ;1168  ; Correct_Strong
-000152  7916              LDRB     r6,[r2,#4]            ;1169  ; correct_por
-000154  f0260601          BIC      r6,r6,#1              ;1169
-000158  7116              STRB     r6,[r2,#4]            ;1169
+000146  e9dd7604          LDRD     r7,r6,[sp,#0x10]      ;1233
+00014a  1bf6              SUBS     r6,r6,r7              ;1233
+00014c  9605              STR      r6,[sp,#0x14]         ;1233
+00014e  9e05              LDR      r6,[sp,#0x14]         ;1234
+000150  6186              STR      r6,[r0,#0x18]         ;1234  ; Correct_Strong
+000152  7916              LDRB     r6,[r2,#4]            ;1235  ; correct_por
+000154  f0260601          BIC      r6,r6,#1              ;1235
+000158  7116              STRB     r6,[r2,#4]            ;1235
                   |L4.346|
-00015a  f8b86000          LDRH     r6,[r8,#0]            ;1172  ; Modify_B_ACT
-00015e  9602              STR      r6,[sp,#8]            ;1172
-000160  881b              LDRH     r3,[r3,#0]            ;1173  ; Modify_A_ACT
-000162  9e02              LDR      r6,[sp,#8]            ;1173
-000164  1af3              SUBS     r3,r6,r3              ;1173
-000166  9302              STR      r3,[sp,#8]            ;1173
-000168  9b02              LDR      r3,[sp,#8]            ;1174
-00016a  039b              LSLS     r3,r3,#14             ;1174
-00016c  9302              STR      r3,[sp,#8]            ;1174
-00016e  f8b93000          LDRH     r3,[r9,#0]            ;1175  ; Modify_D_READ
-000172  882d              LDRH     r5,[r5,#0]            ;1175  ; Modify_C_READ
-000174  1b5b              SUBS     r3,r3,r5              ;1175
-000176  9303              STR      r3,[sp,#0xc]          ;1175
-000178  f8bd300c          LDRH     r3,[sp,#0xc]          ;1176
-00017c  ea0a0343          AND      r3,r10,r3,LSL #1      ;1176
-000180  9303              STR      r3,[sp,#0xc]          ;1176
-000182  f8bd500c          LDRH     r5,[sp,#0xc]          ;1177
-000186  9b02              LDR      r3,[sp,#8]            ;1177
-000188  fbb3f3f5          UDIV     r3,r3,r5              ;1177
-00018c  9302              STR      r3,[sp,#8]            ;1177
-00018e  9b02              LDR      r3,[sp,#8]            ;1178
-000190  61cb              STR      r3,[r1,#0x1c]         ;1178  ; Correct_Parametet
-000192  f8b83000          LDRH     r3,[r8,#0]            ;1179  ; Modify_B_ACT
-000196  9302              STR      r3,[sp,#8]            ;1179
-000198  9b02              LDR      r3,[sp,#8]            ;1180
+00015a  f8b86000          LDRH     r6,[r8,#0]            ;1238  ; Modify_B_ACT
+00015e  9602              STR      r6,[sp,#8]            ;1238
+000160  881b              LDRH     r3,[r3,#0]            ;1239  ; Modify_A_ACT
+000162  9e02              LDR      r6,[sp,#8]            ;1239
+000164  1af3              SUBS     r3,r6,r3              ;1239
+000166  9302              STR      r3,[sp,#8]            ;1239
+000168  9b02              LDR      r3,[sp,#8]            ;1240
+00016a  039b              LSLS     r3,r3,#14             ;1240
+00016c  9302              STR      r3,[sp,#8]            ;1240
+00016e  f8b93000          LDRH     r3,[r9,#0]            ;1241  ; Modify_D_READ
+000172  882d              LDRH     r5,[r5,#0]            ;1241  ; Modify_C_READ
+000174  1b5b              SUBS     r3,r3,r5              ;1241
+000176  9303              STR      r3,[sp,#0xc]          ;1241
+000178  f8bd300c          LDRH     r3,[sp,#0xc]          ;1242
+00017c  ea0a0343          AND      r3,r10,r3,LSL #1      ;1242
+000180  9303              STR      r3,[sp,#0xc]          ;1242
+000182  f8bd500c          LDRH     r5,[sp,#0xc]          ;1243
+000186  9b02              LDR      r3,[sp,#8]            ;1243
+000188  fbb3f3f5          UDIV     r3,r3,r5              ;1243
+00018c  9302              STR      r3,[sp,#8]            ;1243
+00018e  9b02              LDR      r3,[sp,#8]            ;1244
+000190  61cb              STR      r3,[r1,#0x1c]         ;1244  ; Correct_Parametet
+000192  f8b83000          LDRH     r3,[r8,#0]            ;1245  ; Modify_B_ACT
+000196  9302              STR      r3,[sp,#8]            ;1245
+000198  9b02              LDR      r3,[sp,#8]            ;1246
 00019a  e000              B        |L4.414|
                   |L4.412|
 00019c  e030              B        |L4.512|
                   |L4.414|
-00019e  039b              LSLS     r3,r3,#14             ;1180
-0001a0  9302              STR      r3,[sp,#8]            ;1180
-0001a2  69c9              LDR      r1,[r1,#0x1c]         ;1181  ; Correct_Parametet
-0001a4  9101              STR      r1,[sp,#4]            ;1181
-0001a6  f8b93000          LDRH     r3,[r9,#0]            ;1182  ; Modify_D_READ
-0001aa  9901              LDR      r1,[sp,#4]            ;1182
-0001ac  4359              MULS     r1,r3,r1              ;1182
-0001ae  0049              LSLS     r1,r1,#1              ;1182
-0001b0  9101              STR      r1,[sp,#4]            ;1182
-0001b2  e9dd3101          LDRD     r3,r1,[sp,#4]         ;1183
-0001b6  4299              CMP      r1,r3                 ;1183
+00019e  039b              LSLS     r3,r3,#14             ;1246
+0001a0  9302              STR      r3,[sp,#8]            ;1246
+0001a2  69c9              LDR      r1,[r1,#0x1c]         ;1247  ; Correct_Parametet
+0001a4  9101              STR      r1,[sp,#4]            ;1247
+0001a6  f8b93000          LDRH     r3,[r9,#0]            ;1248  ; Modify_D_READ
+0001aa  9901              LDR      r1,[sp,#4]            ;1248
+0001ac  4359              MULS     r1,r3,r1              ;1248
+0001ae  0049              LSLS     r1,r1,#1              ;1248
+0001b0  9101              STR      r1,[sp,#4]            ;1248
+0001b2  e9dd3101          LDRD     r3,r1,[sp,#4]         ;1249
+0001b6  4299              CMP      r1,r3                 ;1249
 0001b8  d20a              BCS      |L4.464|
-0001ba  e9dd1301          LDRD     r1,r3,[sp,#4]         ;1185
-0001be  1ac9              SUBS     r1,r1,r3              ;1185
-0001c0  9101              STR      r1,[sp,#4]            ;1185
-0001c2  9901              LDR      r1,[sp,#4]            ;1186
-0001c4  61c1              STR      r1,[r0,#0x1c]         ;1186  ; Correct_Strong
-0001c6  7910              LDRB     r0,[r2,#4]            ;1187  ; correct_por
-0001c8  f0400004          ORR      r0,r0,#4              ;1187
-0001cc  7110              STRB     r0,[r2,#4]            ;1187
+0001ba  e9dd1301          LDRD     r1,r3,[sp,#4]         ;1251
+0001be  1ac9              SUBS     r1,r1,r3              ;1251
+0001c0  9101              STR      r1,[sp,#4]            ;1251
+0001c2  9901              LDR      r1,[sp,#4]            ;1252
+0001c4  61c1              STR      r1,[r0,#0x1c]         ;1252  ; Correct_Strong
+0001c6  7910              LDRB     r0,[r2,#4]            ;1253  ; correct_por
+0001c8  f0400004          ORR      r0,r0,#4              ;1253
+0001cc  7110              STRB     r0,[r2,#4]            ;1253
 0001ce  e009              B        |L4.484|
                   |L4.464|
-0001d0  e9dd3101          LDRD     r3,r1,[sp,#4]         ;1191
-0001d4  1ac9              SUBS     r1,r1,r3              ;1191
-0001d6  9102              STR      r1,[sp,#8]            ;1191
-0001d8  9902              LDR      r1,[sp,#8]            ;1192
-0001da  61c1              STR      r1,[r0,#0x1c]         ;1192  ; Correct_Strong
-0001dc  7910              LDRB     r0,[r2,#4]            ;1193  ; correct_por
-0001de  f0200004          BIC      r0,r0,#4              ;1193
-0001e2  7110              STRB     r0,[r2,#4]            ;1193
+0001d0  e9dd3101          LDRD     r3,r1,[sp,#4]         ;1257
+0001d4  1ac9              SUBS     r1,r1,r3              ;1257
+0001d6  9102              STR      r1,[sp,#8]            ;1257
+0001d8  9902              LDR      r1,[sp,#8]            ;1258
+0001da  61c1              STR      r1,[r0,#0x1c]         ;1258  ; Correct_Strong
+0001dc  7910              LDRB     r0,[r2,#4]            ;1259  ; correct_por
+0001de  f0200004          BIC      r0,r0,#4              ;1259
+0001e2  7110              STRB     r0,[r2,#4]            ;1259
                   |L4.484|
 0001e4  f7fffffe          BL       Flash_Write_all
-0001e8  6820              LDR      r0,[r4,#0]            ;1196  ; flagB
-0001ea  f0200008          BIC      r0,r0,#8              ;1196
-0001ee  6020              STR      r0,[r4,#0]            ;1196  ; flagB
+0001e8  6820              LDR      r0,[r4,#0]            ;1262  ; flagB
+0001ea  f0200008          BIC      r0,r0,#8              ;1262
+0001ee  6020              STR      r0,[r4,#0]            ;1262  ; flagB
 0001f0  e766              B        |L4.192|
                   |L4.498|
-0001f2  8838              LDRH     r0,[r7,#0]            ;1199  ; Imon_value
-0001f4  8030              STRH     r0,[r6,#0]            ;1199
-0001f6  f8bb0000          LDRH     r0,[r11,#0]           ;1200  ; Contr_Current
-0001fa  8028              STRH     r0,[r5,#0]            ;1200
-0001fc  8019              STRH     r1,[r3,#0]            ;1201
+0001f2  8838              LDRH     r0,[r7,#0]            ;1265  ; Imon_value
+0001f4  8030              STRH     r0,[r6,#0]            ;1265
+0001f6  f8bb0000          LDRH     r0,[r11,#0]           ;1266  ; Contr_Current
+0001fa  8028              STRH     r0,[r5,#0]            ;1266
+0001fc  8019              STRH     r1,[r3,#0]            ;1267
 0001fe  e75f              B        |L4.192|
                   |L4.512|
-000200  e9dd6004          LDRD     r6,r0,[sp,#0x10]      ;1233
-000204  1b80              SUBS     r0,r0,r6              ;1233
-000206  9005              STR      r0,[sp,#0x14]         ;1233
-000208  9805              LDR      r0,[sp,#0x14]         ;1234
-00020a  6608              STR      r0,[r1,#0x60]         ;1234  ; InFlashSave
-00020c  7910              LDRB     r0,[r2,#4]            ;1235  ; correct_por
-00020e  f0200001          BIC      r0,r0,#1              ;1235
-000212  7110              STRB     r0,[r2,#4]            ;1235
+000200  e9dd6004          LDRD     r6,r0,[sp,#0x10]      ;1299
+000204  1b80              SUBS     r0,r0,r6              ;1299
+000206  9005              STR      r0,[sp,#0x14]         ;1299
+000208  9805              LDR      r0,[sp,#0x14]         ;1300
+00020a  6608              STR      r0,[r1,#0x60]         ;1300  ; InFlashSave
+00020c  7910              LDRB     r0,[r2,#4]            ;1301  ; correct_por
+00020e  f0200001          BIC      r0,r0,#1              ;1301
+000212  7110              STRB     r0,[r2,#4]            ;1301
                   |L4.532|
-000214  f8b80000          LDRH     r0,[r8,#0]            ;1238  ; Modify_B_ACT
-000218  9002              STR      r0,[sp,#8]            ;1238
-00021a  881b              LDRH     r3,[r3,#0]            ;1239  ; Modify_A_ACT
-00021c  9802              LDR      r0,[sp,#8]            ;1239
-00021e  1ac0              SUBS     r0,r0,r3              ;1239
-000220  9002              STR      r0,[sp,#8]            ;1239
-000222  9802              LDR      r0,[sp,#8]            ;1240
-000224  0380              LSLS     r0,r0,#14             ;1240
-000226  9002              STR      r0,[sp,#8]            ;1240
-000228  f8b90000          LDRH     r0,[r9,#0]            ;1241  ; Modify_D_READ
-00022c  882b              LDRH     r3,[r5,#0]            ;1241  ; Modify_C_READ
-00022e  1ac0              SUBS     r0,r0,r3              ;1241
-000230  9003              STR      r0,[sp,#0xc]          ;1241
-000232  f8bd000c          LDRH     r0,[sp,#0xc]          ;1242
-000236  ea0a0040          AND      r0,r10,r0,LSL #1      ;1242
-00023a  9003              STR      r0,[sp,#0xc]          ;1242
-00023c  f8bd300c          LDRH     r3,[sp,#0xc]          ;1243
-000240  9802              LDR      r0,[sp,#8]            ;1243
-000242  fbb0f0f3          UDIV     r0,r0,r3              ;1243
-000246  9002              STR      r0,[sp,#8]            ;1243
-000248  9802              LDR      r0,[sp,#8]            ;1244
-00024a  65c8              STR      r0,[r1,#0x5c]         ;1244  ; InFlashSave
-00024c  f8b83000          LDRH     r3,[r8,#0]            ;1245  ; Modify_B_ACT
-000250  9302              STR      r3,[sp,#8]            ;1245
-000252  9b02              LDR      r3,[sp,#8]            ;1246
-000254  039b              LSLS     r3,r3,#14             ;1246
-000256  9302              STR      r3,[sp,#8]            ;1246
-000258  9001              STR      r0,[sp,#4]            ;1247
-00025a  f8b93000          LDRH     r3,[r9,#0]            ;1248  ; Modify_D_READ
-00025e  9801              LDR      r0,[sp,#4]            ;1248
-000260  4358              MULS     r0,r3,r0              ;1248
-000262  0040              LSLS     r0,r0,#1              ;1248
-000264  9001              STR      r0,[sp,#4]            ;1248
-000266  e9dd3001          LDRD     r3,r0,[sp,#4]         ;1249
-00026a  4298              CMP      r0,r3                 ;1249
+000214  f8b80000          LDRH     r0,[r8,#0]            ;1304  ; Modify_B_ACT
+000218  9002              STR      r0,[sp,#8]            ;1304
+00021a  881b              LDRH     r3,[r3,#0]            ;1305  ; Modify_A_ACT
+00021c  9802              LDR      r0,[sp,#8]            ;1305
+00021e  1ac0              SUBS     r0,r0,r3              ;1305
+000220  9002              STR      r0,[sp,#8]            ;1305
+000222  9802              LDR      r0,[sp,#8]            ;1306
+000224  0380              LSLS     r0,r0,#14             ;1306
+000226  9002              STR      r0,[sp,#8]            ;1306
+000228  f8b90000          LDRH     r0,[r9,#0]            ;1307  ; Modify_D_READ
+00022c  882b              LDRH     r3,[r5,#0]            ;1307  ; Modify_C_READ
+00022e  1ac0              SUBS     r0,r0,r3              ;1307
+000230  9003              STR      r0,[sp,#0xc]          ;1307
+000232  f8bd000c          LDRH     r0,[sp,#0xc]          ;1308
+000236  ea0a0040          AND      r0,r10,r0,LSL #1      ;1308
+00023a  9003              STR      r0,[sp,#0xc]          ;1308
+00023c  f8bd300c          LDRH     r3,[sp,#0xc]          ;1309
+000240  9802              LDR      r0,[sp,#8]            ;1309
+000242  fbb0f0f3          UDIV     r0,r0,r3              ;1309
+000246  9002              STR      r0,[sp,#8]            ;1309
+000248  9802              LDR      r0,[sp,#8]            ;1310
+00024a  65c8              STR      r0,[r1,#0x5c]         ;1310  ; InFlashSave
+00024c  f8b83000          LDRH     r3,[r8,#0]            ;1311  ; Modify_B_ACT
+000250  9302              STR      r3,[sp,#8]            ;1311
+000252  9b02              LDR      r3,[sp,#8]            ;1312
+000254  039b              LSLS     r3,r3,#14             ;1312
+000256  9302              STR      r3,[sp,#8]            ;1312
+000258  9001              STR      r0,[sp,#4]            ;1313
+00025a  f8b93000          LDRH     r3,[r9,#0]            ;1314  ; Modify_D_READ
+00025e  9801              LDR      r0,[sp,#4]            ;1314
+000260  4358              MULS     r0,r3,r0              ;1314
+000262  0040              LSLS     r0,r0,#1              ;1314
+000264  9001              STR      r0,[sp,#4]            ;1314
+000266  e9dd3001          LDRD     r3,r0,[sp,#4]         ;1315
+00026a  4298              CMP      r0,r3                 ;1315
 00026c  d20a              BCS      |L4.644|
-00026e  e9dd0301          LDRD     r0,r3,[sp,#4]         ;1251
-000272  1ac0              SUBS     r0,r0,r3              ;1251
-000274  9001              STR      r0,[sp,#4]            ;1251
-000276  9801              LDR      r0,[sp,#4]            ;1252
-000278  6648              STR      r0,[r1,#0x64]         ;1252  ; InFlashSave
-00027a  7910              LDRB     r0,[r2,#4]            ;1253  ; correct_por
-00027c  f0400004          ORR      r0,r0,#4              ;1253
-000280  7110              STRB     r0,[r2,#4]            ;1253
+00026e  e9dd0301          LDRD     r0,r3,[sp,#4]         ;1317
+000272  1ac0              SUBS     r0,r0,r3              ;1317
+000274  9001              STR      r0,[sp,#4]            ;1317
+000276  9801              LDR      r0,[sp,#4]            ;1318
+000278  6648              STR      r0,[r1,#0x64]         ;1318  ; InFlashSave
+00027a  7910              LDRB     r0,[r2,#4]            ;1319  ; correct_por
+00027c  f0400004          ORR      r0,r0,#4              ;1319
+000280  7110              STRB     r0,[r2,#4]            ;1319
 000282  e009              B        |L4.664|
                   |L4.644|
-000284  e9dd3001          LDRD     r3,r0,[sp,#4]         ;1257
-000288  1ac0              SUBS     r0,r0,r3              ;1257
-00028a  9002              STR      r0,[sp,#8]            ;1257
-00028c  9802              LDR      r0,[sp,#8]            ;1258
-00028e  6648              STR      r0,[r1,#0x64]         ;1258  ; InFlashSave
-000290  7910              LDRB     r0,[r2,#4]            ;1259  ; correct_por
-000292  f0200004          BIC      r0,r0,#4              ;1259
-000296  7110              STRB     r0,[r2,#4]            ;1259
+000284  e9dd3001          LDRD     r3,r0,[sp,#4]         ;1323
+000288  1ac0              SUBS     r0,r0,r3              ;1323
+00028a  9002              STR      r0,[sp,#8]            ;1323
+00028c  9802              LDR      r0,[sp,#8]            ;1324
+00028e  6648              STR      r0,[r1,#0x64]         ;1324  ; InFlashSave
+000290  7910              LDRB     r0,[r2,#4]            ;1325  ; correct_por
+000292  f0200004          BIC      r0,r0,#4              ;1325
+000296  7110              STRB     r0,[r2,#4]            ;1325
                   |L4.664|
 000298  4a0f              LDR      r2,|L4.728|
-00029a  2128              MOVS     r1,#0x28              ;1261
+00029a  2128              MOVS     r1,#0x28              ;1327
 00029c  4811              LDR      r0,|L4.740|
 00029e  f7fffffe          BL       Flash_Write32BitDatas
-0002a2  6820              LDR      r0,[r4,#0]            ;1263  ; flagB
-0002a4  f0200008          BIC      r0,r0,#8              ;1263
-0002a8  6020              STR      r0,[r4,#0]            ;1263  ; flagB
+0002a2  6820              LDR      r0,[r4,#0]            ;1329  ; flagB
+0002a4  f0200008          BIC      r0,r0,#8              ;1329
+0002a8  6020              STR      r0,[r4,#0]            ;1329  ; flagB
 0002aa  e709              B        |L4.192|
                           ENDP
 
@@ -1739,16 +1936,16 @@
                           AREA ||i.PowVCal||, CODE, READONLY, ALIGN=2
 
                   PowVCal PROC
-;;;931    
-;;;932    void PowVCal(u8 step)
+;;;997    
+;;;998    void PowVCal(u8 step)
 000000  e92d4ff0          PUSH     {r4-r11,lr}
-;;;933    {
+;;;999    {
 000004  b087              SUB      sp,sp,#0x1c
-;;;934        if(step == 1)
-;;;935        {
-;;;936            Modify_A_READ = Vmon_value;//??d
-;;;937    		Modify_C_READ = Contr_Voltage;//???d
-;;;938    		Modify_A_ACT = inputvalue;
+;;;1000       if(step == 1)
+;;;1001       {
+;;;1002           Modify_A_READ = Vmon_value;//??d
+;;;1003   		Modify_C_READ = Contr_Voltage;//???d
+;;;1004   		Modify_A_ACT = inputvalue;
 000006  49fe              LDR      r1,|L5.1024|
 000008  4df9              LDR      r5,|L5.1008|
 00000a  4efa              LDR      r6,|L5.1012|
@@ -1757,307 +1954,307 @@
 000012  f8dfc3e8          LDR      r12,|L5.1020|
 000016  4cfb              LDR      r4,|L5.1028|
 000018  b289              UXTH     r1,r1
-00001a  2801              CMP      r0,#1                 ;934
+00001a  2801              CMP      r0,#1                 ;1000
 00001c  d052              BEQ      |L5.196|
-;;;939        }else if(step == 2){
-;;;940            vu16 var16;
-;;;941    			vu32 var32a;
-;;;942    			vu32 var32b;
-;;;943    			
-;;;944    			vu16 var16a;
-;;;945    			vu32 var32c;
-;;;946    			vu32 var32d;
-;;;947    			
-;;;948    			Modify_D_READ = Contr_Voltage;
-;;;949    			Modify_B_READ = Vmon_value;
+;;;1005       }else if(step == 2){
+;;;1006           vu16 var16;
+;;;1007   			vu32 var32a;
+;;;1008   			vu32 var32b;
+;;;1009   			
+;;;1010   			vu16 var16a;
+;;;1011   			vu32 var32c;
+;;;1012   			vu32 var32d;
+;;;1013   			
+;;;1014   			Modify_D_READ = Contr_Voltage;
+;;;1015   			Modify_B_READ = Vmon_value;
 00001e  f8dfe3e8          LDR      lr,|L5.1032|
-;;;950    			Modify_B_ACT = inputvalue;
-;;;951    			var32a = Modify_B_ACT;
-;;;952    			var32a = var32a - Modify_A_ACT;
-;;;953    			var32a = var32a << 14;
-;;;954    			var16 = Modify_B_READ - Modify_A_READ;
-;;;955    			var32a = var32a / var16;
-;;;956    			REG_POWERV = var32a;
-;;;957    			var32a = Modify_B_ACT;
-;;;958    			var32a = var32a << 14;
-;;;959    			var32b = Modify_B_READ;
-;;;960    			var32b = var32b * REG_POWERV;
-;;;961    			if (var32a < var32b)
-;;;962    			{
-;;;963    				var32b = var32b - var32a;
-;;;964    				REG_POWERV_Offset = var32b;
-;;;965    				Polar5 |= 0x01;
-;;;966    			}
-;;;967    			else 
-;;;968    			{
-;;;969    				var32a = var32a - var32b;
-;;;970    				REG_POWERV_Offset = var32a;
-;;;971    				Polar5 &= ~0x01;					
-;;;972    			}
-;;;973    	//---------------------------------------------------------------------------------//
-;;;974    			var32c = Modify_B_ACT; //????Çµ?
-;;;975    			var32c = var32c - Modify_A_ACT;
-;;;976    			var32c = var32c << 14;
-;;;977    			var16a=Modify_D_READ-Modify_C_READ;
-;;;978    			var16a=var16a*2;
-;;;979    			var32c=var32c/var16a;
-;;;980    			SET_POWERV = var32c;
-;;;981    			var32c = Modify_B_ACT;
-;;;982    			var32c = var32c << 14;
-;;;983    			var32d = SET_POWERV;
-;;;984    			var32d = var32d * (Modify_D_READ*2);
-;;;985    			if (var32c < var32d)
-;;;986    			{
-;;;987    				var32d = var32d - var32c;
-;;;988    				SET_POWERV_Offset = var32d;
-;;;989    				Polar5 |= 0x04;
-;;;990    			}
-;;;991    			else 
-;;;992    			{
-;;;993    				var32c = var32c - var32d;
-;;;994    				SET_POWERV_Offset = var32c;
-;;;995    				Polar5 &= ~0x04;
-;;;996    			}
-;;;997    			Flash_Write_all ();	
-;;;998    			Flag_DAC_OFF=0;
+;;;1016   			Modify_B_ACT = inputvalue;
+;;;1017   			var32a = Modify_B_ACT;
+;;;1018   			var32a = var32a - Modify_A_ACT;
+;;;1019   			var32a = var32a << 14;
+;;;1020   			var16 = Modify_B_READ - Modify_A_READ;
+;;;1021   			var32a = var32a / var16;
+;;;1022   			REG_POWERV = var32a;
+;;;1023   			var32a = Modify_B_ACT;
+;;;1024   			var32a = var32a << 14;
+;;;1025   			var32b = Modify_B_READ;
+;;;1026   			var32b = var32b * REG_POWERV;
+;;;1027   			if (var32a < var32b)
+;;;1028   			{
+;;;1029   				var32b = var32b - var32a;
+;;;1030   				REG_POWERV_Offset = var32b;
+;;;1031   				Polar5 |= 0x01;
+;;;1032   			}
+;;;1033   			else 
+;;;1034   			{
+;;;1035   				var32a = var32a - var32b;
+;;;1036   				REG_POWERV_Offset = var32a;
+;;;1037   				Polar5 &= ~0x01;					
+;;;1038   			}
+;;;1039   	//---------------------------------------------------------------------------------//
+;;;1040   			var32c = Modify_B_ACT; //????Çµ?
+;;;1041   			var32c = var32c - Modify_A_ACT;
+;;;1042   			var32c = var32c << 14;
+;;;1043   			var16a=Modify_D_READ-Modify_C_READ;
+;;;1044   			var16a=var16a*2;
+;;;1045   			var32c=var32c/var16a;
+;;;1046   			SET_POWERV = var32c;
+;;;1047   			var32c = Modify_B_ACT;
+;;;1048   			var32c = var32c << 14;
+;;;1049   			var32d = SET_POWERV;
+;;;1050   			var32d = var32d * (Modify_D_READ*2);
+;;;1051   			if (var32c < var32d)
+;;;1052   			{
+;;;1053   				var32d = var32d - var32c;
+;;;1054   				SET_POWERV_Offset = var32d;
+;;;1055   				Polar5 |= 0x04;
+;;;1056   			}
+;;;1057   			else 
+;;;1058   			{
+;;;1059   				var32c = var32c - var32d;
+;;;1060   				SET_POWERV_Offset = var32c;
+;;;1061   				Polar5 &= ~0x04;
+;;;1062   			}
+;;;1063   			Flash_Write_all ();	
+;;;1064   			Flag_DAC_OFF=0;
 000022  4ffa              LDR      r7,|L5.1036|
 000024  f8dfb3e8          LDR      r11,|L5.1040|
 000028  f8df93e8          LDR      r9,|L5.1044|
 00002c  f8dfa3e8          LDR      r10,|L5.1048|
 000030  4bfa              LDR      r3,|L5.1052|
 000032  4afb              LDR      r2,|L5.1056|
-000034  2802              CMP      r0,#2                 ;939
+000034  2802              CMP      r0,#2                 ;1005
 000036  d04f              BEQ      |L5.216|
-;;;999        }else if(step == 3){
+;;;1065       }else if(step == 3){
 000038  2803              CMP      r0,#3
 00003a  d07d              BEQ      |L5.312|
-;;;1000           Modify_A_READ = Vmon_value;//??d
-;;;1001   		Modify_C_READ = Contr_Voltage;//???d
-;;;1002   		Modify_A_ACT = inputvalue;
-;;;1003       }else if(step == 4){
+;;;1066           Modify_A_READ = Vmon_value;//??d
+;;;1067   		Modify_C_READ = Contr_Voltage;//???d
+;;;1068   		Modify_A_ACT = inputvalue;
+;;;1069       }else if(step == 4){
 00003c  2804              CMP      r0,#4
 00003e  d07c              BEQ      |L5.314|
-;;;1004           vu16 var16;
-;;;1005   		vu32 var32a;
-;;;1006   		vu32 var32b;
-;;;1007   		
-;;;1008   		vu16 var16a;
-;;;1009   		vu32 var32c;
-;;;1010   		vu32 var32d;
-;;;1011   		
-;;;1012   		Modify_D_READ = Contr_Voltage;
-;;;1013   		Modify_B_READ = Vmon_value;
-;;;1014   		Modify_B_ACT = inputvalue;
-;;;1015   		var32a = Modify_B_ACT;
-;;;1016   		var32a = var32a - Modify_A_ACT;
-;;;1017   		var32a = var32a << 14;
-;;;1018   		var16 = Modify_B_READ - Modify_A_READ;
-;;;1019   		var32a = var32a / var16;
-;;;1020   		REG_POWERV1 = var32a;
-;;;1021   		var32a = Modify_B_ACT;
-;;;1022   		var32a = var32a << 14;
-;;;1023   		var32b = Modify_B_READ;
-;;;1024   		var32b = var32b * REG_POWERV1;
-;;;1025   		if (var32a < var32b)
-;;;1026   		{
-;;;1027   			var32b = var32b - var32a;
-;;;1028   			REG_POWERV_Offset1 = var32b;
-;;;1029   			Polar5 |= 0x01;
-;;;1030   		}
-;;;1031   		else 
-;;;1032   		{
-;;;1033   			var32a = var32a - var32b;
-;;;1034   			REG_POWERV_Offset1 = var32a;
-;;;1035   			Polar5 &= ~0x01;					
-;;;1036   		}
-;;;1037   //---------------------------------------------------------------------------------//
-;;;1038   		var32c = Modify_B_ACT; //????§µ?
-;;;1039   		var32c = var32c - Modify_A_ACT;
-;;;1040   		var32c = var32c << 14;
-;;;1041   		var16a=Modify_D_READ-Modify_C_READ;
-;;;1042   		var16a=var16a*2;
-;;;1043   		var32c=var32c/var16a;
-;;;1044   		SET_POWERV1 = var32c;
-;;;1045   		var32c = Modify_B_ACT;
-;;;1046   		var32c = var32c << 14;
-;;;1047   		var32d = SET_POWERV1;
-;;;1048   		var32d = var32d * (Modify_D_READ*2);
-;;;1049   		if (var32c < var32d)
-;;;1050   		{
-;;;1051   			var32d = var32d - var32c;
-;;;1052   			SET_POWERV_Offset1 = var32d;
-;;;1053   			Polar5 |= 0x04;
-;;;1054   		}
-;;;1055   		else 
-;;;1056   		{
-;;;1057   			var32c = var32c - var32d;
-;;;1058   			SET_POWERV_Offset1 = var32c;
-;;;1059   			Polar5 &= ~0x04;
-;;;1060   		}
-;;;1061   		Flash_Write_all ();	
-;;;1062   		Flag_DAC_OFF=0;
-;;;1063       }else if(step == 5){
+;;;1070           vu16 var16;
+;;;1071   		vu32 var32a;
+;;;1072   		vu32 var32b;
+;;;1073   		
+;;;1074   		vu16 var16a;
+;;;1075   		vu32 var32c;
+;;;1076   		vu32 var32d;
+;;;1077   		
+;;;1078   		Modify_D_READ = Contr_Voltage;
+;;;1079   		Modify_B_READ = Vmon_value;
+;;;1080   		Modify_B_ACT = inputvalue;
+;;;1081   		var32a = Modify_B_ACT;
+;;;1082   		var32a = var32a - Modify_A_ACT;
+;;;1083   		var32a = var32a << 14;
+;;;1084   		var16 = Modify_B_READ - Modify_A_READ;
+;;;1085   		var32a = var32a / var16;
+;;;1086   		REG_POWERV1 = var32a;
+;;;1087   		var32a = Modify_B_ACT;
+;;;1088   		var32a = var32a << 14;
+;;;1089   		var32b = Modify_B_READ;
+;;;1090   		var32b = var32b * REG_POWERV1;
+;;;1091   		if (var32a < var32b)
+;;;1092   		{
+;;;1093   			var32b = var32b - var32a;
+;;;1094   			REG_POWERV_Offset1 = var32b;
+;;;1095   			Polar5 |= 0x01;
+;;;1096   		}
+;;;1097   		else 
+;;;1098   		{
+;;;1099   			var32a = var32a - var32b;
+;;;1100   			REG_POWERV_Offset1 = var32a;
+;;;1101   			Polar5 &= ~0x01;					
+;;;1102   		}
+;;;1103   //---------------------------------------------------------------------------------//
+;;;1104   		var32c = Modify_B_ACT; //????§µ?
+;;;1105   		var32c = var32c - Modify_A_ACT;
+;;;1106   		var32c = var32c << 14;
+;;;1107   		var16a=Modify_D_READ-Modify_C_READ;
+;;;1108   		var16a=var16a*2;
+;;;1109   		var32c=var32c/var16a;
+;;;1110   		SET_POWERV1 = var32c;
+;;;1111   		var32c = Modify_B_ACT;
+;;;1112   		var32c = var32c << 14;
+;;;1113   		var32d = SET_POWERV1;
+;;;1114   		var32d = var32d * (Modify_D_READ*2);
+;;;1115   		if (var32c < var32d)
+;;;1116   		{
+;;;1117   			var32d = var32d - var32c;
+;;;1118   			SET_POWERV_Offset1 = var32d;
+;;;1119   			Polar5 |= 0x04;
+;;;1120   		}
+;;;1121   		else 
+;;;1122   		{
+;;;1123   			var32c = var32c - var32d;
+;;;1124   			SET_POWERV_Offset1 = var32c;
+;;;1125   			Polar5 &= ~0x04;
+;;;1126   		}
+;;;1127   		Flash_Write_all ();	
+;;;1128   		Flag_DAC_OFF=0;
+;;;1129       }else if(step == 5){
 000040  2805              CMP      r0,#5
 000042  d07b              BEQ      |L5.316|
-;;;1064           Modify_A_READ = Vmon_value;//??d
-;;;1065   		Modify_C_READ = Contr_Voltage;//???d
-;;;1066   		Modify_A_ACT = inputvalue;
-;;;1067       }else if(step == 6){
+;;;1130           Modify_A_READ = Vmon_value;//??d
+;;;1131   		Modify_C_READ = Contr_Voltage;//???d
+;;;1132   		Modify_A_ACT = inputvalue;
+;;;1133       }else if(step == 6){
 000044  2806              CMP      r0,#6
 000046  d144              BNE      |L5.210|
-;;;1068           vu16 var16;
-;;;1069   		vu32 var32a;
-;;;1070   		vu32 var32b;
-;;;1071   		
-;;;1072   		vu16 var16a;
-;;;1073   		vu32 var32c;
-;;;1074   		vu32 var32d;
-;;;1075   		
-;;;1076   		Modify_D_READ = Contr_Voltage;
+;;;1134           vu16 var16;
+;;;1135   		vu32 var32a;
+;;;1136   		vu32 var32b;
+;;;1137   		
+;;;1138   		vu16 var16a;
+;;;1139   		vu32 var32c;
+;;;1140   		vu32 var32d;
+;;;1141   		
+;;;1142   		Modify_D_READ = Contr_Voltage;
 000048  f8b80000          LDRH     r0,[r8,#0]  ; Contr_Voltage
 00004c  f8ab0000          STRH     r0,[r11,#0]
-;;;1077   		Modify_B_READ = Vmon_value;
+;;;1143   		Modify_B_READ = Vmon_value;
 000050  8828              LDRH     r0,[r5,#0]  ; Vmon_value
 000052  f8ae0000          STRH     r0,[lr,#0]
-;;;1078   		Modify_B_ACT = inputvalue;
+;;;1144   		Modify_B_ACT = inputvalue;
 000056  f8a91000          STRH     r1,[r9,#0]
-;;;1079   		var32a = Modify_B_ACT;
+;;;1145   		var32a = Modify_B_ACT;
 00005a  f8b90000          LDRH     r0,[r9,#0]  ; Modify_B_ACT
 00005e  9005              STR      r0,[sp,#0x14]
-;;;1080   		var32a = var32a - Modify_A_ACT;
+;;;1146   		var32a = var32a - Modify_A_ACT;
 000060  8821              LDRH     r1,[r4,#0]  ; Modify_A_ACT
 000062  9805              LDR      r0,[sp,#0x14]
 000064  1a40              SUBS     r0,r0,r1
 000066  9005              STR      r0,[sp,#0x14]
-;;;1081   		var32a = var32a << 14;
+;;;1147   		var32a = var32a << 14;
 000068  9805              LDR      r0,[sp,#0x14]
 00006a  0380              LSLS     r0,r0,#14
 00006c  9005              STR      r0,[sp,#0x14]
-;;;1082   		var16 = Modify_B_READ - Modify_A_READ;
+;;;1148   		var16 = Modify_B_READ - Modify_A_READ;
 00006e  f8be0000          LDRH     r0,[lr,#0]  ; Modify_B_READ
 000072  8831              LDRH     r1,[r6,#0]  ; Modify_A_READ
 000074  1a40              SUBS     r0,r0,r1
 000076  9006              STR      r0,[sp,#0x18]
-;;;1083   		var32a = var32a / var16;
+;;;1149   		var32a = var32a / var16;
 000078  f8bd1018          LDRH     r1,[sp,#0x18]
 00007c  9805              LDR      r0,[sp,#0x14]
 00007e  fbb0f0f1          UDIV     r0,r0,r1
 000082  9005              STR      r0,[sp,#0x14]
-;;;1084   		REG_POWERV2 = var32a;
+;;;1150   		REG_POWERV2 = var32a;
 000084  9805              LDR      r0,[sp,#0x14]
 000086  f8ca0040          STR      r0,[r10,#0x40]  ; Correct_Parametet
-;;;1085   		var32a = Modify_B_ACT;
+;;;1151   		var32a = Modify_B_ACT;
 00008a  f8b90000          LDRH     r0,[r9,#0]  ; Modify_B_ACT
 00008e  9005              STR      r0,[sp,#0x14]
-;;;1086   		var32a = var32a << 14;
+;;;1152   		var32a = var32a << 14;
 000090  9805              LDR      r0,[sp,#0x14]
 000092  0380              LSLS     r0,r0,#14
 000094  9005              STR      r0,[sp,#0x14]
-;;;1087   		var32b = Modify_B_READ;
+;;;1153   		var32b = Modify_B_READ;
 000096  f8be0000          LDRH     r0,[lr,#0]  ; Modify_B_READ
 00009a  9004              STR      r0,[sp,#0x10]
-;;;1088   		var32b = var32b * REG_POWERV2;
+;;;1154   		var32b = var32b * REG_POWERV2;
 00009c  f8da0040          LDR      r0,[r10,#0x40]  ; Correct_Parametet
 0000a0  9904              LDR      r1,[sp,#0x10]
 0000a2  4348              MULS     r0,r1,r0
 0000a4  9004              STR      r0,[sp,#0x10]
-;;;1089   		if (var32a < var32b)
+;;;1155   		if (var32a < var32b)
 0000a6  e9dd1004          LDRD     r1,r0,[sp,#0x10]
 0000aa  4288              CMP      r0,r1
 0000ac  d27e              BCS      |L5.428|
-;;;1090   		{
-;;;1091   			var32b = var32b - var32a;
+;;;1156   		{
+;;;1157   			var32b = var32b - var32a;
 0000ae  e9dd0104          LDRD     r0,r1,[sp,#0x10]
 0000b2  1a40              SUBS     r0,r0,r1
 0000b4  9004              STR      r0,[sp,#0x10]
-;;;1092   			REG_POWERV_Offset2 = var32b;
+;;;1158   			REG_POWERV_Offset2 = var32b;
 0000b6  9804              LDR      r0,[sp,#0x10]
 0000b8  6418              STR      r0,[r3,#0x40]  ; Correct_Strong
-;;;1093   			Polar5 |= 0x01;
+;;;1159   			Polar5 |= 0x01;
 0000ba  7950              LDRB     r0,[r2,#5]  ; correct_por
 0000bc  f0400001          ORR      r0,r0,#1
 0000c0  7150              STRB     r0,[r2,#5]
 0000c2  e157              B        |L5.884|
                   |L5.196|
-0000c4  8828              LDRH     r0,[r5,#0]            ;936  ; Vmon_value
-0000c6  8030              STRH     r0,[r6,#0]            ;936
-0000c8  f8b80000          LDRH     r0,[r8,#0]            ;937  ; Contr_Voltage
-0000cc  f8ac0000          STRH     r0,[r12,#0]           ;937
-0000d0  8021              STRH     r1,[r4,#0]            ;938
+0000c4  8828              LDRH     r0,[r5,#0]            ;1002  ; Vmon_value
+0000c6  8030              STRH     r0,[r6,#0]            ;1002
+0000c8  f8b80000          LDRH     r0,[r8,#0]            ;1003  ; Contr_Voltage
+0000cc  f8ac0000          STRH     r0,[r12,#0]           ;1003
+0000d0  8021              STRH     r1,[r4,#0]            ;1004
                   |L5.210|
-;;;1094   		}
-;;;1095   		else 
-;;;1096   		{
-;;;1097   			var32a = var32a - var32b;
-;;;1098   			REG_POWERV_Offset2 = var32a;
-;;;1099   			Polar5 &= ~0x01;					
-;;;1100   		}
-;;;1101   //---------------------------------------------------------------------------------//
-;;;1102   		var32c = Modify_B_ACT; //????§µ?
-;;;1103   		var32c = var32c - Modify_A_ACT;
-;;;1104   		var32c = var32c << 14;
-;;;1105   		var16a=Modify_D_READ-Modify_C_READ;
-;;;1106   		var16a=var16a*2;
-;;;1107   		var32c=var32c/var16a;
-;;;1108   		SET_POWERV2 = var32c;
-;;;1109   		var32c = Modify_B_ACT;
-;;;1110   		var32c = var32c << 14;
-;;;1111   		var32d = SET_POWERV2;
-;;;1112   		var32d = var32d * (Modify_D_READ*2);
-;;;1113   		if (var32c < var32d)
-;;;1114   		{
-;;;1115   			var32d = var32d - var32c;
-;;;1116   			SET_POWERV_Offset2 = var32d;
-;;;1117   			Polar5 |= 0x04;
-;;;1118   		}
-;;;1119   		else 
-;;;1120   		{
-;;;1121   			var32c = var32c - var32d;
-;;;1122   			SET_POWERV_Offset2 = var32c;
-;;;1123   			Polar5 &= ~0x04;
-;;;1124   		}
-;;;1125   		Flash_Write_all ();	
-;;;1126   		Flag_DAC_OFF=0;
-;;;1127       }
-;;;1128   }
+;;;1160   		}
+;;;1161   		else 
+;;;1162   		{
+;;;1163   			var32a = var32a - var32b;
+;;;1164   			REG_POWERV_Offset2 = var32a;
+;;;1165   			Polar5 &= ~0x01;					
+;;;1166   		}
+;;;1167   //---------------------------------------------------------------------------------//
+;;;1168   		var32c = Modify_B_ACT; //????§µ?
+;;;1169   		var32c = var32c - Modify_A_ACT;
+;;;1170   		var32c = var32c << 14;
+;;;1171   		var16a=Modify_D_READ-Modify_C_READ;
+;;;1172   		var16a=var16a*2;
+;;;1173   		var32c=var32c/var16a;
+;;;1174   		SET_POWERV2 = var32c;
+;;;1175   		var32c = Modify_B_ACT;
+;;;1176   		var32c = var32c << 14;
+;;;1177   		var32d = SET_POWERV2;
+;;;1178   		var32d = var32d * (Modify_D_READ*2);
+;;;1179   		if (var32c < var32d)
+;;;1180   		{
+;;;1181   			var32d = var32d - var32c;
+;;;1182   			SET_POWERV_Offset2 = var32d;
+;;;1183   			Polar5 |= 0x04;
+;;;1184   		}
+;;;1185   		else 
+;;;1186   		{
+;;;1187   			var32c = var32c - var32d;
+;;;1188   			SET_POWERV_Offset2 = var32c;
+;;;1189   			Polar5 &= ~0x04;
+;;;1190   		}
+;;;1191   		Flash_Write_all ();	
+;;;1192   		Flag_DAC_OFF=0;
+;;;1193       }
+;;;1194   }
 0000d2  b007              ADD      sp,sp,#0x1c
 0000d4  e8bd8ff0          POP      {r4-r11,pc}
                   |L5.216|
-0000d8  f8b80000          LDRH     r0,[r8,#0]            ;948  ; Contr_Voltage
-0000dc  f8ab0000          STRH     r0,[r11,#0]           ;948
-0000e0  8828              LDRH     r0,[r5,#0]            ;949  ; Vmon_value
-0000e2  f8ae0000          STRH     r0,[lr,#0]            ;949
-0000e6  f8a91000          STRH     r1,[r9,#0]            ;950
-0000ea  f8b90000          LDRH     r0,[r9,#0]            ;951  ; Modify_B_ACT
-0000ee  9005              STR      r0,[sp,#0x14]         ;951
-0000f0  8821              LDRH     r1,[r4,#0]            ;952  ; Modify_A_ACT
-0000f2  9805              LDR      r0,[sp,#0x14]         ;952
-0000f4  1a40              SUBS     r0,r0,r1              ;952
-0000f6  9005              STR      r0,[sp,#0x14]         ;952
-0000f8  9805              LDR      r0,[sp,#0x14]         ;953
-0000fa  0380              LSLS     r0,r0,#14             ;953
-0000fc  9005              STR      r0,[sp,#0x14]         ;953
-0000fe  f8be0000          LDRH     r0,[lr,#0]            ;954  ; Modify_B_READ
-000102  8831              LDRH     r1,[r6,#0]            ;954  ; Modify_A_READ
-000104  1a40              SUBS     r0,r0,r1              ;954
-000106  9006              STR      r0,[sp,#0x18]         ;954
-000108  f8bd1018          LDRH     r1,[sp,#0x18]         ;955
-00010c  9805              LDR      r0,[sp,#0x14]         ;955
-00010e  fbb0f0f1          UDIV     r0,r0,r1              ;955
-000112  9005              STR      r0,[sp,#0x14]         ;955
-000114  9805              LDR      r0,[sp,#0x14]         ;956
-000116  f8ca0020          STR      r0,[r10,#0x20]        ;956  ; Correct_Parametet
-00011a  f8b90000          LDRH     r0,[r9,#0]            ;957  ; Modify_B_ACT
-00011e  9005              STR      r0,[sp,#0x14]         ;957
-000120  9805              LDR      r0,[sp,#0x14]         ;958
-000122  0380              LSLS     r0,r0,#14             ;958
-000124  9005              STR      r0,[sp,#0x14]         ;958
-000126  f8be0000          LDRH     r0,[lr,#0]            ;959  ; Modify_B_READ
-00012a  9004              STR      r0,[sp,#0x10]         ;959
-00012c  f8da0020          LDR      r0,[r10,#0x20]        ;960  ; Correct_Parametet
-000130  9904              LDR      r1,[sp,#0x10]         ;960
-000132  4348              MULS     r0,r1,r0              ;960
-000134  9004              STR      r0,[sp,#0x10]         ;960
+0000d8  f8b80000          LDRH     r0,[r8,#0]            ;1014  ; Contr_Voltage
+0000dc  f8ab0000          STRH     r0,[r11,#0]           ;1014
+0000e0  8828              LDRH     r0,[r5,#0]            ;1015  ; Vmon_value
+0000e2  f8ae0000          STRH     r0,[lr,#0]            ;1015
+0000e6  f8a91000          STRH     r1,[r9,#0]            ;1016
+0000ea  f8b90000          LDRH     r0,[r9,#0]            ;1017  ; Modify_B_ACT
+0000ee  9005              STR      r0,[sp,#0x14]         ;1017
+0000f0  8821              LDRH     r1,[r4,#0]            ;1018  ; Modify_A_ACT
+0000f2  9805              LDR      r0,[sp,#0x14]         ;1018
+0000f4  1a40              SUBS     r0,r0,r1              ;1018
+0000f6  9005              STR      r0,[sp,#0x14]         ;1018
+0000f8  9805              LDR      r0,[sp,#0x14]         ;1019
+0000fa  0380              LSLS     r0,r0,#14             ;1019
+0000fc  9005              STR      r0,[sp,#0x14]         ;1019
+0000fe  f8be0000          LDRH     r0,[lr,#0]            ;1020  ; Modify_B_READ
+000102  8831              LDRH     r1,[r6,#0]            ;1020  ; Modify_A_READ
+000104  1a40              SUBS     r0,r0,r1              ;1020
+000106  9006              STR      r0,[sp,#0x18]         ;1020
+000108  f8bd1018          LDRH     r1,[sp,#0x18]         ;1021
+00010c  9805              LDR      r0,[sp,#0x14]         ;1021
+00010e  fbb0f0f1          UDIV     r0,r0,r1              ;1021
+000112  9005              STR      r0,[sp,#0x14]         ;1021
+000114  9805              LDR      r0,[sp,#0x14]         ;1022
+000116  f8ca0020          STR      r0,[r10,#0x20]        ;1022  ; Correct_Parametet
+00011a  f8b90000          LDRH     r0,[r9,#0]            ;1023  ; Modify_B_ACT
+00011e  9005              STR      r0,[sp,#0x14]         ;1023
+000120  9805              LDR      r0,[sp,#0x14]         ;1024
+000122  0380              LSLS     r0,r0,#14             ;1024
+000124  9005              STR      r0,[sp,#0x14]         ;1024
+000126  f8be0000          LDRH     r0,[lr,#0]            ;1025  ; Modify_B_READ
+00012a  9004              STR      r0,[sp,#0x10]         ;1025
+00012c  f8da0020          LDR      r0,[r10,#0x20]        ;1026  ; Correct_Parametet
+000130  9904              LDR      r1,[sp,#0x10]         ;1026
+000132  4348              MULS     r0,r1,r0              ;1026
+000134  9004              STR      r0,[sp,#0x10]         ;1026
 000136  e002              B        |L5.318|
                   |L5.312|
 000138  e06b              B        |L5.530|
@@ -2066,284 +2263,284 @@
                   |L5.316|
 00013c  e108              B        |L5.848|
                   |L5.318|
-00013e  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;961
-000142  4288              CMP      r0,r1                 ;961
+00013e  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1027
+000142  4288              CMP      r0,r1                 ;1027
 000144  d20a              BCS      |L5.348|
-000146  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;963
-00014a  1a40              SUBS     r0,r0,r1              ;963
-00014c  9004              STR      r0,[sp,#0x10]         ;963
-00014e  9804              LDR      r0,[sp,#0x10]         ;964
-000150  6218              STR      r0,[r3,#0x20]         ;964  ; Correct_Strong
-000152  7950              LDRB     r0,[r2,#5]            ;965  ; correct_por
-000154  f0400001          ORR      r0,r0,#1              ;965
-000158  7150              STRB     r0,[r2,#5]            ;965
+000146  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;1029
+00014a  1a40              SUBS     r0,r0,r1              ;1029
+00014c  9004              STR      r0,[sp,#0x10]         ;1029
+00014e  9804              LDR      r0,[sp,#0x10]         ;1030
+000150  6218              STR      r0,[r3,#0x20]         ;1030  ; Correct_Strong
+000152  7950              LDRB     r0,[r2,#5]            ;1031  ; correct_por
+000154  f0400001          ORR      r0,r0,#1              ;1031
+000158  7150              STRB     r0,[r2,#5]            ;1031
 00015a  e009              B        |L5.368|
                   |L5.348|
-00015c  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;969
-000160  1a40              SUBS     r0,r0,r1              ;969
-000162  9005              STR      r0,[sp,#0x14]         ;969
-000164  9805              LDR      r0,[sp,#0x14]         ;970
-000166  6218              STR      r0,[r3,#0x20]         ;970  ; Correct_Strong
-000168  7950              LDRB     r0,[r2,#5]            ;971  ; correct_por
-00016a  f0200001          BIC      r0,r0,#1              ;971
-00016e  7150              STRB     r0,[r2,#5]            ;971
+00015c  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1035
+000160  1a40              SUBS     r0,r0,r1              ;1035
+000162  9005              STR      r0,[sp,#0x14]         ;1035
+000164  9805              LDR      r0,[sp,#0x14]         ;1036
+000166  6218              STR      r0,[r3,#0x20]         ;1036  ; Correct_Strong
+000168  7950              LDRB     r0,[r2,#5]            ;1037  ; correct_por
+00016a  f0200001          BIC      r0,r0,#1              ;1037
+00016e  7150              STRB     r0,[r2,#5]            ;1037
                   |L5.368|
-000170  f8b90000          LDRH     r0,[r9,#0]            ;974  ; Modify_B_ACT
-000174  9002              STR      r0,[sp,#8]            ;974
-000176  8821              LDRH     r1,[r4,#0]            ;975  ; Modify_A_ACT
-000178  9802              LDR      r0,[sp,#8]            ;975
-00017a  1a40              SUBS     r0,r0,r1              ;975
-00017c  9002              STR      r0,[sp,#8]            ;975
-00017e  9802              LDR      r0,[sp,#8]            ;976
-000180  0380              LSLS     r0,r0,#14             ;976
-000182  9002              STR      r0,[sp,#8]            ;976
-000184  f8bb0000          LDRH     r0,[r11,#0]           ;977  ; Modify_D_READ
-000188  f8bc1000          LDRH     r1,[r12,#0]           ;977  ; Modify_C_READ
-00018c  1a40              SUBS     r0,r0,r1              ;977
-00018e  9003              STR      r0,[sp,#0xc]          ;977
-000190  f8bd100c          LDRH     r1,[sp,#0xc]          ;978
-000194  f64f70ff          MOV      r0,#0xffff            ;978
-000198  ea000041          AND      r0,r0,r1,LSL #1       ;978
-00019c  9003              STR      r0,[sp,#0xc]          ;978
-00019e  f8bd100c          LDRH     r1,[sp,#0xc]          ;979
-0001a2  9802              LDR      r0,[sp,#8]            ;979
-0001a4  fbb0f0f1          UDIV     r0,r0,r1              ;979
-0001a8  9002              STR      r0,[sp,#8]            ;979
+000170  f8b90000          LDRH     r0,[r9,#0]            ;1040  ; Modify_B_ACT
+000174  9002              STR      r0,[sp,#8]            ;1040
+000176  8821              LDRH     r1,[r4,#0]            ;1041  ; Modify_A_ACT
+000178  9802              LDR      r0,[sp,#8]            ;1041
+00017a  1a40              SUBS     r0,r0,r1              ;1041
+00017c  9002              STR      r0,[sp,#8]            ;1041
+00017e  9802              LDR      r0,[sp,#8]            ;1042
+000180  0380              LSLS     r0,r0,#14             ;1042
+000182  9002              STR      r0,[sp,#8]            ;1042
+000184  f8bb0000          LDRH     r0,[r11,#0]           ;1043  ; Modify_D_READ
+000188  f8bc1000          LDRH     r1,[r12,#0]           ;1043  ; Modify_C_READ
+00018c  1a40              SUBS     r0,r0,r1              ;1043
+00018e  9003              STR      r0,[sp,#0xc]          ;1043
+000190  f8bd100c          LDRH     r1,[sp,#0xc]          ;1044
+000194  f64f70ff          MOV      r0,#0xffff            ;1044
+000198  ea000041          AND      r0,r0,r1,LSL #1       ;1044
+00019c  9003              STR      r0,[sp,#0xc]          ;1044
+00019e  f8bd100c          LDRH     r1,[sp,#0xc]          ;1045
+0001a2  9802              LDR      r0,[sp,#8]            ;1045
+0001a4  fbb0f0f1          UDIV     r0,r0,r1              ;1045
+0001a8  9002              STR      r0,[sp,#8]            ;1045
 0001aa  e000              B        |L5.430|
                   |L5.428|
 0001ac  e0d8              B        |L5.864|
                   |L5.430|
-0001ae  9802              LDR      r0,[sp,#8]            ;980
-0001b0  f8ca0024          STR      r0,[r10,#0x24]        ;980  ; Correct_Parametet
-0001b4  f8b90000          LDRH     r0,[r9,#0]            ;981  ; Modify_B_ACT
-0001b8  9002              STR      r0,[sp,#8]            ;981
-0001ba  9802              LDR      r0,[sp,#8]            ;982
-0001bc  0380              LSLS     r0,r0,#14             ;982
-0001be  9002              STR      r0,[sp,#8]            ;982
-0001c0  f8da0024          LDR      r0,[r10,#0x24]        ;983  ; Correct_Parametet
-0001c4  9001              STR      r0,[sp,#4]            ;983
-0001c6  f8bb1000          LDRH     r1,[r11,#0]           ;984  ; Modify_D_READ
-0001ca  9801              LDR      r0,[sp,#4]            ;984
-0001cc  4348              MULS     r0,r1,r0              ;984
-0001ce  0040              LSLS     r0,r0,#1              ;984
-0001d0  9001              STR      r0,[sp,#4]            ;984
-0001d2  e9dd1001          LDRD     r1,r0,[sp,#4]         ;985
-0001d6  4288              CMP      r0,r1                 ;985
+0001ae  9802              LDR      r0,[sp,#8]            ;1046
+0001b0  f8ca0024          STR      r0,[r10,#0x24]        ;1046  ; Correct_Parametet
+0001b4  f8b90000          LDRH     r0,[r9,#0]            ;1047  ; Modify_B_ACT
+0001b8  9002              STR      r0,[sp,#8]            ;1047
+0001ba  9802              LDR      r0,[sp,#8]            ;1048
+0001bc  0380              LSLS     r0,r0,#14             ;1048
+0001be  9002              STR      r0,[sp,#8]            ;1048
+0001c0  f8da0024          LDR      r0,[r10,#0x24]        ;1049  ; Correct_Parametet
+0001c4  9001              STR      r0,[sp,#4]            ;1049
+0001c6  f8bb1000          LDRH     r1,[r11,#0]           ;1050  ; Modify_D_READ
+0001ca  9801              LDR      r0,[sp,#4]            ;1050
+0001cc  4348              MULS     r0,r1,r0              ;1050
+0001ce  0040              LSLS     r0,r0,#1              ;1050
+0001d0  9001              STR      r0,[sp,#4]            ;1050
+0001d2  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1051
+0001d6  4288              CMP      r0,r1                 ;1051
 0001d8  d20a              BCS      |L5.496|
-0001da  e9dd0101          LDRD     r0,r1,[sp,#4]         ;987
-0001de  1a40              SUBS     r0,r0,r1              ;987
-0001e0  9001              STR      r0,[sp,#4]            ;987
-0001e2  9801              LDR      r0,[sp,#4]            ;988
-0001e4  6258              STR      r0,[r3,#0x24]         ;988  ; Correct_Strong
-0001e6  7950              LDRB     r0,[r2,#5]            ;989  ; correct_por
-0001e8  f0400004          ORR      r0,r0,#4              ;989
-0001ec  7150              STRB     r0,[r2,#5]            ;989
+0001da  e9dd0101          LDRD     r0,r1,[sp,#4]         ;1053
+0001de  1a40              SUBS     r0,r0,r1              ;1053
+0001e0  9001              STR      r0,[sp,#4]            ;1053
+0001e2  9801              LDR      r0,[sp,#4]            ;1054
+0001e4  6258              STR      r0,[r3,#0x24]         ;1054  ; Correct_Strong
+0001e6  7950              LDRB     r0,[r2,#5]            ;1055  ; correct_por
+0001e8  f0400004          ORR      r0,r0,#4              ;1055
+0001ec  7150              STRB     r0,[r2,#5]            ;1055
 0001ee  e009              B        |L5.516|
                   |L5.496|
-0001f0  e9dd1001          LDRD     r1,r0,[sp,#4]         ;993
-0001f4  1a40              SUBS     r0,r0,r1              ;993
-0001f6  9002              STR      r0,[sp,#8]            ;993
-0001f8  9802              LDR      r0,[sp,#8]            ;994
-0001fa  6258              STR      r0,[r3,#0x24]         ;994  ; Correct_Strong
-0001fc  7950              LDRB     r0,[r2,#5]            ;995  ; correct_por
-0001fe  f0200004          BIC      r0,r0,#4              ;995
-000202  7150              STRB     r0,[r2,#5]            ;995
+0001f0  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1059
+0001f4  1a40              SUBS     r0,r0,r1              ;1059
+0001f6  9002              STR      r0,[sp,#8]            ;1059
+0001f8  9802              LDR      r0,[sp,#8]            ;1060
+0001fa  6258              STR      r0,[r3,#0x24]         ;1060  ; Correct_Strong
+0001fc  7950              LDRB     r0,[r2,#5]            ;1061  ; correct_por
+0001fe  f0200004          BIC      r0,r0,#4              ;1061
+000202  7150              STRB     r0,[r2,#5]            ;1061
                   |L5.516|
 000204  f7fffffe          BL       Flash_Write_all
-000208  6838              LDR      r0,[r7,#0]            ;998  ; flagB
-00020a  f0200008          BIC      r0,r0,#8              ;998
-00020e  6038              STR      r0,[r7,#0]            ;998  ; flagB
+000208  6838              LDR      r0,[r7,#0]            ;1064  ; flagB
+00020a  f0200008          BIC      r0,r0,#8              ;1064
+00020e  6038              STR      r0,[r7,#0]            ;1064  ; flagB
 000210  e75f              B        |L5.210|
                   |L5.530|
-000212  8828              LDRH     r0,[r5,#0]            ;1000  ; Vmon_value
-000214  8030              STRH     r0,[r6,#0]            ;1000
-000216  f8b80000          LDRH     r0,[r8,#0]            ;1001  ; Contr_Voltage
-00021a  f8ac0000          STRH     r0,[r12,#0]           ;1001
-00021e  8021              STRH     r1,[r4,#0]            ;1002
+000212  8828              LDRH     r0,[r5,#0]            ;1066  ; Vmon_value
+000214  8030              STRH     r0,[r6,#0]            ;1066
+000216  f8b80000          LDRH     r0,[r8,#0]            ;1067  ; Contr_Voltage
+00021a  f8ac0000          STRH     r0,[r12,#0]           ;1067
+00021e  8021              STRH     r1,[r4,#0]            ;1068
 000220  e757              B        |L5.210|
                   |L5.546|
-000222  f8b80000          LDRH     r0,[r8,#0]            ;1012  ; Contr_Voltage
-000226  f8ab0000          STRH     r0,[r11,#0]           ;1012
-00022a  8828              LDRH     r0,[r5,#0]            ;1013  ; Vmon_value
-00022c  f8ae0000          STRH     r0,[lr,#0]            ;1013
-000230  f8a91000          STRH     r1,[r9,#0]            ;1014
-000234  f8b90000          LDRH     r0,[r9,#0]            ;1015  ; Modify_B_ACT
-000238  9005              STR      r0,[sp,#0x14]         ;1015
-00023a  8821              LDRH     r1,[r4,#0]            ;1016  ; Modify_A_ACT
-00023c  9805              LDR      r0,[sp,#0x14]         ;1016
-00023e  1a40              SUBS     r0,r0,r1              ;1016
-000240  9005              STR      r0,[sp,#0x14]         ;1016
-000242  9805              LDR      r0,[sp,#0x14]         ;1017
-000244  0380              LSLS     r0,r0,#14             ;1017
-000246  9005              STR      r0,[sp,#0x14]         ;1017
-000248  f8be0000          LDRH     r0,[lr,#0]            ;1018  ; Modify_B_READ
-00024c  8831              LDRH     r1,[r6,#0]            ;1018  ; Modify_A_READ
-00024e  1a40              SUBS     r0,r0,r1              ;1018
-000250  9006              STR      r0,[sp,#0x18]         ;1018
-000252  f8bd1018          LDRH     r1,[sp,#0x18]         ;1019
-000256  9805              LDR      r0,[sp,#0x14]         ;1019
-000258  fbb0f0f1          UDIV     r0,r0,r1              ;1019
-00025c  9005              STR      r0,[sp,#0x14]         ;1019
-00025e  9805              LDR      r0,[sp,#0x14]         ;1020
-000260  f8ca003c          STR      r0,[r10,#0x3c]        ;1020  ; Correct_Parametet
-000264  f8b90000          LDRH     r0,[r9,#0]            ;1021  ; Modify_B_ACT
-000268  9005              STR      r0,[sp,#0x14]         ;1021
-00026a  9805              LDR      r0,[sp,#0x14]         ;1022
-00026c  0380              LSLS     r0,r0,#14             ;1022
-00026e  9005              STR      r0,[sp,#0x14]         ;1022
-000270  f8be0000          LDRH     r0,[lr,#0]            ;1023  ; Modify_B_READ
-000274  9004              STR      r0,[sp,#0x10]         ;1023
-000276  f8da003c          LDR      r0,[r10,#0x3c]        ;1024  ; Correct_Parametet
-00027a  9904              LDR      r1,[sp,#0x10]         ;1024
-00027c  4348              MULS     r0,r1,r0              ;1024
-00027e  9004              STR      r0,[sp,#0x10]         ;1024
-000280  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1025
-000284  4288              CMP      r0,r1                 ;1025
+000222  f8b80000          LDRH     r0,[r8,#0]            ;1078  ; Contr_Voltage
+000226  f8ab0000          STRH     r0,[r11,#0]           ;1078
+00022a  8828              LDRH     r0,[r5,#0]            ;1079  ; Vmon_value
+00022c  f8ae0000          STRH     r0,[lr,#0]            ;1079
+000230  f8a91000          STRH     r1,[r9,#0]            ;1080
+000234  f8b90000          LDRH     r0,[r9,#0]            ;1081  ; Modify_B_ACT
+000238  9005              STR      r0,[sp,#0x14]         ;1081
+00023a  8821              LDRH     r1,[r4,#0]            ;1082  ; Modify_A_ACT
+00023c  9805              LDR      r0,[sp,#0x14]         ;1082
+00023e  1a40              SUBS     r0,r0,r1              ;1082
+000240  9005              STR      r0,[sp,#0x14]         ;1082
+000242  9805              LDR      r0,[sp,#0x14]         ;1083
+000244  0380              LSLS     r0,r0,#14             ;1083
+000246  9005              STR      r0,[sp,#0x14]         ;1083
+000248  f8be0000          LDRH     r0,[lr,#0]            ;1084  ; Modify_B_READ
+00024c  8831              LDRH     r1,[r6,#0]            ;1084  ; Modify_A_READ
+00024e  1a40              SUBS     r0,r0,r1              ;1084
+000250  9006              STR      r0,[sp,#0x18]         ;1084
+000252  f8bd1018          LDRH     r1,[sp,#0x18]         ;1085
+000256  9805              LDR      r0,[sp,#0x14]         ;1085
+000258  fbb0f0f1          UDIV     r0,r0,r1              ;1085
+00025c  9005              STR      r0,[sp,#0x14]         ;1085
+00025e  9805              LDR      r0,[sp,#0x14]         ;1086
+000260  f8ca003c          STR      r0,[r10,#0x3c]        ;1086  ; Correct_Parametet
+000264  f8b90000          LDRH     r0,[r9,#0]            ;1087  ; Modify_B_ACT
+000268  9005              STR      r0,[sp,#0x14]         ;1087
+00026a  9805              LDR      r0,[sp,#0x14]         ;1088
+00026c  0380              LSLS     r0,r0,#14             ;1088
+00026e  9005              STR      r0,[sp,#0x14]         ;1088
+000270  f8be0000          LDRH     r0,[lr,#0]            ;1089  ; Modify_B_READ
+000274  9004              STR      r0,[sp,#0x10]         ;1089
+000276  f8da003c          LDR      r0,[r10,#0x3c]        ;1090  ; Correct_Parametet
+00027a  9904              LDR      r1,[sp,#0x10]         ;1090
+00027c  4348              MULS     r0,r1,r0              ;1090
+00027e  9004              STR      r0,[sp,#0x10]         ;1090
+000280  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1091
+000284  4288              CMP      r0,r1                 ;1091
 000286  d20a              BCS      |L5.670|
-000288  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;1027
-00028c  1a40              SUBS     r0,r0,r1              ;1027
-00028e  9004              STR      r0,[sp,#0x10]         ;1027
-000290  9804              LDR      r0,[sp,#0x10]         ;1028
-000292  63d8              STR      r0,[r3,#0x3c]         ;1028  ; Correct_Strong
-000294  7950              LDRB     r0,[r2,#5]            ;1029  ; correct_por
-000296  f0400001          ORR      r0,r0,#1              ;1029
-00029a  7150              STRB     r0,[r2,#5]            ;1029
+000288  e9dd0104          LDRD     r0,r1,[sp,#0x10]      ;1093
+00028c  1a40              SUBS     r0,r0,r1              ;1093
+00028e  9004              STR      r0,[sp,#0x10]         ;1093
+000290  9804              LDR      r0,[sp,#0x10]         ;1094
+000292  63d8              STR      r0,[r3,#0x3c]         ;1094  ; Correct_Strong
+000294  7950              LDRB     r0,[r2,#5]            ;1095  ; correct_por
+000296  f0400001          ORR      r0,r0,#1              ;1095
+00029a  7150              STRB     r0,[r2,#5]            ;1095
 00029c  e009              B        |L5.690|
                   |L5.670|
-00029e  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1033
-0002a2  1a40              SUBS     r0,r0,r1              ;1033
-0002a4  9005              STR      r0,[sp,#0x14]         ;1033
-0002a6  9805              LDR      r0,[sp,#0x14]         ;1034
-0002a8  63d8              STR      r0,[r3,#0x3c]         ;1034  ; Correct_Strong
-0002aa  7950              LDRB     r0,[r2,#5]            ;1035  ; correct_por
-0002ac  f0200001          BIC      r0,r0,#1              ;1035
-0002b0  7150              STRB     r0,[r2,#5]            ;1035
+00029e  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1099
+0002a2  1a40              SUBS     r0,r0,r1              ;1099
+0002a4  9005              STR      r0,[sp,#0x14]         ;1099
+0002a6  9805              LDR      r0,[sp,#0x14]         ;1100
+0002a8  63d8              STR      r0,[r3,#0x3c]         ;1100  ; Correct_Strong
+0002aa  7950              LDRB     r0,[r2,#5]            ;1101  ; correct_por
+0002ac  f0200001          BIC      r0,r0,#1              ;1101
+0002b0  7150              STRB     r0,[r2,#5]            ;1101
                   |L5.690|
-0002b2  f8b90000          LDRH     r0,[r9,#0]            ;1038  ; Modify_B_ACT
-0002b6  9002              STR      r0,[sp,#8]            ;1038
-0002b8  8821              LDRH     r1,[r4,#0]            ;1039  ; Modify_A_ACT
-0002ba  9802              LDR      r0,[sp,#8]            ;1039
-0002bc  1a40              SUBS     r0,r0,r1              ;1039
-0002be  9002              STR      r0,[sp,#8]            ;1039
-0002c0  9802              LDR      r0,[sp,#8]            ;1040
-0002c2  0380              LSLS     r0,r0,#14             ;1040
-0002c4  9002              STR      r0,[sp,#8]            ;1040
-0002c6  f8bb0000          LDRH     r0,[r11,#0]           ;1041  ; Modify_D_READ
-0002ca  f8bc1000          LDRH     r1,[r12,#0]           ;1041  ; Modify_C_READ
-0002ce  1a40              SUBS     r0,r0,r1              ;1041
-0002d0  9003              STR      r0,[sp,#0xc]          ;1041
-0002d2  f8bd100c          LDRH     r1,[sp,#0xc]          ;1042
-0002d6  f64f70ff          MOV      r0,#0xffff            ;1042
-0002da  ea000041          AND      r0,r0,r1,LSL #1       ;1042
-0002de  9003              STR      r0,[sp,#0xc]          ;1042
-0002e0  f8bd100c          LDRH     r1,[sp,#0xc]          ;1043
-0002e4  9802              LDR      r0,[sp,#8]            ;1043
-0002e6  fbb0f0f1          UDIV     r0,r0,r1              ;1043
-0002ea  9002              STR      r0,[sp,#8]            ;1043
-0002ec  9802              LDR      r0,[sp,#8]            ;1044
-0002ee  f8ca004c          STR      r0,[r10,#0x4c]        ;1044  ; Correct_Parametet
-0002f2  f8b90000          LDRH     r0,[r9,#0]            ;1045  ; Modify_B_ACT
-0002f6  9002              STR      r0,[sp,#8]            ;1045
-0002f8  9802              LDR      r0,[sp,#8]            ;1046
-0002fa  0380              LSLS     r0,r0,#14             ;1046
-0002fc  9002              STR      r0,[sp,#8]            ;1046
-0002fe  f8da004c          LDR      r0,[r10,#0x4c]        ;1047  ; Correct_Parametet
-000302  9001              STR      r0,[sp,#4]            ;1047
-000304  f8bb1000          LDRH     r1,[r11,#0]           ;1048  ; Modify_D_READ
-000308  9801              LDR      r0,[sp,#4]            ;1048
-00030a  4348              MULS     r0,r1,r0              ;1048
-00030c  0040              LSLS     r0,r0,#1              ;1048
-00030e  9001              STR      r0,[sp,#4]            ;1048
-000310  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1049
-000314  4288              CMP      r0,r1                 ;1049
+0002b2  f8b90000          LDRH     r0,[r9,#0]            ;1104  ; Modify_B_ACT
+0002b6  9002              STR      r0,[sp,#8]            ;1104
+0002b8  8821              LDRH     r1,[r4,#0]            ;1105  ; Modify_A_ACT
+0002ba  9802              LDR      r0,[sp,#8]            ;1105
+0002bc  1a40              SUBS     r0,r0,r1              ;1105
+0002be  9002              STR      r0,[sp,#8]            ;1105
+0002c0  9802              LDR      r0,[sp,#8]            ;1106
+0002c2  0380              LSLS     r0,r0,#14             ;1106
+0002c4  9002              STR      r0,[sp,#8]            ;1106
+0002c6  f8bb0000          LDRH     r0,[r11,#0]           ;1107  ; Modify_D_READ
+0002ca  f8bc1000          LDRH     r1,[r12,#0]           ;1107  ; Modify_C_READ
+0002ce  1a40              SUBS     r0,r0,r1              ;1107
+0002d0  9003              STR      r0,[sp,#0xc]          ;1107
+0002d2  f8bd100c          LDRH     r1,[sp,#0xc]          ;1108
+0002d6  f64f70ff          MOV      r0,#0xffff            ;1108
+0002da  ea000041          AND      r0,r0,r1,LSL #1       ;1108
+0002de  9003              STR      r0,[sp,#0xc]          ;1108
+0002e0  f8bd100c          LDRH     r1,[sp,#0xc]          ;1109
+0002e4  9802              LDR      r0,[sp,#8]            ;1109
+0002e6  fbb0f0f1          UDIV     r0,r0,r1              ;1109
+0002ea  9002              STR      r0,[sp,#8]            ;1109
+0002ec  9802              LDR      r0,[sp,#8]            ;1110
+0002ee  f8ca004c          STR      r0,[r10,#0x4c]        ;1110  ; Correct_Parametet
+0002f2  f8b90000          LDRH     r0,[r9,#0]            ;1111  ; Modify_B_ACT
+0002f6  9002              STR      r0,[sp,#8]            ;1111
+0002f8  9802              LDR      r0,[sp,#8]            ;1112
+0002fa  0380              LSLS     r0,r0,#14             ;1112
+0002fc  9002              STR      r0,[sp,#8]            ;1112
+0002fe  f8da004c          LDR      r0,[r10,#0x4c]        ;1113  ; Correct_Parametet
+000302  9001              STR      r0,[sp,#4]            ;1113
+000304  f8bb1000          LDRH     r1,[r11,#0]           ;1114  ; Modify_D_READ
+000308  9801              LDR      r0,[sp,#4]            ;1114
+00030a  4348              MULS     r0,r1,r0              ;1114
+00030c  0040              LSLS     r0,r0,#1              ;1114
+00030e  9001              STR      r0,[sp,#4]            ;1114
+000310  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1115
+000314  4288              CMP      r0,r1                 ;1115
 000316  d20a              BCS      |L5.814|
-000318  e9dd0101          LDRD     r0,r1,[sp,#4]         ;1051
-00031c  1a40              SUBS     r0,r0,r1              ;1051
-00031e  9001              STR      r0,[sp,#4]            ;1051
-000320  9801              LDR      r0,[sp,#4]            ;1052
-000322  64d8              STR      r0,[r3,#0x4c]         ;1052  ; Correct_Strong
-000324  7950              LDRB     r0,[r2,#5]            ;1053  ; correct_por
-000326  f0400004          ORR      r0,r0,#4              ;1053
-00032a  7150              STRB     r0,[r2,#5]            ;1053
+000318  e9dd0101          LDRD     r0,r1,[sp,#4]         ;1117
+00031c  1a40              SUBS     r0,r0,r1              ;1117
+00031e  9001              STR      r0,[sp,#4]            ;1117
+000320  9801              LDR      r0,[sp,#4]            ;1118
+000322  64d8              STR      r0,[r3,#0x4c]         ;1118  ; Correct_Strong
+000324  7950              LDRB     r0,[r2,#5]            ;1119  ; correct_por
+000326  f0400004          ORR      r0,r0,#4              ;1119
+00032a  7150              STRB     r0,[r2,#5]            ;1119
 00032c  e009              B        |L5.834|
                   |L5.814|
-00032e  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1057
-000332  1a40              SUBS     r0,r0,r1              ;1057
-000334  9002              STR      r0,[sp,#8]            ;1057
-000336  9802              LDR      r0,[sp,#8]            ;1058
-000338  64d8              STR      r0,[r3,#0x4c]         ;1058  ; Correct_Strong
-00033a  7950              LDRB     r0,[r2,#5]            ;1059  ; correct_por
-00033c  f0200004          BIC      r0,r0,#4              ;1059
-000340  7150              STRB     r0,[r2,#5]            ;1059
+00032e  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1123
+000332  1a40              SUBS     r0,r0,r1              ;1123
+000334  9002              STR      r0,[sp,#8]            ;1123
+000336  9802              LDR      r0,[sp,#8]            ;1124
+000338  64d8              STR      r0,[r3,#0x4c]         ;1124  ; Correct_Strong
+00033a  7950              LDRB     r0,[r2,#5]            ;1125  ; correct_por
+00033c  f0200004          BIC      r0,r0,#4              ;1125
+000340  7150              STRB     r0,[r2,#5]            ;1125
                   |L5.834|
 000342  f7fffffe          BL       Flash_Write_all
-000346  6838              LDR      r0,[r7,#0]            ;1062  ; flagB
-000348  f0200008          BIC      r0,r0,#8              ;1062
-00034c  6038              STR      r0,[r7,#0]            ;1062  ; flagB
+000346  6838              LDR      r0,[r7,#0]            ;1128  ; flagB
+000348  f0200008          BIC      r0,r0,#8              ;1128
+00034c  6038              STR      r0,[r7,#0]            ;1128  ; flagB
 00034e  e6c0              B        |L5.210|
                   |L5.848|
-000350  8828              LDRH     r0,[r5,#0]            ;1064  ; Vmon_value
-000352  8030              STRH     r0,[r6,#0]            ;1064
-000354  f8b80000          LDRH     r0,[r8,#0]            ;1065  ; Contr_Voltage
-000358  f8ac0000          STRH     r0,[r12,#0]           ;1065
-00035c  8021              STRH     r1,[r4,#0]            ;1066
+000350  8828              LDRH     r0,[r5,#0]            ;1130  ; Vmon_value
+000352  8030              STRH     r0,[r6,#0]            ;1130
+000354  f8b80000          LDRH     r0,[r8,#0]            ;1131  ; Contr_Voltage
+000358  f8ac0000          STRH     r0,[r12,#0]           ;1131
+00035c  8021              STRH     r1,[r4,#0]            ;1132
 00035e  e6b8              B        |L5.210|
                   |L5.864|
-000360  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1097
-000364  1a40              SUBS     r0,r0,r1              ;1097
-000366  9005              STR      r0,[sp,#0x14]         ;1097
-000368  9805              LDR      r0,[sp,#0x14]         ;1098
-00036a  6418              STR      r0,[r3,#0x40]         ;1098  ; Correct_Strong
-00036c  7950              LDRB     r0,[r2,#5]            ;1099  ; correct_por
-00036e  f0200001          BIC      r0,r0,#1              ;1099
-000372  7150              STRB     r0,[r2,#5]            ;1099
+000360  e9dd1004          LDRD     r1,r0,[sp,#0x10]      ;1163
+000364  1a40              SUBS     r0,r0,r1              ;1163
+000366  9005              STR      r0,[sp,#0x14]         ;1163
+000368  9805              LDR      r0,[sp,#0x14]         ;1164
+00036a  6418              STR      r0,[r3,#0x40]         ;1164  ; Correct_Strong
+00036c  7950              LDRB     r0,[r2,#5]            ;1165  ; correct_por
+00036e  f0200001          BIC      r0,r0,#1              ;1165
+000372  7150              STRB     r0,[r2,#5]            ;1165
                   |L5.884|
-000374  f8b90000          LDRH     r0,[r9,#0]            ;1102  ; Modify_B_ACT
-000378  9002              STR      r0,[sp,#8]            ;1102
-00037a  8821              LDRH     r1,[r4,#0]            ;1103  ; Modify_A_ACT
-00037c  9802              LDR      r0,[sp,#8]            ;1103
-00037e  1a40              SUBS     r0,r0,r1              ;1103
-000380  9002              STR      r0,[sp,#8]            ;1103
-000382  9802              LDR      r0,[sp,#8]            ;1104
-000384  0380              LSLS     r0,r0,#14             ;1104
-000386  9002              STR      r0,[sp,#8]            ;1104
-000388  f8bb0000          LDRH     r0,[r11,#0]           ;1105  ; Modify_D_READ
-00038c  f8bc1000          LDRH     r1,[r12,#0]           ;1105  ; Modify_C_READ
-000390  1a40              SUBS     r0,r0,r1              ;1105
-000392  9003              STR      r0,[sp,#0xc]          ;1105
-000394  f8bd100c          LDRH     r1,[sp,#0xc]          ;1106
-000398  f64f70ff          MOV      r0,#0xffff            ;1106
-00039c  ea000041          AND      r0,r0,r1,LSL #1       ;1106
-0003a0  9003              STR      r0,[sp,#0xc]          ;1106
-0003a2  f8bd100c          LDRH     r1,[sp,#0xc]          ;1107
-0003a6  9802              LDR      r0,[sp,#8]            ;1107
-0003a8  fbb0f0f1          UDIV     r0,r0,r1              ;1107
-0003ac  9002              STR      r0,[sp,#8]            ;1107
-0003ae  9802              LDR      r0,[sp,#8]            ;1108
-0003b0  f8ca0050          STR      r0,[r10,#0x50]        ;1108  ; Correct_Parametet
-0003b4  f8b90000          LDRH     r0,[r9,#0]            ;1109  ; Modify_B_ACT
-0003b8  9002              STR      r0,[sp,#8]            ;1109
-0003ba  9802              LDR      r0,[sp,#8]            ;1110
-0003bc  0380              LSLS     r0,r0,#14             ;1110
-0003be  9002              STR      r0,[sp,#8]            ;1110
-0003c0  f8da0050          LDR      r0,[r10,#0x50]        ;1111  ; Correct_Parametet
-0003c4  9001              STR      r0,[sp,#4]            ;1111
-0003c6  f8bb1000          LDRH     r1,[r11,#0]           ;1112  ; Modify_D_READ
-0003ca  9801              LDR      r0,[sp,#4]            ;1112
-0003cc  4348              MULS     r0,r1,r0              ;1112
-0003ce  0040              LSLS     r0,r0,#1              ;1112
-0003d0  9001              STR      r0,[sp,#4]            ;1112
-0003d2  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1113
-0003d6  4288              CMP      r0,r1                 ;1113
+000374  f8b90000          LDRH     r0,[r9,#0]            ;1168  ; Modify_B_ACT
+000378  9002              STR      r0,[sp,#8]            ;1168
+00037a  8821              LDRH     r1,[r4,#0]            ;1169  ; Modify_A_ACT
+00037c  9802              LDR      r0,[sp,#8]            ;1169
+00037e  1a40              SUBS     r0,r0,r1              ;1169
+000380  9002              STR      r0,[sp,#8]            ;1169
+000382  9802              LDR      r0,[sp,#8]            ;1170
+000384  0380              LSLS     r0,r0,#14             ;1170
+000386  9002              STR      r0,[sp,#8]            ;1170
+000388  f8bb0000          LDRH     r0,[r11,#0]           ;1171  ; Modify_D_READ
+00038c  f8bc1000          LDRH     r1,[r12,#0]           ;1171  ; Modify_C_READ
+000390  1a40              SUBS     r0,r0,r1              ;1171
+000392  9003              STR      r0,[sp,#0xc]          ;1171
+000394  f8bd100c          LDRH     r1,[sp,#0xc]          ;1172
+000398  f64f70ff          MOV      r0,#0xffff            ;1172
+00039c  ea000041          AND      r0,r0,r1,LSL #1       ;1172
+0003a0  9003              STR      r0,[sp,#0xc]          ;1172
+0003a2  f8bd100c          LDRH     r1,[sp,#0xc]          ;1173
+0003a6  9802              LDR      r0,[sp,#8]            ;1173
+0003a8  fbb0f0f1          UDIV     r0,r0,r1              ;1173
+0003ac  9002              STR      r0,[sp,#8]            ;1173
+0003ae  9802              LDR      r0,[sp,#8]            ;1174
+0003b0  f8ca0050          STR      r0,[r10,#0x50]        ;1174  ; Correct_Parametet
+0003b4  f8b90000          LDRH     r0,[r9,#0]            ;1175  ; Modify_B_ACT
+0003b8  9002              STR      r0,[sp,#8]            ;1175
+0003ba  9802              LDR      r0,[sp,#8]            ;1176
+0003bc  0380              LSLS     r0,r0,#14             ;1176
+0003be  9002              STR      r0,[sp,#8]            ;1176
+0003c0  f8da0050          LDR      r0,[r10,#0x50]        ;1177  ; Correct_Parametet
+0003c4  9001              STR      r0,[sp,#4]            ;1177
+0003c6  f8bb1000          LDRH     r1,[r11,#0]           ;1178  ; Modify_D_READ
+0003ca  9801              LDR      r0,[sp,#4]            ;1178
+0003cc  4348              MULS     r0,r1,r0              ;1178
+0003ce  0040              LSLS     r0,r0,#1              ;1178
+0003d0  9001              STR      r0,[sp,#4]            ;1178
+0003d2  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1179
+0003d6  4288              CMP      r0,r1                 ;1179
 0003d8  d224              BCS      |L5.1060|
-0003da  e9dd0101          LDRD     r0,r1,[sp,#4]         ;1115
-0003de  1a40              SUBS     r0,r0,r1              ;1115
-0003e0  9001              STR      r0,[sp,#4]            ;1115
-0003e2  9801              LDR      r0,[sp,#4]            ;1116
-0003e4  6518              STR      r0,[r3,#0x50]         ;1116  ; Correct_Strong
-0003e6  7950              LDRB     r0,[r2,#5]            ;1117  ; correct_por
-0003e8  f0400004          ORR      r0,r0,#4              ;1117
-0003ec  7150              STRB     r0,[r2,#5]            ;1117
+0003da  e9dd0101          LDRD     r0,r1,[sp,#4]         ;1181
+0003de  1a40              SUBS     r0,r0,r1              ;1181
+0003e0  9001              STR      r0,[sp,#4]            ;1181
+0003e2  9801              LDR      r0,[sp,#4]            ;1182
+0003e4  6518              STR      r0,[r3,#0x50]         ;1182  ; Correct_Strong
+0003e6  7950              LDRB     r0,[r2,#5]            ;1183  ; correct_por
+0003e8  f0400004          ORR      r0,r0,#4              ;1183
+0003ec  7150              STRB     r0,[r2,#5]            ;1183
 0003ee  e023              B        |L5.1080|
                   |L5.1008|
                           DCD      Vmon_value
@@ -2372,21 +2569,21 @@
                   |L5.1056|
                           DCD      correct_por
                   |L5.1060|
-000424  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1121
-000428  1a40              SUBS     r0,r0,r1              ;1121
-00042a  9002              STR      r0,[sp,#8]            ;1121
-00042c  9802              LDR      r0,[sp,#8]            ;1122
-00042e  6518              STR      r0,[r3,#0x50]         ;1122  ; Correct_Strong
-000430  7950              LDRB     r0,[r2,#5]            ;1123  ; correct_por
-000432  f0200004          BIC      r0,r0,#4              ;1123
-000436  7150              STRB     r0,[r2,#5]            ;1123
+000424  e9dd1001          LDRD     r1,r0,[sp,#4]         ;1187
+000428  1a40              SUBS     r0,r0,r1              ;1187
+00042a  9002              STR      r0,[sp,#8]            ;1187
+00042c  9802              LDR      r0,[sp,#8]            ;1188
+00042e  6518              STR      r0,[r3,#0x50]         ;1188  ; Correct_Strong
+000430  7950              LDRB     r0,[r2,#5]            ;1189  ; correct_por
+000432  f0200004          BIC      r0,r0,#4              ;1189
+000436  7150              STRB     r0,[r2,#5]            ;1189
                   |L5.1080|
 000438  f7fffffe          BL       Flash_Write_all
-00043c  6838              LDR      r0,[r7,#0]            ;1126  ; flagB
-00043e  f0200008          BIC      r0,r0,#8              ;1126
-000442  6038              STR      r0,[r7,#0]            ;1126  ; flagB
+00043c  6838              LDR      r0,[r7,#0]            ;1192  ; flagB
+00043e  f0200008          BIC      r0,r0,#8              ;1192
+000442  6038              STR      r0,[r7,#0]            ;1192  ; flagB
 000444  e645              B        |L5.210|
-;;;1129   
+;;;1195   
                           ENDP
 
 

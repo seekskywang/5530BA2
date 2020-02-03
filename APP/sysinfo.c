@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		}else if(jkflag == 0){
 			GUI_DispStringAt("5530B", 140+40, 50);
 		}
-        GUI_DispStringAt("Ver:3.6", 140+40, 75);
+        GUI_DispStringAt("Ver:3.8", 140+40, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
@@ -205,6 +205,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//3.3修复充放电截止电压设置bug,
 		//3.5增加仪器校准
 		//3.6增加电压档位切换
+		//3.7修改充放电切换
+		//3.8修改负载电流量程与校准
         GUI_DispStringAt("Ver:1.3", 140+40, 100);
         GUI_DispStringAt("-", 191+40, 125);
         GUI_DispStringAt("-", 227+40, 125);

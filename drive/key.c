@@ -376,7 +376,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 1000;
 								C_SW(0);
-								Contr_Laod = 0x0a12;
+								Contr_Laod = 0x077e;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -475,7 +475,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
-								Contr_Laod = 0x120c;
+								Contr_Laod = 0x1B7E;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -565,7 +565,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
-								Contr_Laod = 0x13f8;
+								Contr_Laod = 0x1B7E;
 								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
@@ -663,7 +663,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
-								Contr_Laod = 0x35e5;
+								Contr_Laod = 0x757E;
 								Contr_Current = 0x1a5f;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
@@ -761,7 +761,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
-								Contr_Laod = 0x5a1f;
+								Contr_Laod = 0x757E;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -848,7 +848,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(0);
-								Contr_Laod = 0x75ad;
+								Contr_Laod = 0xCF1E;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -935,7 +935,7 @@ void Key_Funtion(void)
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
 								C_SW(1);
-								Contr_Laod = 0x1805;
+								Contr_Laod = 0x567E;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -1010,9 +1010,8 @@ void Key_Funtion(void)
                                 GPIO_SetBits(GPIOA,GPIO_Pin_12);//鐢靛帇妗ｄ綅鍒囨崲
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
-//                                SET_Current_Laod = 5000;
 								C_SW(1);
-								Contr_Laod = 0x2bfb;
+								Contr_Laod = 0xA47E;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
@@ -1089,6 +1088,15 @@ void Key_Funtion(void)
                                 LoadVCal(9);
                             }else if(calmode == mode_pow){
                                 
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+								C_SW(1);
+								Contr_Laod = 0xA47E;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鐢靛瓙璐熻浇On
+                                calstep = 9;
                             }else if(calmode == mode_r ){
                                 Rlow_cal(9);
                             }else if(calmode == input){
@@ -1162,6 +1170,15 @@ void Key_Funtion(void)
                                 
                             }else if(calmode == mode_r ){
                                 Rlow_cal(0);
+                            }else if(calmode == mode_loadc){
+                                IO_OFF();
+								C_SW(1);
+								Contr_Laod = 0xF47E;
+								Flag_DAC_OFF=1;
+                                GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+                                flag_Load_CC = 1;
+                                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//鐢靛瓙璐熻浇On
+                                calstep = 10;
                             }else if(calmode == input){
                                 inputcal("0");
                             }
@@ -1336,6 +1353,12 @@ void Key_Funtion(void)
 							KeyCounter = 0;
                             BEEP_Tiggr();
 						}break;
+						case face_menu:
+						{
+							Contr_Voltage -= 1;
+							KeyCounter = 0;
+							BEEP_Tiggr();
+						}break;
                     }
                 }
                 break;
@@ -1393,6 +1416,12 @@ void Key_Funtion(void)
 							sendload += 100;
 							KeyCounter = 0;
                             BEEP_Tiggr();
+						}break;
+						case face_menu:
+						{
+							Contr_Voltage += 1;
+							KeyCounter = 0;
+							BEEP_Tiggr();
 						}break;
                     }
                 }
@@ -1807,6 +1836,8 @@ void Key_Funtion(void)
                             }
                             else if(pow_sw==pow_off)
                             {
+//								SET_Voltage = pow_v-12;
+								SET_Voltage = pow_v;
                                GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
                                 GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出                           
                                 mode_sw = mode_pow;

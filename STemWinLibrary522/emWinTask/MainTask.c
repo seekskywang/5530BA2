@@ -169,12 +169,13 @@ void MainTask(void)
 			}else{
 				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
 				{
-					if(SET_Current_Laod < 2500)
+					if(SET_Current_Laod < 10000)
 					{
 						if(sendload < 250)
 						{
 							sendload = sendload + 10;
 						}else{
+							C_SW(0);
 							sendload = Contr_Laod;
 						}
 						DAC8531_Send(sendload);
