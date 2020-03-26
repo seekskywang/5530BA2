@@ -653,7 +653,7 @@ void TIM3_IRQHandler(void)
                     if(alert_flag == 1)
                     {
                         calert ++;
-                        if(calert == 3)
+                        if(calert == 9)
                         {
                             t_onoff = 0;
                             GPIO_SetBits(GPIOA,GPIO_Pin_15);//????OFF

@@ -241,7 +241,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
                 hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_84);
                 sprintf(buf,"%.3f",disloadv);       
                 TEXT_SetText(hItem,buf);
-            }
+            } 
 //         }else{
 //             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_84);
 //             sprintf(buf,"%.3f",DISS_Voltage);       
@@ -266,7 +266,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
         
         if(load_sw == load_on)
         {
-            if(/*DISS_Current >= 30*/SET_Current_Laod >= 30000)
+            if(/*DISS_Current >= 30*/SET_Current_Laod >= 25000)
             {
                 alert_flag = 1;
             }else{
