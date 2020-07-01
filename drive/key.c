@@ -1173,7 +1173,7 @@ void Key_Funtion(void)
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
 								C_SW(1);
-								Contr_Laod = 0xF47E;
+								Contr_Laod = 0xD6D8;
 								Flag_DAC_OFF=1;
                                 GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
                                 flag_Load_CC = 1;
