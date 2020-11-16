@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		}else if(jkflag == 0){
 			GUI_DispStringAt("5530B", 140+40, 50);
 		}
-        GUI_DispStringAt("Ver:3.9", 140+40, 75);
+        GUI_DispStringAt("Ver:3.9P1", 140+40, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端

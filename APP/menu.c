@@ -800,9 +800,9 @@ void MENU_SET(void)
 				pow_c = atof(buf)*1000;
 			}
               
-            if(pow_c > 5000)
+            if(pow_c > 10000)
             {
-                pow_c = 5000;               
+                pow_c = 10000;               
             }
 			if(pow_v/100 * pow_c/1000 > 200)
             {
@@ -857,9 +857,9 @@ void MENU_SET(void)
 				strncpy(buf,set_limit,dot_flag + 4);
 				set_pow_cutoffc = atof(buf)*1000;
 			}
-            if(set_pow_cutoffc > 5000)
+            if(set_pow_cutoffc > 10000)
             {
-                set_pow_cutoffc = 5000;               
+                set_pow_cutoffc = 10000;               
             }
             pow_cutoffc = (float)set_pow_cutoffc/1000;
             sprintf(buf,"%.3f",pow_cutoffc);

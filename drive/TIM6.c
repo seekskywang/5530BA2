@@ -513,7 +513,7 @@ void TIM3_Int_Init(u16 arr,u16 psc)
     TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE); //?????? 3 ?§ä??
     NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //??? 3 ??
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //????? 1
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03; //§¾???? 3
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //§¾???? 3
     NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
     NVIC_Init(&NVIC_InitStructure);// ¨¹??? NVIC
     TIM_Cmd(TIM3,ENABLE); //Y????? 3

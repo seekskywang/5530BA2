@@ -948,19 +948,19 @@
 ;;;509        TIM_TimeBaseInitStructure.TIM_Prescaler=psc; //?????
 000010  f8ad5004          STRH     r5,[sp,#4]
 ;;;510        TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //§Ó?????
-000014  2000              MOVS     r0,#0
-000016  f8ad0006          STRH     r0,[sp,#6]
+000014  2400              MOVS     r4,#0
+000016  f8ad4006          STRH     r4,[sp,#6]
 ;;;511        TIM_TimeBaseInitStructure.TIM_ClockDivision=TIM_CKD_DIV1;
-00001a  f8ad000c          STRH     r0,[sp,#0xc]
+00001a  f8ad400c          STRH     r4,[sp,#0xc]
 ;;;512        TIM_TimeBaseInit(TIM3,&TIM_TimeBaseInitStructure);// ¨²?????? TIM3
-00001e  4c0e              LDR      r4,|L4.88|
+00001e  4d0e              LDR      r5,|L4.88|
 000020  a901              ADD      r1,sp,#4
-000022  4620              MOV      r0,r4
+000022  4628              MOV      r0,r5
 000024  f7fffffe          BL       TIM_TimeBaseInit
 ;;;513        TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE); //?????? 3 ?§ä??
 000028  2201              MOVS     r2,#1
 00002a  4611              MOV      r1,r2
-00002c  4620              MOV      r0,r4
+00002c  4628              MOV      r0,r5
 00002e  f7fffffe          BL       TIM_ITConfig
 ;;;514        NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //??? 3 ??
 000032  211d              MOVS     r1,#0x1d
@@ -968,23 +968,23 @@
 ;;;515        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //????? 1
 000038  2101              MOVS     r1,#1
 00003a  f88d1001          STRB     r1,[sp,#1]
-;;;516        NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03; //§¾???? 3
-00003e  2203              MOVS     r2,#3
-000040  f88d2002          STRB     r2,[sp,#2]
+;;;516        NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x00; //§¾???? 3
+00003e  f88d4002          STRB     r4,[sp,#2]
 ;;;517        NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
-000044  f88d1003          STRB     r1,[sp,#3]
+000042  f88d1003          STRB     r1,[sp,#3]
 ;;;518        NVIC_Init(&NVIC_InitStructure);// ¨¹??? NVIC
-000048  4668              MOV      r0,sp
-00004a  f7fffffe          BL       NVIC_Init
+000046  4668              MOV      r0,sp
+000048  f7fffffe          BL       NVIC_Init
 ;;;519        TIM_Cmd(TIM3,ENABLE); //Y????? 3
-00004e  2101              MOVS     r1,#1
-000050  4620              MOV      r0,r4
-000052  f7fffffe          BL       TIM_Cmd
+00004c  2101              MOVS     r1,#1
+00004e  4628              MOV      r0,r5
+000050  f7fffffe          BL       TIM_Cmd
 ;;;520    }
-000056  bd7f              POP      {r0-r6,pc}
+000054  bd7f              POP      {r0-r6,pc}
 ;;;521    //??? 3 ??????
                           ENDP
 
+000056  0000              DCW      0x0000
                   |L4.88|
                           DCD      0x40000400
 
