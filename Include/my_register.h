@@ -49,6 +49,7 @@ void MODS_Poll(void);
 void MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 void V_SW(u8 i);
 void C_SW(u8 i);
+extern void SendToPC(u8 mode);
 //=============================================================================
 #define NOP   __nop();	  //???
 
@@ -224,6 +225,7 @@ extern float disloadv;
 extern u16 disrvalue;
 extern vu8 cflag;
 extern vu8 pow_sw;
+extern vu8 sendpcflag;
 #define set_max_lv						InFlashSave[0]
 #define set_min_lv						InFlashSave[1]
 #define set_max_pc						InFlashSave[2]

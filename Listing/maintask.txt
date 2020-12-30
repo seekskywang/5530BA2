@@ -5,39 +5,39 @@
                           AREA ||i.C_SW||, CODE, READONLY, ALIGN=2
 
                   C_SW PROC
-;;;269    
-;;;270    void C_SW(u8 i)
+;;;318    
+;;;319    void C_SW(u8 i)
 000000  b510              PUSH     {r4,lr}
-;;;271    {
-;;;272    	if(i == 0)
-;;;273    	{
-;;;274    		GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+;;;320    {
+;;;321    	if(i == 0)
+;;;322    	{
+;;;323    		GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
 000002  4a0a              LDR      r2,|L1.44|
-;;;275    		cflag = 0;
+;;;324    		cflag = 0;
 000004  4c0a              LDR      r4,|L1.48|
-000006  f44f6100          MOV      r1,#0x800             ;274
-00000a  2800              CMP      r0,#0                 ;272
+000006  f44f6100          MOV      r1,#0x800             ;323
+00000a  2800              CMP      r0,#0                 ;321
 00000c  d007              BEQ      |L1.30|
-;;;276    	}else if(i == 1){
+;;;325    	}else if(i == 1){
 00000e  2801              CMP      r0,#1
 000010  d104              BNE      |L1.28|
-;;;277    		GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+;;;326    		GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 000012  4610              MOV      r0,r2
 000014  f7fffffe          BL       GPIO_SetBits
-;;;278    		cflag = 1;
+;;;327    		cflag = 1;
 000018  2001              MOVS     r0,#1
 00001a  70e0              STRB     r0,[r4,#3]
                   |L1.28|
-;;;279    	}
-;;;280    }
+;;;328    	}
+;;;329    }
 00001c  bd10              POP      {r4,pc}
                   |L1.30|
-00001e  4610              MOV      r0,r2                 ;274
+00001e  4610              MOV      r0,r2                 ;323
 000020  f7fffffe          BL       GPIO_ResetBits
-000024  2000              MOVS     r0,#0                 ;275
-000026  70e0              STRB     r0,[r4,#3]            ;275
+000024  2000              MOVS     r0,#0                 ;324
+000026  70e0              STRB     r0,[r4,#3]            ;324
 000028  bd10              POP      {r4,pc}
-;;;281    ////缓启动
+;;;330    ////缓启动
                           ENDP
 
 00002a  0000              DCW      0x0000
@@ -457,60 +457,109 @@
                   |L2.538|
 ;;;227                 }
 ;;;228            }
-;;;229    		if(Flag_DAC_OFF==0)
+;;;229    		
+;;;230    //		switch(page_sw)
+;;;231    //        {
+;;;232    //            case face_menu:
+;;;233    //            {
+;;;234    //                if(pow_sw == pow_on)
+;;;235    //                {
+;;;236    //					if(rmtrig[1] == 1 && sendpcflag == 1)
+;;;237    //					{
+;;;238    //						sendpcflag = 0;
+;;;239    //						SendToPC(1);
+;;;240    //						
+;;;241    //					}
+;;;242    //                }
+;;;243    //            }break;
+;;;244    //            case face_cdc:
+;;;245    //            {
+;;;246    //                if(mode_sw == mode_pow && cdc_sw == cdc_on)
+;;;247    //                {
+;;;248    //					if(rmtrig[2] == 1  && sendpcflag == 1)
+;;;249    //					{
+;;;250    //						sendpcflag = 0;
+;;;251    //						SendToPC(2);
+;;;252    //					}
+;;;253    ////                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
+;;;254    //                }else if(mode_sw == mode_load && cdc_sw == cdc_on){
+;;;255    //					if(rmtrig[2] == 1  && sendpcflag == 1)
+;;;256    //					{
+;;;257    //						sendpcflag = 0;
+;;;258    //						SendToPC(2);
+;;;259    //					}
+;;;260    //                }else if(cdc_sw == cdc_off){
+;;;261    //					
+;;;262    //                }
+;;;263    //            }break;
+;;;264    //            case face_load:
+;;;265    //            {
+;;;266    //                if(load_sw == load_on)
+;;;267    //                {
+;;;268    
+;;;269    //					if(rmtrig[0] == 1  && sendpcflag == 1)
+;;;270    //					{
+;;;271    //						sendpcflag = 0;
+;;;272    //						SendToPC(0);
+;;;273    //					}
+;;;274    //                }
+;;;275    //            }break;
+;;;276    //        }
+;;;277    		
+;;;278    		if(Flag_DAC_OFF==0)
 00021a  4838              LDR      r0,|L2.764|
 00021c  7800              LDRB     r0,[r0,#0]  ; flagB
 00021e  0700              LSLS     r0,r0,#28
 000220  d401              BMI      |L2.550|
-;;;230    		{
-;;;231    			Transformation_ADC();
+;;;279    		{
+;;;280    			Transformation_ADC();
 000222  f7fffffe          BL       Transformation_ADC
                   |L2.550|
-;;;232    		}
-;;;233    		if(Flag_ADC_Full==1)
+;;;281    		}
+;;;282    		if(Flag_ADC_Full==1)
 000226  f8d90000          LDR      r0,[r9,#0]  ; flagA
 00022a  0781              LSLS     r1,r0,#30
 00022c  d505              BPL      |L2.570|
-;;;234    		{
-;;;235    			Flag_ADC_Full=0;
+;;;283    		{
+;;;284    			Flag_ADC_Full=0;
 00022e  f0200002          BIC      r0,r0,#2
 000232  f8c90000          STR      r0,[r9,#0]  ; flagA
-;;;236    			ADC_CH_Scan();//ADC滤波
+;;;285    			ADC_CH_Scan();//ADC滤波
 000236  f7fffffe          BL       ADC_CH_Scan
                   |L2.570|
-;;;237    		}
-;;;238    		AD7689_Scan_CH();//读取AD7689各通道AD值
+;;;286    		}
+;;;287    		AD7689_Scan_CH();//读取AD7689各通道AD值
 00023a  f7fffffe          BL       AD7689_Scan_CH
-;;;239    // 		if(UART_Buffer_Rece_flag==1)
-;;;240    // 		{
-;;;241    // 			UART_Buffer_Rece_flag=0;
-;;;242    // 			UART_Action();
-;;;243    // 		}
-;;;244    		if(Flag_Key_Scan==1)
+;;;288    // 		if(UART_Buffer_Rece_flag==1)
+;;;289    // 		{
+;;;290    // 			UART_Buffer_Rece_flag=0;
+;;;291    // 			UART_Action();
+;;;292    // 		}
+;;;293    		if(Flag_Key_Scan==1)
 00023e  f8d90000          LDR      r0,[r9,#0]  ; flagA
 000242  0701              LSLS     r1,r0,#28
 000244  d50d              BPL      |L2.610|
-;;;245    		{
-;;;246    			Flag_Key_Scan=0;
+;;;294    		{
+;;;295    			Flag_Key_Scan=0;
 000246  f0200008          BIC      r0,r0,#8
 00024a  f8c90000          STR      r0,[r9,#0]  ; flagA
-;;;247    			NewKey=TM1650_Read_KEY();
+;;;296    			NewKey=TM1650_Read_KEY();
 00024e  f7fffffe          BL       TM1650_Read_KEY
 000252  492b              LDR      r1,|L2.768|
 000254  7008              STRB     r0,[r1,#0]
-;;;248    			Flag_Key_Scan = 1;
+;;;297    			Flag_Key_Scan = 1;
 000256  f8d90000          LDR      r0,[r9,#0]  ; flagA
 00025a  f0400008          ORR      r0,r0,#8
 00025e  f8c90000          STR      r0,[r9,#0]  ; flagA
                   |L2.610|
-;;;249    		}
-;;;250    		Key_Funtion();//键盘处理
+;;;298    		}
+;;;299    		Key_Funtion();//键盘处理
 000262  f7fffffe          BL       Key_Funtion
-;;;251    		Temp_Comapre();//风扇控制
+;;;300    		Temp_Comapre();//风扇控制
 000266  f7fffffe          BL       Temp_Comapre
-;;;252    		BEEP_Ring();//蜂鸣器
+;;;301    		BEEP_Ring();//蜂鸣器
 00026a  f7fffffe          BL       BEEP_Ring
-;;;253    		GUI_Delay(2);//GUI刷新
+;;;302    		GUI_Delay(2);//GUI刷新
 00026e  2002              MOVS     r0,#2
 000270  f7fffffe          BL       GUI_Delay
                   |L2.628|
@@ -527,10 +576,10 @@
 00028c  2801              CMP      r0,#1                 ;110
 00028e  f47faf22          BNE      |L2.214|
 000292  e710              B        |L2.182|
-;;;254    	}
-;;;255      
-;;;256    }
-;;;257    
+;;;303    	}
+;;;304      
+;;;305    }
+;;;306    
                           ENDP
 
                   |L2.660|
@@ -599,39 +648,39 @@
                           AREA ||i.V_SW||, CODE, READONLY, ALIGN=2
 
                   V_SW PROC
-;;;257    
-;;;258    void V_SW(u8 i)
+;;;306    
+;;;307    void V_SW(u8 i)
 000000  b510              PUSH     {r4,lr}
-;;;259    {
-;;;260    	if(i == 0)
-;;;261    	{
-;;;262    		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
+;;;308    {
+;;;309    	if(i == 0)
+;;;310    	{
+;;;311    		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
 000002  4a0a              LDR      r2,|L3.44|
-;;;263    		vflag = 0;
+;;;312    		vflag = 0;
 000004  4c0a              LDR      r4,|L3.48|
-000006  f44f5180          MOV      r1,#0x1000            ;262
-00000a  2800              CMP      r0,#0                 ;260
+000006  f44f5180          MOV      r1,#0x1000            ;311
+00000a  2800              CMP      r0,#0                 ;309
 00000c  d007              BEQ      |L3.30|
-;;;264    	}else if(i == 1){
+;;;313    	}else if(i == 1){
 00000e  2801              CMP      r0,#1
 000010  d104              BNE      |L3.28|
-;;;265    		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
+;;;314    		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
 000012  4610              MOV      r0,r2
 000014  f7fffffe          BL       GPIO_ResetBits
-;;;266    		vflag = 1;
+;;;315    		vflag = 1;
 000018  2001              MOVS     r0,#1
 00001a  70a0              STRB     r0,[r4,#2]
                   |L3.28|
-;;;267    	}
-;;;268    }
+;;;316    	}
+;;;317    }
 00001c  bd10              POP      {r4,pc}
                   |L3.30|
-00001e  4610              MOV      r0,r2                 ;262
+00001e  4610              MOV      r0,r2                 ;311
 000020  f7fffffe          BL       GPIO_SetBits
-000024  2000              MOVS     r0,#0                 ;263
-000026  70a0              STRB     r0,[r4,#2]            ;263
+000024  2000              MOVS     r0,#0                 ;312
+000026  70a0              STRB     r0,[r4,#2]            ;312
 000028  bd10              POP      {r4,pc}
-;;;269    
+;;;318    
                           ENDP
 
 00002a  0000              DCW      0x0000

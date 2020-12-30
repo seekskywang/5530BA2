@@ -34997,6 +34997,7 @@ Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Nvoid V_SW(u8 i);
 Nvoid C_SW(u8 i);
+Nextern void SendToPC(u8 mode);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -35171,7 +35172,8 @@ Nvoid dma_rec(vu16 buf,u16 ndtr);
 Nextern float disloadv;
 Nextern u16 disrvalue;
 Nextern vu8 cflag;
-N
+Nextern vu8 pow_sw;
+Nextern vu8 sendpcflag;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35589,6 +35591,7 @@ Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
 Svoid C_SW(u8 i);
+Sextern void SendToPC(u8 mode);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -35763,7 +35766,8 @@ Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
 Sextern u16 disrvalue;
 Sextern vu8 cflag;
-S
+Sextern vu8 pow_sw;
+Sextern vu8 sendpcflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50246,6 +50250,17 @@ N{
 N    return (((uint16_t)_pBuf[0] << 8) | _pBuf[1]);
 N}
 N
+N/*****************  发送一个字符 **********************/
+Nvoid Usart_SendByte( USART_TypeDef * pUSARTx, uint8_t ch)
+N{
+N	/* 发送一个字节数据到USART */
+N	USART_SendData(pUSARTx,ch);
+N		
+N	/* 等待发送数据寄存器为空 */
+N	while (USART_GetFlagStatus(pUSARTx, USART_FLAG_TXE) == RESET);	
+X	while (USART_GetFlagStatus(pUSARTx, ((uint16_t)0x0080)) == RESET);	
+N}
+N
 Nvoid uart1SendChars(u8 *str, u16 strlen)
 N{ 
 N	  u16 k= 0 ; 
@@ -50397,7 +50412,7 @@ N            if(i < 10)
 N            {
 N             sum += (UART_Buffer_Rece[2] * 256 + UART_Buffer_Rece[3])/10.0;
 N            }else{
-W "..\User\stm32f4xx_it.c" 418 24 single-precision operand implicitly converted to double-precision
+W "..\User\stm32f4xx_it.c" 428 24 single-precision operand implicitly converted to double-precision
 N                temp = sum/10.0;
 N                sum = 0;
 N                i = 0;
@@ -50445,13 +50460,13 @@ N            MODS_52H();
 N        }break;
 N        default:break;
 N    }
-W "..\User\stm32f4xx_it.c" 432 8 variable "crec"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 433 9 variable "csend"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 434 16 variable "sendbuf"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 435 8 variable "sendlen"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 436 16 variable "recrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 437 16 variable "scrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 438 8 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 442 8 variable "crec"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 443 9 variable "csend"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 444 16 variable "sendbuf"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 445 8 variable "sendlen"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 446 16 variable "recrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 447 16 variable "scrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 448 8 variable "i"  was declared but never referenced
 N}
 N
 N/*
@@ -50497,7 +50512,7 @@ N			value =	(int)(DISS_POW_Current*1000);		/* 将寄存器值读出 */
 N			break;
 N		case SLAVE_REG_P05:
 X		case 0x0005:
-W "..\User\stm32f4xx_it.c" 502 4 function "IO_OFF" declared implicitly
+W "..\User\stm32f4xx_it.c" 512 4 function "IO_OFF" declared implicitly
 N			IO_OFF();
 N            SET_Current_Laod = 0;
 X            Run_Control[4] = 0;
@@ -50737,7 +50752,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
-W "..\User\stm32f4xx_it.c" 682 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 692 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
@@ -50870,7 +50885,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
-W "..\User\stm32f4xx_it.c" 784 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 794 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
@@ -50887,7 +50902,7 @@ N
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 794 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 804 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50989,9 +51004,9 @@ N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);				
-W "..\User\stm32f4xx_it.c" 875 5 function "CreateCDC" declared implicitly
+W "..\User\stm32f4xx_it.c" 885 5 function "CreateCDC" declared implicitly
 N				CreateCDC(); 
-W "..\User\stm32f4xx_it.c" 876 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 886 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
@@ -51020,7 +51035,7 @@ N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 895 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 905 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51177,17 +51192,22 @@ N
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen)
 N{
 N	uint16_t crc;
+N	uint8_t i;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1027 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1038 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;
 N	buf[_ucLen++] = crc;
 N//通过485发数据
 N//	RS485_SendBuf(buf, _ucLen);
-N
-N	uart1SendChars(buf, _ucLen);
+N	for(i=0;i<_ucLen+2;i++)
+N	{
+N		Usart_SendByte(USART1,buf[i]);
+X		Usart_SendByte(((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x1000)),buf[i]);
+N	}
+N//	uart1SendChars(buf, _ucLen);
 N	
 N// #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 N// 	g_tPrint.Txlen = _ucLen;

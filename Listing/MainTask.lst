@@ -48823,6 +48823,7 @@ Nvoid MODS_Poll(void);
 Nvoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Nvoid V_SW(u8 i);
 Nvoid C_SW(u8 i);
+Nextern void SendToPC(u8 mode);
 N//=============================================================================
 N#define NOP   __nop();	  //???
 N
@@ -48997,7 +48998,8 @@ Nvoid dma_rec(vu16 buf,u16 ndtr);
 Nextern float disloadv;
 Nextern u16 disrvalue;
 Nextern vu8 cflag;
-N
+Nextern vu8 pow_sw;
+Nextern vu8 sendpcflag;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49443,6 +49445,7 @@ Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
 Svoid C_SW(u8 i);
+Sextern void SendToPC(u8 mode);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -49617,7 +49620,8 @@ Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
 Sextern u16 disrvalue;
 Sextern vu8 cflag;
-S
+Sextern vu8 pow_sw;
+Sextern vu8 sendpcflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50050,6 +50054,7 @@ Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
 Svoid C_SW(u8 i);
+Sextern void SendToPC(u8 mode);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -50224,7 +50229,8 @@ Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
 Sextern u16 disrvalue;
 Sextern vu8 cflag;
-S
+Sextern vu8 pow_sw;
+Sextern vu8 sendpcflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50660,6 +50666,7 @@ Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
 Svoid C_SW(u8 i);
+Sextern void SendToPC(u8 mode);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -50834,7 +50841,8 @@ Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
 Sextern u16 disrvalue;
 Sextern vu8 cflag;
-S
+Sextern vu8 pow_sw;
+Sextern vu8 sendpcflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51270,6 +51278,7 @@ Svoid MODS_Poll(void);
 Svoid MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen);
 Svoid V_SW(u8 i);
 Svoid C_SW(u8 i);
+Sextern void SendToPC(u8 mode);
 S//=============================================================================
 S#define NOP   __nop();	  //???
 S
@@ -51444,7 +51453,8 @@ Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
 Sextern u16 disrvalue;
 Sextern vu8 cflag;
-S
+Sextern vu8 pow_sw;
+Sextern vu8 sendpcflag;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -52245,6 +52255,55 @@ N                 resdone = 0;
 N                 resetflag = 0; 
 N             }
 N        }
+N		
+N//		switch(page_sw)
+N//        {
+N//            case face_menu:
+N//            {
+N//                if(pow_sw == pow_on)
+N//                {
+N//					if(rmtrig[1] == 1 && sendpcflag == 1)
+N//					{
+N//						sendpcflag = 0;
+N//						SendToPC(1);
+N//						
+N//					}
+N//                }
+N//            }break;
+N//            case face_cdc:
+N//            {
+N//                if(mode_sw == mode_pow && cdc_sw == cdc_on)
+N//                {
+N//					if(rmtrig[2] == 1  && sendpcflag == 1)
+N//					{
+N//						sendpcflag = 0;
+N//						SendToPC(2);
+N//					}
+N////                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
+N//                }else if(mode_sw == mode_load && cdc_sw == cdc_on){
+N//					if(rmtrig[2] == 1  && sendpcflag == 1)
+N//					{
+N//						sendpcflag = 0;
+N//						SendToPC(2);
+N//					}
+N//                }else if(cdc_sw == cdc_off){
+N//					
+N//                }
+N//            }break;
+N//            case face_load:
+N//            {
+N//                if(load_sw == load_on)
+N//                {
+N
+N//					if(rmtrig[0] == 1  && sendpcflag == 1)
+N//					{
+N//						sendpcflag = 0;
+N//						SendToPC(0);
+N//					}
+N//                }
+N//            }break;
+N//        }
+N		
 N		if(Flag_DAC_OFF==0)
 X		if((flagB . bit3)==0)
 N		{

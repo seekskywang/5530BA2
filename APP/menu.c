@@ -800,9 +800,9 @@ void MENU_SET(void)
 				pow_c = atof(buf)*1000;
 			}
               
-            if(pow_c > 10000)
+            if(pow_c > 5000)
             {
-                pow_c = 10000;               
+                pow_c = 5000;               
             }
 			if(pow_v/100 * pow_c/1000 > 200)
             {

@@ -1848,9 +1848,9 @@ void CDC_SET(void)
 				opc1 = atof(buf)*1000;
 			}
               
-            if(opc1 > 10000)
+            if(opc1 > 5000)
             {
-                opc1 = 10000;               
+                opc1 = 5000;               
             }
 			SET_Current = opc1;
             if(SET_Voltage/100 * SET_Current/1000 > 250)

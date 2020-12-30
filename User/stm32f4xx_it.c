@@ -274,6 +274,16 @@ uint16_t BEBufToUint16(uint8_t *_pBuf)
     return (((uint16_t)_pBuf[0] << 8) | _pBuf[1]);
 }
 
+/*****************  发送一个字符 **********************/
+void Usart_SendByte( USART_TypeDef * pUSARTx, uint8_t ch)
+{
+	/* 发送一个字节数据到USART */
+	USART_SendData(pUSARTx,ch);
+		
+	/* 等待发送数据寄存器为空 */
+	while (USART_GetFlagStatus(pUSARTx, USART_FLAG_TXE) == RESET);	
+}
+
 void uart1SendChars(u8 *str, u16 strlen)
 { 
 	  u16 k= 0 ; 
@@ -1023,6 +1033,7 @@ err_ret:
 void MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen)
 {
 	uint16_t crc;
+	uint8_t i;
 	uint8_t buf[S_TX_BUF_SIZE];
 	memcpy(buf, _pBuf, _ucLen);
 	crc = CRC16(_pBuf, _ucLen);
@@ -1030,8 +1041,11 @@ void MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen)
 	buf[_ucLen++] = crc;
 //通过485发数据
 //	RS485_SendBuf(buf, _ucLen);
-
-	uart1SendChars(buf, _ucLen);
+	for(i=0;i<_ucLen+2;i++)
+	{
+		Usart_SendByte(USART1,buf[i]);
+	}
+//	uart1SendChars(buf, _ucLen);
 	
 // #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 // 	g_tPrint.Txlen = _ucLen;
