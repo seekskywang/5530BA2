@@ -701,9 +701,9 @@ void MENU_SET(void)
     {
       SET_Voltage = /*3000*/ 6200;
     }
-    if(SET_Current > 5000)
+    if(SET_Current > 10000)
     {
-      SET_Current = 5000;
+      SET_Current = 10000;
     }
     switch(set_sw){
         case set_10:
@@ -800,9 +800,9 @@ void MENU_SET(void)
 				pow_c = atof(buf)*1000;
 			}
               
-            if(pow_c > 5000)
+            if(pow_c > 10000)
             {
-                pow_c = 5000;               
+                pow_c = 10000;               
             }
 			if(pow_v/100 * pow_c/1000 > 200)
             {
