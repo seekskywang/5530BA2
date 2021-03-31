@@ -53511,6 +53511,18 @@ N              cdelay = 0;
 N           }else{
 N               cdelay++;
 N           }
+N		   if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+N			{
+N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
+X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N				  GPIO_SetBits(GPIOC,GPIO_Pin_13);
+X				  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N				  mode_sw = 0;
+N				  pow_sw = pow_off;
+X				  pow_sw = 0;
+N				  cdelay = 0;
+N				
+N			}
 N        }else{
 N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_88);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x95));
@@ -53947,7 +53959,7 @@ N	  GPIO_SetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOFF
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\APP\menu.c" 585 4 function "Delay_ms" declared implicitly
+W "..\APP\menu.c" 594 4 function "Delay_ms" declared implicitly
 N	  Delay_ms(500);
 N	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X	  GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));

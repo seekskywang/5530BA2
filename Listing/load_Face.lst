@@ -53604,7 +53604,17 @@ N                mode_sw = 0;
 N                load_sw = load_off;
 X                load_sw = 0;
 N			}
-N            
+N            if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+N			{
+N				Flag_Swtich_ON=0;
+X				(flagA . bit6)=0;
+N                GPIO_SetBits(GPIOA,GPIO_Pin_15);
+X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N                mode_sw = 0;
+N                load_sw = load_off;
+X                load_sw = 0;
+N				
+N			}
 N//            if(olvbuff != 0 && olvbuff - DISS_Voltage > 0.3)
 N//            {
 N//                Flag_Swtich_ON=0;
@@ -54098,7 +54108,7 @@ N  if(page_sw == face_graph)
 X  if(page_sw == 0)
 N  {      
 N  }else{
-W "..\APP\load_Face.c" 709 7 function "IO_OFF" declared implicitly
+W "..\APP\load_Face.c" 716 7 function "IO_OFF" declared implicitly
 N      IO_OFF();
 N  }
 N  page_sw = face_load;

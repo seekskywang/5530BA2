@@ -234,7 +234,7 @@ void TIM4_IRQHandler(void)
 					Delay_ms(500);
 				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电器				
 					powcount = 0;
-					step = 6;
+					step = 6; 
 //					IO_OFF();
 				}
 			 }else if(step == 6){
@@ -637,7 +637,7 @@ void TIM3_IRQHandler(void)
 						{
 							if(rmtrig[2] == 1)
 							{
-								SendToPC(2);
+//								SendToPC(2);
 							}
 							Delay_ms(50);
 							MODS_SendWithCRC(sendmodestop,6);

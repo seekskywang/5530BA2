@@ -232,6 +232,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
            }else{
                cdelay++;
            }
+		   if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+			{
+				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
+				  GPIO_SetBits(GPIOC,GPIO_Pin_13);
+				  mode_sw = 0;
+				  pow_sw = pow_off;
+				  cdelay = 0;
+				
+			}
         }else{
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_88);
             TEXT_SetText(hItem,"");

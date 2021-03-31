@@ -354,7 +354,7 @@
 ;;;531        
 ;;;532        if(TIM_GetITStatus(TIM3,TIM_IT_Update)==SET) //????
 000008  2101              MOVS     r1,#1
-00000a  4ccd              LDR      r4,|L3.832|
+00000a  4cc9              LDR      r4,|L3.816|
 00000c  4620              MOV      r0,r4
 00000e  f7fffffe          BL       TIM_GetITStatus
 000012  2801              CMP      r0,#1
@@ -397,17 +397,18 @@
 ;;;565    //              }
 ;;;566    //          }
 ;;;567            switch(page_sw)
-00001e  48c9              LDR      r0,|L3.836|
+00001e  48c5              LDR      r0,|L3.820|
 000020  7803              LDRB     r3,[r0,#0]  ; page_sw
 ;;;568            {
 ;;;569                case face_menu:
 ;;;570                {
 ;;;571                    if(pow_sw == pow_on)
-000022  4ac9              LDR      r2,|L3.840|
+000022  4ac5              LDR      r2,|L3.824|
 ;;;572                    {
 ;;;573                        bc_raw += DISS_POW_Current * 1000 * 1/3600;
-000024  4fc9              LDR      r7,|L3.844|
+000024  4ec5              LDR      r6,|L3.828|
 ;;;574    					if(rmtrig[1] == 1)
+000026  4fc6              LDR      r7,|L3.832|
 ;;;575    					{
 ;;;576    						SendToPC(1);
 ;;;577    					}
@@ -455,7 +456,7 @@
 ;;;619                        minute1 = (dctime/60)%60;//åˆ†
 ;;;620                        hour1   = dctime/3600;//æ—¶
 ;;;621                        bc_raw += DISS_Current * 1000 * 1/3600;
-000026  f8df9328          LDR      r9,|L3.848|
+000028  f8df9318          LDR      r9,|L3.836|
 ;;;622    //                    c_sum += DISS_Current * 1000 * 1/3600;
 ;;;623                        cbc_raw = 0;
 ;;;624    					if(rmtrig[2] == 1)
@@ -474,7 +475,7 @@
 ;;;637    						{
 ;;;638    							if(rmtrig[2] == 1)
 ;;;639    							{
-;;;640    								SendToPC(2);
+;;;640    //								SendToPC(2);
 ;;;641    							}
 ;;;642    							Delay_ms(50);
 ;;;643    							MODS_SendWithCRC(sendmodestop,6);
@@ -489,21 +490,20 @@
 ;;;652                    if(load_sw == load_on)
 ;;;653                    {
 ;;;654                        if(alert_flag == 1)
-00002a  49ca              LDR      r1,|L3.852|
-00002c  48ca              LDR      r0,|L3.856|
-00002e  2500              MOVS     r5,#0                 ;584
-000030  4eca              LDR      r6,|L3.860|
-000032  f8dfa32c          LDR      r10,|L3.864|
-000036  f8df832c          LDR      r8,|L3.868|
-00003a  eddf8acb          VLDR     s17,|L3.872|
-00003e  ed9f9acb          VLDR     s18,|L3.876|
-000042  ed9f8acb          VLDR     s16,|L3.880|
-000046  4ccb              LDR      r4,|L3.884|
+00002c  49c6              LDR      r1,|L3.840|
+00002e  48c7              LDR      r0,|L3.844|
+000030  2500              MOVS     r5,#0                 ;584
+000032  f8dfa31c          LDR      r10,|L3.848|
+000036  f8df831c          LDR      r8,|L3.852|
+00003a  eddf8ac7          VLDR     s17,|L3.856|
+00003e  ed9f9ac7          VLDR     s18,|L3.860|
+000042  ed9f8ac7          VLDR     s16,|L3.864|
+000046  4cc7              LDR      r4,|L3.868|
 000048  2b05              CMP      r3,#5                 ;567
 00004a  d209              BCS      |L3.96|
 00004c  e8dff003          TBB      [pc,r3]               ;567
 000050  ef2103ee          DCB      0xef,0x21,0x03,0xee
-000054  f000              DCB      0xf0,0x00
+000054  e700              DCB      0xe7,0x00
 000056  7810              LDRB     r0,[r2,#0]            ;571  ; pow_sw
 000058  2801              CMP      r0,#1                 ;571
 00005a  d005              BEQ      |L3.104|
@@ -580,13 +580,13 @@
 000060  ecbd8b04          VPOP     {d8-d9}
 000064  e8bd9ff0          POP      {r4-r12,pc}
                   |L3.104|
-000068  ed970a00          VLDR     s0,[r7,#0]            ;573
+000068  ed960a00          VLDR     s0,[r6,#0]            ;573
 00006c  ee600a28          VMUL.F32 s1,s0,s17             ;573
 000070  ee800a89          VDIV.F32 s0,s1,s18             ;573
 000074  edd40a0b          VLDR     s1,[r4,#0x2c]         ;573
 000078  ee300a20          VADD.F32 s0,s0,s1              ;573
 00007c  ed840a0b          VSTR     s0,[r4,#0x2c]         ;573
-000080  7870              LDRB     r0,[r6,#1]            ;574  ; rmtrig
+000080  7878              LDRB     r0,[r7,#1]            ;574  ; rmtrig
 000082  2801              CMP      r0,#1                 ;574
                   |L3.132|
 000084  d1ec              BNE      |L3.96|
@@ -595,7 +595,7 @@
 00008e  f7ffbffe          B.W      SendToPC
 000092  f8982000          LDRB     r2,[r8,#0]            ;584  ; mode_sw
 000096  4641              MOV      r1,r8                 ;584
-000098  f8dfa2dc          LDR      r10,|L3.888|
+000098  f8dfa2cc          LDR      r10,|L3.872|
 00009c  f04f0b3c          MOV      r11,#0x3c             ;596
 0000a0  f44f6861          MOV      r8,#0xe10             ;598
 0000a4  2a03              CMP      r2,#3                 ;584
@@ -615,7 +615,7 @@
 0000be  70e5              STRB     r5,[r4,#3]            ;588
 0000c0  e00a              B        |L3.216|
                   |L3.194|
-0000c2  48ac              LDR      r0,|L3.884|
+0000c2  48a8              LDR      r0,|L3.868|
 0000c4  2106              MOVS     r1,#6                 ;590
 0000c6  3040              ADDS     r0,r0,#0x40           ;590
 0000c8  f7fffffe          BL       MODS_SendWithCRC
@@ -636,26 +636,26 @@
 0000e8  69e0              LDR      r0,[r4,#0x1c]         ;596  ; ctime
 0000ea  fbb0f1fb          UDIV     r1,r0,r11             ;596
 0000ee  fb0b0011          MLS      r0,r11,r1,r0          ;596
-0000f2  49a2              LDR      r1,|L3.892|
+0000f2  499e              LDR      r1,|L3.876|
 0000f4  7008              STRB     r0,[r1,#0]            ;596
 0000f6  69e0              LDR      r0,[r4,#0x1c]         ;597  ; ctime
 0000f8  fbb0f0fb          UDIV     r0,r0,r11             ;597
 0000fc  fbb0f1fb          UDIV     r1,r0,r11             ;597
 000100  fb0b0011          MLS      r0,r11,r1,r0          ;597
-000104  499e              LDR      r1,|L3.896|
+000104  499a              LDR      r1,|L3.880|
 000106  7008              STRB     r0,[r1,#0]            ;597
 000108  69e0              LDR      r0,[r4,#0x1c]         ;598  ; ctime
-00010a  499e              LDR      r1,|L3.900|
+00010a  499a              LDR      r1,|L3.884|
 00010c  fbb0f0f8          UDIV     r0,r0,r8              ;598
 000110  7008              STRB     r0,[r1,#0]            ;598
-000112  ed970a00          VLDR     s0,[r7,#0]            ;599
+000112  ed960a00          VLDR     s0,[r6,#0]            ;599
 000116  ee200a28          VMUL.F32 s0,s0,s17             ;599
 00011a  eec00a09          VDIV.F32 s1,s0,s18             ;599
 00011e  ed940a0c          VLDR     s0,[r4,#0x30]         ;599
 000122  ee300a80          VADD.F32 s0,s1,s0              ;599
 000126  ed840a0c          VSTR     s0,[r4,#0x30]         ;599
 00012a  ed848a0b          VSTR     s16,[r4,#0x2c]        ;600
-00012e  78b0              LDRB     r0,[r6,#2]            ;601  ; rmtrig
+00012e  78b8              LDRB     r0,[r7,#2]            ;601  ; rmtrig
 000130  2801              CMP      r0,#1                 ;601
                   |L3.306|
 000132  d195              BNE      |L3.96|
@@ -680,7 +680,7 @@
 000162  2801              CMP      r0,#1                 ;634
 000164  d18e              BNE      |L3.132|
 000166  70e5              STRB     r5,[r4,#3]            ;636
-000168  e059              B        |L3.542|
+000168  e053              B        |L3.530|
                   |L3.362|
 00016a  f89a0000          LDRB     r0,[r10,#0]           ;607  ; sendmodeflag
 00016e  2801              CMP      r0,#1                 ;607
@@ -688,7 +688,7 @@
 000172  70e5              STRB     r5,[r4,#3]            ;609
 000174  e00a              B        |L3.396|
                   |L3.374|
-000176  487f              LDR      r0,|L3.884|
+000176  487b              LDR      r0,|L3.868|
 000178  2106              MOVS     r1,#6                 ;611
 00017a  3046              ADDS     r0,r0,#0x46           ;611
 00017c  f7fffffe          BL       MODS_SendWithCRC
@@ -709,16 +709,16 @@
 00019c  6a20              LDR      r0,[r4,#0x20]         ;618  ; dctime
 00019e  fbb0f1fb          UDIV     r1,r0,r11             ;618
 0001a2  fb0b0011          MLS      r0,r11,r1,r0          ;618
-0001a6  4978              LDR      r1,|L3.904|
+0001a6  4974              LDR      r1,|L3.888|
 0001a8  7008              STRB     r0,[r1,#0]            ;618
 0001aa  6a20              LDR      r0,[r4,#0x20]         ;619  ; dctime
 0001ac  fbb0f0fb          UDIV     r0,r0,r11             ;619
 0001b0  fbb0f1fb          UDIV     r1,r0,r11             ;619
 0001b4  fb0b0011          MLS      r0,r11,r1,r0          ;619
-0001b8  4974              LDR      r1,|L3.908|
+0001b8  4970              LDR      r1,|L3.892|
 0001ba  7008              STRB     r0,[r1,#0]            ;619
 0001bc  6a20              LDR      r0,[r4,#0x20]         ;620  ; dctime
-0001be  4974              LDR      r1,|L3.912|
+0001be  4970              LDR      r1,|L3.896|
 0001c0  fbb0f0f8          UDIV     r0,r0,r8              ;620
 0001c4  7008              STRB     r0,[r1,#0]            ;620
 0001c6  ed990a00          VLDR     s0,[r9,#0]            ;621
@@ -728,7 +728,7 @@
 0001d6  ee300a80          VADD.F32 s0,s1,s0              ;621
 0001da  ed840a0b          VSTR     s0,[r4,#0x2c]         ;621
 0001de  ed848a0c          VSTR     s16,[r4,#0x30]        ;623
-0001e2  78b0              LDRB     r0,[r6,#2]            ;624  ; rmtrig
+0001e2  78b8              LDRB     r0,[r7,#2]            ;624  ; rmtrig
 0001e4  2801              CMP      r0,#1                 ;624
 0001e6  d1a4              BNE      |L3.306|
 0001e8  ecbd8b04          VPOP     {d8-d9}               ;626
@@ -736,195 +736,186 @@
 0001ee  e8bd5ff0          POP      {r4-r12,lr}           ;626
 0001f2  f7ffbffe          B.W      SendToPC
                   |L3.502|
-0001f6  78b0              LDRB     r0,[r6,#2]            ;638  ; rmtrig
-0001f8  2801              CMP      r0,#1                 ;638
-0001fa  d102              BNE      |L3.514|
-0001fc  2002              MOVS     r0,#2                 ;640
-0001fe  f7fffffe          BL       SendToPC
-                  |L3.514|
-000202  2032              MOVS     r0,#0x32              ;642
-000204  f7fffffe          BL       Delay_ms
-000208  485a              LDR      r0,|L3.884|
-00020a  2106              MOVS     r1,#6                 ;643
-00020c  304c              ADDS     r0,r0,#0x4c           ;643
-00020e  f7fffffe          BL       MODS_SendWithCRC
-000212  2032              MOVS     r0,#0x32              ;644
-000214  f7fffffe          BL       Delay_ms
-000218  78e0              LDRB     r0,[r4,#3]            ;636  ; i
-00021a  1c40              ADDS     r0,r0,#1              ;636
-00021c  70e0              STRB     r0,[r4,#3]            ;636
-                  |L3.542|
-00021e  78e0              LDRB     r0,[r4,#3]            ;636  ; i
-000220  2803              CMP      r0,#3                 ;636
-000222  d3e8              BCC      |L3.502|
-000224  f88a5000          STRB     r5,[r10,#0]           ;646
-                  |L3.552|
-000228  e71a              B        |L3.96|
-00022a  e001              B        |L3.560|
-00022c  e075              B        |L3.794|
-00022e  e031              B        |L3.660|
+0001f6  2032              MOVS     r0,#0x32              ;642
+0001f8  f7fffffe          BL       Delay_ms
+0001fc  4859              LDR      r0,|L3.868|
+0001fe  2106              MOVS     r1,#6                 ;643
+000200  304c              ADDS     r0,r0,#0x4c           ;643
+000202  f7fffffe          BL       MODS_SendWithCRC
+000206  2032              MOVS     r0,#0x32              ;644
+000208  f7fffffe          BL       Delay_ms
+00020c  78e0              LDRB     r0,[r4,#3]            ;636  ; i
+00020e  1c40              ADDS     r0,r0,#1              ;636
+000210  70e0              STRB     r0,[r4,#3]            ;636
+                  |L3.530|
+000212  78e0              LDRB     r0,[r4,#3]            ;636  ; i
+000214  2803              CMP      r0,#3                 ;636
+000216  d3ee              BCC      |L3.502|
+000218  f88a5000          STRB     r5,[r10,#0]           ;646
+                  |L3.540|
+00021c  e720              B        |L3.96|
+00021e  f89a0000          LDRB     r0,[r10,#0]           ;652  ; load_sw
+000222  2801              CMP      r0,#1                 ;652
+000224  d004              BEQ      |L3.560|
+000226  ed848a0b          VSTR     s16,[r4,#0x2c]        ;672
+                  |L3.554|
+00022a  e719              B        |L3.96|
+00022c  e06e              B        |L3.780|
+00022e  e02a              B        |L3.646|
                   |L3.560|
-000230  f89a0000          LDRB     r0,[r10,#0]           ;652  ; load_sw
-000234  2801              CMP      r0,#1                 ;652
-000236  d002              BEQ      |L3.574|
-000238  ed848a0b          VSTR     s16,[r4,#0x2c]        ;672
-                  |L3.572|
-00023c  e710              B        |L3.96|
-                  |L3.574|
-00023e  7808              LDRB     r0,[r1,#0]            ;654  ; alert_flag
-000240  2801              CMP      r0,#1                 ;654
-000242  d111              BNE      |L3.616|
-000244  78a0              LDRB     r0,[r4,#2]            ;656  ; calert
-000246  1c40              ADDS     r0,r0,#1              ;656
-000248  70a0              STRB     r0,[r4,#2]            ;656
-00024a  78a0              LDRB     r0,[r4,#2]            ;657  ; calert
-00024c  2809              CMP      r0,#9                 ;657
-00024e  d10b              BNE      |L3.616|
-000250  4850              LDR      r0,|L3.916|
-000252  7005              STRB     r5,[r0,#0]            ;659
-000254  f44f4100          MOV      r1,#0x8000            ;660
-000258  484f              LDR      r0,|L3.920|
-00025a  f7fffffe          BL       GPIO_SetBits
-00025e  f8885000          STRB     r5,[r8,#0]            ;661
-000262  f88a5000          STRB     r5,[r10,#0]           ;662
-000266  70a5              STRB     r5,[r4,#2]            ;663
-                  |L3.616|
-000268  ed990a00          VLDR     s0,[r9,#0]            ;666
-00026c  ee200a28          VMUL.F32 s0,s0,s17             ;666
-000270  eec00a09          VDIV.F32 s1,s0,s18             ;666
-000274  ed940a0b          VLDR     s0,[r4,#0x2c]         ;666
-000278  ee300a80          VADD.F32 s0,s1,s0              ;666
-00027c  ed840a0b          VSTR     s0,[r4,#0x2c]         ;666
-000280  7830              LDRB     r0,[r6,#0]            ;667  ; rmtrig
-000282  2801              CMP      r0,#1                 ;667
-000284  d1d0              BNE      |L3.552|
-000286  ecbd8b04          VPOP     {d8-d9}               ;669
-00028a  2000              MOVS     r0,#0                 ;669
-00028c  e8bd5ff0          POP      {r4-r12,lr}           ;669
-000290  f7ffbffe          B.W      SendToPC
-                  |L3.660|
-000294  f8981000          LDRB     r1,[r8,#0]            ;677  ; mode_sw
-000298  2903              CMP      r1,#3                 ;677
-00029a  d119              BNE      |L3.720|
-00029c  7811              LDRB     r1,[r2,#0]            ;679  ; pow_sw
-00029e  2901              CMP      r1,#1                 ;679
-0002a0  d004              BEQ      |L3.684|
-0002a2  f8981000          LDRB     r1,[r8,#0]            ;682  ; mode_sw
-0002a6  2903              CMP      r1,#3                 ;682
-0002a8  d00d              BEQ      |L3.710|
-0002aa  e00f              B        |L3.716|
-                  |L3.684|
-0002ac  ed970a00          VLDR     s0,[r7,#0]            ;681
-0002b0  ee600a28          VMUL.F32 s1,s0,s17             ;681
-0002b4  ee800a89          VDIV.F32 s0,s1,s18             ;681
-0002b8  edd40a0b          VLDR     s1,[r4,#0x2c]         ;681
-0002bc  ee300a20          VADD.F32 s0,s0,s1              ;681
-0002c0  ed840a0b          VSTR     s0,[r4,#0x2c]         ;681
-0002c4  e004              B        |L3.720|
-                  |L3.710|
-0002c6  7800              LDRB     r0,[r0,#0]            ;682  ; cdc_sw
-0002c8  2801              CMP      r0,#1                 ;682
-0002ca  d00c              BEQ      |L3.742|
-                  |L3.716|
-0002cc  ed848a0b          VSTR     s16,[r4,#0x2c]        ;687
-                  |L3.720|
-0002d0  f8980000          LDRB     r0,[r8,#0]            ;691  ; mode_sw
-0002d4  2802              CMP      r0,#2                 ;691
-0002d6  d1a7              BNE      |L3.552|
-0002d8  f89a0000          LDRB     r0,[r10,#0]           ;693  ; load_sw
-0002dc  2801              CMP      r0,#1                 ;693
-0002de  d00f              BEQ      |L3.768|
-0002e0  ed848a0b          VSTR     s16,[r4,#0x2c]        ;697
-                  |L3.740|
-0002e4  e6bc              B        |L3.96|
-                  |L3.742|
-0002e6  ed970a00          VLDR     s0,[r7,#0]            ;684
-0002ea  ee600a28          VMUL.F32 s1,s0,s17             ;684
-0002ee  ee800a89          VDIV.F32 s0,s1,s18             ;684
-0002f2  edd40a0b          VLDR     s1,[r4,#0x2c]         ;684
-0002f6  ee300a20          VADD.F32 s0,s0,s1              ;684
-0002fa  ed840a0b          VSTR     s0,[r4,#0x2c]         ;684
-0002fe  e7e7              B        |L3.720|
-                  |L3.768|
-000300  ed990a00          VLDR     s0,[r9,#0]            ;695
-000304  ee200a28          VMUL.F32 s0,s0,s17             ;695
-000308  eec00a09          VDIV.F32 s1,s0,s18             ;695
-00030c  ed940a0b          VLDR     s0,[r4,#0x2c]         ;695
-000310  ee300a80          VADD.F32 s0,s1,s0              ;695
-000314  ed840a0b          VSTR     s0,[r4,#0x2c]         ;695
-000318  e6a2              B        |L3.96|
-                  |L3.794|
-00031a  4820              LDR      r0,|L3.924|
-00031c  7800              LDRB     r0,[r0,#0]            ;703  ; oct_sw
-00031e  2801              CMP      r0,#1                 ;703
-000320  d18c              BNE      |L3.572|
-000322  7808              LDRB     r0,[r1,#0]            ;705  ; alert_flag
-000324  2801              CMP      r0,#1                 ;705
-000326  d189              BNE      |L3.572|
-000328  78a0              LDRB     r0,[r4,#2]            ;707  ; calert
-00032a  1c40              ADDS     r0,r0,#1              ;707
-00032c  70a0              STRB     r0,[r4,#2]            ;707
-00032e  78a0              LDRB     r0,[r4,#2]            ;708  ; calert
-000330  2803              CMP      r0,#3                 ;708
-000332  d1d7              BNE      |L3.740|
-000334  491a              LDR      r1,|L3.928|
-000336  2001              MOVS     r0,#1                 ;710
-000338  7008              STRB     r0,[r1,#0]            ;710
-00033a  70a5              STRB     r5,[r4,#2]            ;711
-00033c  e690              B        |L3.96|
+000230  7808              LDRB     r0,[r1,#0]            ;654  ; alert_flag
+000232  2801              CMP      r0,#1                 ;654
+000234  d111              BNE      |L3.602|
+000236  78a0              LDRB     r0,[r4,#2]            ;656  ; calert
+000238  1c40              ADDS     r0,r0,#1              ;656
+00023a  70a0              STRB     r0,[r4,#2]            ;656
+00023c  78a0              LDRB     r0,[r4,#2]            ;657  ; calert
+00023e  2809              CMP      r0,#9                 ;657
+000240  d10b              BNE      |L3.602|
+000242  4850              LDR      r0,|L3.900|
+000244  7005              STRB     r5,[r0,#0]            ;659
+000246  f44f4100          MOV      r1,#0x8000            ;660
+00024a  484f              LDR      r0,|L3.904|
+00024c  f7fffffe          BL       GPIO_SetBits
+000250  f8885000          STRB     r5,[r8,#0]            ;661
+000254  f88a5000          STRB     r5,[r10,#0]           ;662
+000258  70a5              STRB     r5,[r4,#2]            ;663
+                  |L3.602|
+00025a  ed990a00          VLDR     s0,[r9,#0]            ;666
+00025e  ee200a28          VMUL.F32 s0,s0,s17             ;666
+000262  eec00a09          VDIV.F32 s1,s0,s18             ;666
+000266  ed940a0b          VLDR     s0,[r4,#0x2c]         ;666
+00026a  ee300a80          VADD.F32 s0,s1,s0              ;666
+00026e  ed840a0b          VSTR     s0,[r4,#0x2c]         ;666
+000272  7838              LDRB     r0,[r7,#0]            ;667  ; rmtrig
+000274  2801              CMP      r0,#1                 ;667
+000276  d1d1              BNE      |L3.540|
+000278  ecbd8b04          VPOP     {d8-d9}               ;669
+00027c  2000              MOVS     r0,#0                 ;669
+00027e  e8bd5ff0          POP      {r4-r12,lr}           ;669
+000282  f7ffbffe          B.W      SendToPC
+                  |L3.646|
+000286  f8981000          LDRB     r1,[r8,#0]            ;677  ; mode_sw
+00028a  2903              CMP      r1,#3                 ;677
+00028c  d119              BNE      |L3.706|
+00028e  7811              LDRB     r1,[r2,#0]            ;679  ; pow_sw
+000290  2901              CMP      r1,#1                 ;679
+000292  d004              BEQ      |L3.670|
+000294  f8981000          LDRB     r1,[r8,#0]            ;682  ; mode_sw
+000298  2903              CMP      r1,#3                 ;682
+00029a  d00d              BEQ      |L3.696|
+00029c  e00f              B        |L3.702|
+                  |L3.670|
+00029e  ed960a00          VLDR     s0,[r6,#0]            ;681
+0002a2  ee600a28          VMUL.F32 s1,s0,s17             ;681
+0002a6  ee800a89          VDIV.F32 s0,s1,s18             ;681
+0002aa  edd40a0b          VLDR     s1,[r4,#0x2c]         ;681
+0002ae  ee300a20          VADD.F32 s0,s0,s1              ;681
+0002b2  ed840a0b          VSTR     s0,[r4,#0x2c]         ;681
+0002b6  e004              B        |L3.706|
+                  |L3.696|
+0002b8  7800              LDRB     r0,[r0,#0]            ;682  ; cdc_sw
+0002ba  2801              CMP      r0,#1                 ;682
+0002bc  d00c              BEQ      |L3.728|
+                  |L3.702|
+0002be  ed848a0b          VSTR     s16,[r4,#0x2c]        ;687
+                  |L3.706|
+0002c2  f8980000          LDRB     r0,[r8,#0]            ;691  ; mode_sw
+0002c6  2802              CMP      r0,#2                 ;691
+0002c8  d1a8              BNE      |L3.540|
+0002ca  f89a0000          LDRB     r0,[r10,#0]           ;693  ; load_sw
+0002ce  2801              CMP      r0,#1                 ;693
+0002d0  d00f              BEQ      |L3.754|
+0002d2  ed848a0b          VSTR     s16,[r4,#0x2c]        ;697
+                  |L3.726|
+0002d6  e6c3              B        |L3.96|
+                  |L3.728|
+0002d8  ed960a00          VLDR     s0,[r6,#0]            ;684
+0002dc  ee600a28          VMUL.F32 s1,s0,s17             ;684
+0002e0  ee800a89          VDIV.F32 s0,s1,s18             ;684
+0002e4  edd40a0b          VLDR     s1,[r4,#0x2c]         ;684
+0002e8  ee300a20          VADD.F32 s0,s0,s1              ;684
+0002ec  ed840a0b          VSTR     s0,[r4,#0x2c]         ;684
+0002f0  e7e7              B        |L3.706|
+                  |L3.754|
+0002f2  ed990a00          VLDR     s0,[r9,#0]            ;695
+0002f6  ee200a28          VMUL.F32 s0,s0,s17             ;695
+0002fa  eec00a09          VDIV.F32 s1,s0,s18             ;695
+0002fe  ed940a0b          VLDR     s0,[r4,#0x2c]         ;695
+000302  ee300a80          VADD.F32 s0,s1,s0              ;695
+000306  ed840a0b          VSTR     s0,[r4,#0x2c]         ;695
+00030a  e6a9              B        |L3.96|
+                  |L3.780|
+00030c  481f              LDR      r0,|L3.908|
+00030e  7800              LDRB     r0,[r0,#0]            ;703  ; oct_sw
+000310  2801              CMP      r0,#1                 ;703
+000312  d18a              BNE      |L3.554|
+000314  7808              LDRB     r0,[r1,#0]            ;705  ; alert_flag
+000316  2801              CMP      r0,#1                 ;705
+000318  d187              BNE      |L3.554|
+00031a  78a0              LDRB     r0,[r4,#2]            ;707  ; calert
+00031c  1c40              ADDS     r0,r0,#1              ;707
+00031e  70a0              STRB     r0,[r4,#2]            ;707
+000320  78a0              LDRB     r0,[r4,#2]            ;708  ; calert
+000322  2803              CMP      r0,#3                 ;708
+000324  d1d7              BNE      |L3.726|
+000326  491a              LDR      r1,|L3.912|
+000328  2001              MOVS     r0,#1                 ;710
+00032a  7008              STRB     r0,[r1,#0]            ;710
+00032c  70a5              STRB     r5,[r4,#2]            ;711
+00032e  e697              B        |L3.96|
 ;;;723    
                           ENDP
 
-00033e  0000              DCW      0x0000
-                  |L3.832|
+                  |L3.816|
                           DCD      0x40000400
-                  |L3.836|
+                  |L3.820|
                           DCD      page_sw
-                  |L3.840|
+                  |L3.824|
                           DCD      pow_sw
-                  |L3.844|
+                  |L3.828|
                           DCD      DISS_POW_Current
-                  |L3.848|
-                          DCD      DISS_Current
-                  |L3.852|
-                          DCD      alert_flag
-                  |L3.856|
-                          DCD      cdc_sw
-                  |L3.860|
+                  |L3.832|
                           DCD      rmtrig
-                  |L3.864|
+                  |L3.836|
+                          DCD      DISS_Current
+                  |L3.840|
+                          DCD      alert_flag
+                  |L3.844|
+                          DCD      cdc_sw
+                  |L3.848|
                           DCD      load_sw
-                  |L3.868|
+                  |L3.852|
                           DCD      mode_sw
-                  |L3.872|
-000368  447a0000          DCFS     0x447a0000 ; 1000
-                  |L3.876|
-00036c  45610000          DCFS     0x45610000 ; 3600
-                  |L3.880|
-000370  00000000          DCFS     0x00000000 ; 0
-                  |L3.884|
+                  |L3.856|
+000358  447a0000          DCFS     0x447a0000 ; 1000
+                  |L3.860|
+00035c  45610000          DCFS     0x45610000 ; 3600
+                  |L3.864|
+000360  00000000          DCFS     0x00000000 ; 0
+                  |L3.868|
                           DCD      ||.data||
-                  |L3.888|
+                  |L3.872|
                           DCD      sendmodeflag
-                  |L3.892|
+                  |L3.876|
                           DCD      second
-                  |L3.896|
+                  |L3.880|
                           DCD      minute
-                  |L3.900|
+                  |L3.884|
                           DCD      hour
-                  |L3.904|
+                  |L3.888|
                           DCD      second1
-                  |L3.908|
+                  |L3.892|
                           DCD      minute1
-                  |L3.912|
+                  |L3.896|
                           DCD      hour1
-                  |L3.916|
+                  |L3.900|
                           DCD      t_onoff
-                  |L3.920|
+                  |L3.904|
                           DCD      0x40020000
-                  |L3.924|
+                  |L3.908|
                           DCD      oct_sw
-                  |L3.928|
+                  |L3.912|
                           DCD      ocstop
 
                           AREA ||i.TIM3_Int_Init||, CODE, READONLY, ALIGN=2
@@ -1155,7 +1146,7 @@
 ;;;234    					Delay_ms(500);
 ;;;235    				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 ;;;236    					powcount = 0;
-;;;237    					step = 6;
+;;;237    					step = 6; 
 ;;;238    //					IO_OFF();
 ;;;239    				}
 ;;;240    			 }else if(step == 6){

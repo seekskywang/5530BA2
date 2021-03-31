@@ -311,7 +311,14 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
                 mode_sw = 0;
                 load_sw = load_off;
 			}
-            
+            if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+			{
+				Flag_Swtich_ON=0;
+                GPIO_SetBits(GPIOA,GPIO_Pin_15);
+                mode_sw = 0;
+                load_sw = load_off;
+				
+			}
 //            if(olvbuff != 0 && olvbuff - DISS_Voltage > 0.3)
 //            {
 //                Flag_Swtich_ON=0;
