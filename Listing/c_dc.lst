@@ -53517,7 +53517,41 @@ N//        if(lockstat1 != lockstat2)
 N//        {
 N//            WM_InvalidateWindow(hWincdc);
 N//        }
-N        
+N        if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+N		{
+N			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
+X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N            GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电噿
+X            GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N			GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
+X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N			c_sum += bc_raw;
+N			battery_c = c_sum/set_loop_count;                     
+N			count = 1;
+N			cdc_sw = cdc_off;
+X			cdc_sw = 0;
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x81));
+N			sprintf(buf,"%06d",battery_c);
+N			TEXT_SetText(hItem,buf);
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x84));
+N			TEXT_SetText(hItem,"");
+N
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_77);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x8A));
+N			TEXT_SetText(hItem,"");
+N				
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_78);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x8B));
+N			TEXT_SetText(hItem,"");
+N			
+N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_79);
+X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x8C));
+N			TEXT_SetText(hItem,"");
+N			sendmodeflag = 1;
+N		}
 N		if(lock == 1)
 N		{
 N			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_163);
@@ -54683,7 +54717,7 @@ X	  track = 1;
 N	  TM1650_SET_LED(0x68,0x70);
 N	  GPIO_ResetBits(GPIOD,GPIO_Pin_12);//İֆ+
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-W "..\APP\c_dc.c" 1248 4 function "IO_OFF" declared implicitly
+W "..\APP\c_dc.c" 1273 4 function "IO_OFF" declared implicitly
 N	  IO_OFF();//ȍ
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
@@ -56462,7 +56496,7 @@ N            break;
 N        }
 N        
 N    }    
-W "..\APP\c_dc.c" 2355 10 variable "loop_count"  was declared but never referenced
+W "..\APP\c_dc.c" 2380 10 variable "loop_count"  was declared but never referenced
 N}
 N
 Nint count_num(int data)

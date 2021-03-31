@@ -281,7 +281,32 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //        {
 //            WM_InvalidateWindow(hWincdc);
 //        }
-        
+        if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+		{
+			GPIO_ResetBits(GPIOC,GPIO_Pin_1);//关闭电源输出
+            GPIO_SetBits(GPIOC,GPIO_Pin_13);//关闭电源输出继电噿
+			GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
+			c_sum += bc_raw;
+			battery_c = c_sum/set_loop_count;                     
+			count = 1;
+			cdc_sw = cdc_off;
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_68);
+			sprintf(buf,"%06d",battery_c);
+			TEXT_SetText(hItem,buf);
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_71);
+			TEXT_SetText(hItem,"");
+
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_77);
+			TEXT_SetText(hItem,"");
+				
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_78);
+			TEXT_SetText(hItem,"");
+			
+			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_79);
+			TEXT_SetText(hItem,"");
+			sendmodeflag = 1;
+		}
 		if(lock == 1)
 		{
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_163);
