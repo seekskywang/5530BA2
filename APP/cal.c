@@ -609,13 +609,13 @@ void LoadVCal(u8 step)
         {
             var32b = var32b - var32a;
             REG_ReadV_Offset1 = var32b;
-            Polar |= 0x01;
+            Polar6 |= 0x01;
         }
         else
         {
             var32a = var32a - var32b;
             REG_ReadV_Offset1 = var32a;
-            Polar &= ~0x01;
+            Polar6 &= ~0x01;
         }
         Flash_Write_all();	//??§Õ?FLASH
 //        Flag_DAC_OFF=0;

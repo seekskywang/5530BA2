@@ -253,6 +253,8 @@ extern vu8 sendpcflag;
 #define REG_POWERA_Offset1  			InFlashSave[24]//??CC???¡¤???
 #define SET_POWERA_Offset1  			InFlashSave[25]//??CC???¡¤?????
 #define vrange							InFlashSave[26]
+#define Polar6						 	InFlashSave[27]
+
 
 #define SLAVE_REG_P00		0x0000       //R_VOLU
 #define SLAVE_REG_P01		0x0001      //Load_Voltage

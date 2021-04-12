@@ -1552,7 +1552,7 @@ void Transformation_ADC(void)
 					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
 					else var32 = var32 - SET_LoadA_OffsetH1;
 				}
-				else var32 = var32 + SET_LoadA_OffsetH1;
+				else var32 = var32 - SET_LoadA_OffsetH1;
 				var32 = var32/SET_LoadAH1;
 				var32=var32>>1;
 				if(Flag_DAC_OFF==0)
