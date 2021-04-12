@@ -1134,7 +1134,7 @@ void Transformation_ADC(void)
 		{
 			var32 = Vmon1_value;
 			var32 = var32 * REG_CorrectionV1;  
-			if ((Polar & 0x01) == 0x01)		  
+			if ((Polar6 & 0x01) == 0x01)		  
 			{
 				if (var32 < REG_ReadV_Offset1) 
 				{
@@ -1351,7 +1351,7 @@ void Transformation_ADC(void)
 //	//            var32 = Vmon1_value - 5;
 //	//        }
 //			var32 = var32 * REG_CorrectionV2;  
-//			if ((Polar & 0x01) == 0x01)		  
+//			if ((Polar7 & 0x01) == 0x01)		  
 //			{
 //				if (var32 < REG_ReadV_Offset2) 
 //				{
@@ -1390,7 +1390,7 @@ void Transformation_ADC(void)
 		{
 			var32 = Imon1_value;
 			var32 = var32 * REG_Load_A1;  
-			if ((Polar1 & 0x01) == 0x01)		  
+			if ((Polar8 & 0x01) == 0x01)		  
 			{
 				if (var32 < REG_LoadA_Offset1) 
 				{
@@ -1408,7 +1408,7 @@ void Transformation_ADC(void)
 		{
 			var32 = Imon1_value;
 			var32 = var32 * REG_Load_A2;  
-			if ((Polar1 & 0x01) == 0x01)		  
+			if ((Polar9 & 0x01) == 0x01)		  
 			{
 				if (var32 < REG_LoadA_Offset2) 
 				{
@@ -1425,7 +1425,7 @@ void Transformation_ADC(void)
 	}else if(cflag == 1){
 		var32 = Imon1_value;
 		var32 = var32 * REG_Load_AH;  
-		if ((Polar1 & 0x01) == 0x01)		  
+		if ((Polar10 & 0x01) == 0x01)		  
 		{
 			if (var32 < REG_LoadA_OffsetH) 
 			{
@@ -1442,7 +1442,7 @@ void Transformation_ADC(void)
 		{
 			var32 = Imon1_value;
 		var32 = var32 * REG_Load_AH1;  
-		if ((Polar1 & 0x01) == 0x01)		  
+		if ((Polar11 & 0x01) == 0x01)		  
 		{
 			if (var32 < REG_LoadA_OffsetH1) 
 			{
@@ -1486,7 +1486,7 @@ void Transformation_ADC(void)
 			}else if(SET_Current_Laod <= 5000){
 				var32 = SET_Current_Laod;
 				var32=var32<<12;   
-				if ((Polar1 & 0x04) == 0)			   
+				if ((Polar8 & 0x04) == 0)			   
 				{
 					if (var32 < SET_LoadA_Offset1) var32 = 0;
 					else var32 = var32 - SET_LoadA_Offset1;
@@ -1505,7 +1505,7 @@ void Transformation_ADC(void)
 			}else{
 				var32 = SET_Current_Laod;
 				var32=var32<<12;   
-				if ((Polar1 & 0x04) == 0)			   
+				if ((Polar9 & 0x04) == 0)			   
 				{
 					if (var32 < SET_LoadA_Offset2) var32 = 0;
 					else var32 = var32 - SET_LoadA_Offset2;
@@ -1528,7 +1528,7 @@ void Transformation_ADC(void)
 			{
 				var32 = SET_Current_Laod;
 				var32=var32<<12;   
-				if ((Polar1 & 0x04) == 0)			   
+				if ((Polar10 & 0x04) == 0)			   
 				{
 					if (var32 < SET_LoadA_OffsetH) var32 = 0;
 					else var32 = var32 - SET_LoadA_OffsetH;
@@ -1547,12 +1547,12 @@ void Transformation_ADC(void)
 			}else{
 				var32 = SET_Current_Laod;
 				var32=var32<<12;   
-				if ((Polar1 & 0x04) == 0)			   
+				if ((Polar11 & 0x04) == 0)			   
 				{
 					if (var32 < SET_LoadA_OffsetH1) var32 = 0;
 					else var32 = var32 - SET_LoadA_OffsetH1;
 				}
-				else var32 = var32 - SET_LoadA_OffsetH1;
+				else var32 = var32 + SET_LoadA_OffsetH1;
 				var32 = var32/SET_LoadAH1;
 				var32=var32>>1;
 				if(Flag_DAC_OFF==0)
@@ -1594,16 +1594,16 @@ void Transformation_ADC(void)
     if(r_raly == 1)
     {
         var32 = var32 * REG_CorrectionR;  
-//         if ((Polar3 & 0x01) == 0x01)		  
-//         {
-//             if (var32 < REG_ReadR_Offset) 
-//             {
-//                 var32 = 0;
-//             }
-//             else var32 = var32 - REG_ReadR_Offset;
-//         }
-//        else
-        var32 = var32 - REG_ReadR_Offset;
+         if ((Polar3 & 0x01) == 0x01)		  
+         {
+             if (var32 < REG_ReadR_Offset) 
+             {
+                 var32 = 0;
+             }
+             else var32 = var32 - REG_ReadR_Offset;
+         }
+        else
+        var32 = var32 + REG_ReadR_Offset;
         var32 = var32 >> 12;
         if (var32 < 1)
         {
@@ -1613,16 +1613,16 @@ void Transformation_ADC(void)
         var32 = 0;
     }else{
         var32 = var32 * REG_CorrectionRL;  
-//         if ((Polar3 & 0x01) == 0x01)		  
-//         {
-//             if (var32 < REG_ReadRL_Offset) 
-//             {
-//                 var32 = 0;
-//             }
-//             else var32 = var32 - REG_ReadRL_Offset;
-//         }
-//        else
-            var32 = var32 - REG_ReadRL_Offset;
+         if ((Polar15 & 0x01) == 0x01)		  
+         {
+             if (var32 < REG_ReadRL_Offset) 
+             {
+                 var32 = 0;
+             }
+             else var32 = var32 - REG_ReadRL_Offset;
+         }
+        else
+            var32 = var32 + REG_ReadRL_Offset;
         var32 = var32 >> 12;
         if (var32 < 1)
         {
@@ -1633,15 +1633,15 @@ void Transformation_ADC(void)
         {
             var32 = Rmon_value;
             var32 = var32 * REG_CorrectionRH;  
-//             if ((Polar1 & 0x04) == 0x04)		  
-//             {
-//                 if (var32 < REG_ReadRH_Offset) 
-//                 {
-//                     var32 = 0;
-//                 }
-//                 else var32 = var32 - REG_ReadRH_Offset;
-//             }
-//            else
+             if ((Polar16 & 0x01) == 0x01)		  
+             {
+                 if (var32 < REG_ReadRH_Offset) 
+                 {
+                     var32 = 0;
+                 }
+                 else var32 = var32 - REG_ReadRH_Offset;
+             }
+            else
                 var32 = var32 + REG_ReadRH_Offset;
             var32 = var32 >> 12;
             if (var32 < 5) var32 = 0;				  //40mVӔЂȥ£
@@ -1680,15 +1680,15 @@ void Transformation_ADC(void)
     {
         var32 = Vmon_value;
         var32 = var32 * REG_POWERV1;  
-//         if ((Polar5 & 0x01) == 0x01)		  
-//         {
-//             if (var32 < REG_POWERV_Offset1) 
-//             {
-//                 var32 = 0;
-//             }
-//             else var32 = var32 - REG_POWERV_Offset1;
-//         }
-//         else 
+         if ((Polar12 & 0x01) == 0x01)		  
+         {
+             if (var32 < REG_POWERV_Offset1) 
+             {
+                 var32 = 0;
+             }
+             else var32 = var32 - REG_POWERV_Offset1;
+         }
+         else 
             var32 = var32 + REG_POWERV_Offset1;
         var32 = var32 >> 14;
         if (var32 < 40) var32 = 0;				  //40mVӔЂȥ£
@@ -1700,15 +1700,15 @@ void Transformation_ADC(void)
     {
         var32 = Vmon_value;
         var32 = var32 * REG_POWERV2;  
-//         if ((Polar5 & 0x01) == 0x01)		  
-//         {
-//             if (var32 < REG_POWERV_Offset2) 
-//             {
-//                 var32 = 0;
-//             }
-//             else var32 = var32 - REG_POWERV_Offset2;
-//         }
-//         else 
+         if ((Polar13 & 0x01) == 0x01)		  
+         {
+             if (var32 < REG_POWERV_Offset2) 
+             {
+                 var32 = 0;
+             }
+             else var32 = var32 - REG_POWERV_Offset2;
+         }
+         else 
             var32 = var32 + REG_POWERV_Offset2;
         var32 = var32 >> 14;
         if (var32 < 40) var32 = 0;				  //40mVӔЂȥ£
@@ -1739,7 +1739,7 @@ void Transformation_ADC(void)
 		{
 			var32 = Imon_value;
 			var32 = var32 * REG_POWERA1;	   
-			if ((Polar4 & 0x01) == 0x01)			   
+			if ((Polar14 & 0x01) == 0x01)			   
 			{
 				if (var32 < REG_POWERA_Offset1) var32 = 0;
 				else var32 = var32 - REG_POWERA_Offset1;
@@ -1795,12 +1795,12 @@ void Transformation_ADC(void)
 			}
 		}else if(SET_Voltage >= 1000 && SET_Voltage < 3000){
 			var32=var32<<14;   
-	//         if ((Polar5 & 0x04) == 0)			   
-	//         {
-	//             if (var32 < SET_POWERV_Offset1) var32 = 0;
-	//             else var32 = var32 - SET_POWERV_Offset1;
-	//         }
-	//         else 
+	         if ((Polar12 & 0x04) == 0)			   
+	         {
+	            if (var32 < SET_POWERV_Offset1) var32 = 0;
+	             else var32 = var32 - SET_POWERV_Offset1;
+	         }
+	         else 
 				var32 = var32 + SET_POWERV_Offset1;
 			var32 = var32/SET_POWERV1;
 			var32=var32>>1;
@@ -1811,12 +1811,12 @@ void Transformation_ADC(void)
 			}
 		}else if(SET_Voltage >= 3000){
 			var32=var32<<14;   
-	//         if ((Polar5 & 0x04) == 0)			   
-	//         {
-	//             if (var32 < SET_POWERV_Offset2) var32 = 0;
-	//             else var32 = var32 - SET_POWERV_Offset2;
-	//         }
-	//         else 
+	         if ((Polar13 & 0x04) == 0)			   
+	         {
+	             if (var32 < SET_POWERV_Offset2) var32 = 0;
+	             else var32 = var32 - SET_POWERV_Offset2;
+	         }
+	         else 
 				var32 = var32 + SET_POWERV_Offset2;
 			var32 = var32/SET_POWERV2;
 			var32=var32>>1;
@@ -1848,7 +1848,7 @@ void Transformation_ADC(void)
 			Contr_Current=0;
 		}
 	}else{
-		if ((Polar4 & 0x04) == 0)			   
+		if ((Polar14 & 0x04) == 0)			   
 		{
 			if (var32 < SET_POWERA_Offset1) var32 = 0;
 			else var32 = var32 - SET_POWERA_Offset1;
