@@ -208,6 +208,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//3.7修改充放电切换
 		//3.8修改负载电流量程与校准
 		//4.0增加过功率保护
+		//4.2增加CV校准点
         GUI_DispStringAt("Ver:1.3", 140+40, 100);
         GUI_DispStringAt("-", 191+40, 125);
         GUI_DispStringAt("-", 227+40, 125);
