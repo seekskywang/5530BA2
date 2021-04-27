@@ -445,6 +445,7 @@ void Rlow_cal(u8 step)
             }
 //---------------------------------------------------------------------------------------//
             Flash_Write_all();	//²ÎÊýÐ´½øFLASH
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
             flag_OverV=0;
             Flag_DAC_OFF=0;
         }
