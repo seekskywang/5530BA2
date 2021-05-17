@@ -2,9 +2,9 @@
 ..\output\internalflash.o: ..\Include\internalflash.h
 ..\output\internalflash.o: ..\User\stm32f4xx.h
 ..\output\internalflash.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\internalflash.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\internalflash.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\internalflash.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\internalflash.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\internalflash.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\internalflash.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\internalflash.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\internalflash.o: ..\User\system_stm32f4xx.h
 ..\output\internalflash.o: ..\User\stm32f4xx_conf.h

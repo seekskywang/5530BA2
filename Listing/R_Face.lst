@@ -6121,7 +6121,7 @@ N#ifndef GUI_DEBUG_H
 N#define GUI_DEBUG_H
 N
 N#include <stddef.h>
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h" 1
+L 1 "E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h" 1
 N/* stddef.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.1.4 */
 N
 N/* Copyright (C) ARM Ltd., 1999
@@ -14544,7 +14544,7 @@ S  #endif
 N#endif
 N
 N#include <stdint.h>                      /* standard types definitions                      */
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h" 1
+L 1 "E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h" 1
 N/* Copyright (C) ARM Ltd., 1999,2014 */
 N/* All rights reserved */
 N
@@ -14880,7 +14880,7 @@ N
 N/* end of stdint.h */
 L 169 "..\Libraries\CMSIS\inc\core_cm4.h" 2
 N#include <core_cmInstr.h>                /* Core Instruction Access                         */
-L 1 "D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h" 1
+L 1 "E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h" 1
 N/**************************************************************************//**
 N * @file     core_cmInstr.h
 N * @brief    CMSIS Cortex-M Core Instruction Access Header File
@@ -15577,7 +15577,7 @@ N
 N#endif /* __CORE_CMINSTR_H */
 L 170 "..\Libraries\CMSIS\inc\core_cm4.h" 2
 N#include <core_cmFunc.h>                 /* Core Function Access                            */
-L 1 "D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h" 1
+L 1 "E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h" 1
 N/**************************************************************************//**
 N * @file     core_cmFunc.h
 N * @brief    CMSIS Cortex-M Core Function Access Header File
@@ -48921,6 +48921,7 @@ Nextern vu8 ocstop;
 Nextern float temp;
 Nextern vu8 mode_sw;
 Nextern vu16 stepcount;
+Nextern vu16 dropflag;
 Nextern vu32 battery_c;
 Nextern float bc_raw;
 Nextern float cbc_raw;
@@ -49525,6 +49526,7 @@ Sextern vu8 ocstop;
 Sextern float temp;
 Sextern vu8 mode_sw;
 Sextern vu16 stepcount;
+Sextern vu16 dropflag;
 Sextern vu32 battery_c;
 Sextern float bc_raw;
 Sextern float cbc_raw;
@@ -49941,7 +49943,7 @@ Nvoid TM1650_SET_LED(vu8 addr,vu8 dat);
 N#endif
 L 14 "..\APP\R_Face.c" 2
 N#include "stdio.h"
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h" 1
+L 1 "E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h" 1
 N/* stdio.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.9 */
 N/* Copyright (C) Codemist Ltd., 1988-1993                       */
 N/* Copyright 1991-1998 ARM Limited. All rights reserved.        */
@@ -51054,7 +51056,7 @@ N/* end of stdio.h */
 N
 L 15 "..\APP\R_Face.c" 2
 N#include "stdlib.h"
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h" 1
+L 1 "E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h" 1
 N/* stdlib.h: ANSI draft (X3J11 May 88) library header, section 4.10 */
 N/* Copyright (C) Codemist Ltd., 1988-1993.                          */
 N/* Copyright 1991-1998,2014 ARM Limited. All rights reserved.       */
@@ -52234,6 +52236,7 @@ Sextern vu8 ocstop;
 Sextern float temp;
 Sextern vu8 mode_sw;
 Sextern vu16 stepcount;
+Sextern vu16 dropflag;
 Sextern vu32 battery_c;
 Sextern float bc_raw;
 Sextern float cbc_raw;
@@ -52649,7 +52652,7 @@ N#endif
 N/******************* (C) COPYRIGHT 2015 AVER *****END OF FILE***************************/
 L 17 "..\APP\R_Face.c" 2
 N#include "string.h"
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h" 1
+L 1 "E:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h" 1
 N/* string.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.11 */
 N/* Copyright (C) Codemist Ltd., 1988-1993.                        */
 N/* Copyright 1991-1993 ARM Limited. All rights reserved.          */
@@ -53349,7 +53352,7 @@ Nextern vu8 r_test;
 Nextern vu16 stepcount;
 Nvu8 manual = 0;
 Nu8 lockstat1,lockstat2;
-N
+Nvu16 dropflag;
 Nextern struct bitDefine
 N{
 N    unsigned bit0: 1;
@@ -54022,10 +54025,35 @@ N					}
 N					//归零
 N					if(DISS_Voltage < gate_v || DISS_Voltage < 1)
 N					{
+W "..\APP\R_Face.c" 634 7 function "IO_OFF" declared implicitly
+N						IO_OFF();
 N						test_start = 0;
 N						con_flag = 0;
 N						v = 0;
 N						r= 0;
+N						dropflag = 0;
+N					}
+N					if(Rmon_value > 60000 && test_start == 1)
+N					{
+N						dropflag = 1;
+N						SET_Current_Laod = (oc_data * 1000)/10;
+X						Run_Control[4] = (oc_data * 1000)/10;
+N						if(oc_mode == 1)
+N						{
+N							flag_Load_CC = 1;                              
+X							(flagD . bit7) = 1;                              
+N							GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X							GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N							GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
+X							GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N						}else{
+N							GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+X							GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N							flag_Load_CC = 0;
+X							(flagD . bit7) = 0;
+N							GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
+X							GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N						}
 N					}
 N				}else{
 N					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_98);
@@ -54043,7 +54071,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 654 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 671 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54859,7 +54887,7 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1283 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1300 5 function "setmode_r" declared implicitly
 N    setmode_r();
 N	C_SW(0);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
@@ -55863,7 +55891,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1975 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 1992 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55879,7 +55907,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1988 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 2005 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -56245,7 +56273,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 2156 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 2173 5 variable "i"  was declared but never referenced
 N}
 N
 N//内阻页面数字输入
@@ -57130,7 +57158,7 @@ N        crec2 = 0;
 N        rpow = 1;
 N		step =5;
 N    }
-W "..\APP\R_Face.c" 3136 28 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3153 28 single-precision operand implicitly converted to double-precision
 N    if((v - DISS_Voltage > v*0.4) && para_set2 == set_2_on)
 X    if((v - DISS_Voltage > v*0.4) && para_set2 == 0xff)
 N    {
@@ -57187,7 +57215,7 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 3183 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3200 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.9 && para_set2 == 0xff)
 N    {
@@ -57286,9 +57314,9 @@ N				step =5;
 N            }
 N        }       
 N    }        
-W "..\APP\R_Face.c" 3178 13 variable "hItem"  was declared but never referenced
-W "..\APP\R_Face.c" 3179 10 variable "sbs_c"  was declared but never referenced
-W "..\APP\R_Face.c" 3180 11 variable "change_sbs_c"  was declared but never referenced
+W "..\APP\R_Face.c" 3195 13 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 3196 10 variable "sbs_c"  was declared but never referenced
+W "..\APP\R_Face.c" 3197 11 variable "change_sbs_c"  was declared but never referenced
 N}
 N
 Nvoid test_r(void)
@@ -57299,7 +57327,7 @@ N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-W "..\APP\R_Face.c" 3284 6 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3301 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Voltage < 0.3)
 N		{
 N			rcomp = 0;

@@ -17,7 +17,7 @@
 ..\output\menu.o: ..\STemWinLibrary522\inc\GUI_Private.h
 ..\output\menu.o: ..\STemWinLibrary522\inc\LCD_Protected.h
 ..\output\menu.o: ..\STemWinLibrary522\inc\GUI_Debug.h
-..\output\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\output\menu.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\output\menu.o: ..\STemWinLibrary522\inc\SCROLLBAR.h
 ..\output\menu.o: ..\STemWinLibrary522\inc\WIDGET.h
 ..\output\menu.o: ..\STemWinLibrary522\inc\CALENDAR.h
@@ -48,9 +48,9 @@
 ..\output\menu.o: ..\Include\my_register.h
 ..\output\menu.o: ..\User\STM32F4xx.h
 ..\output\menu.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\menu.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\menu.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\menu.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\menu.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\menu.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\menu.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\menu.o: ..\User\system_stm32f4xx.h
 ..\output\menu.o: ..\User\stm32f4xx_conf.h
@@ -83,10 +83,10 @@
 ..\output\menu.o: ..\Libraries\FWlib\inc\stm32f4xx_fsmc.h
 ..\output\menu.o: ..\Include\tm1650.h
 ..\output\menu.o: ..\Include\my_register.h
-..\output\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-..\output\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\output\menu.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\output\menu.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\output\menu.o: ..\Include\key.h
 ..\output\menu.o: ..\Include\my_register.h
-..\output\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\output\menu.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\menu.o: ..\Include\beep.h
 ..\output\menu.o: ..\Include\internalflash.h

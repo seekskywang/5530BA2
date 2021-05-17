@@ -3,9 +3,9 @@
 ..\output\dma.o: ..\Include\sys.h
 ..\output\dma.o: ..\User\stm32f4xx.h
 ..\output\dma.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\dma.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\dma.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\dma.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\dma.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\dma.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\dma.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\dma.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\dma.o: ..\User\system_stm32f4xx.h
 ..\output\dma.o: ..\User\stm32f4xx_conf.h

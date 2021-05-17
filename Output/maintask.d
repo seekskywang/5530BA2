@@ -17,7 +17,7 @@
 ..\output\maintask.o: ..\STemWinLibrary522\inc\GUI_Private.h
 ..\output\maintask.o: ..\STemWinLibrary522\inc\LCD_Protected.h
 ..\output\maintask.o: ..\STemWinLibrary522\inc\GUI_Debug.h
-..\output\maintask.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\output\maintask.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\output\maintask.o: ..\STemWinLibrary522\inc\SCROLLBAR.h
 ..\output\maintask.o: ..\STemWinLibrary522\inc\WIDGET.h
 ..\output\maintask.o: ..\STemWinLibrary522\inc\CALENDAR.h
@@ -51,9 +51,9 @@
 ..\output\maintask.o: ..\Include\my_register.h
 ..\output\maintask.o: ..\User\STM32F4xx.h
 ..\output\maintask.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\maintask.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\maintask.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\maintask.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\maintask.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\maintask.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\maintask.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\maintask.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\maintask.o: ..\User\system_stm32f4xx.h
 ..\output\maintask.o: ..\User\stm32f4xx_conf.h

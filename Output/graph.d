@@ -17,7 +17,7 @@
 ..\output\graph.o: ..\STemWinLibrary522\inc\GUI_Private.h
 ..\output\graph.o: ..\STemWinLibrary522\inc\LCD_Protected.h
 ..\output\graph.o: ..\STemWinLibrary522\inc\GUI_Debug.h
-..\output\graph.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\output\graph.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\output\graph.o: ..\STemWinLibrary522\inc\SCROLLBAR.h
 ..\output\graph.o: ..\STemWinLibrary522\inc\WIDGET.h
 ..\output\graph.o: ..\STemWinLibrary522\inc\CALENDAR.h
@@ -48,9 +48,9 @@
 ..\output\graph.o: ..\Include\my_register.h
 ..\output\graph.o: ..\User\STM32F4xx.h
 ..\output\graph.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\graph.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\graph.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\graph.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\graph.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\graph.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\graph.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\graph.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\graph.o: ..\User\system_stm32f4xx.h
 ..\output\graph.o: ..\User\stm32f4xx_conf.h
@@ -83,9 +83,9 @@
 ..\output\graph.o: ..\Libraries\FWlib\inc\stm32f4xx_fsmc.h
 ..\output\graph.o: ..\Include\tm1650.h
 ..\output\graph.o: ..\Include\my_register.h
-..\output\graph.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-..\output\graph.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\output\graph.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\output\graph.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\output\graph.o: ..\Include\key.h
 ..\output\graph.o: ..\Include\my_register.h
-..\output\graph.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\output\graph.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\graph.o: ..\Include\beep.h

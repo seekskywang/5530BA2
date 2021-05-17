@@ -84,7 +84,7 @@ extern vu8 r_test;
 extern vu16 stepcount;
 vu8 manual = 0;
 u8 lockstat1,lockstat2;
-
+vu16 dropflag;
 extern struct bitDefine
 {
     unsigned bit0: 1;
@@ -631,10 +631,27 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 					//归零
 					if(DISS_Voltage < gate_v || DISS_Voltage < 1)
 					{
+						IO_OFF();
 						test_start = 0;
 						con_flag = 0;
 						v = 0;
 						r= 0;
+						dropflag = 0;
+					}
+					if(Rmon_value > 60000 && test_start == 1)
+					{
+						dropflag = 1;
+						SET_Current_Laod = (oc_data * 1000)/10;
+						if(oc_mode == 1)
+						{
+							flag_Load_CC = 1;                              
+							GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+							GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
+						}else{
+							GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+							flag_Load_CC = 0;
+							GPIO_ResetBits(GPIOA,GPIO_Pin_15);//支負睾諛On
+						}
 					}
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_98);

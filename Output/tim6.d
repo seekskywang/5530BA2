@@ -2,9 +2,9 @@
 ..\output\tim6.o: ..\Include\my_register.h
 ..\output\tim6.o: ..\User\STM32F4xx.h
 ..\output\tim6.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\tim6.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\tim6.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\tim6.o: D:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\tim6.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\tim6.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\tim6.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\tim6.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\tim6.o: ..\User\system_stm32f4xx.h
 ..\output\tim6.o: ..\User\stm32f4xx_conf.h
@@ -54,7 +54,7 @@
 ..\output\tim6.o: ..\STemWinLibrary522\inc\GUI_Private.h
 ..\output\tim6.o: ..\STemWinLibrary522\inc\LCD_Protected.h
 ..\output\tim6.o: ..\STemWinLibrary522\inc\GUI_Debug.h
-..\output\tim6.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\output\tim6.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\output\tim6.o: ..\STemWinLibrary522\inc\SCROLLBAR.h
 ..\output\tim6.o: ..\STemWinLibrary522\inc\WIDGET.h
 ..\output\tim6.o: ..\STemWinLibrary522\inc\CALENDAR.h

@@ -195,6 +195,7 @@ extern vu8 ocstop;
 extern float temp;
 extern vu8 mode_sw;
 extern vu16 stepcount;
+extern vu16 dropflag;
 extern vu32 battery_c;
 extern float bc_raw;
 extern float cbc_raw;

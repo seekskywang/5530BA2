@@ -238,13 +238,13 @@ void TIM4_IRQHandler(void)
 //					IO_OFF();
 				}
 			 }else if(step == 6){
-				if(flag_Load_CC == 1)
+				if(oc_mode == 0)
 				{
 					SET_Current_Laod = (int)(oc_data*1000)+8000; 
 					flag_Load_CC = 1;                              
 					GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
 					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
-				}else if(flag_Load_CC == 0){
+				}else if(oc_mode == 1){
 					GPIO_ResetBits(GPIOC,GPIO_Pin_13);
 					SET_Voltage_Laod = 0;
 					GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
@@ -259,7 +259,7 @@ void TIM4_IRQHandler(void)
 					short_time++;                
 				}
 			 }else if(step == 7){
-				 if(powcount < 2000)
+				 if(powcount < 5000)
 				{
 					SET_Voltage =(int)v*100+300;
 					SET_Current = 1000;
@@ -292,10 +292,11 @@ void TIM4_IRQHandler(void)
 				 
 			 }else if(step == 0 && powcount == 0)
 			 {
-				 
-				 SET_Current_Laod = set_init_c;
-				 rpow= 0;
-				 powcount = 0;
+				 if(dropflag == 0){
+					 SET_Current_Laod = set_init_c;
+					 rpow= 0;
+					 powcount = 0;
+				 }
 //				 IO_OFF();
 			 }
 		}
