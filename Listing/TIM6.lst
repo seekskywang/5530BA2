@@ -50609,6 +50609,7 @@ Nvu8 resetflag;
 Nvu8 resdone;
 Nfloat watch;
 Nextern float crec1,crec2;
+Nextern vu16 ocImon1,ocImon2;
 Nextern u8 g_mods_timeout;
 Nextern struct MODS_T g_tModS;
 Nu32 Tick_10ms=0;
@@ -50674,7 +50675,7 @@ N    static vu16 uocount;
 N    static vu16 powcount;
 N    static vu16 powflag;
 N    static vu16 finishflag;
-N    static float crec1,crec2;
+N//    static float crec1,crec2;
 N    u8 crec[6];
 N    u8 *csend;
 N    static u8 *sendbuf;
@@ -50706,27 +50707,27 @@ N                     GUI_Init();
 N                     if(page_sw == face_menu)
 X                     if(page_sw == 2)
 N                     {
-W "..\drive\TIM6.c" 141 26 function "ResetPow" declared implicitly
+W "..\drive\TIM6.c" 142 26 function "ResetPow" declared implicitly
 N                         ResetPow();
 N                     }else if(page_sw == face_cdc){
 X                     }else if(page_sw == 1){
-W "..\drive\TIM6.c" 143 26 function "ResetCDC" declared implicitly
+W "..\drive\TIM6.c" 144 26 function "ResetCDC" declared implicitly
 N                         ResetCDC();
 N                     }else if(page_sw == face_r){
 X                     }else if(page_sw == 3){
-W "..\drive\TIM6.c" 145 26 function "ResetR" declared implicitly
+W "..\drive\TIM6.c" 146 26 function "ResetR" declared implicitly
 N                         ResetR();
 N                     }else if(page_sw == face_load){
 X                     }else if(page_sw == 4){
-W "..\drive\TIM6.c" 147 26 function "ResetLoad" declared implicitly
+W "..\drive\TIM6.c" 148 26 function "ResetLoad" declared implicitly
 N                         ResetLoad();
 N                     }else if(page_sw == face_graph){
 X                     }else if(page_sw == 0){
-W "..\drive\TIM6.c" 149 26 function "ResetG" declared implicitly
+W "..\drive\TIM6.c" 150 26 function "ResetG" declared implicitly
 N                         ResetG();
 N                     }else if(page_sw == face_set){
 X                     }else if(page_sw == 5){
-W "..\drive\TIM6.c" 151 26 function "ResetSET" declared implicitly
+W "..\drive\TIM6.c" 152 26 function "ResetSET" declared implicitly
 N                         ResetSET();
 N                     }
 N//                     resdone = 1;
@@ -50758,7 +50759,7 @@ N					powcount++;
 N				}else{
 N					powcount = 0;
 N					C_SW(0);
-W "..\drive\TIM6.c" 177 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 178 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					
 N					step = 2;
@@ -50781,7 +50782,7 @@ N					static_pc = DISS_POW_Current;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 193 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 194 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50832,7 +50833,7 @@ N					powcount++;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 234 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 235 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50863,10 +50864,10 @@ X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//Ö§Ø“ØºÕ˜On
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				}
-W "..\drive\TIM6.c" 254 30 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 255 30 single-precision operand implicitly converted to double-precision
 N				if(((v - DISS_Voltage) > v*0.6)/* || (DISS_Current < 0.05)*/)
 N				{
-W "..\drive\TIM6.c" 256 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 257 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					step = 7;
 N				}else{
@@ -50888,7 +50889,7 @@ N	//                 shortv = DISS_Voltage;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 272 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 273 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50897,7 +50898,7 @@ N					step = 0;
 N					con_flag = 0;
 N					SET_Current_Laod = set_init_c;
 X					Run_Control[4] = Run_Control[22];
-N					C_SW(0);
+N					C_SW(1);
 N//					GPIO_ResetBits(GPIOA,GPIO_Pin_11);//µçÁ÷ÇÐ»»ÎªµÍµµ
 N//					Delay_ms(500);
 N//					IO_OFF();                
@@ -50956,7 +50957,7 @@ N			if(crec1 > crec2)
 N			{
 N				crec2 = crec1;
 N			}
-W "..\drive\TIM6.c" 326 35 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 327 35 single-precision operand implicitly converted to double-precision
 N            if(v - DISS_Voltage > v*0.4)
 N            {     
 N                oc_data = crec2;
@@ -51009,7 +51010,7 @@ N                powcount = 0;
 N                powflag = 0;
 N                GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 368 5 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 369 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N                GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ÷ 
 X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51043,11 +51044,11 @@ X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µç×Ó¸ºÔØOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N            }
-W "..\drive\TIM6.c" 389 43 single-precision operand implicitly converted to double-precision
-W "..\drive\TIM6.c" 389 59 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 390 43 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 390 59 single-precision operand implicitly converted to double-precision
 N            if(((shortv - DISS_Voltage) > shortv*0.6) || (DISS_Current < 0.05))
 N            {
-W "..\drive\TIM6.c" 391 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 392 17 function "IO_OFF" declared implicitly
 N                IO_OFF();
 N                usartshortflag = 0;               
 N                g_tModS.TxBuf[17] = (short_time/10)>>8;
@@ -51078,19 +51079,19 @@ N                SET_Current_Laod = 1000;
 X                Run_Control[4] = 1000;
 N                powcount = 0;
 N                finishflag = 0;
-W "..\drive\TIM6.c" 416 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 417 17 function "IO_OFF" declared implicitly
 N                IO_OFF(); 
 N				C_SW(0);
 N            }
 N        }
 N    }    
-W "..\drive\TIM6.c" 114 8 variable "crec"  was declared but never referenced
-W "..\drive\TIM6.c" 115 9 variable "csend"  was declared but never referenced
-W "..\drive\TIM6.c" 116 16 variable "sendbuf"  was declared but never referenced
-W "..\drive\TIM6.c" 117 8 variable "sendlen"  was declared but never referenced
-W "..\drive\TIM6.c" 118 16 variable "recrc"  was declared but never referenced
-W "..\drive\TIM6.c" 119 16 variable "scrc"  was declared but never referenced
-W "..\drive\TIM6.c" 121 8 variable "i"  was declared but never referenced
+W "..\drive\TIM6.c" 115 8 variable "crec"  was declared but never referenced
+W "..\drive\TIM6.c" 116 9 variable "csend"  was declared but never referenced
+W "..\drive\TIM6.c" 117 16 variable "sendbuf"  was declared but never referenced
+W "..\drive\TIM6.c" 118 8 variable "sendlen"  was declared but never referenced
+W "..\drive\TIM6.c" 119 16 variable "recrc"  was declared but never referenced
+W "..\drive\TIM6.c" 120 16 variable "scrc"  was declared but never referenced
+W "..\drive\TIM6.c" 122 8 variable "i"  was declared but never referenced
 N}
 N
 N//void TIM6_Config(void)
@@ -51281,7 +51282,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodepow,6);
-W "..\drive\TIM6.c" 592 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 593 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N						}
 N						sendmodeflag = 0;
@@ -51304,7 +51305,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodeload,6);
-W "..\drive\TIM6.c" 613 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 614 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							
 N						}
@@ -51336,7 +51337,7 @@ N							if(rmtrig[2] == 1)
 N							{
 N//								SendToPC(2);
 N							}
-W "..\drive\TIM6.c" 643 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 644 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							MODS_SendWithCRC(sendmodestop,6);
 N							Delay_ms(50);
@@ -51595,7 +51596,7 @@ N
 N	/* åˆ†æžåº”ç”¨å±‚åè®?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 879 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 880 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -51610,7 +51611,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* å¿…é¡»æ¸…é›¶è®¡æ•°å™¨ï¼Œæ–¹ä¾¿ä¸‹æ¬¡å¸§åŒæ­?*/
-W "..\drive\TIM6.c" 814 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 815 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 815 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 816 18 variable "crc1"  was declared but never referenced
 N}
 N

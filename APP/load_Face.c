@@ -247,7 +247,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
 //             sprintf(buf,"%.3f",DISS_Voltage);       
 //             TEXT_SetText(hItem,buf);
 //         }
-        if((float)SET_Current_Laod/1000 * DISS_Voltage > 200){
+        if((float)SET_Current_Laod/1000 * DISS_Voltage > 500){
             SET_Current_Laod = 0;
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_49);
             TEXT_SetBkColor(hItem,GUI_INVALID_COLOR);//选项背景色设为透明
@@ -311,7 +311,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
                 mode_sw = 0;
                 load_sw = load_off;
 			}
-            if(DISS_Voltage * DISS_Current > 200 || DISS_Voltage * DISS_POW_Current > 200)
+            if(DISS_Voltage * DISS_Current > 500 || DISS_Voltage * DISS_POW_Current > 500)
 			{
 				Flag_Swtich_ON=0;
                 GPIO_SetBits(GPIOA,GPIO_Pin_15);
@@ -885,7 +885,7 @@ void LOAD_SET(void) {
 				strncpy(buf,set_limit,dot_flag + 4);
 				load_c = atof(buf)*1000;
 			}
-			if(load_c > 30000 || (float)load_c/1000 * DISS_Voltage > 200){
+			if(load_c > 30000 || (float)load_c/1000 * DISS_Voltage > 500){
                 load_c = 0;
             }
 //			if(load_c > 2500)

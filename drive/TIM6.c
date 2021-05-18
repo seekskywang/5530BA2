@@ -51,6 +51,7 @@ vu8 resetflag;
 vu8 resdone;
 float watch;
 extern float crec1,crec2;
+extern vu16 ocImon1,ocImon2;
 extern u8 g_mods_timeout;
 extern struct MODS_T g_tModS;
 u32 Tick_10ms=0;
@@ -110,7 +111,7 @@ void TIM4_IRQHandler(void)
     static vu16 powcount;
     static vu16 powflag;
     static vu16 finishflag;
-    static float crec1,crec2;
+//    static float crec1,crec2;
     u8 crec[6];
     u8 *csend;
     static u8 *sendbuf;
@@ -275,7 +276,7 @@ void TIM4_IRQHandler(void)
 					step = 0;
 					con_flag = 0;
 					SET_Current_Laod = set_init_c;
-					C_SW(0);
+					C_SW(1);
 //					GPIO_ResetBits(GPIOA,GPIO_Pin_11);//µçÁ÷ÇÐ»»ÎªµÍµµ
 //					Delay_ms(500);
 //					IO_OFF();                

@@ -75,6 +75,7 @@ vu8 oc_test = 0;
 extern vu8 t_onoff;
 extern vu8 mode_sw;
 float crec1,crec2;
+vu16 ocImon1,ocImon2;
 extern vu8 LOAD_t;
 //extern vu8 status_flash;
 extern vu8 pass;
@@ -1298,7 +1299,7 @@ WM_HWIN CreateR(void) {
   track = face_r;
     con_flag = 0;
     setmode_r();
-	C_SW(0);
+	C_SW(1);
 //    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 //    GPIO_SetBits(GPIOB,GPIO_Pin_13);
 //    r_raly = 1;
@@ -3125,15 +3126,18 @@ void OC_CHECK(void){
     float change_sbs_c;
 	
 //    crec2 = crec1;
-    crec1 = DISS_Current;  
-	if(crec1 > crec2)
+//    crec1 = DISS_Current;  
+//	if(crec1 > crec2)
+//	{
+//		crec2 = crec1;
+//	}
+	if(DISS_Current > crec1)
 	{
-		crec2 = crec1;
+		crec1 = DISS_Current;
 	}
-
-    if(DISS_Voltage * DISS_Current > 200)
+    if(DISS_Voltage * DISS_Current > 450)
     {
-         oc_data = crec2;
+         oc_data = crec1;
         SET_Current_Laod = set_init_c;
         hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
         change_sbs_c = (float)set_sbs_c/1000;
@@ -3150,42 +3154,45 @@ void OC_CHECK(void){
         rpow = 1;
 		step =5;
     }
-    if((v - DISS_Voltage > v*0.4) && para_set2 == set_2_on)
-    {
-        if(oc_mode == 0)
-        {
-            //        oc_data = (float)(SET_Current_Laod+csum)/1000;       
-            oc_data = crec2;
-            SET_Current_Laod = set_init_c;
-            hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
-            change_sbs_c = (float)set_sbs_c/1000;
-            sprintf(sbs_c,"%.3f",change_sbs_c);
-            TEXT_SetText(hItem,sbs_c);
-            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-            t_onoff = 0;
-            stepcount = 0;
-            oct_sw = oct_off;
-            finish = 1;
-            oc_test = 0;
-            crec1 = 0;
-            crec2 = 0;
-            rpow = 1;
-			ocf = 0;
-			step =5;
-        }else if(oc_mode == 1){
-            oc_data = crec2;
-            GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-            t_onoff = 0;
-            stepcount = 0;
-            oct_sw = oct_off;
-            finish = 1;
-            oc_test = 0;
-            crec1 = 0;
-            crec2 = 0;
-			ocf = 0;
-            rpow = 1;
-			step =5;
-        }
+	if(crec1 != 0)
+	{
+		if(/*(v - DISS_Voltage > v*0.4) */crec1 - DISS_Current  > 0.002 && para_set2 == set_2_on)
+		{
+			if(oc_mode == 0)
+			{
+				//        oc_data = (float)(SET_Current_Laod+csum)/1000;       
+				oc_data = crec1;
+				SET_Current_Laod = set_init_c;
+				hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+				change_sbs_c = (float)set_sbs_c/1000;
+				sprintf(sbs_c,"%.3f",change_sbs_c);
+				TEXT_SetText(hItem,sbs_c);
+				GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+				t_onoff = 0;
+				stepcount = 0;
+				oct_sw = oct_off;
+				finish = 1;
+				oc_test = 0;
+				crec1 = 0;
+				crec2 = 0;
+				rpow = 1;
+				ocf = 0;
+				step =5;
+			}else if(oc_mode == 1){
+				oc_data = crec1;
+				GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+				t_onoff = 0;
+				stepcount = 0;
+				oct_sw = oct_off;
+				finish = 1;
+				oc_test = 0;
+				crec1 = 0;
+				crec2 = 0;
+				ocf = 0;
+				rpow = 1;
+				step =5;
+			}
+		}
 
     }
 }
@@ -3270,24 +3277,24 @@ void OC_ADD(void){
 //				step =5;
 //            }
         }else if(oc_mode == 1){
-            SET_Voltage_Laod = 0;
-            crec2 = crec1;
-            crec1 = DISS_Current;
-            if(crec1 < crec2)
-            {
-                oc_data = crec2;
-                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
-                t_onoff = 0;
-                stepcount = 0;
-                oct_sw = oct_off;
-                finish = 1;
-                crec1 = 0;
-                crec2 = 0;
-                oc_test = 0;
-                rpow = 1;
-				ocf = 0;
-				step =5;
-            }
+//            SET_Voltage_Laod = 0;
+//            crec2 = crec1;
+//            crec1 = DISS_Current;
+//            if(crec1 < crec2)
+//            {
+//                oc_data = crec2;
+//                GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+//                t_onoff = 0;
+//                stepcount = 0;
+//                oct_sw = oct_off;
+//                finish = 1;
+//                crec1 = 0;
+//                crec2 = 0;
+//                oc_test = 0;
+//                rpow = 1;
+//				ocf = 0;
+//				step =5;
+//            }
         }       
     }        
 }
