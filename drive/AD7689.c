@@ -265,15 +265,15 @@ void AD7689_Scan_CH(void)
 		var_chR=AD7689_Buffer[7];
 	}
 	Ad7689_Fit_Imon[I_cont++]=var_chI;
-	if(I_cont==5)
+	if(I_cont==60)
 	{
 		I_cont=0;
 		sum1=0;
-		for(f=0;f<5;f++)
+		for(f=0;f<60;f++)
 		{
 			sum1 +=Ad7689_Fit_Imon[f];
 		}
-		Imon1_value=sum1/5;//负载电流
+		Imon1_value=sum1/60;//负载电流
 	}
 	
 	Ad7689_Fit_Imon1[I1_cont++]=var_chI1;
@@ -289,30 +289,30 @@ void AD7689_Scan_CH(void)
 	}
 	
 	Ad7689_Fit_PVmon[V1_cont++]=var_chV1;
-	if(V1_cont==10)
+	if(V1_cont==100)
 	{
 		V1_cont=0;
 		sum1=0;
-		for(f=0;f<10;f++)
+		for(f=0;f<100;f++)
 		{
 			sum1 +=Ad7689_Fit_PVmon[f];
 		}
-		Vmon_value=sum1/10;//电源电压
+		Vmon_value=sum1/100;//电源电压
 	}
 	
 	Ad7689_Fit_Vmon[V_cont++]=var_chV;
-	if(V_cont==10)
+	if(V_cont==100)
 	{
 		V_cont=0;
 		
 	}
 	sum1=0;
 //		Bubble_sort( Ad7689_Fit_Vmon,100);//����Ӵ�С
-		for(f=0;f<10;f++)
+		for(f=0;f<100;f++)
 		{
 			sum1 +=Ad7689_Fit_Vmon[f];
 		}
-		Vmon1_value=sum1/10;//负载电压
+		Vmon1_value=sum1/100;//负载电压
 
 	Ad7689_Fit_Rmon[R_cont++]=var_chR;
 	if(R_cont==30)

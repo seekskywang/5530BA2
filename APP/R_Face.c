@@ -86,6 +86,7 @@ extern vu16 stepcount;
 vu8 manual = 0;
 u8 lockstat1,lockstat2;
 vu16 dropflag;
+vu16 ptcount;
 extern struct bitDefine
 {
     unsigned bit0: 1;
@@ -3135,7 +3136,7 @@ void OC_CHECK(void){
 	{
 		crec1 = DISS_Current;
 	}
-    if(DISS_Voltage * DISS_Current > 450)
+    if(DISS_Voltage * DISS_Current > 500)
     {
          oc_data = crec1;
         SET_Current_Laod = set_init_c;
@@ -3153,10 +3154,36 @@ void OC_CHECK(void){
         crec2 = 0;
         rpow = 1;
 		step =5;
+		ptcount = 0;
+    }
+	if(DISS_Voltage * DISS_Current > 200)
+    {
+		if(ptcount < 3000)
+		{
+			ptcount ++;
+		}else{
+			oc_data = crec1;
+			SET_Current_Laod = set_init_c;
+			hItem = WM_GetDialogItem(hWinR, ID_TEXT_47);
+			change_sbs_c = (float)set_sbs_c/1000;
+			sprintf(sbs_c,"%.3f",change_sbs_c);
+			TEXT_SetText(hItem,sbs_c);
+			GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
+			t_onoff = 0;
+			stepcount = 0;
+			oct_sw = oct_off;
+			finish = 1;
+			oc_test = 0;
+			crec1 = 0;
+			crec2 = 0;
+			rpow = 1;
+			step =5;
+			ptcount = 0;
+		}
     }
 	if(crec1 != 0)
 	{
-		if(/*(v - DISS_Voltage > v*0.4) */crec1 - DISS_Current  > 0.002 && para_set2 == set_2_on)
+		if((v - DISS_Voltage > v*0.8) && para_set2 == set_2_on)
 		{
 			if(oc_mode == 0)
 			{
@@ -3178,6 +3205,7 @@ void OC_CHECK(void){
 				rpow = 1;
 				ocf = 0;
 				step =5;
+				ptcount = 0;
 			}else if(oc_mode == 1){
 				oc_data = crec1;
 				GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF   
@@ -3191,6 +3219,7 @@ void OC_CHECK(void){
 				ocf = 0;
 				rpow = 1;
 				step =5;
+				ptcount = 0;
 			}
 		}
 
