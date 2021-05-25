@@ -23,8 +23,8 @@
 000012  71e5              STRB     r5,[r4,#7]
 ;;;1302       setmode_r();
 000014  f7fffffe          BL       setmode_r
-;;;1303   	C_SW(1);
-000018  2001              MOVS     r0,#1
+;;;1303   	C_SW(0);
+000018  2000              MOVS     r0,#0
 00001a  f7fffffe          BL       C_SW
 ;;;1304   //    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 ;;;1305   //    GPIO_SetBits(GPIOB,GPIO_Pin_13);
@@ -1604,7 +1604,7 @@
 ;;;3233       float change_sbs_c;
 ;;;3234       static vu16 csum;
 ;;;3235                
-;;;3236       if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
+;;;3236       if(v - /*DISS_Voltage*/DISS_Voltage > v*0.4 && para_set2 == set_2_on)
 000006  4c18              LDR      r4,|L4.104|
 000008  ed949a0d          VLDR     s18,[r4,#0x34]
 00000c  ee190a10          VMOV     r0,s18
@@ -1742,8 +1742,8 @@
                   |L4.104|
                           DCD      ||.data||
                   |L4.108|
-00006c  cccccccd          DCFD     0x3feccccccccccccd ; 0.90000000000000002
-000070  3feccccc
+00006c  9999999a          DCFD     0x3fd999999999999a ; 0.40000000000000002
+000070  3fd99999
                   |L4.116|
                           DCD      DISS_Voltage
                   |L4.120|
@@ -8736,12 +8736,11 @@
 ;;;3333       WM_HWIN hItem;
 ;;;3334   	u32 rcomp;
 ;;;3335       if(para_set2 == set_2_off)
-000008  4dfe              LDR      r5,|L13.1028|
-00000a  78e9              LDRB     r1,[r5,#3]  ; para_set2
+000008  4cfe              LDR      r4,|L13.1028|
+00000a  78e1              LDRB     r1,[r4,#3]  ; para_set2
+00000c  4620              MOV      r0,r4
 ;;;3336       {
 ;;;3337   		if(DISS_Voltage < 0.3)
-00000c  4ffe              LDR      r7,|L13.1032|
-00000e  4628              MOV      r0,r5                 ;3335
 ;;;3338   		{
 ;;;3339   			rcomp = 0;
 ;;;3340   		}else{
@@ -8756,22 +8755,22 @@
 ;;;3349   				}
 ;;;3350   				TM1650_SET_LED(0x68,0x70);//FAIL灯
 ;;;3351   				GPIO_SetBits(GPIOD,GPIO_Pin_12);//
-000010  f44f5880          MOV      r8,#0x1000
+00000e  f8df93f8          LDR      r9,|L13.1032|
 ;;;3352   				if(R_VLUE > set_max_r || R_VLUE < set_min_r)
 ;;;3353   				{
 ;;;3354   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-000014  6a40              LDR      r0,[r0,#0x24]
-000016  edd70a00          VLDR     s1,[r7,#0]            ;3337
-00001a  ed9f8afc          VLDR     s16,|L13.1036|
-00001e  4efc              LDR      r6,|L13.1040|
+000012  6a40              LDR      r0,[r0,#0x24]
+000014  4ffd              LDR      r7,|L13.1036|
+000016  4efe              LDR      r6,|L13.1040|
+000018  f44f5880          MOV      r8,#0x1000            ;3351
 ;;;3355   					TEXT_SetTextColor(hItem, GUI_RED);
 ;;;3356   				}else{
 ;;;3357   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
 ;;;3358   					TEXT_SetTextColor(hItem, GUI_GREEN);
-000020  f44f447f          MOV      r4,#0xff00
-000024  ee200a88          VMUL.F32 s0,s1,s16             ;3345
-000028  2900              CMP      r1,#0                 ;3335
-00002a  d073              BEQ      |L13.276|
+00001c  f44f457f          MOV      r5,#0xff00
+000020  ed9f8afc          VLDR     s16,|L13.1044|
+000024  2900              CMP      r1,#0                 ;3335
+000026  d073              BEQ      |L13.272|
 ;;;3359   				}
 ;;;3360   				if(DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v){
 ;;;3361   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
@@ -8800,12 +8799,18 @@
 ;;;3384   			GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
 ;;;3385   		}
 ;;;3386       }else{
-;;;3387           if(finish == 0)
-00002c  7a29              LDRB     r1,[r5,#8]  ; finish
-00002e  2900              CMP      r1,#0
-000030  d06f              BEQ      |L13.274|
+;;;3387           if(staticcdc == 0)
+000028  7be2              LDRB     r2,[r4,#0xf]  ; staticcdc
+00002a  4621              MOV      r1,r4                 ;3335
 ;;;3388           {
-;;;3389               if(r > set_max_r || r < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
+;;;3389               if(r > set_max_r || r < set_min_r || v*1000 > set_max_v || v*1000 < set_min_v  || oc_data*1000 > set_max_c || oc_data*1000 < set_min_c)
+00002c  ed910a0d          VLDR     s0,[r1,#0x34]
+000030  ed9f1af8          VLDR     s2,|L13.1044|
+000034  edd10a0c          VLDR     s1,[r1,#0x30]
+000038  2a00              CMP      r2,#0                 ;3387
+00003a  ee200a01          VMUL.F32 s0,s0,s2
+00003e  ee600a81          VMUL.F32 s1,s1,s2
+000042  d06e              BEQ      |L13.290|
 ;;;3390               {
 ;;;3391                   if(para_set4 == set_4_on){
 ;;;3392                       BEEP_Tiggr();
@@ -8827,607 +8832,661 @@
 ;;;3408                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
 ;;;3409                       TEXT_SetTextColor(hItem, GUI_GREEN);
 ;;;3410                   }
-;;;3411               }else{
-;;;3412                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-;;;3413                   TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3414                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-;;;3415                   TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3416                   
-;;;3417                   GPIO_ResetBits(GPIOD,GPIO_Pin_12);
-;;;3418                   TM1650_SET_LED(0x48,0x71);
-;;;3419                   TM1650_SET_LED(0x68,0xF2);//PASS灯
-;;;3420               }
-;;;3421           }else{
-;;;3422               if(r > set_max_r || r < set_min_r || v*1000 > set_max_v || v*1000 < set_min_v || oc_data*1000 > set_max_c || oc_data*1000 < set_min_c || static_lv*1000 > set_max_lv || static_lv*1000 < set_min_lv || static_pc*1000 > set_max_pc || static_pc*1000 < set_min_pc)
-000032  6c31              LDR      r1,[r6,#0x40]  ; Run_Control
-000034  8b2a              LDRH     r2,[r5,#0x18]  ; r
-000036  4ff7              LDR      r7,|L13.1044|
-;;;3423               {
-;;;3424                   if(para_set4 == set_4_on){
-;;;3425                       BEEP_Tiggr();
-;;;3426                   }
-;;;3427                   TM1650_SET_LED(0x68,0x70);//FAIL灯
-;;;3428                   GPIO_SetBits(GPIOD,GPIO_Pin_12);//
-;;;3429                   if(r > set_max_r || r < set_min_r)
-;;;3430                   {
-;;;3431                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-;;;3432                       TEXT_SetTextColor(hItem, GUI_RED);
-;;;3433                   }else{
-;;;3434                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-;;;3435                       TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3436                   }
-;;;3437                   if(v*1000 > set_max_v || v*1000 < set_min_v){
-;;;3438                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-;;;3439                       TEXT_SetTextColor(hItem, GUI_RED);
-;;;3440                   }else{
-;;;3441                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-;;;3442                       TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3443                   }
-;;;3444                   if(oc_data*1000 > set_max_c || oc_data*1000 < set_min_c){
-;;;3445                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
-000038  f640098f          MOV      r9,#0x88f
-;;;3446                       TEXT_SetTextColor(hItem, GUI_RED);
-;;;3447                   }else{
-;;;3448                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
-;;;3449                       TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3450                   }
-;;;3451   				
-;;;3452   				if(static_lv*1000 > set_max_lv || static_lv*1000 < set_min_lv)
-;;;3453   				{
-;;;3454   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
-00003c  f44f6a09          MOV      r10,#0x890
+;;;3411   				
+;;;3412   				if(oc_data*1000 > set_max_c || oc_data*1000 < set_min_c){
+;;;3413                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+;;;3414                       TEXT_SetTextColor(hItem, GUI_RED);
+;;;3415                   }else{
+;;;3416                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+;;;3417                       TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3418                   }
+;;;3419               }else{
+;;;3420                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+;;;3421                   TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3422                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+;;;3423                   TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3424                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+;;;3425                   TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3426                   GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+;;;3427                   TM1650_SET_LED(0x48,0x71);
+;;;3428                   TM1650_SET_LED(0x68,0xF2);//PASS灯
+;;;3429               }
+;;;3430           }else{
+;;;3431               if(r > set_max_r || r < set_min_r || v*1000 > set_max_v || v*1000 < set_min_v || oc_data*1000 > set_max_c || oc_data*1000 < set_min_c || static_lv*1000 > set_max_lv || static_lv*1000 < set_min_lv || static_pc*1000 > set_max_pc || static_pc*1000 < set_min_pc)
+000044  6c31              LDR      r1,[r6,#0x40]  ; Run_Control
+000046  8b22              LDRH     r2,[r4,#0x18]  ; r
+000048  4ff3              LDR      r7,|L13.1048|
+;;;3432               {
+;;;3433                   if(para_set4 == set_4_on){
+;;;3434                       BEEP_Tiggr();
+;;;3435                   }
+;;;3436                   TM1650_SET_LED(0x68,0x70);//FAIL灯
+;;;3437                   GPIO_SetBits(GPIOD,GPIO_Pin_12);//
+;;;3438                   if(r > set_max_r || r < set_min_r)
+;;;3439                   {
+;;;3440                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+;;;3441                       TEXT_SetTextColor(hItem, GUI_RED);
+;;;3442                   }else{
+;;;3443                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+;;;3444                       TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3445                   }
+;;;3446                   if(v*1000 > set_max_v || v*1000 < set_min_v){
+;;;3447                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+;;;3448                       TEXT_SetTextColor(hItem, GUI_RED);
+;;;3449                   }else{
+;;;3450                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+;;;3451                       TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3452                   }
+;;;3453                   if(oc_data*1000 > set_max_c || oc_data*1000 < set_min_c){
+;;;3454                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
 ;;;3455                       TEXT_SetTextColor(hItem, GUI_RED);
-;;;3456   				}else{
-;;;3457   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
+;;;3456                   }else{
+;;;3457                       hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
 ;;;3458                       TEXT_SetTextColor(hItem, GUI_GREEN);
-;;;3459   				}
+;;;3459                   }
 ;;;3460   				
-;;;3461   				if(static_pc*1000 > set_max_pc || static_pc*1000 < set_min_pc)
+;;;3461   				if(static_lv*1000 > set_max_lv || static_lv*1000 < set_min_lv)
 ;;;3462   				{
-;;;3463   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
-000040  f6401b35          MOV      r11,#0x935
-000044  4291              CMP      r1,r2                 ;3422
-000046  d35f              BCC      |L13.264|
-000048  6c71              LDR      r1,[r6,#0x44]         ;3422  ; Run_Control
-00004a  8b2a              LDRH     r2,[r5,#0x18]         ;3422  ; r
-00004c  4291              CMP      r1,r2                 ;3422
-00004e  d85b              BHI      |L13.264|
-000050  ed950a0d          VLDR     s0,[r5,#0x34]         ;3422
-000054  6bb1              LDR      r1,[r6,#0x38]         ;3422  ; Run_Control
-000056  ee200a08          VMUL.F32 s0,s0,s16             ;3422
-00005a  ee001a90          VMOV     s1,r1                 ;3422
-00005e  eef80a60          VCVT.F32.U32 s1,s1                 ;3422
-000062  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-000066  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-00006a  dc4d              BGT      |L13.264|
-00006c  6bf1              LDR      r1,[r6,#0x3c]         ;3422  ; Run_Control
-00006e  ee001a90          VMOV     s1,r1                 ;3422
-000072  eef80a60          VCVT.F32.U32 s1,s1                 ;3422
-000076  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-00007a  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-00007e  d343              BCC      |L13.264|
-000080  ed950a0c          VLDR     s0,[r5,#0x30]         ;3422
-000084  6cb1              LDR      r1,[r6,#0x48]         ;3422  ; Run_Control
-000086  ee200a08          VMUL.F32 s0,s0,s16             ;3422
-00008a  ee001a90          VMOV     s1,r1                 ;3422
-00008e  eef80a60          VCVT.F32.U32 s1,s1                 ;3422
-000092  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-000096  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-00009a  dc35              BGT      |L13.264|
-00009c  6cf1              LDR      r1,[r6,#0x4c]         ;3422  ; Run_Control
-00009e  ee001a90          VMOV     s1,r1                 ;3422
-0000a2  eef80a60          VCVT.F32.U32 s1,s1                 ;3422
-0000a6  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-0000aa  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-0000ae  d32b              BCC      |L13.264|
-0000b0  ed950a0b          VLDR     s0,[r5,#0x2c]         ;3422
-0000b4  edd70a00          VLDR     s1,[r7,#0]            ;3422
-0000b8  ee200a08          VMUL.F32 s0,s0,s16             ;3422
-0000bc  eef80ae0          VCVT.F32.S32 s1,s1                 ;3422
-0000c0  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-0000c4  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-0000c8  dc1e              BGT      |L13.264|
-0000ca  edd70a01          VLDR     s1,[r7,#4]            ;3422
-0000ce  eef80ae0          VCVT.F32.S32 s1,s1                 ;3422
-0000d2  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-0000d6  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-0000da  d315              BCC      |L13.264|
-0000dc  ed950a0a          VLDR     s0,[r5,#0x28]         ;3422
-0000e0  edd70a02          VLDR     s1,[r7,#8]            ;3422
-0000e4  ee200a08          VMUL.F32 s0,s0,s16             ;3422
-0000e8  eef80ae0          VCVT.F32.S32 s1,s1                 ;3422
-0000ec  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-0000f0  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-0000f4  dc08              BGT      |L13.264|
-0000f6  edd70a03          VLDR     s1,[r7,#0xc]          ;3422
-0000fa  eef80ae0          VCVT.F32.S32 s1,s1                 ;3422
-0000fe  eeb40ae0          VCMPE.F32 s0,s1                 ;3422
-000102  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3422
-000106  d27c              BCS      |L13.514|
-                  |L13.264|
-000108  7928              LDRB     r0,[r5,#4]            ;3424  ; para_set4
-00010a  28ff              CMP      r0,#0xff              ;3424
-00010c  d07a              BEQ      |L13.516|
-00010e  e14c              B        |L13.938|
-000110  e000              B        |L13.276|
-                  |L13.274|
-000112  e0b7              B        |L13.644|
-                  |L13.276|
-000114  ee101a90          VMOV     r1,s1                 ;3337
-000118  4abf              LDR      r2,|L13.1048|
+;;;3463   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
+00004a  f44f6a09          MOV      r10,#0x890
+;;;3464                       TEXT_SetTextColor(hItem, GUI_RED);
+;;;3465   				}else{
+;;;3466   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
+;;;3467                       TEXT_SetTextColor(hItem, GUI_GREEN);
+;;;3468   				}
+;;;3469   				
+;;;3470   				if(static_pc*1000 > set_max_pc || static_pc*1000 < set_min_pc)
+;;;3471   				{
+;;;3472   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
+00004e  f6401b35          MOV      r11,#0x935
+000052  4291              CMP      r1,r2                 ;3431
+000054  d357              BCC      |L13.262|
+000056  6c71              LDR      r1,[r6,#0x44]         ;3431  ; Run_Control
+000058  8b22              LDRH     r2,[r4,#0x18]         ;3431  ; r
+00005a  4291              CMP      r1,r2                 ;3431
+00005c  d853              BHI      |L13.262|
+00005e  6bb1              LDR      r1,[r6,#0x38]         ;3431  ; Run_Control
+000060  ee011a10          VMOV     s2,r1                 ;3431
+000064  eeb81a41          VCVT.F32.U32 s2,s2                 ;3431
+000068  eeb40ac1          VCMPE.F32 s0,s2                 ;3431
+00006c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+000070  dc49              BGT      |L13.262|
+000072  6bf1              LDR      r1,[r6,#0x3c]         ;3431  ; Run_Control
+000074  ee011a10          VMOV     s2,r1                 ;3431
+000078  eeb81a41          VCVT.F32.U32 s2,s2                 ;3431
+00007c  eeb40ac1          VCMPE.F32 s0,s2                 ;3431
+000080  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+000084  d33f              BCC      |L13.262|
+000086  6cb1              LDR      r1,[r6,#0x48]         ;3431  ; Run_Control
+000088  ee001a10          VMOV     s0,r1                 ;3431
+00008c  eeb80a40          VCVT.F32.U32 s0,s0                 ;3431
+000090  eef40ac0          VCMPE.F32 s1,s0                 ;3431
+000094  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+000098  dc35              BGT      |L13.262|
+00009a  6cf1              LDR      r1,[r6,#0x4c]         ;3431  ; Run_Control
+00009c  ee001a10          VMOV     s0,r1                 ;3431
+0000a0  eeb80a40          VCVT.F32.U32 s0,s0                 ;3431
+0000a4  eef40ac0          VCMPE.F32 s1,s0                 ;3431
+0000a8  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+0000ac  d32b              BCC      |L13.262|
+0000ae  ed940a0b          VLDR     s0,[r4,#0x2c]         ;3431
+0000b2  edd70a00          VLDR     s1,[r7,#0]            ;3431
+0000b6  ee200a08          VMUL.F32 s0,s0,s16             ;3431
+0000ba  eef80ae0          VCVT.F32.S32 s1,s1                 ;3431
+0000be  eeb40ae0          VCMPE.F32 s0,s1                 ;3431
+0000c2  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+0000c6  dc1e              BGT      |L13.262|
+0000c8  edd70a01          VLDR     s1,[r7,#4]            ;3431
+0000cc  eef80ae0          VCVT.F32.S32 s1,s1                 ;3431
+0000d0  eeb40ae0          VCMPE.F32 s0,s1                 ;3431
+0000d4  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+0000d8  d315              BCC      |L13.262|
+0000da  ed940a0a          VLDR     s0,[r4,#0x28]         ;3431
+0000de  edd70a02          VLDR     s1,[r7,#8]            ;3431
+0000e2  ee200a08          VMUL.F32 s0,s0,s16             ;3431
+0000e6  eef80ae0          VCVT.F32.S32 s1,s1                 ;3431
+0000ea  eeb40ae0          VCMPE.F32 s0,s1                 ;3431
+0000ee  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+0000f2  dc08              BGT      |L13.262|
+0000f4  edd70a03          VLDR     s1,[r7,#0xc]          ;3431
+0000f8  eef80ae0          VCVT.F32.S32 s1,s1                 ;3431
+0000fc  eeb40ae0          VCMPE.F32 s0,s1                 ;3431
+000100  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3431
+000104  d27e              BCS      |L13.516|
+                  |L13.262|
+000106  7920              LDRB     r0,[r4,#4]            ;3433  ; para_set4
+000108  28ff              CMP      r0,#0xff              ;3433
+00010a  d07c              BEQ      |L13.518|
+00010c  e1a7              B        |L13.1118|
+00010e  e7ff              B        |L13.272|
+                  |L13.272|
+000110  ed970a00          VLDR     s0,[r7,#0]            ;3337
+000114  4ac1              LDR      r2,|L13.1052|
+000116  ee101a10          VMOV     r1,s0                 ;3337
 00011a  4291              CMP      r1,r2                 ;3337
-00011c  da01              BGE      |L13.290|
-00011e  2200              MOVS     r2,#0                 ;3339
-000120  e000              B        |L13.292|
+00011c  da02              BGE      |L13.292|
+00011e  2100              MOVS     r1,#0                 ;3339
+000120  e001              B        |L13.294|
                   |L13.290|
-000122  6b72              LDR      r2,[r6,#0x34]         ;3341  ; Run_Control
+000122  e0b2              B        |L13.650|
                   |L13.292|
-000124  2a00              CMP      r2,#0                 ;3343
-000126  d06e              BEQ      |L13.518|
-000128  6c31              LDR      r1,[r6,#0x40]         ;3345  ; Run_Control
-00012a  4291              CMP      r1,r2                 ;3345
-00012c  d316              BCC      |L13.348|
-00012e  6c71              LDR      r1,[r6,#0x44]         ;3345  ; Run_Control
-000130  4291              CMP      r1,r2                 ;3345
-000132  d813              BHI      |L13.348|
-000134  6bb1              LDR      r1,[r6,#0x38]         ;3345  ; Run_Control
-000136  ee001a90          VMOV     s1,r1                 ;3345
-00013a  eef80a60          VCVT.F32.U32 s1,s1                 ;3345
-00013e  eeb40ae0          VCMPE.F32 s0,s1                 ;3345
-000142  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3345
-000146  dc09              BGT      |L13.348|
-000148  6bf1              LDR      r1,[r6,#0x3c]         ;3345  ; Run_Control
-00014a  ee001a90          VMOV     s1,r1                 ;3345
-00014e  eef80a60          VCVT.F32.U32 s1,s1                 ;3345
-000152  eeb40ae0          VCMPE.F32 s0,s1                 ;3345
-000156  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3345
-00015a  d259              BCS      |L13.528|
-                  |L13.348|
-00015c  7928              LDRB     r0,[r5,#4]            ;3347  ; para_set4
-00015e  28ff              CMP      r0,#0xff              ;3347
-000160  d101              BNE      |L13.358|
-000162  f7fffffe          BL       BEEP_Tiggr
-                  |L13.358|
-000166  2170              MOVS     r1,#0x70              ;3350
-000168  2068              MOVS     r0,#0x68              ;3350
-00016a  f7fffffe          BL       TM1650_SET_LED
-00016e  4641              MOV      r1,r8                 ;3351
-000170  48aa              LDR      r0,|L13.1052|
-000172  f7fffffe          BL       GPIO_SetBits
-000176  6b70              LDR      r0,[r6,#0x34]         ;3352  ; Run_Control
-000178  6c31              LDR      r1,[r6,#0x40]         ;3352  ; Run_Control
-00017a  4288              CMP      r0,r1                 ;3352
-00017c  d803              BHI      |L13.390|
-00017e  6b70              LDR      r0,[r6,#0x34]         ;3352  ; Run_Control
-000180  6c71              LDR      r1,[r6,#0x44]         ;3352  ; Run_Control
-000182  4288              CMP      r0,r1                 ;3352
-000184  d208              BCS      |L13.408|
-                  |L13.390|
-000186  f640018e          MOV      r1,#0x88e             ;3354
-00018a  6a68              LDR      r0,[r5,#0x24]         ;3354  ; hWinR
-00018c  f7fffffe          BL       WM_GetDialogItem
-000190  21ff              MOVS     r1,#0xff              ;3355
-000192  f7fffffe          BL       TEXT_SetTextColor
-000196  e007              B        |L13.424|
-                  |L13.408|
-000198  f640018e          MOV      r1,#0x88e             ;3357
-00019c  6a68              LDR      r0,[r5,#0x24]         ;3357  ; hWinR
-00019e  f7fffffe          BL       WM_GetDialogItem
-0001a2  4621              MOV      r1,r4                 ;3358
-0001a4  f7fffffe          BL       TEXT_SetTextColor
-                  |L13.424|
-0001a8  ed970a00          VLDR     s0,[r7,#0]            ;3360
-0001ac  6bb0              LDR      r0,[r6,#0x38]         ;3360  ; Run_Control
-0001ae  ee200a08          VMUL.F32 s0,s0,s16             ;3360
-0001b2  ee000a90          VMOV     s1,r0                 ;3360
-0001b6  eef80a60          VCVT.F32.U32 s1,s1                 ;3360
-0001ba  eeb40ae0          VCMPE.F32 s0,s1                 ;3360
-0001be  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3360
-0001c2  dc09              BGT      |L13.472|
-0001c4  6bf0              LDR      r0,[r6,#0x3c]         ;3360  ; Run_Control
-0001c6  ee000a90          VMOV     s1,r0                 ;3360
-0001ca  eef80a60          VCVT.F32.U32 s1,s1                 ;3360
-0001ce  eeb40ae0          VCMPE.F32 s0,s1                 ;3360
-0001d2  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3360
-0001d6  d20b              BCS      |L13.496|
-                  |L13.472|
-0001d8  f640018d          MOV      r1,#0x88d             ;3361
-0001dc  6a68              LDR      r0,[r5,#0x24]         ;3361  ; hWinR
-0001de  f7fffffe          BL       WM_GetDialogItem
-0001e2  ecbd8b02          VPOP     {d8}                  ;3362
-0001e6  21ff              MOVS     r1,#0xff              ;3362
-0001e8  e8bd5ff0          POP      {r4-r12,lr}           ;3362
-0001ec  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.496|
-0001f0  f640018d          MOV      r1,#0x88d             ;3364
-0001f4  6a68              LDR      r0,[r5,#0x24]         ;3364  ; hWinR
-0001f6  f7fffffe          BL       WM_GetDialogItem
-0001fa  4621              MOV      r1,r4                 ;3365
-0001fc  ecbd8b02          VPOP     {d8}                  ;3365
-000200  e002              B        |L13.520|
-                  |L13.514|
-000202  e1a3              B        |L13.1356|
+000124  6b71              LDR      r1,[r6,#0x34]         ;3341  ; Run_Control
+                  |L13.294|
+000126  2900              CMP      r1,#0                 ;3343
+000128  d06e              BEQ      |L13.520|
+00012a  6c32              LDR      r2,[r6,#0x40]         ;3345  ; Run_Control
+00012c  428a              CMP      r2,r1                 ;3345
+00012e  d318              BCC      |L13.354|
+000130  6c72              LDR      r2,[r6,#0x44]         ;3345  ; Run_Control
+000132  428a              CMP      r2,r1                 ;3345
+000134  d815              BHI      |L13.354|
+000136  ee200a08          VMUL.F32 s0,s0,s16             ;3345
+00013a  6bb1              LDR      r1,[r6,#0x38]         ;3345  ; Run_Control
+00013c  ee001a90          VMOV     s1,r1                 ;3345
+000140  eef80a60          VCVT.F32.U32 s1,s1                 ;3345
+000144  eeb40ae0          VCMPE.F32 s0,s1                 ;3345
+000148  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3345
+00014c  dc09              BGT      |L13.354|
+00014e  6bf1              LDR      r1,[r6,#0x3c]         ;3345  ; Run_Control
+000150  ee001a90          VMOV     s1,r1                 ;3345
+000154  eef80a60          VCVT.F32.U32 s1,s1                 ;3345
+000158  eeb40ae0          VCMPE.F32 s0,s1                 ;3345
+00015c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3345
+000160  d259              BCS      |L13.534|
+                  |L13.354|
+000162  7920              LDRB     r0,[r4,#4]            ;3347  ; para_set4
+000164  28ff              CMP      r0,#0xff              ;3347
+000166  d101              BNE      |L13.364|
+000168  f7fffffe          BL       BEEP_Tiggr
+                  |L13.364|
+00016c  2170              MOVS     r1,#0x70              ;3350
+00016e  2068              MOVS     r0,#0x68              ;3350
+000170  f7fffffe          BL       TM1650_SET_LED
+000174  4641              MOV      r1,r8                 ;3351
+000176  4648              MOV      r0,r9                 ;3351
+000178  f7fffffe          BL       GPIO_SetBits
+00017c  6b70              LDR      r0,[r6,#0x34]         ;3352  ; Run_Control
+00017e  6c31              LDR      r1,[r6,#0x40]         ;3352  ; Run_Control
+000180  4288              CMP      r0,r1                 ;3352
+000182  d803              BHI      |L13.396|
+000184  6b70              LDR      r0,[r6,#0x34]         ;3352  ; Run_Control
+000186  6c71              LDR      r1,[r6,#0x44]         ;3352  ; Run_Control
+000188  4288              CMP      r0,r1                 ;3352
+00018a  d208              BCS      |L13.414|
+                  |L13.396|
+00018c  f640018e          MOV      r1,#0x88e             ;3354
+000190  6a60              LDR      r0,[r4,#0x24]         ;3354  ; hWinR
+000192  f7fffffe          BL       WM_GetDialogItem
+000196  21ff              MOVS     r1,#0xff              ;3355
+000198  f7fffffe          BL       TEXT_SetTextColor
+00019c  e007              B        |L13.430|
+                  |L13.414|
+00019e  f640018e          MOV      r1,#0x88e             ;3357
+0001a2  6a60              LDR      r0,[r4,#0x24]         ;3357  ; hWinR
+0001a4  f7fffffe          BL       WM_GetDialogItem
+0001a8  4629              MOV      r1,r5                 ;3358
+0001aa  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.430|
+0001ae  ed970a00          VLDR     s0,[r7,#0]            ;3360
+0001b2  6bb0              LDR      r0,[r6,#0x38]         ;3360  ; Run_Control
+0001b4  ee200a08          VMUL.F32 s0,s0,s16             ;3360
+0001b8  ee000a90          VMOV     s1,r0                 ;3360
+0001bc  eef80a60          VCVT.F32.U32 s1,s1                 ;3360
+0001c0  eeb40ae0          VCMPE.F32 s0,s1                 ;3360
+0001c4  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3360
+0001c8  dc09              BGT      |L13.478|
+0001ca  6bf0              LDR      r0,[r6,#0x3c]         ;3360  ; Run_Control
+0001cc  ee000a90          VMOV     s1,r0                 ;3360
+0001d0  eef80a60          VCVT.F32.U32 s1,s1                 ;3360
+0001d4  eeb40ae0          VCMPE.F32 s0,s1                 ;3360
+0001d8  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3360
+0001dc  d20b              BCS      |L13.502|
+                  |L13.478|
+0001de  f640018d          MOV      r1,#0x88d             ;3361
+0001e2  6a60              LDR      r0,[r4,#0x24]         ;3361  ; hWinR
+0001e4  f7fffffe          BL       WM_GetDialogItem
+0001e8  ecbd8b02          VPOP     {d8}                  ;3362
+0001ec  21ff              MOVS     r1,#0xff              ;3362
+0001ee  e8bd5ff0          POP      {r4-r12,lr}           ;3362
+0001f2  f7ffbffe          B.W      TEXT_SetTextColor
+                  |L13.502|
+0001f6  f640018d          MOV      r1,#0x88d             ;3364
+0001fa  6a60              LDR      r0,[r4,#0x24]         ;3364  ; hWinR
+0001fc  f7fffffe          BL       WM_GetDialogItem
+000200  4629              MOV      r1,r5                 ;3365
+000202  e002              B        |L13.522|
                   |L13.516|
-000204  e0cf              B        |L13.934|
+000204  e1ef              B        |L13.1510|
                   |L13.518|
-000206  e022              B        |L13.590|
+000206  e128              B        |L13.1114|
                   |L13.520|
-000208  e8bd5ff0          POP      {r4-r12,lr}           ;3365
-00020c  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.528|
-000210  f640018d          MOV      r1,#0x88d             ;3368
-000214  f7fffffe          BL       WM_GetDialogItem
-000218  4621              MOV      r1,r4                 ;3369
-00021a  f7fffffe          BL       TEXT_SetTextColor
-00021e  f640018e          MOV      r1,#0x88e             ;3370
-000222  6a68              LDR      r0,[r5,#0x24]         ;3370  ; hWinR
-000224  f7fffffe          BL       WM_GetDialogItem
-000228  4621              MOV      r1,r4                 ;3371
-00022a  f7fffffe          BL       TEXT_SetTextColor
-00022e  4641              MOV      r1,r8                 ;3373
-000230  487a              LDR      r0,|L13.1052|
-000232  f7fffffe          BL       GPIO_ResetBits
-000236  2171              MOVS     r1,#0x71              ;3374
-000238  2048              MOVS     r0,#0x48              ;3374
-00023a  f7fffffe          BL       TM1650_SET_LED
-00023e  ecbd8b02          VPOP     {d8}                  ;3375
-000242  21f2              MOVS     r1,#0xf2              ;3375
-000244  e8bd5ff0          POP      {r4-r12,lr}           ;3375
-000248  2068              MOVS     r0,#0x68              ;3375
-00024a  f7ffbffe          B.W      TM1650_SET_LED
-                  |L13.590|
-00024e  f640018d          MOV      r1,#0x88d             ;3378
-000252  f7fffffe          BL       WM_GetDialogItem
-000256  4621              MOV      r1,r4                 ;3379
-000258  f7fffffe          BL       TEXT_SetTextColor
-00025c  f640018e          MOV      r1,#0x88e             ;3380
-000260  6a68              LDR      r0,[r5,#0x24]         ;3380  ; hWinR
-000262  f7fffffe          BL       WM_GetDialogItem
-000266  4621              MOV      r1,r4                 ;3381
-000268  f7fffffe          BL       TEXT_SetTextColor
-00026c  2170              MOVS     r1,#0x70              ;3383
-00026e  2068              MOVS     r0,#0x68              ;3383
-000270  f7fffffe          BL       TM1650_SET_LED
-000274  ecbd8b02          VPOP     {d8}                  ;3384
-000278  4641              MOV      r1,r8                 ;3384
-00027a  e8bd5ff0          POP      {r4-r12,lr}           ;3384
-00027e  4867              LDR      r0,|L13.1052|
-000280  f7ffbffe          B.W      GPIO_ResetBits
-                  |L13.644|
-000284  6c31              LDR      r1,[r6,#0x40]         ;3389  ; Run_Control
-000286  8b2a              LDRH     r2,[r5,#0x18]         ;3389  ; r
-000288  4291              CMP      r1,r2                 ;3389
-00028a  d317              BCC      |L13.700|
-00028c  6c71              LDR      r1,[r6,#0x44]         ;3389  ; Run_Control
-00028e  8b2a              LDRH     r2,[r5,#0x18]         ;3389  ; r
-000290  4291              CMP      r1,r2                 ;3389
-000292  d813              BHI      |L13.700|
-000294  6bb1              LDR      r1,[r6,#0x38]         ;3389  ; Run_Control
-000296  ee001a90          VMOV     s1,r1                 ;3389
-00029a  eef80a60          VCVT.F32.U32 s1,s1                 ;3389
-00029e  eeb40ae0          VCMPE.F32 s0,s1                 ;3389
-0002a2  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
-0002a6  dc09              BGT      |L13.700|
-0002a8  6bf1              LDR      r1,[r6,#0x3c]         ;3389  ; Run_Control
-0002aa  ee001a90          VMOV     s1,r1                 ;3389
-0002ae  eef80a60          VCVT.F32.U32 s1,s1                 ;3389
-0002b2  eeb40ae0          VCMPE.F32 s0,s1                 ;3389
-0002b6  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
-0002ba  d255              BCS      |L13.872|
-                  |L13.700|
-0002bc  7928              LDRB     r0,[r5,#4]            ;3391  ; para_set4
-0002be  28ff              CMP      r0,#0xff              ;3391
-0002c0  d101              BNE      |L13.710|
-0002c2  f7fffffe          BL       BEEP_Tiggr
-                  |L13.710|
-0002c6  2170              MOVS     r1,#0x70              ;3394
-0002c8  2068              MOVS     r0,#0x68              ;3394
-0002ca  f7fffffe          BL       TM1650_SET_LED
-0002ce  4641              MOV      r1,r8                 ;3395
-0002d0  4852              LDR      r0,|L13.1052|
-0002d2  f7fffffe          BL       GPIO_SetBits
-0002d6  6c30              LDR      r0,[r6,#0x40]         ;3396  ; Run_Control
-0002d8  8b29              LDRH     r1,[r5,#0x18]         ;3396  ; r
-0002da  4288              CMP      r0,r1                 ;3396
-0002dc  d303              BCC      |L13.742|
-0002de  6c70              LDR      r0,[r6,#0x44]         ;3396  ; Run_Control
-0002e0  8b29              LDRH     r1,[r5,#0x18]         ;3396  ; r
-0002e2  4288              CMP      r0,r1                 ;3396
-0002e4  d908              BLS      |L13.760|
-                  |L13.742|
-0002e6  f640018e          MOV      r1,#0x88e             ;3398
-0002ea  6a68              LDR      r0,[r5,#0x24]         ;3398  ; hWinR
-0002ec  f7fffffe          BL       WM_GetDialogItem
-0002f0  21ff              MOVS     r1,#0xff              ;3399
-0002f2  f7fffffe          BL       TEXT_SetTextColor
-0002f6  e007              B        |L13.776|
-                  |L13.760|
-0002f8  f640018e          MOV      r1,#0x88e             ;3401
-0002fc  6a68              LDR      r0,[r5,#0x24]         ;3401  ; hWinR
-0002fe  f7fffffe          BL       WM_GetDialogItem
-000302  4621              MOV      r1,r4                 ;3402
-000304  f7fffffe          BL       TEXT_SetTextColor
-                  |L13.776|
-000308  ed970a00          VLDR     s0,[r7,#0]            ;3404
-00030c  6bb0              LDR      r0,[r6,#0x38]         ;3404  ; Run_Control
-00030e  ee200a08          VMUL.F32 s0,s0,s16             ;3404
-000312  ee000a90          VMOV     s1,r0                 ;3404
-000316  eef80a60          VCVT.F32.U32 s1,s1                 ;3404
-00031a  eeb40ae0          VCMPE.F32 s0,s1                 ;3404
-00031e  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3404
-000322  dc09              BGT      |L13.824|
-000324  6bf0              LDR      r0,[r6,#0x3c]         ;3404  ; Run_Control
-000326  ee000a90          VMOV     s1,r0                 ;3404
-00032a  eef80a60          VCVT.F32.U32 s1,s1                 ;3404
-00032e  eeb40ae0          VCMPE.F32 s0,s1                 ;3404
-000332  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3404
-000336  d20b              BCS      |L13.848|
-                  |L13.824|
-000338  f640018d          MOV      r1,#0x88d             ;3405
-00033c  6a68              LDR      r0,[r5,#0x24]         ;3405  ; hWinR
-00033e  f7fffffe          BL       WM_GetDialogItem
-000342  ecbd8b02          VPOP     {d8}                  ;3406
-000346  21ff              MOVS     r1,#0xff              ;3406
-000348  e8bd5ff0          POP      {r4-r12,lr}           ;3406
-00034c  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.848|
-000350  f640018d          MOV      r1,#0x88d             ;3408
-000354  6a68              LDR      r0,[r5,#0x24]         ;3408  ; hWinR
-000356  f7fffffe          BL       WM_GetDialogItem
-00035a  ecbd8b02          VPOP     {d8}                  ;3409
-00035e  4621              MOV      r1,r4                 ;3409
-000360  e8bd5ff0          POP      {r4-r12,lr}           ;3409
-000364  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.872|
-000368  f640018d          MOV      r1,#0x88d             ;3412
+000208  e024              B        |L13.596|
+                  |L13.522|
+00020a  ecbd8b02          VPOP     {d8}                  ;3365
+00020e  e8bd5ff0          POP      {r4-r12,lr}           ;3365
+000212  f7ffbffe          B.W      TEXT_SetTextColor
+                  |L13.534|
+000216  f640018d          MOV      r1,#0x88d             ;3368
+00021a  f7fffffe          BL       WM_GetDialogItem
+00021e  4629              MOV      r1,r5                 ;3369
+000220  f7fffffe          BL       TEXT_SetTextColor
+000224  f640018e          MOV      r1,#0x88e             ;3370
+000228  6a60              LDR      r0,[r4,#0x24]         ;3370  ; hWinR
+00022a  f7fffffe          BL       WM_GetDialogItem
+00022e  4629              MOV      r1,r5                 ;3371
+000230  f7fffffe          BL       TEXT_SetTextColor
+000234  4641              MOV      r1,r8                 ;3373
+000236  4648              MOV      r0,r9                 ;3373
+000238  f7fffffe          BL       GPIO_ResetBits
+00023c  2171              MOVS     r1,#0x71              ;3374
+00023e  2048              MOVS     r0,#0x48              ;3374
+000240  f7fffffe          BL       TM1650_SET_LED
+000244  ecbd8b02          VPOP     {d8}                  ;3375
+000248  21f2              MOVS     r1,#0xf2              ;3375
+00024a  e8bd5ff0          POP      {r4-r12,lr}           ;3375
+00024e  2068              MOVS     r0,#0x68              ;3375
+000250  f7ffbffe          B.W      TM1650_SET_LED
+                  |L13.596|
+000254  f640018d          MOV      r1,#0x88d             ;3378
+000258  f7fffffe          BL       WM_GetDialogItem
+00025c  4629              MOV      r1,r5                 ;3379
+00025e  f7fffffe          BL       TEXT_SetTextColor
+000262  f640018e          MOV      r1,#0x88e             ;3380
+000266  6a60              LDR      r0,[r4,#0x24]         ;3380  ; hWinR
+000268  f7fffffe          BL       WM_GetDialogItem
+00026c  4629              MOV      r1,r5                 ;3381
+00026e  f7fffffe          BL       TEXT_SetTextColor
+000272  2170              MOVS     r1,#0x70              ;3383
+000274  2068              MOVS     r0,#0x68              ;3383
+000276  f7fffffe          BL       TM1650_SET_LED
+00027a  ecbd8b02          VPOP     {d8}                  ;3384
+00027e  4641              MOV      r1,r8                 ;3384
+000280  4648              MOV      r0,r9                 ;3384
+000282  e8bd5ff0          POP      {r4-r12,lr}           ;3384
+000286  f7ffbffe          B.W      GPIO_ResetBits
+                  |L13.650|
+00028a  6c31              LDR      r1,[r6,#0x40]         ;3389  ; Run_Control
+00028c  8b22              LDRH     r2,[r4,#0x18]         ;3389  ; r
+00028e  4291              CMP      r1,r2                 ;3389
+000290  d32b              BCC      |L13.746|
+000292  6c71              LDR      r1,[r6,#0x44]         ;3389  ; Run_Control
+000294  8b22              LDRH     r2,[r4,#0x18]         ;3389  ; r
+000296  4291              CMP      r1,r2                 ;3389
+000298  d827              BHI      |L13.746|
+00029a  6bb1              LDR      r1,[r6,#0x38]         ;3389  ; Run_Control
+00029c  ee011a10          VMOV     s2,r1                 ;3389
+0002a0  eeb81a41          VCVT.F32.U32 s2,s2                 ;3389
+0002a4  eeb40ac1          VCMPE.F32 s0,s2                 ;3389
+0002a8  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
+0002ac  dc1d              BGT      |L13.746|
+0002ae  6bf1              LDR      r1,[r6,#0x3c]         ;3389  ; Run_Control
+0002b0  ee011a10          VMOV     s2,r1                 ;3389
+0002b4  eeb81a41          VCVT.F32.U32 s2,s2                 ;3389
+0002b8  eeb40ac1          VCMPE.F32 s0,s2                 ;3389
+0002bc  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
+0002c0  d313              BCC      |L13.746|
+0002c2  6cb1              LDR      r1,[r6,#0x48]         ;3389  ; Run_Control
+0002c4  ee001a10          VMOV     s0,r1                 ;3389
+0002c8  eeb80a40          VCVT.F32.U32 s0,s0                 ;3389
+0002cc  eef40ac0          VCMPE.F32 s1,s0                 ;3389
+0002d0  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
+0002d4  dc09              BGT      |L13.746|
+0002d6  6cf1              LDR      r1,[r6,#0x4c]         ;3389  ; Run_Control
+0002d8  ee001a10          VMOV     s0,r1                 ;3389
+0002dc  eeb80a40          VCVT.F32.U32 s0,s0                 ;3389
+0002e0  eef40ac0          VCMPE.F32 s1,s0                 ;3389
+0002e4  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3389
+0002e8  d27d              BCS      |L13.998|
+                  |L13.746|
+0002ea  7920              LDRB     r0,[r4,#4]            ;3391  ; para_set4
+0002ec  28ff              CMP      r0,#0xff              ;3391
+0002ee  d101              BNE      |L13.756|
+0002f0  f7fffffe          BL       BEEP_Tiggr
+                  |L13.756|
+0002f4  2170              MOVS     r1,#0x70              ;3394
+0002f6  2068              MOVS     r0,#0x68              ;3394
+0002f8  f7fffffe          BL       TM1650_SET_LED
+0002fc  4641              MOV      r1,r8                 ;3395
+0002fe  4648              MOV      r0,r9                 ;3395
+000300  f7fffffe          BL       GPIO_SetBits
+000304  6c30              LDR      r0,[r6,#0x40]         ;3396  ; Run_Control
+000306  8b21              LDRH     r1,[r4,#0x18]         ;3396  ; r
+000308  4288              CMP      r0,r1                 ;3396
+00030a  d303              BCC      |L13.788|
+00030c  6c70              LDR      r0,[r6,#0x44]         ;3396  ; Run_Control
+00030e  8b21              LDRH     r1,[r4,#0x18]         ;3396  ; r
+000310  4288              CMP      r0,r1                 ;3396
+000312  d908              BLS      |L13.806|
+                  |L13.788|
+000314  f640018e          MOV      r1,#0x88e             ;3398
+000318  6a60              LDR      r0,[r4,#0x24]         ;3398  ; hWinR
+00031a  f7fffffe          BL       WM_GetDialogItem
+00031e  21ff              MOVS     r1,#0xff              ;3399
+000320  f7fffffe          BL       TEXT_SetTextColor
+000324  e007              B        |L13.822|
+                  |L13.806|
+000326  f640018e          MOV      r1,#0x88e             ;3401
+00032a  6a60              LDR      r0,[r4,#0x24]         ;3401  ; hWinR
+00032c  f7fffffe          BL       WM_GetDialogItem
+000330  4629              MOV      r1,r5                 ;3402
+000332  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.822|
+000336  ed970a00          VLDR     s0,[r7,#0]            ;3404
+00033a  6bb0              LDR      r0,[r6,#0x38]         ;3404  ; Run_Control
+00033c  ee200a08          VMUL.F32 s0,s0,s16             ;3404
+000340  ee000a90          VMOV     s1,r0                 ;3404
+000344  eef80a60          VCVT.F32.U32 s1,s1                 ;3404
+000348  eeb40ae0          VCMPE.F32 s0,s1                 ;3404
+00034c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3404
+000350  dc09              BGT      |L13.870|
+000352  6bf0              LDR      r0,[r6,#0x3c]         ;3404  ; Run_Control
+000354  ee000a90          VMOV     s1,r0                 ;3404
+000358  eef80a60          VCVT.F32.U32 s1,s1                 ;3404
+00035c  eeb40ae0          VCMPE.F32 s0,s1                 ;3404
+000360  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3404
+000364  d208              BCS      |L13.888|
+                  |L13.870|
+000366  f640018d          MOV      r1,#0x88d             ;3405
+00036a  6a60              LDR      r0,[r4,#0x24]         ;3405  ; hWinR
 00036c  f7fffffe          BL       WM_GetDialogItem
-000370  4621              MOV      r1,r4                 ;3413
+000370  21ff              MOVS     r1,#0xff              ;3406
 000372  f7fffffe          BL       TEXT_SetTextColor
-000376  f640018e          MOV      r1,#0x88e             ;3414
-00037a  6a68              LDR      r0,[r5,#0x24]         ;3414  ; hWinR
-00037c  f7fffffe          BL       WM_GetDialogItem
-000380  4621              MOV      r1,r4                 ;3415
-000382  f7fffffe          BL       TEXT_SetTextColor
-000386  4641              MOV      r1,r8                 ;3417
-000388  4824              LDR      r0,|L13.1052|
-00038a  f7fffffe          BL       GPIO_ResetBits
-00038e  2171              MOVS     r1,#0x71              ;3418
-000390  2048              MOVS     r0,#0x48              ;3418
-000392  f7fffffe          BL       TM1650_SET_LED
-000396  ecbd8b02          VPOP     {d8}                  ;3419
-00039a  21f2              MOVS     r1,#0xf2              ;3419
-00039c  e8bd5ff0          POP      {r4-r12,lr}           ;3419
-0003a0  2068              MOVS     r0,#0x68              ;3419
-0003a2  f7ffbffe          B.W      TM1650_SET_LED
-                  |L13.934|
-0003a6  f7fffffe          BL       BEEP_Tiggr
-                  |L13.938|
-0003aa  2170              MOVS     r1,#0x70              ;3427
-0003ac  2068              MOVS     r0,#0x68              ;3427
-0003ae  f7fffffe          BL       TM1650_SET_LED
-0003b2  4641              MOV      r1,r8                 ;3428
-0003b4  4819              LDR      r0,|L13.1052|
-0003b6  f7fffffe          BL       GPIO_SetBits
-0003ba  6c30              LDR      r0,[r6,#0x40]         ;3429  ; Run_Control
-0003bc  8b29              LDRH     r1,[r5,#0x18]         ;3429  ; r
-0003be  4288              CMP      r0,r1                 ;3429
-0003c0  d303              BCC      |L13.970|
-0003c2  6c70              LDR      r0,[r6,#0x44]         ;3429  ; Run_Control
-0003c4  8b29              LDRH     r1,[r5,#0x18]         ;3429  ; r
-0003c6  4288              CMP      r0,r1                 ;3429
-0003c8  d908              BLS      |L13.988|
-                  |L13.970|
-0003ca  f640018e          MOV      r1,#0x88e             ;3431
-0003ce  6a68              LDR      r0,[r5,#0x24]         ;3431  ; hWinR
-0003d0  f7fffffe          BL       WM_GetDialogItem
-0003d4  21ff              MOVS     r1,#0xff              ;3432
-0003d6  f7fffffe          BL       TEXT_SetTextColor
-0003da  e007              B        |L13.1004|
-                  |L13.988|
-0003dc  f640018e          MOV      r1,#0x88e             ;3434
-0003e0  6a68              LDR      r0,[r5,#0x24]         ;3434  ; hWinR
-0003e2  f7fffffe          BL       WM_GetDialogItem
-0003e6  4621              MOV      r1,r4                 ;3435
-0003e8  f7fffffe          BL       TEXT_SetTextColor
+000376  e007              B        |L13.904|
+                  |L13.888|
+000378  f640018d          MOV      r1,#0x88d             ;3408
+00037c  6a60              LDR      r0,[r4,#0x24]         ;3408  ; hWinR
+00037e  f7fffffe          BL       WM_GetDialogItem
+000382  4629              MOV      r1,r5                 ;3409
+000384  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.904|
+000388  ed940a0c          VLDR     s0,[r4,#0x30]         ;3412
+00038c  6cb0              LDR      r0,[r6,#0x48]         ;3412  ; Run_Control
+00038e  ee200a08          VMUL.F32 s0,s0,s16             ;3412
+000392  ee000a90          VMOV     s1,r0                 ;3412
+000396  eef80a60          VCVT.F32.U32 s1,s1                 ;3412
+00039a  eeb40ae0          VCMPE.F32 s0,s1                 ;3412
+00039e  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3412
+0003a2  dc09              BGT      |L13.952|
+0003a4  6cf0              LDR      r0,[r6,#0x4c]         ;3412  ; Run_Control
+0003a6  ee000a90          VMOV     s1,r0                 ;3412
+0003aa  eef80a60          VCVT.F32.U32 s1,s1                 ;3412
+0003ae  eeb40ae0          VCMPE.F32 s0,s1                 ;3412
+0003b2  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3412
+0003b6  d20b              BCS      |L13.976|
+                  |L13.952|
+0003b8  f640018f          MOV      r1,#0x88f             ;3413
+0003bc  6a60              LDR      r0,[r4,#0x24]         ;3413  ; hWinR
+0003be  f7fffffe          BL       WM_GetDialogItem
+0003c2  ecbd8b02          VPOP     {d8}                  ;3414
+0003c6  21ff              MOVS     r1,#0xff              ;3414
+0003c8  e8bd5ff0          POP      {r4-r12,lr}           ;3414
+0003cc  f7ffbffe          B.W      TEXT_SetTextColor
+                  |L13.976|
+0003d0  f640018f          MOV      r1,#0x88f             ;3416
+0003d4  6a60              LDR      r0,[r4,#0x24]         ;3416  ; hWinR
+0003d6  f7fffffe          BL       WM_GetDialogItem
+0003da  ecbd8b02          VPOP     {d8}                  ;3417
+0003de  4629              MOV      r1,r5                 ;3417
+0003e0  e8bd5ff0          POP      {r4-r12,lr}           ;3417
+0003e4  e000              B        |L13.1000|
+                  |L13.998|
+0003e6  e001              B        |L13.1004|
+                  |L13.1000|
+0003e8  f7ffbffe          B.W      TEXT_SetTextColor
                   |L13.1004|
-0003ec  ed950a0d          VLDR     s0,[r5,#0x34]         ;3437
-0003f0  6bb0              LDR      r0,[r6,#0x38]         ;3437  ; Run_Control
-0003f2  ee200a08          VMUL.F32 s0,s0,s16             ;3437
-0003f6  ee000a90          VMOV     s1,r0                 ;3437
-0003fa  eef80a60          VCVT.F32.U32 s1,s1                 ;3437
-0003fe  eeb40ae0          VCMPE.F32 s0,s1                 ;3437
-000402  e00d              B        |L13.1056|
+0003ec  f640018d          MOV      r1,#0x88d             ;3420
+0003f0  f7fffffe          BL       WM_GetDialogItem
+0003f4  4629              MOV      r1,r5                 ;3421
+0003f6  f7fffffe          BL       TEXT_SetTextColor
+0003fa  f640018e          MOV      r1,#0x88e             ;3422
+0003fe  6a60              LDR      r0,[r4,#0x24]         ;3422  ; hWinR
+000400  e00e              B        |L13.1056|
+000402  0000              DCW      0x0000
                   |L13.1028|
                           DCD      ||.data||
                   |L13.1032|
-                          DCD      DISS_Voltage
+                          DCD      0x40020c00
                   |L13.1036|
-00040c  447a0000          DCFS     0x447a0000 ; 1000
+                          DCD      DISS_Voltage
                   |L13.1040|
                           DCD      Run_Control
                   |L13.1044|
-                          DCD      InFlashSave
+000414  447a0000          DCFS     0x447a0000 ; 1000
                   |L13.1048|
-                          DCD      0x3e99999a
+                          DCD      InFlashSave
                   |L13.1052|
-                          DCD      0x40020c00
+                          DCD      0x3e99999a
                   |L13.1056|
-000420  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3437
-000424  dc09              BGT      |L13.1082|
-000426  6bf0              LDR      r0,[r6,#0x3c]         ;3437  ; Run_Control
-000428  ee000a90          VMOV     s1,r0                 ;3437
-00042c  eef80a60          VCVT.F32.U32 s1,s1                 ;3437
-000430  eeb40ae0          VCMPE.F32 s0,s1                 ;3437
-000434  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3437
-000438  d208              BCS      |L13.1100|
-                  |L13.1082|
-00043a  f640018d          MOV      r1,#0x88d             ;3438
-00043e  6a68              LDR      r0,[r5,#0x24]         ;3438  ; hWinR
-000440  f7fffffe          BL       WM_GetDialogItem
-000444  21ff              MOVS     r1,#0xff              ;3439
-000446  f7fffffe          BL       TEXT_SetTextColor
-00044a  e007              B        |L13.1116|
-                  |L13.1100|
-00044c  f640018d          MOV      r1,#0x88d             ;3441
-000450  6a68              LDR      r0,[r5,#0x24]         ;3441  ; hWinR
-000452  f7fffffe          BL       WM_GetDialogItem
-000456  4621              MOV      r1,r4                 ;3442
-000458  f7fffffe          BL       TEXT_SetTextColor
-                  |L13.1116|
-00045c  ed950a0c          VLDR     s0,[r5,#0x30]         ;3444
-000460  6cb0              LDR      r0,[r6,#0x48]         ;3444  ; Run_Control
-000462  ee200a08          VMUL.F32 s0,s0,s16             ;3444
-000466  ee000a90          VMOV     s1,r0                 ;3444
-00046a  eef80a60          VCVT.F32.U32 s1,s1                 ;3444
-00046e  eeb40ae0          VCMPE.F32 s0,s1                 ;3444
-000472  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3444
-000476  dc09              BGT      |L13.1164|
-000478  6cf0              LDR      r0,[r6,#0x4c]         ;3444  ; Run_Control
-00047a  ee000a90          VMOV     s1,r0                 ;3444
-00047e  eef80a60          VCVT.F32.U32 s1,s1                 ;3444
-000482  eeb40ae0          VCMPE.F32 s0,s1                 ;3444
-000486  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3444
-00048a  d207              BCS      |L13.1180|
-                  |L13.1164|
-00048c  4649              MOV      r1,r9                 ;3445
-00048e  6a68              LDR      r0,[r5,#0x24]         ;3445  ; hWinR
-000490  f7fffffe          BL       WM_GetDialogItem
-000494  21ff              MOVS     r1,#0xff              ;3446
-000496  f7fffffe          BL       TEXT_SetTextColor
-00049a  e006              B        |L13.1194|
-                  |L13.1180|
-00049c  4649              MOV      r1,r9                 ;3448
-00049e  6a68              LDR      r0,[r5,#0x24]         ;3448  ; hWinR
-0004a0  f7fffffe          BL       WM_GetDialogItem
-0004a4  4621              MOV      r1,r4                 ;3449
-0004a6  f7fffffe          BL       TEXT_SetTextColor
-                  |L13.1194|
-0004aa  ed950a0b          VLDR     s0,[r5,#0x2c]         ;3452
-0004ae  edd70a00          VLDR     s1,[r7,#0]            ;3452
-0004b2  ee200a08          VMUL.F32 s0,s0,s16             ;3452
-0004b6  eef80ae0          VCVT.F32.S32 s1,s1                 ;3452
-0004ba  eeb40ae0          VCMPE.F32 s0,s1                 ;3452
-0004be  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3452
-0004c2  dc08              BGT      |L13.1238|
-0004c4  edd70a01          VLDR     s1,[r7,#4]            ;3452
-0004c8  eef80ae0          VCVT.F32.S32 s1,s1                 ;3452
-0004cc  eeb40ae0          VCMPE.F32 s0,s1                 ;3452
-0004d0  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3452
-0004d4  d207              BCS      |L13.1254|
-                  |L13.1238|
-0004d6  4651              MOV      r1,r10                ;3454
-0004d8  6a68              LDR      r0,[r5,#0x24]         ;3454  ; hWinR
-0004da  f7fffffe          BL       WM_GetDialogItem
-0004de  21ff              MOVS     r1,#0xff              ;3455
-0004e0  f7fffffe          BL       TEXT_SetTextColor
-0004e4  e006              B        |L13.1268|
-                  |L13.1254|
-0004e6  4651              MOV      r1,r10                ;3457
-0004e8  6a68              LDR      r0,[r5,#0x24]         ;3457  ; hWinR
-0004ea  f7fffffe          BL       WM_GetDialogItem
-0004ee  4621              MOV      r1,r4                 ;3458
-0004f0  f7fffffe          BL       TEXT_SetTextColor
-                  |L13.1268|
-0004f4  ed950a0a          VLDR     s0,[r5,#0x28]         ;3461
-0004f8  edd70a02          VLDR     s1,[r7,#8]            ;3461
-0004fc  ee200a08          VMUL.F32 s0,s0,s16             ;3461
-000500  eef80ae0          VCVT.F32.S32 s1,s1                 ;3461
-000504  eeb40ae0          VCMPE.F32 s0,s1                 ;3461
-000508  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3461
-00050c  dc08              BGT      |L13.1312|
-00050e  edd70a03          VLDR     s1,[r7,#0xc]          ;3461
-000512  eef80ae0          VCVT.F32.S32 s1,s1                 ;3461
-000516  eeb40ae0          VCMPE.F32 s0,s1                 ;3461
-00051a  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3461
-00051e  d20a              BCS      |L13.1334|
-                  |L13.1312|
-000520  4659              MOV      r1,r11
-000522  6a68              LDR      r0,[r5,#0x24]  ; hWinR
-000524  f7fffffe          BL       WM_GetDialogItem
-;;;3464                       TEXT_SetTextColor(hItem, GUI_RED);
-000528  ecbd8b02          VPOP     {d8}
-00052c  21ff              MOVS     r1,#0xff
-00052e  e8bd5ff0          POP      {r4-r12,lr}
-000532  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.1334|
-;;;3465   				}else{
-;;;3466   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
-000536  4659              MOV      r1,r11
-000538  6a68              LDR      r0,[r5,#0x24]  ; hWinR
+000420  f7fffffe          BL       WM_GetDialogItem
+000424  4629              MOV      r1,r5                 ;3423
+000426  f7fffffe          BL       TEXT_SetTextColor
+00042a  f640018f          MOV      r1,#0x88f             ;3424
+00042e  6a60              LDR      r0,[r4,#0x24]         ;3424  ; hWinR
+000430  f7fffffe          BL       WM_GetDialogItem
+000434  4629              MOV      r1,r5                 ;3425
+000436  f7fffffe          BL       TEXT_SetTextColor
+00043a  4641              MOV      r1,r8                 ;3426
+00043c  4648              MOV      r0,r9                 ;3426
+00043e  f7fffffe          BL       GPIO_ResetBits
+000442  2171              MOVS     r1,#0x71              ;3427
+000444  2048              MOVS     r0,#0x48              ;3427
+000446  f7fffffe          BL       TM1650_SET_LED
+00044a  ecbd8b02          VPOP     {d8}                  ;3428
+00044e  21f2              MOVS     r1,#0xf2              ;3428
+000450  e8bd5ff0          POP      {r4-r12,lr}           ;3428
+000454  2068              MOVS     r0,#0x68              ;3428
+000456  f7ffbffe          B.W      TM1650_SET_LED
+                  |L13.1114|
+00045a  f7fffffe          BL       BEEP_Tiggr
+                  |L13.1118|
+00045e  2170              MOVS     r1,#0x70              ;3436
+000460  2068              MOVS     r0,#0x68              ;3436
+000462  f7fffffe          BL       TM1650_SET_LED
+000466  4641              MOV      r1,r8                 ;3437
+000468  4648              MOV      r0,r9                 ;3437
+00046a  f7fffffe          BL       GPIO_SetBits
+00046e  6c30              LDR      r0,[r6,#0x40]         ;3438  ; Run_Control
+000470  8b21              LDRH     r1,[r4,#0x18]         ;3438  ; r
+000472  4288              CMP      r0,r1                 ;3438
+000474  d303              BCC      |L13.1150|
+000476  6c70              LDR      r0,[r6,#0x44]         ;3438  ; Run_Control
+000478  8b21              LDRH     r1,[r4,#0x18]         ;3438  ; r
+00047a  4288              CMP      r0,r1                 ;3438
+00047c  d908              BLS      |L13.1168|
+                  |L13.1150|
+00047e  f640018e          MOV      r1,#0x88e             ;3440
+000482  6a60              LDR      r0,[r4,#0x24]         ;3440  ; hWinR
+000484  f7fffffe          BL       WM_GetDialogItem
+000488  21ff              MOVS     r1,#0xff              ;3441
+00048a  f7fffffe          BL       TEXT_SetTextColor
+00048e  e007              B        |L13.1184|
+                  |L13.1168|
+000490  f640018e          MOV      r1,#0x88e             ;3443
+000494  6a60              LDR      r0,[r4,#0x24]         ;3443  ; hWinR
+000496  f7fffffe          BL       WM_GetDialogItem
+00049a  4629              MOV      r1,r5                 ;3444
+00049c  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.1184|
+0004a0  ed940a0d          VLDR     s0,[r4,#0x34]         ;3446
+0004a4  6bb0              LDR      r0,[r6,#0x38]         ;3446  ; Run_Control
+0004a6  ee200a08          VMUL.F32 s0,s0,s16             ;3446
+0004aa  ee000a90          VMOV     s1,r0                 ;3446
+0004ae  eef80a60          VCVT.F32.U32 s1,s1                 ;3446
+0004b2  eeb40ae0          VCMPE.F32 s0,s1                 ;3446
+0004b6  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3446
+0004ba  dc09              BGT      |L13.1232|
+0004bc  6bf0              LDR      r0,[r6,#0x3c]         ;3446  ; Run_Control
+0004be  ee000a90          VMOV     s1,r0                 ;3446
+0004c2  eef80a60          VCVT.F32.U32 s1,s1                 ;3446
+0004c6  eeb40ae0          VCMPE.F32 s0,s1                 ;3446
+0004ca  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3446
+0004ce  d208              BCS      |L13.1250|
+                  |L13.1232|
+0004d0  f640018d          MOV      r1,#0x88d             ;3447
+0004d4  6a60              LDR      r0,[r4,#0x24]         ;3447  ; hWinR
+0004d6  f7fffffe          BL       WM_GetDialogItem
+0004da  21ff              MOVS     r1,#0xff              ;3448
+0004dc  f7fffffe          BL       TEXT_SetTextColor
+0004e0  e007              B        |L13.1266|
+                  |L13.1250|
+0004e2  f640018d          MOV      r1,#0x88d             ;3450
+0004e6  6a60              LDR      r0,[r4,#0x24]         ;3450  ; hWinR
+0004e8  f7fffffe          BL       WM_GetDialogItem
+0004ec  4629              MOV      r1,r5                 ;3451
+0004ee  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.1266|
+0004f2  ed940a0c          VLDR     s0,[r4,#0x30]         ;3453
+0004f6  6cb0              LDR      r0,[r6,#0x48]         ;3453  ; Run_Control
+0004f8  ee200a08          VMUL.F32 s0,s0,s16             ;3453
+0004fc  ee000a90          VMOV     s1,r0                 ;3453
+000500  eef80a60          VCVT.F32.U32 s1,s1                 ;3453
+000504  eeb40ae0          VCMPE.F32 s0,s1                 ;3453
+000508  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3453
+00050c  dc09              BGT      |L13.1314|
+00050e  6cf0              LDR      r0,[r6,#0x4c]         ;3453  ; Run_Control
+000510  ee000a90          VMOV     s1,r0                 ;3453
+000514  eef80a60          VCVT.F32.U32 s1,s1                 ;3453
+000518  eeb40ae0          VCMPE.F32 s0,s1                 ;3453
+00051c  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3453
+000520  d208              BCS      |L13.1332|
+                  |L13.1314|
+000522  f640018f          MOV      r1,#0x88f             ;3454
+000526  6a60              LDR      r0,[r4,#0x24]         ;3454  ; hWinR
+000528  f7fffffe          BL       WM_GetDialogItem
+00052c  21ff              MOVS     r1,#0xff              ;3455
+00052e  f7fffffe          BL       TEXT_SetTextColor
+000532  e007              B        |L13.1348|
+                  |L13.1332|
+000534  f640018f          MOV      r1,#0x88f             ;3457
+000538  6a60              LDR      r0,[r4,#0x24]         ;3457  ; hWinR
 00053a  f7fffffe          BL       WM_GetDialogItem
-;;;3467                       TEXT_SetTextColor(hItem, GUI_GREEN);
-00053e  ecbd8b02          VPOP     {d8}
-000542  4621              MOV      r1,r4
-000544  e8bd5ff0          POP      {r4-r12,lr}
-000548  f7ffbffe          B.W      TEXT_SetTextColor
-                  |L13.1356|
-;;;3468   				}
-;;;3469   				
-;;;3470               }else{
-;;;3471                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
-00054c  f640018d          MOV      r1,#0x88d
-000550  f7fffffe          BL       WM_GetDialogItem
-;;;3472                   TEXT_SetTextColor(hItem, GUI_GREEN);
-000554  4621              MOV      r1,r4
-000556  f7fffffe          BL       TEXT_SetTextColor
-;;;3473                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
-00055a  f640018e          MOV      r1,#0x88e
-00055e  6a68              LDR      r0,[r5,#0x24]  ; hWinR
-000560  f7fffffe          BL       WM_GetDialogItem
-;;;3474                   TEXT_SetTextColor(hItem, GUI_GREEN);
-000564  4621              MOV      r1,r4
-000566  f7fffffe          BL       TEXT_SetTextColor
-;;;3475                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
-00056a  4649              MOV      r1,r9
-00056c  6a68              LDR      r0,[r5,#0x24]  ; hWinR
-00056e  f7fffffe          BL       WM_GetDialogItem
-;;;3476                   TEXT_SetTextColor(hItem, GUI_GREEN);				
-000572  4621              MOV      r1,r4
-000574  f7fffffe          BL       TEXT_SetTextColor
-;;;3477   				hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
-000578  4651              MOV      r1,r10
-00057a  6a68              LDR      r0,[r5,#0x24]  ; hWinR
-00057c  f7fffffe          BL       WM_GetDialogItem
-;;;3478                   TEXT_SetTextColor(hItem, GUI_GREEN);
-000580  4621              MOV      r1,r4
-000582  f7fffffe          BL       TEXT_SetTextColor
-;;;3479   				hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
-000586  4659              MOV      r1,r11
-000588  6a68              LDR      r0,[r5,#0x24]  ; hWinR
-00058a  f7fffffe          BL       WM_GetDialogItem
-;;;3480                   TEXT_SetTextColor(hItem, GUI_GREEN);
-00058e  4621              MOV      r1,r4
-000590  f7fffffe          BL       TEXT_SetTextColor
-;;;3481                   
-;;;3482                   GPIO_ResetBits(GPIOD,GPIO_Pin_12);
-000594  4641              MOV      r1,r8
-000596  4807              LDR      r0,|L13.1460|
-000598  f7fffffe          BL       GPIO_ResetBits
-;;;3483                   TM1650_SET_LED(0x48,0x71);
-00059c  2171              MOVS     r1,#0x71
-00059e  2048              MOVS     r0,#0x48
-0005a0  f7fffffe          BL       TM1650_SET_LED
-;;;3484                   TM1650_SET_LED(0x68,0xF2);//PASS灯
-0005a4  ecbd8b02          VPOP     {d8}
-0005a8  21f2              MOVS     r1,#0xf2
-0005aa  e8bd5ff0          POP      {r4-r12,lr}
-0005ae  2068              MOVS     r0,#0x68
-0005b0  f7ffbffe          B.W      TM1650_SET_LED
-;;;3485               }
-;;;3486           }
-;;;3487                  
-;;;3488       }
-;;;3489   //     else
-;;;3490   //     {
-;;;3491   //         TM1650_SET_LED(0x68,0x70);
-;;;3492   //         GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
-;;;3493   //     }
-;;;3494   }
-;;;3495   
+00053e  4629              MOV      r1,r5                 ;3458
+000540  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.1348|
+000544  ed940a0b          VLDR     s0,[r4,#0x2c]         ;3461
+000548  edd70a00          VLDR     s1,[r7,#0]            ;3461
+00054c  ee200a08          VMUL.F32 s0,s0,s16             ;3461
+000550  eef80ae0          VCVT.F32.S32 s1,s1                 ;3461
+000554  eeb40ae0          VCMPE.F32 s0,s1                 ;3461
+000558  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3461
+00055c  dc08              BGT      |L13.1392|
+00055e  edd70a01          VLDR     s1,[r7,#4]            ;3461
+000562  eef80ae0          VCVT.F32.S32 s1,s1                 ;3461
+000566  eeb40ae0          VCMPE.F32 s0,s1                 ;3461
+00056a  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3461
+00056e  d207              BCS      |L13.1408|
+                  |L13.1392|
+000570  4651              MOV      r1,r10                ;3463
+000572  6a60              LDR      r0,[r4,#0x24]         ;3463  ; hWinR
+000574  f7fffffe          BL       WM_GetDialogItem
+000578  21ff              MOVS     r1,#0xff              ;3464
+00057a  f7fffffe          BL       TEXT_SetTextColor
+00057e  e006              B        |L13.1422|
+                  |L13.1408|
+000580  4651              MOV      r1,r10                ;3466
+000582  6a60              LDR      r0,[r4,#0x24]         ;3466  ; hWinR
+000584  f7fffffe          BL       WM_GetDialogItem
+000588  4629              MOV      r1,r5                 ;3467
+00058a  f7fffffe          BL       TEXT_SetTextColor
+                  |L13.1422|
+00058e  ed940a0a          VLDR     s0,[r4,#0x28]         ;3470
+000592  edd70a02          VLDR     s1,[r7,#8]            ;3470
+000596  ee200a08          VMUL.F32 s0,s0,s16             ;3470
+00059a  eef80ae0          VCVT.F32.S32 s1,s1                 ;3470
+00059e  eeb40ae0          VCMPE.F32 s0,s1                 ;3470
+0005a2  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3470
+0005a6  dc08              BGT      |L13.1466|
+0005a8  edd70a03          VLDR     s1,[r7,#0xc]          ;3470
+0005ac  eef80ae0          VCVT.F32.S32 s1,s1                 ;3470
+0005b0  eeb40ae0          VCMPE.F32 s0,s1                 ;3470
+0005b4  eef1fa10          VMRS     APSR_nzcv,FPSCR       ;3470
+0005b8  d20a              BCS      |L13.1488|
+                  |L13.1466|
+0005ba  4659              MOV      r1,r11
+0005bc  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+0005be  f7fffffe          BL       WM_GetDialogItem
+;;;3473                       TEXT_SetTextColor(hItem, GUI_RED);
+0005c2  ecbd8b02          VPOP     {d8}
+0005c6  21ff              MOVS     r1,#0xff
+0005c8  e8bd5ff0          POP      {r4-r12,lr}
+0005cc  f7ffbffe          B.W      TEXT_SetTextColor
+                  |L13.1488|
+;;;3474   				}else{
+;;;3475   					hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
+0005d0  4659              MOV      r1,r11
+0005d2  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+0005d4  f7fffffe          BL       WM_GetDialogItem
+;;;3476                       TEXT_SetTextColor(hItem, GUI_GREEN);
+0005d8  ecbd8b02          VPOP     {d8}
+0005dc  4629              MOV      r1,r5
+0005de  e8bd5ff0          POP      {r4-r12,lr}
+0005e2  f7ffbffe          B.W      TEXT_SetTextColor
+                  |L13.1510|
+;;;3477   				}
+;;;3478   				
+;;;3479               }else{
+;;;3480                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
+0005e6  f640018d          MOV      r1,#0x88d
+0005ea  f7fffffe          BL       WM_GetDialogItem
+;;;3481                   TEXT_SetTextColor(hItem, GUI_GREEN);
+0005ee  4629              MOV      r1,r5
+0005f0  f7fffffe          BL       TEXT_SetTextColor
+;;;3482                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
+0005f4  f640018e          MOV      r1,#0x88e
+0005f8  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+0005fa  f7fffffe          BL       WM_GetDialogItem
+;;;3483                   TEXT_SetTextColor(hItem, GUI_GREEN);
+0005fe  4629              MOV      r1,r5
+000600  f7fffffe          BL       TEXT_SetTextColor
+;;;3484                   hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+000604  f640018f          MOV      r1,#0x88f
+000608  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+00060a  f7fffffe          BL       WM_GetDialogItem
+;;;3485                   TEXT_SetTextColor(hItem, GUI_GREEN);				
+00060e  4629              MOV      r1,r5
+000610  f7fffffe          BL       TEXT_SetTextColor
+;;;3486   				hItem = WM_GetDialogItem(hWinR, ID_TEXT_83);
+000614  4651              MOV      r1,r10
+000616  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+000618  f7fffffe          BL       WM_GetDialogItem
+;;;3487                   TEXT_SetTextColor(hItem, GUI_GREEN);
+00061c  4629              MOV      r1,r5
+00061e  f7fffffe          BL       TEXT_SetTextColor
+;;;3488   				hItem = WM_GetDialogItem(hWinR, ID_TEXT_151);
+000622  4659              MOV      r1,r11
+000624  6a60              LDR      r0,[r4,#0x24]  ; hWinR
+000626  f7fffffe          BL       WM_GetDialogItem
+;;;3489                   TEXT_SetTextColor(hItem, GUI_GREEN);
+00062a  4629              MOV      r1,r5
+00062c  f7fffffe          BL       TEXT_SetTextColor
+;;;3490                   
+;;;3491                   GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+000630  4641              MOV      r1,r8
+000632  4648              MOV      r0,r9
+000634  f7fffffe          BL       GPIO_ResetBits
+;;;3492                   TM1650_SET_LED(0x48,0x71);
+000638  2171              MOVS     r1,#0x71
+00063a  2048              MOVS     r0,#0x48
+00063c  f7fffffe          BL       TM1650_SET_LED
+;;;3493                   TM1650_SET_LED(0x68,0xF2);//PASS灯
+000640  ecbd8b02          VPOP     {d8}
+000644  21f2              MOVS     r1,#0xf2
+000646  e8bd5ff0          POP      {r4-r12,lr}
+00064a  2068              MOVS     r0,#0x68
+00064c  f7ffbffe          B.W      TM1650_SET_LED
+;;;3494               }
+;;;3495           }
+;;;3496                  
+;;;3497       }
+;;;3498   //     else
+;;;3499   //     {
+;;;3500   //         TM1650_SET_LED(0x68,0x70);
+;;;3501   //         GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
+;;;3502   //     }
+;;;3503   }
+;;;3504   
                           ENDP
 
-                  |L13.1460|
-                          DCD      0x40020c00
 
                           AREA ||.constdata||, DATA, READONLY, ALIGN=2
 

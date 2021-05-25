@@ -1300,7 +1300,7 @@ WM_HWIN CreateR(void) {
   track = face_r;
     con_flag = 0;
     setmode_r();
-	C_SW(1);
+	C_SW(0);
 //    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
 //    GPIO_SetBits(GPIOB,GPIO_Pin_13);
 //    r_raly = 1;
@@ -3233,7 +3233,7 @@ void OC_ADD(void){
     float change_sbs_c;
     static vu16 csum;
              
-    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.9 && para_set2 == set_2_on)
+    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.4 && para_set2 == set_2_on)
     {
 //        if(oc_mode == 0)
 //        {
@@ -3384,9 +3384,9 @@ void test_r(void)
 			GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
 		}
     }else{
-        if(finish == 0)
+        if(staticcdc == 0)
         {
-            if(r > set_max_r || r < set_min_r || DISS_Voltage*1000 > set_max_v || DISS_Voltage*1000 < set_min_v)
+            if(r > set_max_r || r < set_min_r || v*1000 > set_max_v || v*1000 < set_min_v  || oc_data*1000 > set_max_c || oc_data*1000 < set_min_c)
             {
                 if(para_set4 == set_4_on){
                     BEEP_Tiggr();
@@ -3408,12 +3408,21 @@ void test_r(void)
                     hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
                     TEXT_SetTextColor(hItem, GUI_GREEN);
                 }
+				
+				if(oc_data*1000 > set_max_c || oc_data*1000 < set_min_c){
+                    hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+                    TEXT_SetTextColor(hItem, GUI_RED);
+                }else{
+                    hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+                    TEXT_SetTextColor(hItem, GUI_GREEN);
+                }
             }else{
                 hItem = WM_GetDialogItem(hWinR, ID_TEXT_80);
                 TEXT_SetTextColor(hItem, GUI_GREEN);
                 hItem = WM_GetDialogItem(hWinR, ID_TEXT_81);
                 TEXT_SetTextColor(hItem, GUI_GREEN);
-                
+                hItem = WM_GetDialogItem(hWinR, ID_TEXT_82);
+                TEXT_SetTextColor(hItem, GUI_GREEN);
                 GPIO_ResetBits(GPIOD,GPIO_Pin_12);
                 TM1650_SET_LED(0x48,0x71);
                 TM1650_SET_LED(0x68,0xF2);//PASS灯
