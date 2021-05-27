@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		}else if(jkflag == 0){
 			GUI_DispStringAt("5530B", 140+40, 50);
 		}
-        GUI_DispStringAt("Ver:4.2P1", 140+40, 75);
+        GUI_DispStringAt("Ver:4.3P1", 140+40, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
@@ -209,6 +209,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//3.8修改负载电流量程与校准
 		//4.0增加过功率保护
 		//4.2增加CV校准点
+		//4.3修复各种bug
         GUI_DispStringAt("Ver:1.3", 140+40, 100);
         GUI_DispStringAt("-", 191+40, 125);
         GUI_DispStringAt("-", 227+40, 125);

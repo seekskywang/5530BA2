@@ -2059,9 +2059,9 @@ void Key_Funtion(void)
                     WM_DeleteWindow(hWinsysinfo);
                     WM_DeleteWindow(hWincdc);
                     WM_DeleteWindow(hWinset);
-					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
-					Delay_ms(500);
-				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
+//					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
+//					Delay_ms(500);
+//				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
                     CreateCDC(); 
                     KeyCounter = 0;
                     BEEP_Tiggr();//

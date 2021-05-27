@@ -35160,6 +35160,9 @@ Nextern float clear_pv;
 Nextern float clear_lv;
 Nextern float temp;
 Nextern vu8 set_loop_count;
+Nextern float load_cutoffv;;
+Nextern float pow_cutoffc;
+N
 Nextern vu8 test_mode;
 Nextern u8 usartocflag;
 Nextern u8 usartshortflag;
@@ -35766,6 +35769,9 @@ Sextern float clear_pv;
 Sextern float clear_lv;
 Sextern float temp;
 Sextern vu8 set_loop_count;
+Sextern float load_cutoffv;;
+Sextern float pow_cutoffc;
+S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
 Sextern u8 usartshortflag;
@@ -50015,6 +50021,65 @@ N#endif
 N
 N/*****************************(END OF FILE) *********************************/
 L 36 "..\User\stm32f4xx_it.c" 2
+N#include "internalflash.h"
+L 1 "..\Include\internalflash.h" 1
+N#ifndef __INTERNALFLASH_H__
+N#define __INTERNALFLASH_H__
+N
+N#include "stm32f4xx.h"
+N
+N/* Base address of the Flash sectors */
+N#define ADDR_FLASH_SECTOR_0     ((uint32_t)0x08000000) /* Base @ of Sector 0, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_1     ((uint32_t)0x08004000) /* Base @ of Sector 1, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_2     ((uint32_t)0x08008000) /* Base @ of Sector 2, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_3     ((uint32_t)0x0800C000) /* Base @ of Sector 3, 16 Kbytes */
+N#define ADDR_FLASH_SECTOR_4     ((uint32_t)0x08010000) /* Base @ of Sector 4, 64 Kbytes */
+N#define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000) /* Base @ of Sector 5, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000) /* Base @ of Sector 6, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000) /* Base @ of Sector 7, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000) /* Base @ of Sector 8, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_9     ((uint32_t)0x080A0000) /* Base @ of Sector 9, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_10    ((uint32_t)0x080C0000) /* Base @ of Sector 10, 128 Kbytes */
+N#define ADDR_FLASH_SECTOR_11    ((uint32_t)0x080E0000) /* Base @ of Sector 11, 128 Kbytes */
+N
+N#define FLASH_USER_START_ADDR ADDR_FLASH_SECTOR_11	//用户起始地址，暂定为第十个扇区的起始地址
+N
+N//用户根据自己的需要设置
+N#define STM32_FLASH_SIZE 1024 	 		//所选STM32的FLASH容量大小(单位为K)
+N#define STM32_FLASH_WREN 1              //使能FLASH写入(0，不是能;1，使能)
+N//////////////////////////////////////////////////////////////////////////////////////////////////////
+N
+N//FLASH起始地址
+N#define STM32_FLASH_BASE 0x08000000 	//STM32 FLASH的起始地址
+N//FLASH解锁键值
+N 
+N
+Nu16 STMFLASH_ReadHalfWord(u32 faddr);		  //读出半字  
+Nvoid STMFLASH_WriteLenByte(u32 WriteAddr,u32 DataToWrite,u16 Len);	//指定地址开始写入指定长度的数据
+Nu32 STMFLASH_ReadLenByte(u32 ReadAddr,u16 Len);						//指定地址开始读取指定长度数据
+Nvoid STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//从指定地址开始写入指定长度的数据
+Nvoid STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//从指定地址开始读出指定长度的数据
+N
+N//测试写入
+Nvoid Test_Write(u32 WriteAddr,u16 WriteData);	
+N
+N//API
+Nuint16_t Flash_GetSector(uint32_t Address);
+Nvoid Flash_EraseSector(uint16_t SectorNum);
+N
+Nvoid Flash_Write32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+Nvoid Flash_Read32BitDatas(uint32_t address, uint16_t length, int32_t* data_32);
+N
+Nvoid Flash_Write16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+Nvoid Flash_Read16BitDatas(uint32_t address, uint16_t length, int16_t* data_16);
+N
+Nvoid Flash_Write8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+Nvoid Flash_Read8BitDatas(uint32_t address, uint16_t length, int8_t* data_8);
+N
+N
+W "..\Include\internalflash.h" 55 7 last line of file ends without a newline
+N#endif
+L 37 "..\User\stm32f4xx_it.c" 2
 Nextern WM_HWIN CreateR(void);
 Xextern GUI_HWIN CreateR(void);
 Nextern WM_HWIN CreateWindow2(void);
@@ -50436,7 +50501,7 @@ N            if(i < 10)
 N            {
 N             sum += (UART_Buffer_Rece[2] * 256 + UART_Buffer_Rece[3])/10.0;
 N            }else{
-W "..\User\stm32f4xx_it.c" 428 24 single-precision operand implicitly converted to double-precision
+W "..\User\stm32f4xx_it.c" 429 24 single-precision operand implicitly converted to double-precision
 N                temp = sum/10.0;
 N                sum = 0;
 N                i = 0;
@@ -50484,13 +50549,13 @@ N            MODS_52H();
 N        }break;
 N        default:break;
 N    }
-W "..\User\stm32f4xx_it.c" 442 8 variable "crec"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 443 9 variable "csend"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 444 16 variable "sendbuf"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 445 8 variable "sendlen"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 446 16 variable "recrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 447 16 variable "scrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 448 8 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 443 8 variable "crec"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 444 9 variable "csend"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 445 16 variable "sendbuf"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 446 8 variable "sendlen"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 447 16 variable "recrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 448 16 variable "scrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 449 8 variable "i"  was declared but never referenced
 N}
 N
 N/*
@@ -50536,7 +50601,7 @@ N			value =	(int)(DISS_POW_Current*1000);		/* 将寄存器值读出 */
 N			break;
 N		case SLAVE_REG_P05:
 X		case 0x0005:
-W "..\User\stm32f4xx_it.c" 512 4 function "IO_OFF" declared implicitly
+W "..\User\stm32f4xx_it.c" 513 4 function "IO_OFF" declared implicitly
 N			IO_OFF();
 N            SET_Current_Laod = 0;
 X            Run_Control[4] = 0;
@@ -50733,10 +50798,18 @@ N			Write_Limits();
 N			break;
 N		case SLAVE_REG_P12:
 X		case 0x000C:
+N			set_load_cutoffv = reg_value;
+X			InFlashSave[4] = reg_value;
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
 N			break;
 N
 N		case SLAVE_REG_P13:
 X		case 0x000D:
+N			set_pow_cutoffc = reg_value;
+X			InFlashSave[5] = reg_value;
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
 N			break;
 N		case SLAVE_REG_P14:
 X		case 0x000E:
@@ -50776,7 +50849,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
-W "..\User\stm32f4xx_it.c" 692 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 697 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
@@ -50909,7 +50982,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
-W "..\User\stm32f4xx_it.c" 794 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 799 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
@@ -50926,7 +50999,7 @@ N
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 804 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 809 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51028,9 +51101,9 @@ N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);				
-W "..\User\stm32f4xx_it.c" 885 5 function "CreateCDC" declared implicitly
+W "..\User\stm32f4xx_it.c" 890 5 function "CreateCDC" declared implicitly
 N				CreateCDC(); 
-W "..\User\stm32f4xx_it.c" 886 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 891 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
@@ -51059,7 +51132,7 @@ N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 905 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 910 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51219,7 +51292,7 @@ N	uint16_t crc;
 N	uint8_t i;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1038 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1043 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;

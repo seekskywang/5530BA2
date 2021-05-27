@@ -84,3 +84,4 @@
 ..\output\stm32f4xx_it.o: ..\STemWinLibrary522\inc\TEXT.h
 ..\output\stm32f4xx_it.o: ..\STemWinLibrary522\inc\TREEVIEW.h
 ..\output\stm32f4xx_it.o: ..\APP\MENU.h
+..\output\stm32f4xx_it.o: ..\Include\internalflash.h

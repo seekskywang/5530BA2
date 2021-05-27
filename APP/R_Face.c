@@ -477,6 +477,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			
 			if(test_start == 0)
 			{
+				TM1650_SET_LED(0x68,0x70);
+				GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
 				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 0)
 				{
 					con_flag = 1;
@@ -577,12 +579,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 TEXT_SetText(hItem,buf);
 				
 				static_lv = 0;
-				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_83);  
+				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_83);
+				TEXT_SetTextColor(hItem, GUI_GREEN);
 				sprintf(buf,"%.3f",static_lv);
 				TEXT_SetText(hItem,buf); 
 				
 				static_pc = 0;
 				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_151);
+				TEXT_SetTextColor(hItem, GUI_GREEN);
 				sprintf(buf,"%.3f",static_pc);       
 				TEXT_SetText(hItem,buf);
 				

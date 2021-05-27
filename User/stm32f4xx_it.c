@@ -33,6 +33,7 @@
 #include "my_register.h"
 #include  "gui.h"
 #include "MainTask.h"
+#include "internalflash.h"
 extern WM_HWIN CreateR(void);
 extern WM_HWIN CreateWindow2(void);
 extern WM_HWIN CreateWindow(void);
@@ -652,9 +653,13 @@ static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
 			Write_Limits();
 			break;
 		case SLAVE_REG_P12:
+			set_load_cutoffv = reg_value;
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 			break;
 
 		case SLAVE_REG_P13:
+			set_pow_cutoffc = reg_value;
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 			break;
 		case SLAVE_REG_P14:
 			break;
