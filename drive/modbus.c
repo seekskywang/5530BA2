@@ -286,24 +286,24 @@ void UART_Action(void)
 			var32a = var32a << 12;
 			var16 = Modify_B_READ - Modify_A_READ;
 			var32a = var32a / var16;
-			REG_LoadV = var32a;
+//			REG_LoadV = var32a;
 			var32a=0;
 			var32a = Modify_B_ACT;
 			var32a = var32a << 12;
 			var32b = Modify_B_READ;
 			var32b = var32b * REG_LoadV;
-			if (var32a < var32b)
-			{
-				var32b = var32b - var32a;
-				REG_LoadV_Offset = var32b;
-				Polar2 |= 0x01;
-			}
-			else 
-			{
-				var32a = var32a - var32b;
-				REG_LoadV_Offset = var32a;
-				Polar2 &= ~0x01;
-			}
+//			if (var32a < var32b)
+//			{
+//				var32b = var32b - var32a;
+//				REG_LoadV_Offset = var32b;
+//				Polar2 |= 0x01;
+//			}
+//			else 
+//			{
+//				var32a = var32a - var32b;
+//				REG_LoadV_Offset = var32a;
+//				Polar2 &= ~0x01;
+//			}
 //---------------------------------------------------------------------------------------//			
 			var32c = Modify_B_ACT; //CV??????��?
 			var32c = var32c - Modify_A_ACT;
@@ -330,6 +330,77 @@ void UART_Action(void)
 			}
 //---------------------------------------------------------------------------------------//
 		  Flash_Write_all();	//??��?FLASH
+			DAC_Flag=0;
+		}
+		
+		if(g_tModS.RxBuf[1] == 0x30)
+		{
+			Modify_A_READ = Vmon1_value;//????
+			Modify_C_READ = Contr_Laod;//?????
+			Modify_A_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];//????
+		}
+		if (g_tModS.RxBuf[1] == 0x31)			   //???��???
+		{
+			vu32 var16;
+			vu32 var32a;
+			vu32 var32b;
+			
+			vu32 var16a;
+			vu32 var32c;
+			vu32 var32d;
+			
+			Modify_B_READ =Vmon1_value;//????
+			Modify_D_READ =Contr_Laod;//?????
+			Modify_B_ACT = (g_tModS.RxBuf[3] << 8) + g_tModS.RxBuf[4];//????
+			var32a = Modify_B_ACT;
+			var32a = var32a - Modify_A_ACT;
+			var32a = var32a << 12;
+			var16 = Modify_B_READ - Modify_A_READ;
+			var32a = var32a / var16;
+//			REG_LoadV = var32a;
+			var32a=0;
+			var32a = Modify_B_ACT;
+			var32a = var32a << 12;
+			var32b = Modify_B_READ;
+			var32b = var32b * REG_LoadV;
+//			if (var32a < var32b)
+//			{
+//				var32b = var32b - var32a;
+//				REG_LoadV_Offset = var32b;
+//				Polar2 |= 0x01;
+//			}
+//			else 
+//			{
+//				var32a = var32a - var32b;
+//				REG_LoadV_Offset = var32a;
+//				Polar2 &= ~0x01;
+//			}
+//---------------------------------------------------------------------------------------//			
+			var32c = Modify_B_ACT; //CV??????��?
+			var32c = var32c - Modify_A_ACT;
+			var32c = var32c << 12;
+			var16a=Modify_D_READ-Modify_C_READ;
+			var16a=(var16a*2);
+			var32c=var32c/var16a;
+			SET_LoadV1 = var32c;
+			var32c = Modify_B_ACT;
+			var32c = var32c << 12;
+			var32d = SET_LoadV1;
+			var32d = var32d * (Modify_D_READ*2);
+			if (var32c < var32d)
+			{
+				var32d = var32d - var32c;
+				SET_LoadV_Offset1 = var32d;
+				Polar6 |= 0x04;
+			}
+			else 
+			{
+				var32c = var32c - var32d;
+				SET_LoadV_Offset1 = var32c;
+				Polar6 &= ~0x04;
+			}
+//---------------------------------------------------------------------------------------//
+		  Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 			DAC_Flag=0;
 		}
 /*************************************??��?**************************************************************************/
@@ -1277,57 +1348,111 @@ void Transformation_ADC(void)
 				V_SW(0);//电压低档位
 				DISS_Voltage = 0;
 				i=0;
-			}else{										
-				if(DISS_Voltage > 10)
+			}else{
+				if(flag_Load_CC == 1)
 				{
-					V_SW(1);//电压高档位
-					if(r_raly == 1)
+					if(DISS_Voltage > 10)
 					{
-						var32 = Vmon1_value;
-					}else if(r_raly == 0){
-						var32 = Vmon1_value - 2;
-					}
-	//				var32 = Vmon1_value;
-					var32 = var32 * REG_CorrectionV1;  
-					if ((Polar & 0x01) == 0x01)		  
-					{
-						if (var32 < REG_ReadV_Offset1) 
+						V_SW(1);//电压高档位
+						if(r_raly == 1)
 						{
-							var32 = 0;
+							var32 = Vmon1_value;
+						}else if(r_raly == 0){
+							var32 = Vmon1_value - 2;
 						}
-						else var32 = var32 - REG_ReadV_Offset1;
+		//				var32 = Vmon1_value;
+						var32 = var32 * REG_CorrectionV1;  
+						if ((Polar & 0x01) == 0x01)		  
+						{
+							if (var32 < REG_ReadV_Offset1) 
+							{
+								var32 = 0;
+							}
+							else var32 = var32 - REG_ReadV_Offset1;
+						}
+						else var32 = var32 + REG_ReadV_Offset1;
+						var32 = var32 >> 12;
+						if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+						Voltage = var32;
+						DISS_Voltage=Voltage;
+						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+						
+					}else{
+						V_SW(0);//电压低档位
+						if(r_raly == 1)
+						{
+							var32 = Vmon1_value;
+						}else if(r_raly == 0){
+							var32 = Vmon1_value - 3;
+						}
+		//				var32 = Vmon1_value;
+						var32 = var32 * REG_CorrectionV;  
+						if ((Polar & 0x01) == 0x01)		  
+						{
+							if (var32 < REG_ReadV_Offset) 
+							{
+								var32 = 0;
+							}
+							else var32 = var32 - REG_ReadV_Offset;
+						}
+						else var32 = var32 + REG_ReadV_Offset;
+						var32 = var32 >> 12;
+						if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+						Voltage = var32;
+						DISS_Voltage=Voltage;
+						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 					}
-					else var32 = var32 + REG_ReadV_Offset1;
-					var32 = var32 >> 12;
-					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-					Voltage = var32;
-					DISS_Voltage=Voltage;
-					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
-					
 				}else{
-					V_SW(0);//电压低档位
-					if(r_raly == 1)
+					if(SET_Voltage_Laod > 10000)
 					{
-						var32 = Vmon1_value;
-					}else if(r_raly == 0){
-						var32 = Vmon1_value - 3;
-					}
-	//				var32 = Vmon1_value;
-					var32 = var32 * REG_CorrectionV;  
-					if ((Polar & 0x01) == 0x01)		  
-					{
-						if (var32 < REG_ReadV_Offset) 
+						V_SW(1);//电压高档�?
+						if(r_raly == 1)
 						{
-							var32 = 0;
+							var32 = Vmon1_value;
+						}else if(r_raly == 0){
+							var32 = Vmon1_value - 2;
 						}
-						else var32 = var32 - REG_ReadV_Offset;
+		//				var32 = Vmon1_value;
+						var32 = var32 * REG_CorrectionV1;  
+						if ((Polar & 0x01) == 0x01)		  
+						{
+							if (var32 < REG_ReadV_Offset1) 
+							{
+								var32 = 0;
+							}
+							else var32 = var32 - REG_ReadV_Offset1;
+						}
+						else var32 = var32 + REG_ReadV_Offset1;
+						var32 = var32 >> 12;
+						if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+						Voltage = var32;
+						DISS_Voltage=Voltage;
+						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
+					}else{
+						V_SW(0);//电压低档�?
+						if(r_raly == 1)
+						{
+							var32 = Vmon1_value;
+						}else if(r_raly == 0){
+							var32 = Vmon1_value - 3;
+						}
+		//				var32 = Vmon1_value;
+						var32 = var32 * REG_CorrectionV;  
+						if ((Polar & 0x01) == 0x01)		  
+						{
+							if (var32 < REG_ReadV_Offset) 
+							{
+								var32 = 0;
+							}
+							else var32 = var32 - REG_ReadV_Offset;
+						}
+						else var32 = var32 + REG_ReadV_Offset;
+						var32 = var32 >> 12;
+						if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
+						Voltage = var32;
+						DISS_Voltage=Voltage;
+						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 					}
-					else var32 = var32 + REG_ReadV_Offset;
-					var32 = var32 >> 12;
-					if (var32 < 30) var32 = 0;				  //40mVӔЂȥ£
-					Voltage = var32;
-					DISS_Voltage=Voltage;
-					DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 				}
 			}
 		}
@@ -1569,25 +1694,48 @@ void Transformation_ADC(void)
 	}
 	else
 	{
-		var32 = SET_Voltage_Laod;
-		var32=var32<<12;   
-		if ((Polar2 & 0x04) == 0)			   
+		if(SET_Voltage_Laod > 10000)
 		{
-			if (var32 < SET_LoadA_Offset) var32 = 0;
-			else var32 = var32 - SET_LoadV_Offset;
+			var32 = SET_Voltage_Laod;
+			var32=var32<<12;   
+			if ((Polar2 & 0x04) == 0)			   
+			{
+				if (var32 < SET_LoadA_Offset1) var32 = 0;
+				else var32 = var32 - SET_LoadV_Offset1;
+			}
+			else var32 = var32 + SET_LoadV_Offset1;
+			var32 = var32/SET_LoadV1;
+			var32=var32>>1;
+			if(Flag_DAC_OFF==0)
+			{
+				Contr_Laod = var32;
+			}
+			if(SET_Voltage_Laod==0)
+			{
+				Contr_Laod=0;
+			}
+			var32 = 0;
+		}else{
+			var32 = SET_Voltage_Laod;
+			var32=var32<<12;   
+			if ((Polar2 & 0x04) == 0)			   
+			{
+				if (var32 < SET_LoadA_Offset) var32 = 0;
+				else var32 = var32 - SET_LoadV_Offset;
+			}
+			else var32 = var32 + SET_LoadV_Offset;
+			var32 = var32/SET_LoadV;
+			var32=var32>>1;
+			if(Flag_DAC_OFF==0)
+			{
+				Contr_Laod = var32;
+			}
+			if(SET_Voltage_Laod==0)
+			{
+				Contr_Laod=0;
+			}
+			var32 = 0;
 		}
-		else var32 = var32 + SET_LoadV_Offset;
-		var32 = var32/SET_LoadV;
-		var32=var32>>1;
-		if(Flag_DAC_OFF==0)
-		{
-			Contr_Laod = var32;
-		}
-		if(SET_Voltage_Laod==0)
-		{
-			Contr_Laod=0;
-		}
-		var32 = 0;
 	}
 /*****************************����ֵת��*******************************************/
 	var32 = Rmon_value;

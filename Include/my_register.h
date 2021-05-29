@@ -268,6 +268,9 @@ extern vu8 sendpcflag;
 #define Polar14						 	InFlashSave[35]
 #define Polar15						 	InFlashSave[36]
 #define Polar16						 	InFlashSave[37]
+#define SET_LoadV1						InFlashSave[38]
+#define SET_LoadV_Offset1				InFlashSave[39]
+
 
 #define SLAVE_REG_P00		0x0000       //R_VOLU
 #define SLAVE_REG_P01		0x0001      //Load_Voltage
