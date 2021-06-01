@@ -359,7 +359,14 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(1);
+								IO_OFF();
+								Contr_Laod = 0x045F;
+								Flag_DAC_OFF=1;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
+								calstep = 1;
+//                                LoadVCal(1);
                             }else if(calmode == mode_pow){
                                 IO_OFF();
 //                                SET_Voltage = 100;
@@ -460,7 +467,14 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(2);
+								IO_OFF();
+								Contr_Laod = 0x2144;
+								Flag_DAC_OFF=1;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
+								calstep = 2;
+//                                LoadVCal(2);
                             }else if(calmode == mode_pow){
                                 IO_OFF();
                                 Contr_Voltage = 0x1338;
@@ -560,7 +574,14 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(3);
+								IO_OFF();
+								Contr_Laod = 0x0FE9;
+								Flag_DAC_OFF=1;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
+								calstep = 3;
+//                                LoadVCal(3);
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
@@ -658,7 +679,14 @@ void Key_Funtion(void)
                         {
                             if(calmode == mode_load)
                             {
-                                LoadVCal(4);
+								IO_OFF();
+								Contr_Laod = 0x1FE9;
+								Flag_DAC_OFF=1;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
+								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘On
+								calstep = 4;
+//                                LoadVCal(4);
                             }else if(calmode == mode_loadc){
                                 IO_OFF();
 //                                SET_Current_Laod = 5000;
@@ -1914,7 +1942,9 @@ void Key_Funtion(void)
 //                                }else if(calstep == 4){
 //                                    PowCCal(4);
 //                                }
-                            }
+                            }else if(calmode == mode_load){
+								LoadVCal(calstep);
+							}
                             KeyCounter = 0;
                             BEEP_Tiggr();//
                         }break;

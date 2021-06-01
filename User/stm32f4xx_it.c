@@ -55,6 +55,7 @@ extern vu8 c_rec;
 extern vu8 load_sw;
 extern u8 load_mode;
 extern u8 sendmodeflag;
+vu16 Temperature;
 extern float v;
 u8 rmtrig[3];
 extern __IO int32_t OS_TimeMS;
@@ -427,6 +428,7 @@ void USART3_IRQHandler(void)
              sum += (UART_Buffer_Rece[2] * 256 + UART_Buffer_Rece[3])/10.0;
             }else{
                 temp = sum/10.0;
+				Temperature = (vu16)(temp*10);
                 sum = 0;
                 i = 0;
             }
@@ -1046,11 +1048,11 @@ void MODS_SendWithCRC(uint8_t *_pBuf, uint8_t _ucLen)
 	buf[_ucLen++] = crc;
 //通过485发数据
 //	RS485_SendBuf(buf, _ucLen);
-	for(i=0;i<_ucLen+2;i++)
-	{
-		Usart_SendByte(USART1,buf[i]);
-	}
-//	uart1SendChars(buf, _ucLen);
+//	for(i=0;i<_ucLen+2;i++)
+//	{
+//		Usart_SendByte(USART1,buf[i]);
+//	}
+	uart1SendChars(buf, _ucLen);
 	
 // #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 // 	g_tPrint.Txlen = _ucLen;

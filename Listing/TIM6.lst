@@ -35010,6 +35010,7 @@ Nextern vu16 Time_sw;
 Nextern vu16 Test_Daley;
 Nextern vu16 Test_C_Door;
 Nextern vu16 TEMP_OFFSET;//?????
+Nextern vu16 Temperature;
 N//--------------------------
 Nextern vu8 UART_Buffer_Size;//????????
 Nextern vu8 Transmit_BUFFERsize;
@@ -49507,6 +49508,7 @@ Sextern vu16 Time_sw;
 Sextern vu16 Test_Daley;
 Sextern vu16 Test_C_Door;
 Sextern vu16 TEMP_OFFSET;//?????
+Sextern vu16 Temperature;
 S//--------------------------
 Sextern vu8 UART_Buffer_Size;//????????
 Sextern vu8 Transmit_BUFFERsize;
@@ -50137,6 +50139,7 @@ Sextern vu16 Time_sw;
 Sextern vu16 Test_Daley;
 Sextern vu16 Test_C_Door;
 Sextern vu16 TEMP_OFFSET;//?????
+Sextern vu16 Temperature;
 S//--------------------------
 Sextern vu8 UART_Buffer_Size;//????????
 Sextern vu8 Transmit_BUFFERsize;
@@ -51492,10 +51495,10 @@ N}
 N
 Nvoid SendToPC(u8 mode)
 N{
-N	uint8_t vccbuf[11];
+N	uint8_t vccbuf[13];
 N	
 N	vccbuf[0] = 0x01;
-N	vccbuf[2] = 0x08;
+N	vccbuf[2] = 0x0A;
 N	if(mode == 0)
 N	{
 N		vccbuf[1] = 0x50;
@@ -51510,6 +51513,8 @@ N		vccbuf[7] = battery_c>>24;
 N		vccbuf[8] = battery_c>>16;
 N		vccbuf[9] = battery_c>>8;
 N		vccbuf[10] = battery_c;
+N		vccbuf[11] = Temperature>>8;
+N		vccbuf[12] = (vu8)Temperature;
 N	}else if(mode == 1){
 N		vccbuf[1] = 0x51;
 N		
@@ -51523,6 +51528,8 @@ N		vccbuf[7] = battery_c>>24;
 N		vccbuf[8] = battery_c>>16;
 N		vccbuf[9] = battery_c>>8;
 N		vccbuf[10] = battery_c;
+N		vccbuf[11] = Temperature>>8;
+N		vccbuf[12] = (vu8)Temperature;
 N	}else if(mode == 2){
 N		vccbuf[1] = 0x52;
 N		
@@ -51543,8 +51550,10 @@ N		vccbuf[7] = battery_c>>24;
 N		vccbuf[8] = battery_c>>16;
 N		vccbuf[9] = battery_c>>8;
 N		vccbuf[10] = battery_c;
+N		vccbuf[11] = Temperature>>8;
+N		vccbuf[12] = (vu8)Temperature;
 N	}
-N	MODS_SendWithCRC(vccbuf, 11);
+N	MODS_SendWithCRC(vccbuf, 13);
 N}
 N
 Nvoid MODS_Poll(void)
@@ -51614,7 +51623,7 @@ N
 N	/* 分析应用层协�?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 880 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 886 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -51629,7 +51638,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* 必须清零计数器，方便下次帧同�?*/
-W "..\drive\TIM6.c" 815 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 816 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 821 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 822 18 variable "crc1"  was declared but never referenced
 N}
 N

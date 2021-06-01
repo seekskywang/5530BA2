@@ -153,6 +153,7 @@ extern vu16 Time_sw;
 extern vu16 Test_Daley;
 extern vu16 Test_C_Door;
 extern vu16 TEMP_OFFSET;//?????
+extern vu16 Temperature;
 //--------------------------
 extern vu8 UART_Buffer_Size;//????????
 extern vu8 Transmit_BUFFERsize;

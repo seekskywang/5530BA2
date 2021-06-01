@@ -757,10 +757,10 @@ void TIM5_IRQHandler(void)
 
 void SendToPC(u8 mode)
 {
-	uint8_t vccbuf[11];
+	uint8_t vccbuf[13];
 	
 	vccbuf[0] = 0x01;
-	vccbuf[2] = 0x08;
+	vccbuf[2] = 0x0A;
 	if(mode == 0)
 	{
 		vccbuf[1] = 0x50;
@@ -775,6 +775,8 @@ void SendToPC(u8 mode)
 		vccbuf[8] = battery_c>>16;
 		vccbuf[9] = battery_c>>8;
 		vccbuf[10] = battery_c;
+		vccbuf[11] = Temperature>>8;
+		vccbuf[12] = (vu8)Temperature;
 	}else if(mode == 1){
 		vccbuf[1] = 0x51;
 		
@@ -788,6 +790,8 @@ void SendToPC(u8 mode)
 		vccbuf[8] = battery_c>>16;
 		vccbuf[9] = battery_c>>8;
 		vccbuf[10] = battery_c;
+		vccbuf[11] = Temperature>>8;
+		vccbuf[12] = (vu8)Temperature;
 	}else if(mode == 2){
 		vccbuf[1] = 0x52;
 		
@@ -806,8 +810,10 @@ void SendToPC(u8 mode)
 		vccbuf[8] = battery_c>>16;
 		vccbuf[9] = battery_c>>8;
 		vccbuf[10] = battery_c;
+		vccbuf[11] = Temperature>>8;
+		vccbuf[12] = (vu8)Temperature;
 	}
-	MODS_SendWithCRC(vccbuf, 11);
+	MODS_SendWithCRC(vccbuf, 13);
 }
 
 void MODS_Poll(void)

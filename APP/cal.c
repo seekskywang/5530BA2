@@ -547,6 +547,7 @@ void LoadVCal(u8 step)
     if(step == 1)
     {
         Modify_A_READ = Vmon1_value;//????
+		Modify_C_READ = Contr_Laod;//?????
         Modify_A_ACT = inputvalue;//????
     }else if(step == 2){
         vu32 var16;
@@ -557,6 +558,7 @@ void LoadVCal(u8 step)
         vu32 var32c;
         vu32 var32d;
         Modify_B_READ =Vmon1_value;//????
+		Modify_D_READ =Contr_Laod;//?????
         Modify_B_ACT = inputvalue;//????
         var32a = Modify_B_ACT;
         var32a = var32a - Modify_A_ACT;
@@ -581,10 +583,37 @@ void LoadVCal(u8 step)
             REG_ReadV_Offset = var32a;
             Polar &= ~0x01;
         }
+//---------------------------------------------------------------------------------------//			
+			var32c = Modify_B_ACT; //CV??????§µ?
+			var32c = var32c - Modify_A_ACT;
+			var32c = var32c << 12;
+			var16a=Modify_D_READ-Modify_C_READ;
+			var16a=(var16a*2);
+			var32c=var32c/var16a;
+			SET_LoadV1 = var32c;
+			var32c = Modify_B_ACT;
+			var32c = var32c << 12;
+			var32d = SET_LoadV1;
+			var32d = var32d * (Modify_D_READ*2);
+			if (var32c < var32d)
+			{
+				var32d = var32d - var32c;
+				SET_LoadV_Offset1 = var32d;
+				Polar6 |= 0x04;
+			}
+			else 
+			{
+				var32c = var32c - var32d;
+				SET_LoadV_Offset1 = var32c;
+				Polar6 &= ~0x04;
+			}
         Flash_Write_all();	//??§Õ?FLASH
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flag_DAC_OFF =0;
 //        Flag_DAC_OFF=0;
     }else if(step == 3){
         Modify_A_READ = Vmon1_value;//????
+		Modify_C_READ = Contr_Laod;//?????
         Modify_A_ACT = inputvalue;//????
     }else if(step == 4){
         vu32 var16;
@@ -619,6 +648,32 @@ void LoadVCal(u8 step)
             REG_ReadV_Offset1 = var32a;
             Polar6 &= ~0x01;
         }
+		//---------------------------------------------------------------------------------------//			
+			var32c = Modify_B_ACT; //CV??????§µ?
+			var32c = var32c - Modify_A_ACT;
+			var32c = var32c << 12;
+			var16a=Modify_D_READ-Modify_C_READ;
+			var16a=(var16a*2);
+			var32c=var32c/var16a;
+			SET_LoadV1 = var32c;
+			var32c = Modify_B_ACT;
+			var32c = var32c << 12;
+			var32d = SET_LoadV1;
+			var32d = var32d * (Modify_D_READ*2);
+			if (var32c < var32d)
+			{
+				var32d = var32d - var32c;
+				SET_LoadV_Offset1 = var32d;
+				Polar6 |= 0x04;
+			}
+			else 
+			{
+				var32c = var32c - var32d;
+				SET_LoadV_Offset1 = var32c;
+				Polar6 &= ~0x04;
+			}
+//---------------------------------------------------------------------------------------//
+		Flag_DAC_OFF =0;
         Flash_Write_all();	//??§Õ?FLASH
 		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
 //        Flag_DAC_OFF=0;

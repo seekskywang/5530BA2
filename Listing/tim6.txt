@@ -5,130 +5,130 @@
                           AREA ||i.MODS_Poll||, CODE, READONLY, ALIGN=2
 
                   MODS_Poll PROC
-;;;812    
-;;;813    void MODS_Poll(void)
+;;;818    
+;;;819    void MODS_Poll(void)
 000000  b510              PUSH     {r4,lr}
-;;;814    {
-;;;815    	uint16_t addr;
-;;;816    	static uint16_t crc1;
-;;;817        static u32 testi;
-;;;818    	/* 瓒呰繃3.5涓瓧绗︽椂闂村悗鎵цMODH_RxTimeOut()鍑芥暟銆傚叏灞�鍙橀噺 g_rtu_timeout = 1; 閫氱煡涓荤▼搴忓紑濮嬭В鐮?*/
-;;;819    //	if (g_mods_timeout == 0)	
-;;;820    //	{
-;;;821    //		return;								/* 娌℃湁瓒呮椂锛岀户缁帴鏀躲�備笉瑕佹竻闆?g_tModS.RxCount */
-;;;822    //	}
-;;;823    
-;;;824        testi=g_tModS.RxCount;
+;;;820    {
+;;;821    	uint16_t addr;
+;;;822    	static uint16_t crc1;
+;;;823        static u32 testi;
+;;;824    	/* 瓒呰繃3.5涓瓧绗︽椂闂村悗鎵цMODH_RxTimeOut()鍑芥暟銆傚叏灞�鍙橀噺 g_rtu_timeout = 1; 閫氱煡涓荤▼搴忓紑濮嬭В鐮?*/
+;;;825    //	if (g_mods_timeout == 0)	
+;;;826    //	{
+;;;827    //		return;								/* 娌℃湁瓒呮椂锛岀户缁帴鏀躲�備笉瑕佹竻闆?g_tModS.RxCount */
+;;;828    //	}
+;;;829    
+;;;830        testi=g_tModS.RxCount;
 000002  4c13              LDR      r4,|L1.80|
 000004  4a13              LDR      r2,|L1.84|
 000006  f894009e          LDRB     r0,[r4,#0x9e]  ; g_tModS
 00000a  61d0              STR      r0,[r2,#0x1c]  ; testi
-;;;825        testi=g_tModS.RxCount;
-;;;826        testi=g_tModS.RxCount;
-;;;827    	if(testi>7)				/* 接收到的数据小于4个字节就认为错误 */
-;;;828    	{
-;;;829    		testi=testi;
-;;;830    	}
-;;;831    	testi=g_tModS.RxCount;
-;;;832        if(testi==8)				/* 接收到的数据小于4个字节就认为错误 */
+;;;831        testi=g_tModS.RxCount;
+;;;832        testi=g_tModS.RxCount;
+;;;833    	if(testi>7)				/* 接收到的数据小于4个字节就认为错误 */
+;;;834    	{
+;;;835    		testi=testi;
+;;;836    	}
+;;;837    	testi=g_tModS.RxCount;
+;;;838        if(testi==8)				/* 接收到的数据小于4个字节就认为错误 */
 00000c  2808              CMP      r0,#8
 00000e  d101              BNE      |L1.20|
-;;;833    	{
-;;;834    		testi=testi+1;
+;;;839    	{
+;;;840    		testi=testi+1;
 000010  2109              MOVS     r1,#9
 000012  61d1              STR      r1,[r2,#0x1c]  ; testi
                   |L1.20|
-;;;835    	}
-;;;836    	//判断通讯接收是否超时
-;;;837    	if(OldTick!=Tick_10ms)
+;;;841    	}
+;;;842    	//判断通讯接收是否超时
+;;;843    	if(OldTick!=Tick_10ms)
 000014  6b13              LDR      r3,[r2,#0x30]  ; OldTick
 000016  6911              LDR      r1,[r2,#0x10]  ; Tick_10ms
 000018  428b              CMP      r3,r1
 00001a  d014              BEQ      |L1.70|
-;;;838      	{  
-;;;839    	  OldTick=Tick_10ms;
+;;;844      	{  
+;;;845    	  OldTick=Tick_10ms;
 00001c  6311              STR      r1,[r2,#0x30]  ; OldTick
-;;;840    	   if(g_mods_timeout>0)
+;;;846    	   if(g_mods_timeout>0)
 00001e  4a0e              LDR      r2,|L1.88|
 000020  7811              LDRB     r1,[r2,#0]  ; g_mods_timeout
 000022  b109              CBZ      r1,|L1.40|
-;;;841          { 
-;;;842    	    g_mods_timeout--;
+;;;847          { 
+;;;848    	    g_mods_timeout--;
 000024  1e49              SUBS     r1,r1,#1
 000026  7011              STRB     r1,[r2,#0]
                   |L1.40|
-;;;843          }
-;;;844    	  if(g_mods_timeout==0 && g_tModS.RxCount>0)   //有数但超时了
+;;;849          }
+;;;850    	  if(g_mods_timeout==0 && g_tModS.RxCount>0)   //有数但超时了
 000028  7811              LDRB     r1,[r2,#0]  ; g_mods_timeout
 00002a  2900              CMP      r1,#0
 00002c  d10b              BNE      |L1.70|
 00002e  2800              CMP      r0,#0
 000030  d009              BEQ      |L1.70|
-;;;845          { 
-;;;846    		// goto err_ret;
-;;;847    	
-;;;848          }
-;;;849          else if(g_mods_timeout==0 && g_tModS.RxCount==0) //没数超时了
-;;;850             return;
-;;;851          else //没超时了，继续收
-;;;852             return;
-;;;853    	}
-;;;854    	else   //没有到10ms，不进入解析
-;;;855    		return;
-;;;856    	//g_mods_timeout = 0;	 					/* 清标志 */
-;;;857    
-;;;858    	if (g_tModS.RxCount < 4)				/* 接收到的数据小于4个字节就认为错误 */
+;;;851          { 
+;;;852    		// goto err_ret;
+;;;853    	
+;;;854          }
+;;;855          else if(g_mods_timeout==0 && g_tModS.RxCount==0) //没数超时了
+;;;856             return;
+;;;857          else //没超时了，继续收
+;;;858             return;
+;;;859    	}
+;;;860    	else   //没有到10ms，不进入解析
+;;;861    		return;
+;;;862    	//g_mods_timeout = 0;	 					/* 清标志 */
+;;;863    
+;;;864    	if (g_tModS.RxCount < 4)				/* 接收到的数据小于4个字节就认为错误 */
 000032  2804              CMP      r0,#4
 000034  d304              BCC      |L1.64|
-;;;859    	{
-;;;860    		goto err_ret;
-;;;861    	}
-;;;862    
-;;;863    	/* 计算CRC校验和 */
-;;;864    // 	crc1 = CRC16(g_tModS.RxBuf, g_tModS.RxCount);
-;;;865    // 	if (crc1 != 0)
-;;;866    // 	{
-;;;867    // 		goto err_ret;
-;;;868    // 	}
-;;;869    
-;;;870    // 	/* 站地址 (1字节） */
-;;;871    // 	addr = g_tModS.RxBuf[0];				/* 第1字节 站号 */
-;;;872    // 	if (addr != SADDR485)		 			/* 判断主机发送的命令地址是否符合 */
-;;;873    // 	{
-;;;874    // 		goto err_ret;
-;;;875    // 	}
-;;;876    
-;;;877    	/* 鍒嗘瀽搴旂敤灞傚崗璁?*/
-;;;878        if(g_tModS.RxBuf[2] == 0xA5)
+;;;865    	{
+;;;866    		goto err_ret;
+;;;867    	}
+;;;868    
+;;;869    	/* 计算CRC校验和 */
+;;;870    // 	crc1 = CRC16(g_tModS.RxBuf, g_tModS.RxCount);
+;;;871    // 	if (crc1 != 0)
+;;;872    // 	{
+;;;873    // 		goto err_ret;
+;;;874    // 	}
+;;;875    
+;;;876    // 	/* 站地址 (1字节） */
+;;;877    // 	addr = g_tModS.RxBuf[0];				/* 第1字节 站号 */
+;;;878    // 	if (addr != SADDR485)		 			/* 判断主机发送的命令地址是否符合 */
+;;;879    // 	{
+;;;880    // 		goto err_ret;
+;;;881    // 	}
+;;;882    
+;;;883    	/* 鍒嗘瀽搴旂敤灞傚崗璁?*/
+;;;884        if(g_tModS.RxBuf[2] == 0xA5)
 000036  78a0              LDRB     r0,[r4,#2]  ; g_tModS
 000038  28a5              CMP      r0,#0xa5
 00003a  d005              BEQ      |L1.72|
-;;;879        {
-;;;880            UART_Action();
-;;;881        }else{
-;;;882    //        usartocflag = 1;
-;;;883            RecHandle();
+;;;885        {
+;;;886            UART_Action();
+;;;887        }else{
+;;;888    //        usartocflag = 1;
+;;;889            RecHandle();
 00003c  f7fffffe          BL       RecHandle
                   |L1.64|
-;;;884        }
-;;;885    							
-;;;886    	
-;;;887    err_ret:
-;;;888    #if 0										/* 姝ら儴鍒嗕负浜嗕覆鍙ｆ墦鍗扮粨鏋?瀹為檯杩愮敤涓彲涓嶈 */
-;;;889    	g_tPrint.Rxlen = g_tModS.RxCount;
-;;;890    	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
-;;;891    #endif
+;;;890        }
+;;;891    							
 ;;;892    	
-;;;893     	g_tModS.RxCount = 0;					/* 蹇呴』娓呴浂璁℃暟鍣紝鏂逛究涓嬫甯у悓姝?*/
+;;;893    err_ret:
+;;;894    #if 0										/* 姝ら儴鍒嗕负浜嗕覆鍙ｆ墦鍗扮粨鏋?瀹為檯杩愮敤涓彲涓嶈 */
+;;;895    	g_tPrint.Rxlen = g_tModS.RxCount;
+;;;896    	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
+;;;897    #endif
+;;;898    	
+;;;899     	g_tModS.RxCount = 0;					/* 蹇呴』娓呴浂璁℃暟鍣紝鏂逛究涓嬫甯у悓姝?*/
 000040  2000              MOVS     r0,#0
 000042  f884009e          STRB     r0,[r4,#0x9e]
                   |L1.70|
-;;;894    }
+;;;900    }
 000046  bd10              POP      {r4,pc}
                   |L1.72|
 000048  f7fffffe          BL       UART_Action
 00004c  e7f8              B        |L1.64|
-;;;895    
+;;;901    
                           ENDP
 
 00004e  0000              DCW      0x0000
@@ -144,197 +144,221 @@
                   SendToPC PROC
 ;;;757    
 ;;;758    void SendToPC(u8 mode)
-000000  b50e              PUSH     {r1-r3,lr}
+000000  b51f              PUSH     {r0-r4,lr}
 ;;;759    {
-;;;760    	uint8_t vccbuf[11];
+;;;760    	uint8_t vccbuf[13];
 ;;;761    	
 ;;;762    	vccbuf[0] = 0x01;
 000002  2101              MOVS     r1,#1
 000004  f88d1000          STRB     r1,[sp,#0]
-;;;763    	vccbuf[2] = 0x08;
-000008  2108              MOVS     r1,#8
+;;;763    	vccbuf[2] = 0x0A;
+000008  210a              MOVS     r1,#0xa
 00000a  f88d1002          STRB     r1,[sp,#2]
 ;;;764    	if(mode == 0)
 ;;;765    	{
 ;;;766    		vccbuf[1] = 0x50;
 ;;;767    		
 ;;;768    		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
-00000e  4b53              LDR      r3,|L2.348|
+00000e  4c5e              LDR      r4,|L2.392|
 ;;;769    		vccbuf[4] = (vu16)(DISS_Voltage*1000);
 ;;;770    		
 ;;;771    		vccbuf[5] = (vu16)(DISS_Current*1000)>>8;
-000010  4a53              LDR      r2,|L2.352|
+000010  4b5e              LDR      r3,|L2.396|
 ;;;772    		vccbuf[6] = (vu16)(DISS_Current*1000);
 ;;;773    		
 ;;;774    		vccbuf[7] = battery_c>>24;
-000012  4954              LDR      r1,|L2.356|
-000014  ed9f0a54          VLDR     s0,|L2.360|
-000018  edd20a00          VLDR     s1,[r2,#0]            ;771
-00001c  ed931a00          VLDR     s2,[r3,#0]            ;768
-000020  2800              CMP      r0,#0                 ;764
-000022  ee600a80          VMUL.F32 s1,s1,s0              ;771
-000026  ee210a00          VMUL.F32 s0,s2,s0              ;768
-00002a  eefc0ae0          VCVT.U32.F32 s1,s1                 ;771
-00002e  eebc0ac0          VCVT.U32.F32 s0,s0                 ;768
-000032  d00d              BEQ      |L2.80|
+000012  495f              LDR      r1,|L2.400|
 ;;;775    		vccbuf[8] = battery_c>>16;
 ;;;776    		vccbuf[9] = battery_c>>8;
 ;;;777    		vccbuf[10] = battery_c;
-;;;778    	}else if(mode == 1){
-;;;779    		vccbuf[1] = 0x51;
-;;;780    		
-;;;781    		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
-;;;782    		vccbuf[4] = (vu16)(DISS_Voltage*1000);
-;;;783    		
-;;;784    		vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
-000034  4a4d              LDR      r2,|L2.364|
-000036  ed9f1a4c          VLDR     s2,|L2.360|
-00003a  2801              CMP      r0,#1                 ;778
-00003c  edd21a00          VLDR     s3,[r2,#0]
-000040  ee211a81          VMUL.F32 s2,s3,s2
-000044  eebc1ac1          VCVT.U32.F32 s2,s2
-000048  d027              BEQ      |L2.154|
-;;;785    		vccbuf[6] = (vu16)(DISS_POW_Current*1000);
-;;;786    		
-;;;787    		vccbuf[7] = battery_c>>24;
-;;;788    		vccbuf[8] = battery_c>>16;
-;;;789    		vccbuf[9] = battery_c>>8;
-;;;790    		vccbuf[10] = battery_c;
-;;;791    	}else if(mode == 2){
-00004a  2802              CMP      r0,#2
-00004c  d04a              BEQ      |L2.228|
-00004e  e07f              B        |L2.336|
-                  |L2.80|
-000050  2050              MOVS     r0,#0x50              ;766
-000052  f88d0001          STRB     r0,[sp,#1]            ;766
-000056  ee100a10          VMOV     r0,s0                 ;768
-00005a  0a00              LSRS     r0,r0,#8              ;768
-00005c  f88d0003          STRB     r0,[sp,#3]            ;768
-000060  ee100a10          VMOV     r0,s0                 ;769
-000064  f88d0004          STRB     r0,[sp,#4]            ;769
-000068  ee100a90          VMOV     r0,s1                 ;771
-00006c  0a00              LSRS     r0,r0,#8              ;771
-00006e  f88d0005          STRB     r0,[sp,#5]            ;771
-000072  ee100a90          VMOV     r0,s1                 ;772
-000076  f88d0006          STRB     r0,[sp,#6]            ;772
-00007a  6a08              LDR      r0,[r1,#0x20]         ;774  ; battery_c
-00007c  0e00              LSRS     r0,r0,#24             ;774
-00007e  f88d0007          STRB     r0,[sp,#7]            ;774
-000082  6a08              LDR      r0,[r1,#0x20]         ;775  ; battery_c
-000084  0c00              LSRS     r0,r0,#16             ;775
-000086  f88d0008          STRB     r0,[sp,#8]            ;775
-00008a  6a08              LDR      r0,[r1,#0x20]         ;776  ; battery_c
-00008c  0a00              LSRS     r0,r0,#8              ;776
-00008e  f88d0009          STRB     r0,[sp,#9]            ;776
-000092  6a08              LDR      r0,[r1,#0x20]         ;777  ; battery_c
-000094  f88d000a          STRB     r0,[sp,#0xa]          ;777
-000098  e05a              B        |L2.336|
-                  |L2.154|
-00009a  2051              MOVS     r0,#0x51              ;779
-00009c  f88d0001          STRB     r0,[sp,#1]            ;779
-0000a0  ee100a10          VMOV     r0,s0                 ;781
-0000a4  0a00              LSRS     r0,r0,#8              ;781
-0000a6  f88d0003          STRB     r0,[sp,#3]            ;781
-0000aa  ee100a10          VMOV     r0,s0                 ;782
-0000ae  f88d0004          STRB     r0,[sp,#4]            ;782
-0000b2  ee110a10          VMOV     r0,s2                 ;784
-0000b6  0a00              LSRS     r0,r0,#8              ;784
-0000b8  f88d0005          STRB     r0,[sp,#5]            ;784
-0000bc  ee110a10          VMOV     r0,s2                 ;785
-0000c0  f88d0006          STRB     r0,[sp,#6]            ;785
-0000c4  6a08              LDR      r0,[r1,#0x20]         ;787  ; battery_c
-0000c6  0e00              LSRS     r0,r0,#24             ;787
-0000c8  f88d0007          STRB     r0,[sp,#7]            ;787
-0000cc  6a08              LDR      r0,[r1,#0x20]         ;788  ; battery_c
-0000ce  0c00              LSRS     r0,r0,#16             ;788
-0000d0  f88d0008          STRB     r0,[sp,#8]            ;788
+;;;778    		vccbuf[11] = Temperature>>8;
+000014  4a5f              LDR      r2,|L2.404|
+000016  ed9f0a60          VLDR     s0,|L2.408|
+00001a  edd30a00          VLDR     s1,[r3,#0]            ;771
+00001e  ed941a00          VLDR     s2,[r4,#0]            ;768
+000022  2800              CMP      r0,#0                 ;764
+000024  ee600a80          VMUL.F32 s1,s1,s0              ;771
+000028  ee210a00          VMUL.F32 s0,s2,s0              ;768
+00002c  eefc0ae0          VCVT.U32.F32 s1,s1                 ;771
+000030  eebc0ac0          VCVT.U32.F32 s0,s0                 ;768
+000034  d00d              BEQ      |L2.82|
+;;;779    		vccbuf[12] = (vu8)Temperature;
+;;;780    	}else if(mode == 1){
+;;;781    		vccbuf[1] = 0x51;
+;;;782    		
+;;;783    		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
+;;;784    		vccbuf[4] = (vu16)(DISS_Voltage*1000);
+;;;785    		
+;;;786    		vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
+000036  4b59              LDR      r3,|L2.412|
+000038  ed9f1a57          VLDR     s2,|L2.408|
+00003c  2801              CMP      r0,#1                 ;780
+00003e  edd31a00          VLDR     s3,[r3,#0]
+000042  ee211a81          VMUL.F32 s2,s3,s2
+000046  eebc1ac1          VCVT.U32.F32 s2,s2
+00004a  d02e              BEQ      |L2.170|
+;;;787    		vccbuf[6] = (vu16)(DISS_POW_Current*1000);
+;;;788    		
+;;;789    		vccbuf[7] = battery_c>>24;
+;;;790    		vccbuf[8] = battery_c>>16;
+;;;791    		vccbuf[9] = battery_c>>8;
+;;;792    		vccbuf[10] = battery_c;
+;;;793    		vccbuf[11] = Temperature>>8;
+;;;794    		vccbuf[12] = (vu8)Temperature;
+;;;795    	}else if(mode == 2){
+00004c  2802              CMP      r0,#2
+00004e  d058              BEQ      |L2.258|
+000050  e094              B        |L2.380|
+                  |L2.82|
+000052  2050              MOVS     r0,#0x50              ;766
+000054  f88d0001          STRB     r0,[sp,#1]            ;766
+000058  ee100a10          VMOV     r0,s0                 ;768
+00005c  0a00              LSRS     r0,r0,#8              ;768
+00005e  f88d0003          STRB     r0,[sp,#3]            ;768
+000062  ee100a10          VMOV     r0,s0                 ;769
+000066  f88d0004          STRB     r0,[sp,#4]            ;769
+00006a  ee100a90          VMOV     r0,s1                 ;771
+00006e  0a00              LSRS     r0,r0,#8              ;771
+000070  f88d0005          STRB     r0,[sp,#5]            ;771
+000074  ee100a90          VMOV     r0,s1                 ;772
+000078  f88d0006          STRB     r0,[sp,#6]            ;772
+00007c  6a08              LDR      r0,[r1,#0x20]         ;774  ; battery_c
+00007e  0e00              LSRS     r0,r0,#24             ;774
+000080  f88d0007          STRB     r0,[sp,#7]            ;774
+000084  6a08              LDR      r0,[r1,#0x20]         ;775  ; battery_c
+000086  0c00              LSRS     r0,r0,#16             ;775
+000088  f88d0008          STRB     r0,[sp,#8]            ;775
+00008c  6a08              LDR      r0,[r1,#0x20]         ;776  ; battery_c
+00008e  0a00              LSRS     r0,r0,#8              ;776
+000090  f88d0009          STRB     r0,[sp,#9]            ;776
+000094  6a08              LDR      r0,[r1,#0x20]         ;777  ; battery_c
+000096  f88d000a          STRB     r0,[sp,#0xa]          ;777
+00009a  8810              LDRH     r0,[r2,#0]            ;778  ; Temperature
+00009c  0a00              LSRS     r0,r0,#8              ;778
+00009e  f88d000b          STRB     r0,[sp,#0xb]          ;778
+0000a2  8810              LDRH     r0,[r2,#0]            ;779  ; Temperature
+0000a4  f88d000c          STRB     r0,[sp,#0xc]          ;779
+0000a8  e068              B        |L2.380|
+                  |L2.170|
+0000aa  2051              MOVS     r0,#0x51              ;781
+0000ac  f88d0001          STRB     r0,[sp,#1]            ;781
+0000b0  ee100a10          VMOV     r0,s0                 ;783
+0000b4  0a00              LSRS     r0,r0,#8              ;783
+0000b6  f88d0003          STRB     r0,[sp,#3]            ;783
+0000ba  ee100a10          VMOV     r0,s0                 ;784
+0000be  f88d0004          STRB     r0,[sp,#4]            ;784
+0000c2  ee110a10          VMOV     r0,s2                 ;786
+0000c6  0a00              LSRS     r0,r0,#8              ;786
+0000c8  f88d0005          STRB     r0,[sp,#5]            ;786
+0000cc  ee110a10          VMOV     r0,s2                 ;787
+0000d0  f88d0006          STRB     r0,[sp,#6]            ;787
 0000d4  6a08              LDR      r0,[r1,#0x20]         ;789  ; battery_c
-0000d6  0a00              LSRS     r0,r0,#8              ;789
-0000d8  f88d0009          STRB     r0,[sp,#9]            ;789
+0000d6  0e00              LSRS     r0,r0,#24             ;789
+0000d8  f88d0007          STRB     r0,[sp,#7]            ;789
 0000dc  6a08              LDR      r0,[r1,#0x20]         ;790  ; battery_c
-0000de  f88d000a          STRB     r0,[sp,#0xa]          ;790
-0000e2  e035              B        |L2.336|
-                  |L2.228|
-;;;792    		vccbuf[1] = 0x52;
-0000e4  2052              MOVS     r0,#0x52
-0000e6  f88d0001          STRB     r0,[sp,#1]
-;;;793    		
-;;;794    		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
-0000ea  ee100a10          VMOV     r0,s0
-0000ee  0a00              LSRS     r0,r0,#8
-0000f0  f88d0003          STRB     r0,[sp,#3]
-;;;795    		vccbuf[4] = (vu16)(DISS_Voltage*1000);
-0000f4  ee100a10          VMOV     r0,s0
-0000f8  f88d0004          STRB     r0,[sp,#4]
-;;;796    		if(mode_sw == mode_pow)
-0000fc  481c              LDR      r0,|L2.368|
-0000fe  7802              LDRB     r2,[r0,#0]  ; mode_sw
-000100  2a03              CMP      r2,#3
-000102  d003              BEQ      |L2.268|
-;;;797    		{
-;;;798    			vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
-;;;799    			vccbuf[6] = (vu16)(DISS_POW_Current*1000);
-;;;800    		}else if(mode_sw == mode_load){
-000104  7800              LDRB     r0,[r0,#0]  ; mode_sw
-000106  2802              CMP      r0,#2
-000108  d00a              BEQ      |L2.288|
-00010a  e012              B        |L2.306|
-                  |L2.268|
-00010c  ee110a10          VMOV     r0,s2                 ;798
-000110  0a00              LSRS     r0,r0,#8              ;798
-000112  f88d0005          STRB     r0,[sp,#5]            ;798
-000116  ee110a10          VMOV     r0,s2                 ;799
-00011a  f88d0006          STRB     r0,[sp,#6]            ;799
-00011e  e008              B        |L2.306|
-                  |L2.288|
-;;;801    			vccbuf[5] = (vu16)(DISS_Current*1000)>>8;
-000120  ee100a90          VMOV     r0,s1
-000124  0a00              LSRS     r0,r0,#8
-000126  f88d0005          STRB     r0,[sp,#5]
-;;;802    			vccbuf[6] = (vu16)(DISS_Current*1000);
-00012a  ee100a90          VMOV     r0,s1
-00012e  f88d0006          STRB     r0,[sp,#6]
-                  |L2.306|
-;;;803    		}
-;;;804    		
-;;;805    		vccbuf[7] = battery_c>>24;
-000132  6a08              LDR      r0,[r1,#0x20]  ; battery_c
-000134  0e00              LSRS     r0,r0,#24
-000136  f88d0007          STRB     r0,[sp,#7]
-;;;806    		vccbuf[8] = battery_c>>16;
-00013a  6a08              LDR      r0,[r1,#0x20]  ; battery_c
-00013c  0c00              LSRS     r0,r0,#16
-00013e  f88d0008          STRB     r0,[sp,#8]
-;;;807    		vccbuf[9] = battery_c>>8;
-000142  6a08              LDR      r0,[r1,#0x20]  ; battery_c
-000144  0a00              LSRS     r0,r0,#8
-000146  f88d0009          STRB     r0,[sp,#9]
-;;;808    		vccbuf[10] = battery_c;
-00014a  6a08              LDR      r0,[r1,#0x20]  ; battery_c
-00014c  f88d000a          STRB     r0,[sp,#0xa]
+0000de  0c00              LSRS     r0,r0,#16             ;790
+0000e0  f88d0008          STRB     r0,[sp,#8]            ;790
+0000e4  6a08              LDR      r0,[r1,#0x20]         ;791  ; battery_c
+0000e6  0a00              LSRS     r0,r0,#8              ;791
+0000e8  f88d0009          STRB     r0,[sp,#9]            ;791
+0000ec  6a08              LDR      r0,[r1,#0x20]         ;792  ; battery_c
+0000ee  f88d000a          STRB     r0,[sp,#0xa]          ;792
+0000f2  8810              LDRH     r0,[r2,#0]            ;793  ; Temperature
+0000f4  0a00              LSRS     r0,r0,#8              ;793
+0000f6  f88d000b          STRB     r0,[sp,#0xb]          ;793
+0000fa  8810              LDRH     r0,[r2,#0]            ;794  ; Temperature
+0000fc  f88d000c          STRB     r0,[sp,#0xc]          ;794
+000100  e03c              B        |L2.380|
+                  |L2.258|
+;;;796    		vccbuf[1] = 0x52;
+000102  2052              MOVS     r0,#0x52
+000104  f88d0001          STRB     r0,[sp,#1]
+;;;797    		
+;;;798    		vccbuf[3] = (vu16)(DISS_Voltage*1000)>>8;
+000108  ee100a10          VMOV     r0,s0
+00010c  0a00              LSRS     r0,r0,#8
+00010e  f88d0003          STRB     r0,[sp,#3]
+;;;799    		vccbuf[4] = (vu16)(DISS_Voltage*1000);
+000112  ee100a10          VMOV     r0,s0
+000116  f88d0004          STRB     r0,[sp,#4]
+;;;800    		if(mode_sw == mode_pow)
+00011a  4821              LDR      r0,|L2.416|
+00011c  7803              LDRB     r3,[r0,#0]  ; mode_sw
+00011e  2b03              CMP      r3,#3
+000120  d003              BEQ      |L2.298|
+;;;801    		{
+;;;802    			vccbuf[5] = (vu16)(DISS_POW_Current*1000)>>8;
+;;;803    			vccbuf[6] = (vu16)(DISS_POW_Current*1000);
+;;;804    		}else if(mode_sw == mode_load){
+000122  7800              LDRB     r0,[r0,#0]  ; mode_sw
+000124  2802              CMP      r0,#2
+000126  d00a              BEQ      |L2.318|
+000128  e012              B        |L2.336|
+                  |L2.298|
+00012a  ee110a10          VMOV     r0,s2                 ;802
+00012e  0a00              LSRS     r0,r0,#8              ;802
+000130  f88d0005          STRB     r0,[sp,#5]            ;802
+000134  ee110a10          VMOV     r0,s2                 ;803
+000138  f88d0006          STRB     r0,[sp,#6]            ;803
+00013c  e008              B        |L2.336|
+                  |L2.318|
+;;;805    			vccbuf[5] = (vu16)(DISS_Current*1000)>>8;
+00013e  ee100a90          VMOV     r0,s1
+000142  0a00              LSRS     r0,r0,#8
+000144  f88d0005          STRB     r0,[sp,#5]
+;;;806    			vccbuf[6] = (vu16)(DISS_Current*1000);
+000148  ee100a90          VMOV     r0,s1
+00014c  f88d0006          STRB     r0,[sp,#6]
                   |L2.336|
-;;;809    	}
-;;;810    	MODS_SendWithCRC(vccbuf, 11);
-000150  210b              MOVS     r1,#0xb
-000152  4668              MOV      r0,sp
-000154  f7fffffe          BL       MODS_SendWithCRC
-;;;811    }
-000158  bd0e              POP      {r1-r3,pc}
-;;;812    
+;;;807    		}
+;;;808    		
+;;;809    		vccbuf[7] = battery_c>>24;
+000150  6a08              LDR      r0,[r1,#0x20]  ; battery_c
+000152  0e00              LSRS     r0,r0,#24
+000154  f88d0007          STRB     r0,[sp,#7]
+;;;810    		vccbuf[8] = battery_c>>16;
+000158  6a08              LDR      r0,[r1,#0x20]  ; battery_c
+00015a  0c00              LSRS     r0,r0,#16
+00015c  f88d0008          STRB     r0,[sp,#8]
+;;;811    		vccbuf[9] = battery_c>>8;
+000160  6a08              LDR      r0,[r1,#0x20]  ; battery_c
+000162  0a00              LSRS     r0,r0,#8
+000164  f88d0009          STRB     r0,[sp,#9]
+;;;812    		vccbuf[10] = battery_c;
+000168  6a08              LDR      r0,[r1,#0x20]  ; battery_c
+00016a  f88d000a          STRB     r0,[sp,#0xa]
+;;;813    		vccbuf[11] = Temperature>>8;
+00016e  8810              LDRH     r0,[r2,#0]  ; Temperature
+000170  0a00              LSRS     r0,r0,#8
+000172  f88d000b          STRB     r0,[sp,#0xb]
+;;;814    		vccbuf[12] = (vu8)Temperature;
+000176  8810              LDRH     r0,[r2,#0]  ; Temperature
+000178  f88d000c          STRB     r0,[sp,#0xc]
+                  |L2.380|
+;;;815    	}
+;;;816    	MODS_SendWithCRC(vccbuf, 13);
+00017c  210d              MOVS     r1,#0xd
+00017e  4668              MOV      r0,sp
+000180  f7fffffe          BL       MODS_SendWithCRC
+;;;817    }
+000184  bd1f              POP      {r0-r4,pc}
+;;;818    
                           ENDP
 
-00015a  0000              DCW      0x0000
-                  |L2.348|
+000186  0000              DCW      0x0000
+                  |L2.392|
                           DCD      DISS_Voltage
-                  |L2.352|
+                  |L2.396|
                           DCD      DISS_Current
-                  |L2.356|
+                  |L2.400|
                           DCD      ||.data||
-                  |L2.360|
-000168  447a0000          DCFS     0x447a0000 ; 1000
-                  |L2.364|
+                  |L2.404|
+                          DCD      Temperature
+                  |L2.408|
+000198  447a0000          DCFS     0x447a0000 ; 1000
+                  |L2.412|
                           DCD      DISS_POW_Current
-                  |L2.368|
+                  |L2.416|
                           DCD      mode_sw
 
                           AREA ||i.TIM3_IRQHandler||, CODE, READONLY, ALIGN=2
