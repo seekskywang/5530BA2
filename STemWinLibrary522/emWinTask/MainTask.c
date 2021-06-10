@@ -169,31 +169,36 @@ void MainTask(void)
 				}
 				
 			}else{
-				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
+				if(flag_Load_CC == 1)
 				{
-					if(SET_Current_Laod < 10000)
+					if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (page_sw == face_cal && calmode == mode_loadc) || (page_sw == face_cal && calmode == mode_load))
 					{
-						if(sendload < 250)
+						if(SET_Current_Laod < 10000)
 						{
-							sendload = sendload + 10;
+							if(sendload < 250)
+							{
+								sendload = sendload + 10;
+							}else{
+								C_SW(0);
+								sendload = Contr_Laod;
+							}
+							DAC8531_Send(sendload);
 						}else{
-							C_SW(0);
-							sendload = Contr_Laod;
+							if(sendload < 1000)
+							{
+								sendload = sendload + 10;
+							}else{
+								C_SW(1);
+								sendload = Contr_Laod;
+							}
+							DAC8531_Send(sendload);
 						}
-						DAC8531_Send(sendload);
 					}else{
-						if(sendload < 1000)
-						{
-							sendload = sendload + 10;
-						}else{
-							C_SW(1);
-							sendload = Contr_Laod;
-						}
+						sendload = 0;
 						DAC8531_Send(sendload);
 					}
-				}else{
-					sendload = 0;
-					DAC8531_Send(sendload);
+				}else if(flag_Load_CC == 0){
+					DAC8531_Send(Contr_Laod);
 				}
 			}
 		}

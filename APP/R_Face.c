@@ -3187,7 +3187,7 @@ void OC_CHECK(void){
     }
 	if(crec1 != 0)
 	{
-		if((v - DISS_Voltage > v*0.8) && para_set2 == set_2_on)
+		if((v - DISS_Voltage > v*0.9) && para_set2 == set_2_on)
 		{
 			if(oc_mode == 0)
 			{
@@ -3237,7 +3237,7 @@ void OC_ADD(void){
     float change_sbs_c;
     static vu16 csum;
              
-    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.4 && para_set2 == set_2_on)
+    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.8 && para_set2 == set_2_on)
     {
 //        if(oc_mode == 0)
 //        {
@@ -3288,7 +3288,10 @@ void OC_ADD(void){
 			
 			if(cflag == 1)
             SET_Current_Laod = SET_Current_Laod + set_sbs_c;
-            
+//            if(SET_Current_Laod > 10000)
+//			{
+//				C_SW(1);
+//			}
 //            if(crec1 < crec2)
 //            {
 //                oc_data = crec2;

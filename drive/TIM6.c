@@ -276,7 +276,7 @@ void TIM4_IRQHandler(void)
 					step = 0;
 					con_flag = 0;
 					SET_Current_Laod = set_init_c;
-					C_SW(1);
+					C_SW(0);
 //					GPIO_ResetBits(GPIOA,GPIO_Pin_11);//µçÁ÷ÇÐ»»ÎªµÍµµ
 //					Delay_ms(500);
 //					IO_OFF();                

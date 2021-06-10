@@ -360,10 +360,12 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
 								IO_OFF();
-								Contr_Laod = 0x045F;
+								Contr_Laod = 0x08E9;
 								Flag_DAC_OFF=1;
 								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
 								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+                                c_rec = 1;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 								calstep = 1;
 //                                LoadVCal(1);
@@ -468,10 +470,12 @@ void Key_Funtion(void)
                             if(calmode == mode_load)
                             {
 								IO_OFF();
-								Contr_Laod = 0x2144;
+								Contr_Laod = 0x3BA2;
 								Flag_DAC_OFF=1;
 								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
 								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+                                c_rec = 1;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 								calstep = 2;
 //                                LoadVCal(2);
@@ -579,6 +583,8 @@ void Key_Funtion(void)
 								Flag_DAC_OFF=1;
 								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
 								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+                                c_rec = 1;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 								calstep = 3;
 //                                LoadVCal(3);
@@ -684,6 +690,8 @@ void Key_Funtion(void)
 								Flag_DAC_OFF=1;
 								GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CV
 								flag_Load_CC = 0;
+								GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
+                                c_rec = 1;
 								GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 								calstep = 4;
 //                                LoadVCal(4);
@@ -1371,6 +1379,8 @@ void Key_Funtion(void)
 								Contr_Laod -= 100;
                             }else if(calmode == mode_powc){
                                 Contr_Current -= 100;
+                            }else if(calmode == mode_load){
+								Contr_Laod -= 100;
                             }
                             KeyCounter = 0;
                             BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âôø
@@ -1435,6 +1445,8 @@ void Key_Funtion(void)
 								Contr_Laod += 100;
                             }else if(calmode == mode_powc){
                                 Contr_Current += 100;
+                            }else if(calmode == mode_load){
+								Contr_Laod += 100;
                             }
                             KeyCounter = 0;
                             BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âôø

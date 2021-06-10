@@ -37804,8 +37804,8 @@ N				V_SW(0);//电压低档位
 N				DISS_Voltage = 0;
 N				i=0;
 N			}else{
-N				if(flag_Load_CC == 1)
-X				if((flagD . bit7) == 1)
+N				if(flag_Load_CC == 1 || Flag_Swtich_ON == 0)
+X				if((flagD . bit7) == 1 || (flagA . bit6) == 0)
 N				{
 N					if(DISS_Voltage > 10)
 N					{
@@ -37872,7 +37872,8 @@ N						DISS_Voltage=Voltage;
 X						DISS_Voltage=Run_Control[10];
 N						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 N					}
-N				}else{
+N				}else if(flag_Load_CC == 0 && Flag_Swtich_ON == 1){
+X				}else if((flagD . bit7) == 0 && (flagA . bit6) == 1){
 N					if(SET_Voltage_Laod > 10000)
 X					if(Run_Control[3] > 10000)
 N					{
@@ -38267,8 +38268,8 @@ N			var32=var32<<12;
 N			if ((Polar2 & 0x04) == 0)			   
 X			if ((correct_por[2] & 0x04) == 0)			   
 N			{
-N				if (var32 < SET_LoadA_Offset1) var32 = 0;
-X				if (var32 < InFlashSave[9]) var32 = 0;
+N				if (var32 < SET_LoadV_Offset1) var32 = 0;
+X				if (var32 < InFlashSave[39]) var32 = 0;
 N				else var32 = var32 - SET_LoadV_Offset1;
 X				else var32 = var32 - InFlashSave[39];
 N			}
@@ -38295,8 +38296,8 @@ N			var32=var32<<12;
 N			if ((Polar2 & 0x04) == 0)			   
 X			if ((correct_por[2] & 0x04) == 0)			   
 N			{
-N				if (var32 < SET_LoadA_Offset) var32 = 0;
-X				if (var32 < Correct_Strong[2]) var32 = 0;
+N				if (var32 < SET_LoadV_Offset) var32 = 0;
+X				if (var32 < Correct_Strong[4]) var32 = 0;
 N				else var32 = var32 - SET_LoadV_Offset;
 X				else var32 = var32 - Correct_Strong[4];
 N			}

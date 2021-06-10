@@ -52290,33 +52290,40 @@ N					}
 N				}
 N				
 N			}else{
-N				if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (calmode == mode_loadc))
-X				if(load_sw == 1 || (mode_sw == 2 && cdc_sw == 1) || (calmode == 4))
+N				if(flag_Load_CC == 1)
+X				if((flagD . bit7) == 1)
 N				{
-N					if(SET_Current_Laod < 10000)
-X					if(Run_Control[4] < 10000)
+N					if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (page_sw == face_cal && calmode == mode_loadc) || (page_sw == face_cal && calmode == mode_load))
+X					if(load_sw == 1 || (mode_sw == 2 && cdc_sw == 1) || (page_sw == 8 && calmode == 4) || (page_sw == 8 && calmode == 2))
 N					{
-N						if(sendload < 250)
+N						if(SET_Current_Laod < 10000)
+X						if(Run_Control[4] < 10000)
 N						{
-N							sendload = sendload + 10;
+N							if(sendload < 250)
+N							{
+N								sendload = sendload + 10;
+N							}else{
+N								C_SW(0);
+N								sendload = Contr_Laod;
+N							}
+N							DAC8531_Send(sendload);
 N						}else{
-N							C_SW(0);
-N							sendload = Contr_Laod;
+N							if(sendload < 1000)
+N							{
+N								sendload = sendload + 10;
+N							}else{
+N								C_SW(1);
+N								sendload = Contr_Laod;
+N							}
+N							DAC8531_Send(sendload);
 N						}
-N						DAC8531_Send(sendload);
 N					}else{
-N						if(sendload < 1000)
-N						{
-N							sendload = sendload + 10;
-N						}else{
-N							C_SW(1);
-N							sendload = Contr_Laod;
-N						}
+N						sendload = 0;
 N						DAC8531_Send(sendload);
 N					}
-N				}else{
-N					sendload = 0;
-N					DAC8531_Send(sendload);
+N				}else if(flag_Load_CC == 0){
+X				}else if((flagD . bit7) == 0){
+N					DAC8531_Send(Contr_Laod);
 N				}
 N			}
 N		}

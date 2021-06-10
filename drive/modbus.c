@@ -1349,7 +1349,7 @@ void Transformation_ADC(void)
 				DISS_Voltage = 0;
 				i=0;
 			}else{
-				if(flag_Load_CC == 1)
+				if(flag_Load_CC == 1 || Flag_Swtich_ON == 0)
 				{
 					if(DISS_Voltage > 10)
 					{
@@ -1402,7 +1402,7 @@ void Transformation_ADC(void)
 						DISS_Voltage=Voltage;
 						DISS_Voltage=DISS_Voltage/1000;//݆̣Дʾ֧ѹ
 					}
-				}else{
+				}else if(flag_Load_CC == 0 && Flag_Swtich_ON == 1){
 					if(SET_Voltage_Laod > 10000)
 					{
 						V_SW(1);//电压高档�?
@@ -1700,7 +1700,7 @@ void Transformation_ADC(void)
 			var32=var32<<12;   
 			if ((Polar2 & 0x04) == 0)			   
 			{
-				if (var32 < SET_LoadA_Offset1) var32 = 0;
+				if (var32 < SET_LoadV_Offset1) var32 = 0;
 				else var32 = var32 - SET_LoadV_Offset1;
 			}
 			else var32 = var32 + SET_LoadV_Offset1;
@@ -1720,7 +1720,7 @@ void Transformation_ADC(void)
 			var32=var32<<12;   
 			if ((Polar2 & 0x04) == 0)			   
 			{
-				if (var32 < SET_LoadA_Offset) var32 = 0;
+				if (var32 < SET_LoadV_Offset) var32 = 0;
 				else var32 = var32 - SET_LoadV_Offset;
 			}
 			else var32 = var32 + SET_LoadV_Offset;
