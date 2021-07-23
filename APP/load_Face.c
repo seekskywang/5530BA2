@@ -26,6 +26,7 @@ extern vu8 oc_mode;
 u8 load_mode;
 float load_cutoffv;
 extern u8 cswflag;
+vu16 loaddelay;
 extern struct bitDefine
 {
     unsigned bit0: 1;
@@ -304,7 +305,11 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
                 TEXT_SetText(hItem,"");
                 status_flash = 0;
             }
-            if(load_cutoffv != 0 && DISS_Voltage < load_cutoffv)
+			if(loaddelay != 0)
+			{
+				loaddelay --;
+			}
+            if(load_cutoffv != 0 && DISS_Voltage < load_cutoffv && loaddelay == 0)
 			{
 				Flag_Swtich_ON=0;
                 GPIO_SetBits(GPIOA,GPIO_Pin_15);
@@ -339,6 +344,7 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_85);
             sprintf(buf,"%.3f",0.000);        
             TEXT_SetText(hItem,buf);
+			loaddelay = 50;
         }
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_143);       
 //        sprintf(buf,"%.3f",overloadv);

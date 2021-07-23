@@ -1854,6 +1854,7 @@ void Key_Funtion(void)
                                 
                                 mode_sw = mode_load;
                                 load_sw = load_on;
+								
                             }
                             KeyCounter = 0;
                             BEEP_Tiggr();//

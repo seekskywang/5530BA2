@@ -5,39 +5,39 @@
                           AREA ||i.C_SW||, CODE, READONLY, ALIGN=2
 
                   C_SW PROC
-;;;325    
-;;;326    void C_SW(u8 i)
+;;;338    
+;;;339    void C_SW(u8 i)
 000000  b510              PUSH     {r4,lr}
-;;;327    {
-;;;328    	if(i == 0)
-;;;329    	{
-;;;330    		GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
+;;;340    {
+;;;341    	if(i == 0)
+;;;342    	{
+;;;343    		GPIO_ResetBits(GPIOA,GPIO_Pin_11);//电流切换为低档
 000002  4a0a              LDR      r2,|L1.44|
-;;;331    		cflag = 0;
+;;;344    		cflag = 0;
 000004  4c0a              LDR      r4,|L1.48|
-000006  f44f6100          MOV      r1,#0x800             ;330
-00000a  2800              CMP      r0,#0                 ;328
+000006  f44f6100          MOV      r1,#0x800             ;343
+00000a  2800              CMP      r0,#0                 ;341
 00000c  d007              BEQ      |L1.30|
-;;;332    	}else if(i == 1){
+;;;345    	}else if(i == 1){
 00000e  2801              CMP      r0,#1
 000010  d104              BNE      |L1.28|
-;;;333    		GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+;;;346    		GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 000012  4610              MOV      r0,r2
 000014  f7fffffe          BL       GPIO_SetBits
-;;;334    		cflag = 1;
+;;;347    		cflag = 1;
 000018  2001              MOVS     r0,#1
 00001a  70e0              STRB     r0,[r4,#3]
                   |L1.28|
-;;;335    	}
-;;;336    }
+;;;348    	}
+;;;349    }
 00001c  bd10              POP      {r4,pc}
                   |L1.30|
-00001e  4610              MOV      r0,r2                 ;330
+00001e  4610              MOV      r0,r2                 ;343
 000020  f7fffffe          BL       GPIO_ResetBits
-000024  2000              MOVS     r0,#0                 ;331
-000026  70e0              STRB     r0,[r4,#3]            ;331
+000024  2000              MOVS     r0,#0                 ;344
+000026  70e0              STRB     r0,[r4,#3]            ;344
 000028  bd10              POP      {r4,pc}
-;;;337    ////缓启动
+;;;350    ////缓启动
                           ENDP
 
 00002a  0000              DCW      0x0000
@@ -68,77 +68,77 @@
 000010  2004              MOVS     r0,#4
 000012  f7fffffe          BL       WM_SetCreateFlags
 ;;;75     	PROGBAR_SetDefaultSkin(PROGBAR_SKIN_FLEX);
-000016  48a9              LDR      r0,|L2.700|
+000016  48b4              LDR      r0,|L2.744|
 000018  f7fffffe          BL       PROGBAR_SetDefaultSkin
 ;;;76     	FRAMEWIN_SetDefaultSkin(FRAMEWIN_SKIN_FLEX);
-00001c  48a8              LDR      r0,|L2.704|
+00001c  48b3              LDR      r0,|L2.748|
 00001e  f7fffffe          BL       FRAMEWIN_SetDefaultSkin
 ;;;77     	PROGBAR_SetDefaultSkin(PROGBAR_SKIN_FLEX);
-000022  48a6              LDR      r0,|L2.700|
+000022  48b1              LDR      r0,|L2.744|
 000024  f7fffffe          BL       PROGBAR_SetDefaultSkin
 ;;;78     	BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
-000028  48a6              LDR      r0,|L2.708|
+000028  48b1              LDR      r0,|L2.752|
 00002a  f7fffffe          BL       BUTTON_SetDefaultSkin
 ;;;79     	CHECKBOX_SetDefaultSkin(CHECKBOX_SKIN_FLEX);
-00002e  48a6              LDR      r0,|L2.712|
+00002e  48b1              LDR      r0,|L2.756|
 000030  f7fffffe          BL       CHECKBOX_SetDefaultSkin
 ;;;80     	DROPDOWN_SetDefaultSkin(DROPDOWN_SKIN_FLEX);
-000034  48a5              LDR      r0,|L2.716|
+000034  48b0              LDR      r0,|L2.760|
 000036  f7fffffe          BL       DROPDOWN_SetDefaultSkin
 ;;;81     	SCROLLBAR_SetDefaultSkin(SCROLLBAR_SKIN_FLEX);
-00003a  48a5              LDR      r0,|L2.720|
+00003a  48b0              LDR      r0,|L2.764|
 00003c  f7fffffe          BL       SCROLLBAR_SetDefaultSkin
 ;;;82     	SLIDER_SetDefaultSkin(SLIDER_SKIN_FLEX);
-000040  48a4              LDR      r0,|L2.724|
+000040  48af              LDR      r0,|L2.768|
 000042  f7fffffe          BL       SLIDER_SetDefaultSkin
 ;;;83     	HEADER_SetDefaultSkin(HEADER_SKIN_FLEX);
-000046  48a4              LDR      r0,|L2.728|
+000046  48af              LDR      r0,|L2.772|
 000048  f7fffffe          BL       HEADER_SetDefaultSkin
 ;;;84     	RADIO_SetDefaultSkin(RADIO_SKIN_FLEX);
-00004c  48a3              LDR      r0,|L2.732|
+00004c  48ae              LDR      r0,|L2.776|
 00004e  f7fffffe          BL       RADIO_SetDefaultSkin
 ;;;85     //	CreateR();//开机进入内阻测试界面
 ;;;86     	flag_Load_CC=1;//开机负载默认进入CC模式
-000052  f8dfa28c          LDR      r10,|L2.736|
-000056  f8da0000          LDR      r0,[r10,#0]  ; flagD
-00005a  f0400080          ORR      r0,r0,#0x80
-00005e  f8ca0000          STR      r0,[r10,#0]  ; flagD
+000052  48ae              LDR      r0,|L2.780|
+000054  6801              LDR      r1,[r0,#0]  ; flagD
+000056  f0410180          ORR      r1,r1,#0x80
+00005a  6001              STR      r1,[r0,#0]  ; flagD
 ;;;87     	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
-000062  f44f6180          MOV      r1,#0x400
-000066  489f              LDR      r0,|L2.740|
-000068  f7fffffe          BL       GPIO_SetBits
+00005c  f44f6180          MOV      r1,#0x400
+000060  48ab              LDR      r0,|L2.784|
+000062  f7fffffe          BL       GPIO_SetBits
 ;;;88     	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
-00006c  4c9e              LDR      r4,|L2.744|
-00006e  f44f4100          MOV      r1,#0x8000
-000072  4620              MOV      r0,r4
-000074  f7fffffe          BL       GPIO_SetBits
+000066  4cab              LDR      r4,|L2.788|
+000068  f44f4100          MOV      r1,#0x8000
+00006c  4620              MOV      r0,r4
+00006e  f7fffffe          BL       GPIO_SetBits
 ;;;89     	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
-000078  14e1              ASRS     r1,r4,#19
-00007a  4620              MOV      r0,r4
-00007c  f7fffffe          BL       GPIO_SetBits
+000072  14e1              ASRS     r1,r4,#19
+000074  4620              MOV      r0,r4
+000076  f7fffffe          BL       GPIO_SetBits
 ;;;90     	Flag_Swtich_ON=0;
-000080  f8dfb268          LDR      r11,|L2.748|
-000084  f8db0000          LDR      r0,[r11,#0]  ; flagA
-000088  f0200040          BIC      r0,r0,#0x40
-00008c  f8cb0000          STR      r0,[r11,#0]  ; flagA
+00007a  f8dfb29c          LDR      r11,|L2.792|
+00007e  f8db0000          LDR      r0,[r11,#0]  ; flagA
+000082  f0200040          BIC      r0,r0,#0x40
+000086  f8cb0000          STR      r0,[r11,#0]  ; flagA
 ;;;91     	if(jkflag == 1)
-000090  4c97              LDR      r4,|L2.752|
-000092  7820              LDRB     r0,[r4,#0]  ; jkflag
-000094  2801              CMP      r0,#1
-000096  d002              BEQ      |L2.158|
+00008a  4ca4              LDR      r4,|L2.796|
+00008c  7820              LDRB     r0,[r4,#0]  ; jkflag
+00008e  2801              CMP      r0,#1
+000090  d002              BEQ      |L2.152|
 ;;;92     	{
 ;;;93     		CreateSTARTER();
 ;;;94     	}else if(jkflag == 0){
-000098  7820              LDRB     r0,[r4,#0]  ; jkflag
-00009a  b118              CBZ      r0,|L2.164|
-00009c  e004              B        |L2.168|
+000092  7820              LDRB     r0,[r4,#0]  ; jkflag
+000094  b118              CBZ      r0,|L2.158|
+000096  e004              B        |L2.162|
+                  |L2.152|
+000098  f7fffffe          BL       CreateSTARTER
+00009c  e001              B        |L2.162|
                   |L2.158|
-00009e  f7fffffe          BL       CreateSTARTER
-0000a2  e001              B        |L2.168|
-                  |L2.164|
 ;;;95     		CreateR();
-0000a4  f7fffffe          BL       CreateR
-                  |L2.168|
+00009e  f7fffffe          BL       CreateR
+                  |L2.162|
 ;;;96     	}
 ;;;97     ////	CreateR();//开机进入内阻测试界面
 ;;;98     //// 	flag_Load_CC=1;//开机负载默认进入CC模式
@@ -218,10 +218,11 @@
 ;;;172    				if(flag_Load_CC == 1)
 ;;;173    				{
 ;;;174    					if(load_sw == load_on || (mode_sw == mode_load && cdc_sw == cdc_on) || (page_sw == face_cal && calmode == mode_loadc) || (page_sw == face_cal && calmode == mode_load))
-0000a8  f8df8248          LDR      r8,|L2.756|
-0000ac  4d92              LDR      r5,|L2.760|
-0000ae  4f93              LDR      r7,|L2.764|
-0000b0  2600              MOVS     r6,#0                 ;127
+0000a2  f8df827c          LDR      r8,|L2.800|
+0000a6  f8df927c          LDR      r9,|L2.804|
+0000aa  4d9f              LDR      r5,|L2.808|
+0000ac  4f9f              LDR      r7,|L2.812|
+0000ae  2600              MOVS     r6,#0                 ;127
 ;;;175    					{
 ;;;176    						if(SET_Current_Laod < 10000)
 ;;;177    						{
@@ -248,464 +249,499 @@
 ;;;198    						DAC8531_Send(sendload);
 ;;;199    					}
 ;;;200    				}else if(flag_Load_CC == 0){
-;;;201    					DAC8531_Send(Contr_Laod);
-;;;202    				}
-;;;203    			}
-;;;204    		}
-;;;205    		
-;;;206            
-;;;207    //        RCC_GetClocksFreq(&rcc);
-;;;208            if(page_sw != face_starter)
-;;;209            {
-;;;210                if(scancount == 9)
-;;;211                {
-;;;212                    sLCD_WR_REG(0xf1);
-;;;213                    ee_Delay(30);
-;;;214                    read1963 =sLCD_Read_Data();
-;;;215    				sLCD_WR_REG(0xE6);
-;;;216                    ee_Delay(30);
-;;;217                    read1964=sLCD_Read_Data();
-;;;218                    scancount = 0;
-;;;219                }else{
-;;;220                    scancount++;
-;;;221                }
-;;;222    //                 if(resdone == 1)
-;;;223    //                 {
-;;;224    //                     sLCD_WR_REG(0xf1);
-;;;225    //                     ee_Delay(30);
-;;;226    //                     read1963 =sLCD_Read_Data();
-;;;227    //                 }
-;;;228                 if(read1963 != 0x03)
-;;;229                 {
-;;;230                     resetflag = 1;               
-0000b2  f8df924c          LDR      r9,|L2.768|
-0000b6  e0ef              B        |L2.664|
-                  |L2.184|
-0000b8  88a0              LDRH     r0,[r4,#4]            ;114  ; sendload
-0000ba  28fa              CMP      r0,#0xfa              ;114
-0000bc  d203              BCS      |L2.198|
-0000be  88a0              LDRH     r0,[r4,#4]            ;116  ; sendload
-0000c0  1c40              ADDS     r0,r0,#1              ;116
-0000c2  80a0              STRH     r0,[r4,#4]            ;116
-0000c4  e004              B        |L2.208|
-                  |L2.198|
-0000c6  2001              MOVS     r0,#1                 ;120
-0000c8  f7fffffe          BL       C_SW
-0000cc  8828              LDRH     r0,[r5,#0]            ;122  ; Contr_Laod
-0000ce  80a0              STRH     r0,[r4,#4]            ;122
-                  |L2.208|
-0000d0  88a0              LDRH     r0,[r4,#4]            ;124  ; sendload
-0000d2  f7fffffe          BL       DAC8531_Send
-0000d6  e089              B        |L2.492|
-                  |L2.216|
-0000d8  7838              LDRB     r0,[r7,#0]            ;127  ; page_sw
-0000da  2803              CMP      r0,#3                 ;127
-0000dc  d00c              BEQ      |L2.248|
-0000de  f89a0000          LDRB     r0,[r10,#0]           ;172  ; flagD
-0000e2  0600              LSLS     r0,r0,#24             ;172
-0000e4  d57f              BPL      |L2.486|
-0000e6  4887              LDR      r0,|L2.772|
-0000e8  7800              LDRB     r0,[r0,#0]            ;174  ; load_sw
-0000ea  2801              CMP      r0,#1                 ;174
-0000ec  d053              BEQ      |L2.406|
-0000ee  4886              LDR      r0,|L2.776|
-0000f0  7800              LDRB     r0,[r0,#0]            ;174  ; mode_sw
-0000f2  2802              CMP      r0,#2                 ;174
-0000f4  d038              BEQ      |L2.360|
-0000f6  e03b              B        |L2.368|
-                  |L2.248|
-0000f8  4884              LDR      r0,|L2.780|
-0000fa  7801              LDRB     r1,[r0,#0]            ;129  ; step
-0000fc  2906              CMP      r1,#6                 ;129
-0000fe  d004              BEQ      |L2.266|
-000100  4983              LDR      r1,|L2.784|
-000102  7809              LDRB     r1,[r1,#0]            ;134  ; test_start
-000104  2901              CMP      r1,#1                 ;134
-000106  d004              BEQ      |L2.274|
-000108  e029              B        |L2.350|
-                  |L2.266|
-00010a  8828              LDRH     r0,[r5,#0]            ;131  ; Contr_Laod
-00010c  f7fffffe          BL       DAC8531_Send
-000110  e06c              B        |L2.492|
-                  |L2.274|
-000112  4980              LDR      r1,|L2.788|
-000114  7809              LDRB     r1,[r1,#0]            ;134  ; con_flag
-000116  2901              CMP      r1,#1                 ;134
-000118  d121              BNE      |L2.350|
-00011a  7801              LDRB     r1,[r0,#0]            ;134  ; step
-00011c  b1f9              CBZ      r1,|L2.350|
-00011e  7801              LDRB     r1,[r0,#0]            ;136  ; step
-000120  2902              CMP      r1,#2                 ;136
-000122  d00e              BEQ      |L2.322|
-000124  7801              LDRB     r1,[r0,#0]            ;136  ; step
-000126  2903              CMP      r1,#3                 ;136
-000128  d00b              BEQ      |L2.322|
-00012a  7800              LDRB     r0,[r0,#0]            ;136  ; step
-00012c  2804              CMP      r0,#4                 ;136
-00012e  d101              BNE      |L2.308|
-000130  7860              LDRB     r0,[r4,#1]            ;136  ; ocf
-000132  b130              CBZ      r0,|L2.322|
-                  |L2.308|
-000134  88a0              LDRH     r0,[r4,#4]            ;152  ; sendload
-000136  28fa              CMP      r0,#0xfa              ;152
-000138  d208              BCS      |L2.332|
-00013a  88a0              LDRH     r0,[r4,#4]            ;154  ; sendload
-00013c  1c40              ADDS     r0,r0,#1              ;154
-00013e  80a0              STRH     r0,[r4,#4]            ;154
-000140  e009              B        |L2.342|
-                  |L2.322|
-000142  80a6              STRH     r6,[r4,#4]            ;138
-000144  88a0              LDRH     r0,[r4,#4]            ;139  ; sendload
-000146  f7fffffe          BL       DAC8531_Send
-00014a  e04f              B        |L2.492|
-                  |L2.332|
-00014c  2001              MOVS     r0,#1                 ;158
-00014e  f7fffffe          BL       C_SW
-000152  8828              LDRH     r0,[r5,#0]            ;160  ; Contr_Laod
-000154  80a0              STRH     r0,[r4,#4]            ;160
-                  |L2.342|
-000156  88a0              LDRH     r0,[r4,#4]            ;162  ; sendload
-000158  f7fffffe          BL       DAC8531_Send
-00015c  e046              B        |L2.492|
-                  |L2.350|
-00015e  80a6              STRH     r6,[r4,#4]            ;166
-000160  88a0              LDRH     r0,[r4,#4]            ;167  ; sendload
-000162  f7fffffe          BL       DAC8531_Send
-000166  e041              B        |L2.492|
-                  |L2.360|
-000168  486b              LDR      r0,|L2.792|
-00016a  7800              LDRB     r0,[r0,#0]            ;174  ; cdc_sw
-00016c  2801              CMP      r0,#1                 ;174
-00016e  d012              BEQ      |L2.406|
-                  |L2.368|
-000170  7838              LDRB     r0,[r7,#0]            ;174  ; page_sw
-000172  2808              CMP      r0,#8                 ;174
-000174  d103              BNE      |L2.382|
-000176  f8980000          LDRB     r0,[r8,#0]            ;174  ; calmode
-00017a  2804              CMP      r0,#4                 ;174
-00017c  d00b              BEQ      |L2.406|
-                  |L2.382|
-00017e  7838              LDRB     r0,[r7,#0]            ;174  ; page_sw
-000180  2808              CMP      r0,#8                 ;174
-000182  d103              BNE      |L2.396|
-000184  f8980000          LDRB     r0,[r8,#0]            ;174  ; calmode
-000188  2802              CMP      r0,#2                 ;174
-00018a  d004              BEQ      |L2.406|
-                  |L2.396|
-00018c  80a6              STRH     r6,[r4,#4]            ;197
-00018e  88a0              LDRH     r0,[r4,#4]            ;198  ; sendload
-000190  f7fffffe          BL       DAC8531_Send
-000194  e02a              B        |L2.492|
-                  |L2.406|
-000196  4861              LDR      r0,|L2.796|
-000198  6900              LDR      r0,[r0,#0x10]         ;176  ; Run_Control
-00019a  f2427110          MOV      r1,#0x2710            ;176
-00019e  4288              CMP      r0,r1                 ;176
-0001a0  d20f              BCS      |L2.450|
-0001a2  88a0              LDRH     r0,[r4,#4]            ;178  ; sendload
-0001a4  28fa              CMP      r0,#0xfa              ;178
-0001a6  d203              BCS      |L2.432|
-0001a8  88a0              LDRH     r0,[r4,#4]            ;180  ; sendload
-0001aa  300a              ADDS     r0,r0,#0xa            ;180
-0001ac  80a0              STRH     r0,[r4,#4]            ;180
-0001ae  e004              B        |L2.442|
-                  |L2.432|
-0001b0  2000              MOVS     r0,#0                 ;182
-0001b2  f7fffffe          BL       C_SW
-0001b6  8828              LDRH     r0,[r5,#0]            ;183  ; Contr_Laod
-0001b8  80a0              STRH     r0,[r4,#4]            ;183
-                  |L2.442|
-0001ba  88a0              LDRH     r0,[r4,#4]            ;185  ; sendload
-0001bc  f7fffffe          BL       DAC8531_Send
-0001c0  e014              B        |L2.492|
-                  |L2.450|
-0001c2  88a0              LDRH     r0,[r4,#4]            ;187  ; sendload
-0001c4  f5b07f7a          CMP      r0,#0x3e8             ;187
-0001c8  d204              BCS      |L2.468|
-0001ca  88a0              LDRH     r0,[r4,#4]            ;189  ; sendload
-0001cc  300a              ADDS     r0,r0,#0xa            ;189
-0001ce  80a0              STRH     r0,[r4,#4]            ;189
-0001d0  e005              B        |L2.478|
-0001d2  e008              B        |L2.486|
-                  |L2.468|
-0001d4  2001              MOVS     r0,#1                 ;191
-0001d6  f7fffffe          BL       C_SW
-0001da  8828              LDRH     r0,[r5,#0]            ;192  ; Contr_Laod
-0001dc  80a0              STRH     r0,[r4,#4]            ;192
-                  |L2.478|
-0001de  88a0              LDRH     r0,[r4,#4]            ;194  ; sendload
-0001e0  f7fffffe          BL       DAC8531_Send
-0001e4  e002              B        |L2.492|
-                  |L2.486|
-0001e6  8828              LDRH     r0,[r5,#0]            ;201  ; Contr_Laod
-0001e8  f7fffffe          BL       DAC8531_Send
-                  |L2.492|
-0001ec  7838              LDRB     r0,[r7,#0]            ;208  ; page_sw
-0001ee  2806              CMP      r0,#6                 ;208
-0001f0  d023              BEQ      |L2.570|
-0001f2  6920              LDR      r0,[r4,#0x10]         ;210  ; scancount
-0001f4  2809              CMP      r0,#9                 ;210
-0001f6  d008              BEQ      |L2.522|
-0001f8  1c40              ADDS     r0,r0,#1              ;220
-0001fa  6120              STR      r0,[r4,#0x10]         ;220  ; scancount
-                  |L2.508|
-0001fc  68a0              LDR      r0,[r4,#8]            ;228  ; read1963
-0001fe  2803              CMP      r0,#3                 ;228
-000200  d017              BEQ      |L2.562|
-000202  2001              MOVS     r0,#1
-000204  f8890000          STRB     r0,[r9,#0]
-000208  e017              B        |L2.570|
-                  |L2.522|
-00020a  20f1              MOVS     r0,#0xf1              ;212
-00020c  f7fffffe          BL       sLCD_WR_REG
-000210  201e              MOVS     r0,#0x1e              ;213
-000212  f7fffffe          BL       ee_Delay
-000216  f7fffffe          BL       sLCD_Read_Data
-00021a  60a0              STR      r0,[r4,#8]            ;214  ; read1963
-00021c  20e6              MOVS     r0,#0xe6              ;215
-00021e  f7fffffe          BL       sLCD_WR_REG
-000222  201e              MOVS     r0,#0x1e              ;216
-000224  f7fffffe          BL       ee_Delay
-000228  f7fffffe          BL       sLCD_Read_Data
-00022c  60e0              STR      r0,[r4,#0xc]          ;217  ; read1964
-00022e  6126              STR      r6,[r4,#0x10]         ;218  ; scancount
-000230  e7e4              B        |L2.508|
-                  |L2.562|
-;;;231                 }else{
-;;;232                     resdone = 0;
-000232  483b              LDR      r0,|L2.800|
-000234  7006              STRB     r6,[r0,#0]
-;;;233                     resetflag = 0; 
-000236  f8896000          STRB     r6,[r9,#0]
-                  |L2.570|
-;;;234                 }
-;;;235            }
-;;;236    		
-;;;237    //		switch(page_sw)
-;;;238    //        {
-;;;239    //            case face_menu:
-;;;240    //            {
-;;;241    //                if(pow_sw == pow_on)
-;;;242    //                {
-;;;243    //					if(rmtrig[1] == 1 && sendpcflag == 1)
-;;;244    //					{
-;;;245    //						sendpcflag = 0;
-;;;246    //						SendToPC(1);
-;;;247    //						
-;;;248    //					}
-;;;249    //                }
-;;;250    //            }break;
-;;;251    //            case face_cdc:
-;;;252    //            {
-;;;253    //                if(mode_sw == mode_pow && cdc_sw == cdc_on)
-;;;254    //                {
-;;;255    //					if(rmtrig[2] == 1  && sendpcflag == 1)
-;;;256    //					{
-;;;257    //						sendpcflag = 0;
-;;;258    //						SendToPC(2);
-;;;259    //					}
-;;;260    ////                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
-;;;261    //                }else if(mode_sw == mode_load && cdc_sw == cdc_on){
-;;;262    //					if(rmtrig[2] == 1  && sendpcflag == 1)
-;;;263    //					{
-;;;264    //						sendpcflag = 0;
-;;;265    //						SendToPC(2);
-;;;266    //					}
-;;;267    //                }else if(cdc_sw == cdc_off){
-;;;268    //					
-;;;269    //                }
-;;;270    //            }break;
-;;;271    //            case face_load:
-;;;272    //            {
-;;;273    //                if(load_sw == load_on)
-;;;274    //                {
-;;;275    
-;;;276    //					if(rmtrig[0] == 1  && sendpcflag == 1)
-;;;277    //					{
-;;;278    //						sendpcflag = 0;
-;;;279    //						SendToPC(0);
-;;;280    //					}
-;;;281    //                }
-;;;282    //            }break;
-;;;283    //        }
-;;;284    		
-;;;285    		if(Flag_DAC_OFF==0)
-00023a  483a              LDR      r0,|L2.804|
-00023c  7800              LDRB     r0,[r0,#0]  ; flagB
-00023e  0700              LSLS     r0,r0,#28
-000240  d401              BMI      |L2.582|
-;;;286    		{
-;;;287    			Transformation_ADC();
-000242  f7fffffe          BL       Transformation_ADC
-                  |L2.582|
-;;;288    		}
-;;;289    		if(Flag_ADC_Full==1)
-000246  f8dfb0a4          LDR      r11,|L2.748|
-00024a  f8db0000          LDR      r0,[r11,#0]  ; flagA
-00024e  0781              LSLS     r1,r0,#30
-000250  d505              BPL      |L2.606|
-;;;290    		{
-;;;291    			Flag_ADC_Full=0;
-000252  f0200002          BIC      r0,r0,#2
-000256  f8cb0000          STR      r0,[r11,#0]  ; flagA
-;;;292    			ADC_CH_Scan();//ADC滤波
-00025a  f7fffffe          BL       ADC_CH_Scan
-                  |L2.606|
-;;;293    		}
-;;;294    		AD7689_Scan_CH();//读取AD7689各通道AD值
-00025e  f7fffffe          BL       AD7689_Scan_CH
-;;;295    // 		if(UART_Buffer_Rece_flag==1)
-;;;296    // 		{
-;;;297    // 			UART_Buffer_Rece_flag=0;
-;;;298    // 			UART_Action();
-;;;299    // 		}
-;;;300    		if(Flag_Key_Scan==1)
-000262  f8db0000          LDR      r0,[r11,#0]  ; flagA
-000266  0701              LSLS     r1,r0,#28
-000268  d50d              BPL      |L2.646|
-;;;301    		{
-;;;302    			Flag_Key_Scan=0;
-00026a  f0200008          BIC      r0,r0,#8
-00026e  f8cb0000          STR      r0,[r11,#0]  ; flagA
-;;;303    			NewKey=TM1650_Read_KEY();
-000272  f7fffffe          BL       TM1650_Read_KEY
-000276  492c              LDR      r1,|L2.808|
-000278  7008              STRB     r0,[r1,#0]
-;;;304    			Flag_Key_Scan = 1;
-00027a  f8db0000          LDR      r0,[r11,#0]  ; flagA
-00027e  f0400008          ORR      r0,r0,#8
-000282  f8cb0000          STR      r0,[r11,#0]  ; flagA
-                  |L2.646|
-;;;305    		}
-;;;306    		Key_Funtion();//键盘处理
-000286  f7fffffe          BL       Key_Funtion
-;;;307    		Temp_Comapre();//风扇控制
-00028a  f7fffffe          BL       Temp_Comapre
-;;;308    		BEEP_Ring();//蜂鸣器
-00028e  f7fffffe          BL       BEEP_Ring
-;;;309    		GUI_Delay(2);//GUI刷新
-000292  2002              MOVS     r0,#2
-000294  f7fffffe          BL       GUI_Delay
-                  |L2.664|
-000298  4824              LDR      r0,|L2.812|
-00029a  8801              LDRH     r1,[r0,#0]            ;109  ; Contr_Current
-00029c  f04f4b80          MOV      r11,#0x40000000       ;109
-0002a0  4658              MOV      r0,r11                ;109
-0002a2  f7fffffe          BL       TIM_SetCompare1
-0002a6  4822              LDR      r0,|L2.816|
-0002a8  8801              LDRH     r1,[r0,#0]            ;110  ; Contr_Voltage
-0002aa  4658              MOV      r0,r11                ;110
-0002ac  f7fffffe          BL       TIM_SetCompare2
-0002b0  4820              LDR      r0,|L2.820|
-0002b2  7800              LDRB     r0,[r0,#0]            ;112  ; usartocflag
-0002b4  2801              CMP      r0,#1                 ;112
-0002b6  f47faf0f          BNE      |L2.216|
-0002ba  e6fd              B        |L2.184|
-;;;310    	}
-;;;311      
-;;;312    }
-;;;313    
+;;;201    					if(load_sw == load_on)
+;;;202    					{
+;;;203    						if(sendload > 63535)
+;;;204    						{
+;;;205    							sendload = sendload - 10;
+;;;206    						}else{
+;;;207    							sendload = Contr_Laod;
+;;;208    						}
+;;;209    						DAC8531_Send(sendload);
+;;;210    					}else{
+;;;211    						sendload = 65535;
+;;;212    						DAC8531_Send(sendload);
+;;;213    					}
+;;;214    //					DAC8531_Send(Contr_Laod);
+;;;215    				}
+;;;216    			}
+;;;217    		}
+;;;218    		
+;;;219            
+;;;220    //        RCC_GetClocksFreq(&rcc);
+;;;221            if(page_sw != face_starter)
+;;;222            {
+;;;223                if(scancount == 9)
+;;;224                {
+;;;225                    sLCD_WR_REG(0xf1);
+;;;226                    ee_Delay(30);
+;;;227                    read1963 =sLCD_Read_Data();
+;;;228    				sLCD_WR_REG(0xE6);
+;;;229                    ee_Delay(30);
+;;;230                    read1964=sLCD_Read_Data();
+;;;231                    scancount = 0;
+;;;232                }else{
+;;;233                    scancount++;
+;;;234                }
+;;;235    //                 if(resdone == 1)
+;;;236    //                 {
+;;;237    //                     sLCD_WR_REG(0xf1);
+;;;238    //                     ee_Delay(30);
+;;;239    //                     read1963 =sLCD_Read_Data();
+;;;240    //                 }
+;;;241                 if(read1963 != 0x03)
+;;;242                 {
+;;;243                     resetflag = 1;               
+0000b0  f8dfa27c          LDR      r10,|L2.816|
+0000b4  e105              B        |L2.706|
+                  |L2.182|
+0000b6  88a0              LDRH     r0,[r4,#4]            ;114  ; sendload
+0000b8  28fa              CMP      r0,#0xfa              ;114
+0000ba  d203              BCS      |L2.196|
+0000bc  88a0              LDRH     r0,[r4,#4]            ;116  ; sendload
+0000be  1c40              ADDS     r0,r0,#1              ;116
+0000c0  80a0              STRH     r0,[r4,#4]            ;116
+0000c2  e004              B        |L2.206|
+                  |L2.196|
+0000c4  2001              MOVS     r0,#1                 ;120
+0000c6  f7fffffe          BL       C_SW
+0000ca  8828              LDRH     r0,[r5,#0]            ;122  ; Contr_Laod
+0000cc  80a0              STRH     r0,[r4,#4]            ;122
+                  |L2.206|
+0000ce  88a0              LDRH     r0,[r4,#4]            ;124  ; sendload
+0000d0  f7fffffe          BL       DAC8531_Send
+0000d4  e090              B        |L2.504|
+                  |L2.214|
+0000d6  7838              LDRB     r0,[r7,#0]            ;127  ; page_sw
+0000d8  2803              CMP      r0,#3                 ;127
+0000da  d00c              BEQ      |L2.246|
+0000dc  488b              LDR      r0,|L2.780|
+0000de  7800              LDRB     r0,[r0,#0]            ;172  ; flagD
+0000e0  0600              LSLS     r0,r0,#24             ;172
+0000e2  d57f              BPL      |L2.484|
+0000e4  f8990000          LDRB     r0,[r9,#0]            ;174  ; load_sw
+0000e8  2801              CMP      r0,#1                 ;174
+0000ea  d053              BEQ      |L2.404|
+0000ec  4891              LDR      r0,|L2.820|
+0000ee  7800              LDRB     r0,[r0,#0]            ;174  ; mode_sw
+0000f0  2802              CMP      r0,#2                 ;174
+0000f2  d038              BEQ      |L2.358|
+0000f4  e03b              B        |L2.366|
+                  |L2.246|
+0000f6  4890              LDR      r0,|L2.824|
+0000f8  7801              LDRB     r1,[r0,#0]            ;129  ; step
+0000fa  2906              CMP      r1,#6                 ;129
+0000fc  d004              BEQ      |L2.264|
+0000fe  498f              LDR      r1,|L2.828|
+000100  7809              LDRB     r1,[r1,#0]            ;134  ; test_start
+000102  2901              CMP      r1,#1                 ;134
+000104  d004              BEQ      |L2.272|
+000106  e029              B        |L2.348|
+                  |L2.264|
+000108  8828              LDRH     r0,[r5,#0]            ;131  ; Contr_Laod
+00010a  f7fffffe          BL       DAC8531_Send
+00010e  e073              B        |L2.504|
+                  |L2.272|
+000110  498b              LDR      r1,|L2.832|
+000112  7809              LDRB     r1,[r1,#0]            ;134  ; con_flag
+000114  2901              CMP      r1,#1                 ;134
+000116  d121              BNE      |L2.348|
+000118  7801              LDRB     r1,[r0,#0]            ;134  ; step
+00011a  b1f9              CBZ      r1,|L2.348|
+00011c  7801              LDRB     r1,[r0,#0]            ;136  ; step
+00011e  2902              CMP      r1,#2                 ;136
+000120  d00e              BEQ      |L2.320|
+000122  7801              LDRB     r1,[r0,#0]            ;136  ; step
+000124  2903              CMP      r1,#3                 ;136
+000126  d00b              BEQ      |L2.320|
+000128  7800              LDRB     r0,[r0,#0]            ;136  ; step
+00012a  2804              CMP      r0,#4                 ;136
+00012c  d101              BNE      |L2.306|
+00012e  7860              LDRB     r0,[r4,#1]            ;136  ; ocf
+000130  b130              CBZ      r0,|L2.320|
+                  |L2.306|
+000132  88a0              LDRH     r0,[r4,#4]            ;152  ; sendload
+000134  28fa              CMP      r0,#0xfa              ;152
+000136  d208              BCS      |L2.330|
+000138  88a0              LDRH     r0,[r4,#4]            ;154  ; sendload
+00013a  1c40              ADDS     r0,r0,#1              ;154
+00013c  80a0              STRH     r0,[r4,#4]            ;154
+00013e  e009              B        |L2.340|
+                  |L2.320|
+000140  80a6              STRH     r6,[r4,#4]            ;138
+000142  88a0              LDRH     r0,[r4,#4]            ;139  ; sendload
+000144  f7fffffe          BL       DAC8531_Send
+000148  e056              B        |L2.504|
+                  |L2.330|
+00014a  2001              MOVS     r0,#1                 ;158
+00014c  f7fffffe          BL       C_SW
+000150  8828              LDRH     r0,[r5,#0]            ;160  ; Contr_Laod
+000152  80a0              STRH     r0,[r4,#4]            ;160
+                  |L2.340|
+000154  88a0              LDRH     r0,[r4,#4]            ;162  ; sendload
+000156  f7fffffe          BL       DAC8531_Send
+00015a  e04d              B        |L2.504|
+                  |L2.348|
+00015c  80a6              STRH     r6,[r4,#4]            ;166
+00015e  88a0              LDRH     r0,[r4,#4]            ;167  ; sendload
+000160  f7fffffe          BL       DAC8531_Send
+000164  e048              B        |L2.504|
+                  |L2.358|
+000166  4877              LDR      r0,|L2.836|
+000168  7800              LDRB     r0,[r0,#0]            ;174  ; cdc_sw
+00016a  2801              CMP      r0,#1                 ;174
+00016c  d012              BEQ      |L2.404|
+                  |L2.366|
+00016e  7838              LDRB     r0,[r7,#0]            ;174  ; page_sw
+000170  2808              CMP      r0,#8                 ;174
+000172  d103              BNE      |L2.380|
+000174  f8980000          LDRB     r0,[r8,#0]            ;174  ; calmode
+000178  2804              CMP      r0,#4                 ;174
+00017a  d00b              BEQ      |L2.404|
+                  |L2.380|
+00017c  7838              LDRB     r0,[r7,#0]            ;174  ; page_sw
+00017e  2808              CMP      r0,#8                 ;174
+000180  d103              BNE      |L2.394|
+000182  f8980000          LDRB     r0,[r8,#0]            ;174  ; calmode
+000186  2802              CMP      r0,#2                 ;174
+000188  d004              BEQ      |L2.404|
+                  |L2.394|
+00018a  80a6              STRH     r6,[r4,#4]            ;197
+00018c  88a0              LDRH     r0,[r4,#4]            ;198  ; sendload
+00018e  f7fffffe          BL       DAC8531_Send
+000192  e031              B        |L2.504|
+                  |L2.404|
+000194  486c              LDR      r0,|L2.840|
+000196  6900              LDR      r0,[r0,#0x10]         ;176  ; Run_Control
+000198  f2427110          MOV      r1,#0x2710            ;176
+00019c  4288              CMP      r0,r1                 ;176
+00019e  d20f              BCS      |L2.448|
+0001a0  88a0              LDRH     r0,[r4,#4]            ;178  ; sendload
+0001a2  28fa              CMP      r0,#0xfa              ;178
+0001a4  d203              BCS      |L2.430|
+0001a6  88a0              LDRH     r0,[r4,#4]            ;180  ; sendload
+0001a8  300a              ADDS     r0,r0,#0xa            ;180
+0001aa  80a0              STRH     r0,[r4,#4]            ;180
+0001ac  e004              B        |L2.440|
+                  |L2.430|
+0001ae  2000              MOVS     r0,#0                 ;182
+0001b0  f7fffffe          BL       C_SW
+0001b4  8828              LDRH     r0,[r5,#0]            ;183  ; Contr_Laod
+0001b6  80a0              STRH     r0,[r4,#4]            ;183
+                  |L2.440|
+0001b8  88a0              LDRH     r0,[r4,#4]            ;185  ; sendload
+0001ba  f7fffffe          BL       DAC8531_Send
+0001be  e01b              B        |L2.504|
+                  |L2.448|
+0001c0  88a0              LDRH     r0,[r4,#4]            ;187  ; sendload
+0001c2  f5b07f7a          CMP      r0,#0x3e8             ;187
+0001c6  d204              BCS      |L2.466|
+0001c8  88a0              LDRH     r0,[r4,#4]            ;189  ; sendload
+0001ca  300a              ADDS     r0,r0,#0xa            ;189
+0001cc  80a0              STRH     r0,[r4,#4]            ;189
+0001ce  e005              B        |L2.476|
+0001d0  e008              B        |L2.484|
+                  |L2.466|
+0001d2  2001              MOVS     r0,#1                 ;191
+0001d4  f7fffffe          BL       C_SW
+0001d8  8828              LDRH     r0,[r5,#0]            ;192  ; Contr_Laod
+0001da  80a0              STRH     r0,[r4,#4]            ;192
+                  |L2.476|
+0001dc  88a0              LDRH     r0,[r4,#4]            ;194  ; sendload
+0001de  f7fffffe          BL       DAC8531_Send
+0001e2  e009              B        |L2.504|
+                  |L2.484|
+0001e4  f8990000          LDRB     r0,[r9,#0]            ;201  ; load_sw
+0001e8  2801              CMP      r0,#1                 ;201
+0001ea  d014              BEQ      |L2.534|
+0001ec  f64f70ff          MOV      r0,#0xffff            ;211
+0001f0  80a0              STRH     r0,[r4,#4]            ;211
+0001f2  88a0              LDRH     r0,[r4,#4]            ;212  ; sendload
+0001f4  f7fffffe          BL       DAC8531_Send
+                  |L2.504|
+0001f8  7838              LDRB     r0,[r7,#0]            ;221  ; page_sw
+0001fa  2806              CMP      r0,#6                 ;221
+0001fc  d032              BEQ      |L2.612|
+0001fe  6920              LDR      r0,[r4,#0x10]         ;223  ; scancount
+000200  2809              CMP      r0,#9                 ;223
+000202  d017              BEQ      |L2.564|
+000204  1c40              ADDS     r0,r0,#1              ;233
+000206  6120              STR      r0,[r4,#0x10]         ;233  ; scancount
+                  |L2.520|
+000208  68a0              LDR      r0,[r4,#8]            ;241  ; read1963
+00020a  2803              CMP      r0,#3                 ;241
+00020c  d026              BEQ      |L2.604|
+00020e  2001              MOVS     r0,#1
+000210  f88a0000          STRB     r0,[r10,#0]
+000214  e026              B        |L2.612|
+                  |L2.534|
+000216  88a0              LDRH     r0,[r4,#4]            ;203  ; sendload
+000218  f64f012f          MOV      r1,#0xf82f            ;203
+00021c  4288              CMP      r0,r1                 ;203
+00021e  d903              BLS      |L2.552|
+000220  88a0              LDRH     r0,[r4,#4]            ;205  ; sendload
+000222  380a              SUBS     r0,r0,#0xa            ;205
+000224  80a0              STRH     r0,[r4,#4]            ;205
+000226  e001              B        |L2.556|
+                  |L2.552|
+000228  8828              LDRH     r0,[r5,#0]            ;207  ; Contr_Laod
+00022a  80a0              STRH     r0,[r4,#4]            ;207
+                  |L2.556|
+00022c  88a0              LDRH     r0,[r4,#4]            ;209  ; sendload
+00022e  f7fffffe          BL       DAC8531_Send
+000232  e7e1              B        |L2.504|
+                  |L2.564|
+000234  20f1              MOVS     r0,#0xf1              ;225
+000236  f7fffffe          BL       sLCD_WR_REG
+00023a  201e              MOVS     r0,#0x1e              ;226
+00023c  f7fffffe          BL       ee_Delay
+000240  f7fffffe          BL       sLCD_Read_Data
+000244  60a0              STR      r0,[r4,#8]            ;227  ; read1963
+000246  20e6              MOVS     r0,#0xe6              ;228
+000248  f7fffffe          BL       sLCD_WR_REG
+00024c  201e              MOVS     r0,#0x1e              ;229
+00024e  f7fffffe          BL       ee_Delay
+000252  f7fffffe          BL       sLCD_Read_Data
+000256  60e0              STR      r0,[r4,#0xc]          ;230  ; read1964
+000258  6126              STR      r6,[r4,#0x10]         ;231  ; scancount
+00025a  e7d5              B        |L2.520|
+                  |L2.604|
+;;;244                 }else{
+;;;245                     resdone = 0;
+00025c  483b              LDR      r0,|L2.844|
+00025e  7006              STRB     r6,[r0,#0]
+;;;246                     resetflag = 0; 
+000260  f88a6000          STRB     r6,[r10,#0]
+                  |L2.612|
+;;;247                 }
+;;;248            }
+;;;249    		
+;;;250    //		switch(page_sw)
+;;;251    //        {
+;;;252    //            case face_menu:
+;;;253    //            {
+;;;254    //                if(pow_sw == pow_on)
+;;;255    //                {
+;;;256    //					if(rmtrig[1] == 1 && sendpcflag == 1)
+;;;257    //					{
+;;;258    //						sendpcflag = 0;
+;;;259    //						SendToPC(1);
+;;;260    //						
+;;;261    //					}
+;;;262    //                }
+;;;263    //            }break;
+;;;264    //            case face_cdc:
+;;;265    //            {
+;;;266    //                if(mode_sw == mode_pow && cdc_sw == cdc_on)
+;;;267    //                {
+;;;268    //					if(rmtrig[2] == 1  && sendpcflag == 1)
+;;;269    //					{
+;;;270    //						sendpcflag = 0;
+;;;271    //						SendToPC(2);
+;;;272    //					}
+;;;273    ////                    bc_raw += DISS_POW_Current * 1000 * 1/3600;
+;;;274    //                }else if(mode_sw == mode_load && cdc_sw == cdc_on){
+;;;275    //					if(rmtrig[2] == 1  && sendpcflag == 1)
+;;;276    //					{
+;;;277    //						sendpcflag = 0;
+;;;278    //						SendToPC(2);
+;;;279    //					}
+;;;280    //                }else if(cdc_sw == cdc_off){
+;;;281    //					
+;;;282    //                }
+;;;283    //            }break;
+;;;284    //            case face_load:
+;;;285    //            {
+;;;286    //                if(load_sw == load_on)
+;;;287    //                {
+;;;288    
+;;;289    //					if(rmtrig[0] == 1  && sendpcflag == 1)
+;;;290    //					{
+;;;291    //						sendpcflag = 0;
+;;;292    //						SendToPC(0);
+;;;293    //					}
+;;;294    //                }
+;;;295    //            }break;
+;;;296    //        }
+;;;297    		
+;;;298    		if(Flag_DAC_OFF==0)
+000264  483a              LDR      r0,|L2.848|
+000266  7800              LDRB     r0,[r0,#0]  ; flagB
+000268  0700              LSLS     r0,r0,#28
+00026a  d401              BMI      |L2.624|
+;;;299    		{
+;;;300    			Transformation_ADC();
+00026c  f7fffffe          BL       Transformation_ADC
+                  |L2.624|
+;;;301    		}
+;;;302    		if(Flag_ADC_Full==1)
+000270  f8dfb0a4          LDR      r11,|L2.792|
+000274  f8db0000          LDR      r0,[r11,#0]  ; flagA
+000278  0781              LSLS     r1,r0,#30
+00027a  d505              BPL      |L2.648|
+;;;303    		{
+;;;304    			Flag_ADC_Full=0;
+00027c  f0200002          BIC      r0,r0,#2
+000280  f8cb0000          STR      r0,[r11,#0]  ; flagA
+;;;305    			ADC_CH_Scan();//ADC滤波
+000284  f7fffffe          BL       ADC_CH_Scan
+                  |L2.648|
+;;;306    		}
+;;;307    		AD7689_Scan_CH();//读取AD7689各通道AD值
+000288  f7fffffe          BL       AD7689_Scan_CH
+;;;308    // 		if(UART_Buffer_Rece_flag==1)
+;;;309    // 		{
+;;;310    // 			UART_Buffer_Rece_flag=0;
+;;;311    // 			UART_Action();
+;;;312    // 		}
+;;;313    		if(Flag_Key_Scan==1)
+00028c  f8db0000          LDR      r0,[r11,#0]  ; flagA
+000290  0701              LSLS     r1,r0,#28
+000292  d50d              BPL      |L2.688|
+;;;314    		{
+;;;315    			Flag_Key_Scan=0;
+000294  f0200008          BIC      r0,r0,#8
+000298  f8cb0000          STR      r0,[r11,#0]  ; flagA
+;;;316    			NewKey=TM1650_Read_KEY();
+00029c  f7fffffe          BL       TM1650_Read_KEY
+0002a0  492c              LDR      r1,|L2.852|
+0002a2  7008              STRB     r0,[r1,#0]
+;;;317    			Flag_Key_Scan = 1;
+0002a4  f8db0000          LDR      r0,[r11,#0]  ; flagA
+0002a8  f0400008          ORR      r0,r0,#8
+0002ac  f8cb0000          STR      r0,[r11,#0]  ; flagA
+                  |L2.688|
+;;;318    		}
+;;;319    		Key_Funtion();//键盘处理
+0002b0  f7fffffe          BL       Key_Funtion
+;;;320    		Temp_Comapre();//风扇控制
+0002b4  f7fffffe          BL       Temp_Comapre
+;;;321    		BEEP_Ring();//蜂鸣器
+0002b8  f7fffffe          BL       BEEP_Ring
+;;;322    		GUI_Delay(2);//GUI刷新
+0002bc  2002              MOVS     r0,#2
+0002be  f7fffffe          BL       GUI_Delay
+                  |L2.706|
+0002c2  4825              LDR      r0,|L2.856|
+0002c4  8801              LDRH     r1,[r0,#0]            ;109  ; Contr_Current
+0002c6  f04f4b80          MOV      r11,#0x40000000       ;109
+0002ca  4658              MOV      r0,r11                ;109
+0002cc  f7fffffe          BL       TIM_SetCompare1
+0002d0  4822              LDR      r0,|L2.860|
+0002d2  8801              LDRH     r1,[r0,#0]            ;110  ; Contr_Voltage
+0002d4  4658              MOV      r0,r11                ;110
+0002d6  f7fffffe          BL       TIM_SetCompare2
+0002da  4821              LDR      r0,|L2.864|
+0002dc  7800              LDRB     r0,[r0,#0]            ;112  ; usartocflag
+0002de  2801              CMP      r0,#1                 ;112
+0002e0  f47faef9          BNE      |L2.214|
+0002e4  e6e7              B        |L2.182|
+;;;323    	}
+;;;324      
+;;;325    }
+;;;326    
                           ENDP
 
-                  |L2.700|
-                          DCD      PROGBAR_DrawSkinFlex
-                  |L2.704|
-                          DCD      FRAMEWIN_DrawSkinFlex
-                  |L2.708|
-                          DCD      BUTTON_DrawSkinFlex
-                  |L2.712|
-                          DCD      CHECKBOX_DrawSkinFlex
-                  |L2.716|
-                          DCD      DROPDOWN_DrawSkinFlex
-                  |L2.720|
-                          DCD      SCROLLBAR_DrawSkinFlex
-                  |L2.724|
-                          DCD      SLIDER_DrawSkinFlex
-                  |L2.728|
-                          DCD      HEADER_DrawSkinFlex
-                  |L2.732|
-                          DCD      RADIO_DrawSkinFlex
-                  |L2.736|
-                          DCD      flagD
-                  |L2.740|
-                          DCD      0x40020800
+0002e6  0000              DCW      0x0000
                   |L2.744|
-                          DCD      0x40020000
+                          DCD      PROGBAR_DrawSkinFlex
                   |L2.748|
-                          DCD      flagA
+                          DCD      FRAMEWIN_DrawSkinFlex
                   |L2.752|
-                          DCD      ||.data||
+                          DCD      BUTTON_DrawSkinFlex
                   |L2.756|
-                          DCD      calmode
+                          DCD      CHECKBOX_DrawSkinFlex
                   |L2.760|
-                          DCD      Contr_Laod
+                          DCD      DROPDOWN_DrawSkinFlex
                   |L2.764|
-                          DCD      page_sw
+                          DCD      SCROLLBAR_DrawSkinFlex
                   |L2.768|
-                          DCD      resetflag
+                          DCD      SLIDER_DrawSkinFlex
                   |L2.772|
-                          DCD      load_sw
+                          DCD      HEADER_DrawSkinFlex
                   |L2.776|
-                          DCD      mode_sw
+                          DCD      RADIO_DrawSkinFlex
                   |L2.780|
-                          DCD      step
+                          DCD      flagD
                   |L2.784|
-                          DCD      test_start
+                          DCD      0x40020800
                   |L2.788|
-                          DCD      con_flag
+                          DCD      0x40020000
                   |L2.792|
-                          DCD      cdc_sw
+                          DCD      flagA
                   |L2.796|
-                          DCD      Run_Control
+                          DCD      ||.data||
                   |L2.800|
-                          DCD      resdone
+                          DCD      calmode
                   |L2.804|
-                          DCD      flagB
+                          DCD      load_sw
                   |L2.808|
-                          DCD      NewKey
+                          DCD      Contr_Laod
                   |L2.812|
-                          DCD      Contr_Current
+                          DCD      page_sw
                   |L2.816|
-                          DCD      Contr_Voltage
+                          DCD      resetflag
                   |L2.820|
+                          DCD      mode_sw
+                  |L2.824|
+                          DCD      step
+                  |L2.828|
+                          DCD      test_start
+                  |L2.832|
+                          DCD      con_flag
+                  |L2.836|
+                          DCD      cdc_sw
+                  |L2.840|
+                          DCD      Run_Control
+                  |L2.844|
+                          DCD      resdone
+                  |L2.848|
+                          DCD      flagB
+                  |L2.852|
+                          DCD      NewKey
+                  |L2.856|
+                          DCD      Contr_Current
+                  |L2.860|
+                          DCD      Contr_Voltage
+                  |L2.864|
                           DCD      usartocflag
 
                           AREA ||i.V_SW||, CODE, READONLY, ALIGN=2
 
                   V_SW PROC
-;;;313    
-;;;314    void V_SW(u8 i)
+;;;326    
+;;;327    void V_SW(u8 i)
 000000  b510              PUSH     {r4,lr}
-;;;315    {
-;;;316    	if(i == 0)
-;;;317    	{
-;;;318    		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
+;;;328    {
+;;;329    	if(i == 0)
+;;;330    	{
+;;;331    		GPIO_SetBits(GPIOA,GPIO_Pin_12);//电压低档位0-12V
 000002  4a0a              LDR      r2,|L3.44|
-;;;319    		vflag = 0;
+;;;332    		vflag = 0;
 000004  4c0a              LDR      r4,|L3.48|
-000006  f44f5180          MOV      r1,#0x1000            ;318
-00000a  2800              CMP      r0,#0                 ;316
+000006  f44f5180          MOV      r1,#0x1000            ;331
+00000a  2800              CMP      r0,#0                 ;329
 00000c  d007              BEQ      |L3.30|
-;;;320    	}else if(i == 1){
+;;;333    	}else if(i == 1){
 00000e  2801              CMP      r0,#1
 000010  d104              BNE      |L3.28|
-;;;321    		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
+;;;334    		GPIO_ResetBits(GPIOA,GPIO_Pin_12);//电压高档位>12V
 000012  4610              MOV      r0,r2
 000014  f7fffffe          BL       GPIO_ResetBits
-;;;322    		vflag = 1;
+;;;335    		vflag = 1;
 000018  2001              MOVS     r0,#1
 00001a  70a0              STRB     r0,[r4,#2]
                   |L3.28|
-;;;323    	}
-;;;324    }
+;;;336    	}
+;;;337    }
 00001c  bd10              POP      {r4,pc}
                   |L3.30|
-00001e  4610              MOV      r0,r2                 ;318
+00001e  4610              MOV      r0,r2                 ;331
 000020  f7fffffe          BL       GPIO_SetBits
-000024  2000              MOVS     r0,#0                 ;319
-000026  70a0              STRB     r0,[r4,#2]            ;319
+000024  2000              MOVS     r0,#0                 ;332
+000026  70a0              STRB     r0,[r4,#2]            ;332
 000028  bd10              POP      {r4,pc}
-;;;325    
+;;;338    
                           ENDP
 
 00002a  0000              DCW      0x0000

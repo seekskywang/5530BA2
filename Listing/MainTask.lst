@@ -48989,6 +48989,7 @@ Nextern float temp;
 Nextern vu8 set_loop_count;
 Nextern float load_cutoffv;;
 Nextern float pow_cutoffc;
+Nextern vu16 loaddelay;
 N
 Nextern vu8 test_mode;
 Nextern u8 usartocflag;
@@ -49630,6 +49631,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -50258,6 +50260,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -50889,6 +50892,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -51520,6 +51524,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -52323,7 +52328,21 @@ N						DAC8531_Send(sendload);
 N					}
 N				}else if(flag_Load_CC == 0){
 X				}else if((flagD . bit7) == 0){
-N					DAC8531_Send(Contr_Laod);
+N					if(load_sw == load_on)
+X					if(load_sw == 1)
+N					{
+N						if(sendload > 63535)
+N						{
+N							sendload = sendload - 10;
+N						}else{
+N							sendload = Contr_Laod;
+N						}
+N						DAC8531_Send(sendload);
+N					}else{
+N						sendload = 65535;
+N						DAC8531_Send(sendload);
+N					}
+N//					DAC8531_Send(Contr_Laod);
 N				}
 N			}
 N		}

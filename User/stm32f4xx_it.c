@@ -55,6 +55,7 @@ extern vu8 c_rec;
 extern vu8 load_sw;
 extern u8 load_mode;
 extern u8 sendmodeflag;
+extern vu16 short_time;
 vu16 Temperature;
 extern float v;
 u8 rmtrig[3];
@@ -514,7 +515,8 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 		case SLAVE_REG_P05:
 			IO_OFF();
             SET_Current_Laod = 0;
-            usartocflag = 1; 
+            usartocflag = 1;
+			short_time = 0; 
 //            while(usartocflag == 1);
             value = (int)(oc_data*1000);
 			break;

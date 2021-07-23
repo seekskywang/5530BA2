@@ -215,6 +215,7 @@ extern float temp;
 extern vu8 set_loop_count;
 extern float load_cutoffv;;
 extern float pow_cutoffc;
+extern vu16 loaddelay;
 
 extern vu8 test_mode;
 extern u8 usartocflag;

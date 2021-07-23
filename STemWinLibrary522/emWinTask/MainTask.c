@@ -198,7 +198,20 @@ void MainTask(void)
 						DAC8531_Send(sendload);
 					}
 				}else if(flag_Load_CC == 0){
-					DAC8531_Send(Contr_Laod);
+					if(load_sw == load_on)
+					{
+						if(sendload > 63535)
+						{
+							sendload = sendload - 10;
+						}else{
+							sendload = Contr_Laod;
+						}
+						DAC8531_Send(sendload);
+					}else{
+						sendload = 65535;
+						DAC8531_Send(sendload);
+					}
+//					DAC8531_Send(Contr_Laod);
 				}
 			}
 		}

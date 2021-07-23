@@ -48939,6 +48939,7 @@ Nextern float temp;
 Nextern vu8 set_loop_count;
 Nextern float load_cutoffv;;
 Nextern float pow_cutoffc;
+Nextern vu16 loaddelay;
 N
 Nextern vu8 test_mode;
 Nextern u8 usartocflag;
@@ -49551,6 +49552,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -52268,6 +52270,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -53311,6 +53314,7 @@ Nextern vu8 oc_mode;
 Nu8 load_mode;
 Nfloat load_cutoffv;
 Nextern u8 cswflag;
+Nvu16 loaddelay;
 Nextern struct bitDefine
 N{
 N    unsigned bit0: 1;
@@ -53561,7 +53565,7 @@ X			hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x013D));
 N			TEXT_SetText(hItem,"");
 N		}
 N		
-W "..\APP\load_Face.c" 235 16 single-precision operand implicitly converted to double-precision
+W "..\APP\load_Face.c" 236 16 single-precision operand implicitly converted to double-precision
 N            if(DISS_Voltage < 0.3)
 N            {
 N                hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_84);
@@ -53651,7 +53655,11 @@ X                hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x96));
 N                TEXT_SetText(hItem,"");
 N                status_flash = 0;
 N            }
-N            if(load_cutoffv != 0 && DISS_Voltage < load_cutoffv)
+N			if(loaddelay != 0)
+N			{
+N				loaddelay --;
+N			}
+N            if(load_cutoffv != 0 && DISS_Voltage < load_cutoffv && loaddelay == 0)
 N			{
 N				Flag_Swtich_ON=0;
 X				(flagA . bit6)=0;
@@ -53694,6 +53702,7 @@ N            hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_85);
 X            hItem = WM_GetDialogItem(pMsg->hWin, (0x800 + 0x92));
 N            sprintf(buf,"%.3f",0.000);        
 N            TEXT_SetText(hItem,buf);
+N			loaddelay = 50;
 N        }
 N//        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_143);       
 N//        sprintf(buf,"%.3f",overloadv);
@@ -54151,12 +54160,12 @@ N  default:
 N    WM_DefaultProc(pMsg);
 N    break;
 N  }
-W "..\APP\load_Face.c" 108 14 variable "swcount"  was declared but never referenced
-W "..\APP\load_Face.c" 111 16 variable "olvbuff"  was declared but never referenced
-W "..\APP\load_Face.c" 111 24 variable "oldv"  was declared but never referenced
-W "..\APP\load_Face.c" 112 16 variable "testc1"  was declared but never referenced
-W "..\APP\load_Face.c" 112 23 variable "testc2"  was declared but never referenced
-W "..\APP\load_Face.c" 112 30 variable "testres"  was declared but never referenced
+W "..\APP\load_Face.c" 109 14 variable "swcount"  was declared but never referenced
+W "..\APP\load_Face.c" 112 16 variable "olvbuff"  was declared but never referenced
+W "..\APP\load_Face.c" 112 24 variable "oldv"  was declared but never referenced
+W "..\APP\load_Face.c" 113 16 variable "testc1"  was declared but never referenced
+W "..\APP\load_Face.c" 113 23 variable "testc2"  was declared but never referenced
+W "..\APP\load_Face.c" 113 30 variable "testres"  was declared but never referenced
 N}
 N
 NWM_HWIN CreateWindow2(void) {
@@ -54165,7 +54174,7 @@ N  if(page_sw == face_graph)
 X  if(page_sw == 0)
 N  {      
 N  }else{
-W "..\APP\load_Face.c" 716 7 function "IO_OFF" declared implicitly
+W "..\APP\load_Face.c" 722 7 function "IO_OFF" declared implicitly
 N      IO_OFF();
 N  }
 N  page_sw = face_load;

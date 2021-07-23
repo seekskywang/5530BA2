@@ -35163,6 +35163,7 @@ Nextern float temp;
 Nextern vu8 set_loop_count;
 Nextern float load_cutoffv;;
 Nextern float pow_cutoffc;
+Nextern vu16 loaddelay;
 N
 Nextern vu8 test_mode;
 Nextern u8 usartocflag;
@@ -35776,6 +35777,7 @@ Sextern float temp;
 Sextern vu8 set_loop_count;
 Sextern float load_cutoffv;;
 Sextern float pow_cutoffc;
+Sextern vu16 loaddelay;
 S
 Sextern vu8 test_mode;
 Sextern u8 usartocflag;
@@ -50122,6 +50124,7 @@ Nextern vu8 c_rec;
 Nextern vu8 load_sw;
 Nextern u8 load_mode;
 Nextern u8 sendmodeflag;
+Nextern vu16 short_time;
 Nvu16 Temperature;
 Nextern float v;
 Nu8 rmtrig[3];
@@ -50510,7 +50513,7 @@ N            if(i < 10)
 N            {
 N             sum += (UART_Buffer_Rece[2] * 256 + UART_Buffer_Rece[3])/10.0;
 N            }else{
-W "..\User\stm32f4xx_it.c" 430 24 single-precision operand implicitly converted to double-precision
+W "..\User\stm32f4xx_it.c" 431 24 single-precision operand implicitly converted to double-precision
 N                temp = sum/10.0;
 N				Temperature = (vu16)(temp*10);
 N                sum = 0;
@@ -50559,13 +50562,13 @@ N            MODS_52H();
 N        }break;
 N        default:break;
 N    }
-W "..\User\stm32f4xx_it.c" 445 8 variable "crec"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 446 9 variable "csend"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 447 16 variable "sendbuf"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 448 8 variable "sendlen"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 449 16 variable "recrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 450 16 variable "scrc"  was declared but never referenced
-W "..\User\stm32f4xx_it.c" 451 8 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 446 8 variable "crec"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 447 9 variable "csend"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 448 16 variable "sendbuf"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 449 8 variable "sendlen"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 450 16 variable "recrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 451 16 variable "scrc"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 452 8 variable "i"  was declared but never referenced
 N}
 N
 N/*
@@ -50611,11 +50614,12 @@ N			value =	(int)(DISS_POW_Current*1000);		/* 将寄存器值读出 */
 N			break;
 N		case SLAVE_REG_P05:
 X		case 0x0005:
-W "..\User\stm32f4xx_it.c" 515 4 function "IO_OFF" declared implicitly
+W "..\User\stm32f4xx_it.c" 516 4 function "IO_OFF" declared implicitly
 N			IO_OFF();
 N            SET_Current_Laod = 0;
 X            Run_Control[4] = 0;
-N            usartocflag = 1; 
+N            usartocflag = 1;
+N			short_time = 0; 
 N//            while(usartocflag == 1);
 N            value = (int)(oc_data*1000);
 N			break;
@@ -50859,7 +50863,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
-W "..\User\stm32f4xx_it.c" 699 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 701 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
@@ -50992,7 +50996,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
-W "..\User\stm32f4xx_it.c" 801 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 803 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
@@ -51009,7 +51013,7 @@ N
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 811 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 813 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51111,9 +51115,9 @@ N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);				
-W "..\User\stm32f4xx_it.c" 892 5 function "CreateCDC" declared implicitly
+W "..\User\stm32f4xx_it.c" 894 5 function "CreateCDC" declared implicitly
 N				CreateCDC(); 
-W "..\User\stm32f4xx_it.c" 893 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 895 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
@@ -51142,7 +51146,7 @@ N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 912 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 914 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51302,7 +51306,7 @@ N	uint16_t crc;
 N	uint8_t i;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1045 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1047 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;
@@ -51319,7 +51323,7 @@ N// #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 N// 	g_tPrint.Txlen = _ucLen;
 N// 	memcpy(g_tPrint.TxBuf, buf, _ucLen);
 N// #endif
-W "..\User\stm32f4xx_it.c" 1043 10 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 1045 10 variable "i"  was declared but never referenced
 N}
 N
 Nstatic void MODS_06H(void)
