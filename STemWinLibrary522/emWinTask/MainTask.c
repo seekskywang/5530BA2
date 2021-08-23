@@ -39,7 +39,7 @@ extern vu8 load_sw;
 extern vu8 test_start;
 extern vu8 step;
 RCC_ClocksTypeDef rcc;
-vu16 sendload;
+vu16 sendload = 0;
 vu8 jkflag;
 extern vu8 cdc_sw;
 vu8 ocf;

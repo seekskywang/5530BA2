@@ -66,6 +66,10 @@ int main(void)
 	RCC_Configuration();
 	SysTick_Init();
 	GPIO_Conf();
+	flag_Load_CC=1;//开机负载默认进入CC模式
+	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
+	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
 	TIM1_PWM_Config();
 	TIM2_PWM_Config();
     TIM4_Int_Init(2-1,8400-1);
@@ -78,6 +82,7 @@ int main(void)
 	i2c_CfgGpio();//24C01引脚初始化
 	TM1650_GPIO_INT();		/*TM1650引脚初始化 */  
 	DAC8531_GPIOCoing();//DAC初始化
+	DAC8531_Send(0);
 	AD7689_InitializeSPI1();//AD7689初始化
 	LCD_Initializtion();//液晶屏初始化	
 	EEPROM_READ_Coeff();//读取校准参数

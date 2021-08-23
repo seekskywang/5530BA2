@@ -53606,23 +53606,32 @@ X	RCC_AHB1PeriphClockCmd(((uint32_t)0x00001000), ENABLE);
 N	RCC_Configuration();
 N	SysTick_Init();
 N	GPIO_Conf();
+N	flag_Load_CC=1;//开机负载默认进入CC模式
+X	(flagD . bit7)=1;
+N	GPIO_SetBits(GPIOC,GPIO_Pin_10);//CC
+X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
+N	GPIO_SetBits(GPIOA,GPIO_Pin_15);//OFF
+X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N	GPIO_SetBits(GPIOA,GPIO_Pin_11);//电流切换为高档
+X	GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x0800));
 N	TIM1_PWM_Config();
 N	TIM2_PWM_Config();
-W "..\User\main.c" 71 5 function "TIM4_Int_Init" declared implicitly
+W "..\User\main.c" 75 5 function "TIM4_Int_Init" declared implicitly
 N    TIM4_Int_Init(2-1,8400-1);
-W "..\User\main.c" 72 5 function "TIM3_Int_Init" declared implicitly
+W "..\User\main.c" 76 5 function "TIM3_Int_Init" declared implicitly
 N    TIM3_Int_Init(10000-1,8400-1);
-W "..\User\main.c" 73 5 function "TIM5_Int_Init" declared implicitly
+W "..\User\main.c" 77 5 function "TIM5_Int_Init" declared implicitly
 N    TIM5_Int_Init(90-1,8400-1);
 N	TIM6_Config();
 N	ADC1_DMA_Init();
 N	USART_Configuration();
-W "..\User\main.c" 77 5 function "USART3_Configuration" declared implicitly
+W "..\User\main.c" 81 5 function "USART3_Configuration" declared implicitly
 N    USART3_Configuration();
 N	i2c_CfgGpio();//24C01引脚初始化
 N	TM1650_GPIO_INT();		/*TM1650引脚初始化 */  
 N	DAC8531_GPIOCoing();//DAC初始化
-W "..\User\main.c" 81 2 function "AD7689_InitializeSPI1" declared implicitly
+N	DAC8531_Send(0);
+W "..\User\main.c" 86 2 function "AD7689_InitializeSPI1" declared implicitly
 N	AD7689_InitializeSPI1();//AD7689初始化
 N	LCD_Initializtion();//液晶屏初始化	
 N	EEPROM_READ_Coeff();//读取校准参数
