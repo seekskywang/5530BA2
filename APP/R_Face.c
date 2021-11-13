@@ -2171,7 +2171,7 @@ void OC_SET(void) {
 			}else{
 				vrange = 0;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 		}break;
     }
 }

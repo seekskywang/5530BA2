@@ -194,7 +194,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		}else if(jkflag == 0){
 			GUI_DispStringAt("5530B", 140+40, 50);
 		}
-        GUI_DispStringAt("Ver:4.6P1", 140+40, 75);
+        GUI_DispStringAt("Ver:4.7P1", 140+40, 75);
 		//2.6修复内阻测试过流没分开bug
 		//2.7增加风扇断路保护
 		//2.8电源电压显示改成测量端
@@ -213,6 +213,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 		//4.4增加温度上位机通讯
 		//4.5修改CV模式校准
 		//4.6修复上位机短路时间bug
+		//4.7增加搁置时间
         GUI_DispStringAt("Ver:1.3", 140+40, 100);
         GUI_DispStringAt("-", 191+40, 125);
         GUI_DispStringAt("-", 227+40, 125);

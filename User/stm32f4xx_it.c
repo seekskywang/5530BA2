@@ -653,27 +653,34 @@ static uint8_t MODS_WriteRegValue(uint16_t reg_addr, uint16_t reg_value)
 			break;
 
 		case SLAVE_REG_P11://循环次数
-			set_loop_count = reg_value;
+			CDCLOOP = reg_value;
 			Write_Limits();
 			break;
 		case SLAVE_REG_P12:
 			set_load_cutoffv = reg_value;
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 			break;
 
 		case SLAVE_REG_P13:
 			set_pow_cutoffc = reg_value;
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 			break;
 		case SLAVE_REG_P14:
+			GAPTIME = reg_value;
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 			break;
 
 		case SLAVE_REG_P15:
+			set_init_c = reg_value;
 			break;
 		case SLAVE_REG_P16:
+			set_sbs_c = reg_value;
 			break;
-
 		case SLAVE_REG_P17:
+			steptime = reg_value;
+		case SLAVE_REG_P18:
+			GAPTIME2 = reg_value;
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 			break;
 		default:
 			return 0;

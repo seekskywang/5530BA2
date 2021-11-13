@@ -35172,7 +35172,7 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int32_t InFlashSave[40];
+Nextern int32_t InFlashSave[43];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
 Nextern float disloadv;
@@ -35180,6 +35180,7 @@ Nextern u16 disrvalue;
 Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
+Nextern u16 gaptimecount;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35220,7 +35221,9 @@ N#define Polar15						 	InFlashSave[36]
 N#define Polar16						 	InFlashSave[37]
 N#define SET_LoadV1						InFlashSave[38]
 N#define SET_LoadV_Offset1				InFlashSave[39]
-N
+N#define CDCLOOP							InFlashSave[40]
+N#define GAPTIME							InFlashSave[41]
+N#define GAPTIME2						InFlashSave[42]
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35424,6 +35427,8 @@ N#define set_88          87
 N#define set_89          88
 N#define set_90          89
 N#define set_91          90
+N#define set_92          91
+N#define set_93          92
 N/*
 N************************************************************************
 N*						参数设置识别符
@@ -35450,6 +35455,8 @@ N#define mode_pow            3
 N#define mode_loadc          4
 N#define mode_powc           5
 N#define input               6
+N#define mode_gapc           7
+N#define mode_gapd           8
 N#define load_on             1
 N#define load_off            0
 N#define pow_on              1
@@ -35469,7 +35476,7 @@ Nextern vu16 Contr_Voltage;//
 Nextern vu16 Contr_Current;//
 Nextern vu16 Contr_Laod;//
 Nextern vu32 Correct_Parametet[21];
-N#define  REG_CorrectionV   Correct_Parametet[0]//???????
+N#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???·???
@@ -35786,7 +35793,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -35794,6 +35801,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -35834,7 +35842,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -36038,6 +36048,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						参数设置识别符
@@ -36064,6 +36076,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -36083,7 +36097,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???·???
@@ -50807,37 +50821,52 @@ N			break;
 N
 N		case SLAVE_REG_P11://寰幆娆℃暟
 X		case 0x000B:
-N			set_loop_count = reg_value;
+N			CDCLOOP = reg_value;
+X			InFlashSave[40] = reg_value;
 N			Write_Limits();
 N			break;
 N		case SLAVE_REG_P12:
 X		case 0x000C:
 N			set_load_cutoffv = reg_value;
 X			InFlashSave[4] = reg_value;
-N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
-X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),43, InFlashSave);
 N			break;
 N
 N		case SLAVE_REG_P13:
 X		case 0x000D:
 N			set_pow_cutoffc = reg_value;
 X			InFlashSave[5] = reg_value;
-N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
-X			Flash_Write32BitDatas(((uint32_t)0x080E0000),40, InFlashSave);
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),43, InFlashSave);
 N			break;
 N		case SLAVE_REG_P14:
 X		case 0x000E:
+N			GAPTIME = reg_value;
+X			InFlashSave[41] = reg_value;
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),43, InFlashSave);
 N			break;
 N
 N		case SLAVE_REG_P15:
 X		case 0x000F:
+N			set_init_c = reg_value;
+X			Run_Control[22] = reg_value;
 N			break;
 N		case SLAVE_REG_P16:
 X		case 0x0010:
+N			set_sbs_c = reg_value;
+X			Run_Control[23] = reg_value;
 N			break;
-N
 N		case SLAVE_REG_P17:
 X		case 0x0011:
+N			steptime = reg_value;
+N		case SLAVE_REG_P18:
+X		case 0x0012:
+N			GAPTIME2 = reg_value;
+X			InFlashSave[42] = reg_value;
+N			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
+X			Flash_Write32BitDatas(((uint32_t)0x080E0000),43, InFlashSave);
 N			break;
 N		default:
 N			return 0;
@@ -50863,7 +50892,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
-W "..\User\stm32f4xx_it.c" 701 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 708 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
@@ -50996,7 +51025,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
-W "..\User\stm32f4xx_it.c" 803 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 810 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
@@ -51013,7 +51042,7 @@ N
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 813 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 820 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51115,9 +51144,9 @@ N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);				
-W "..\User\stm32f4xx_it.c" 894 5 function "CreateCDC" declared implicitly
+W "..\User\stm32f4xx_it.c" 901 5 function "CreateCDC" declared implicitly
 N				CreateCDC(); 
-W "..\User\stm32f4xx_it.c" 895 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 902 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
@@ -51146,7 +51175,7 @@ N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 914 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 921 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51306,7 +51335,7 @@ N	uint16_t crc;
 N	uint8_t i;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1047 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1054 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;
@@ -51323,7 +51352,7 @@ N// #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 N// 	g_tPrint.Txlen = _ucLen;
 N// 	memcpy(g_tPrint.TxBuf, buf, _ucLen);
 N// #endif
-W "..\User\stm32f4xx_it.c" 1045 10 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 1052 10 variable "i"  was declared but never referenced
 N}
 N
 Nstatic void MODS_06H(void)

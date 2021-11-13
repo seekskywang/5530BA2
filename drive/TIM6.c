@@ -76,7 +76,9 @@ extern vu8 ocf;
 vu8 sendpcflag;
 u8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
 u8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
+u8 sendmodegap[6] = {0x01,0x53,0x00,0x00,0x00,0x03};
 u8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
+u16 gaptimecount;
 //????? 3 ?????
 //arr¨²?????c psc¨²??????
 //???????????:Tout=((arr+1)*(psc+1))/Ft us.
@@ -605,7 +607,7 @@ void TIM3_IRQHandler(void)
                     minute = (ctime/60)%60;//åˆ†
                     hour   = ctime/3600;//æ—¶
                     cbc_raw += DISS_POW_Current * 1000 * 1/3600;
-                    bc_raw = 0;
+//                    bc_raw = 0;
 					if(rmtrig[2] == 1)
 					{
 						SendToPC(2);
@@ -628,12 +630,50 @@ void TIM3_IRQHandler(void)
                     hour1   = dctime/3600;//æ—¶
                     bc_raw += DISS_Current * 1000 * 1/3600;
 //                    c_sum += DISS_Current * 1000 * 1/3600;
-                    cbc_raw = 0;
+//                    cbc_raw = 0;
 					if(rmtrig[2] == 1)
 					{
 						SendToPC(2);
 					}
-                }else if(cdc_sw == cdc_off){
+                }else if(mode_sw == mode_gapc){
+					if(sendmodeflag == 1)
+					{
+						for(i=0;i<3;i++)
+						{
+							MODS_SendWithCRC(sendmodegap,6);
+							Delay_ms(50);
+							
+						}
+						sendmodeflag = 0;
+					}
+					if(gaptimecount > 0)
+					{
+						gaptimecount--;
+					}
+					if(rmtrig[2] == 1)
+					{
+						SendToPC(2);
+					}
+				}else if(mode_sw == mode_gapd){
+					if(sendmodeflag == 1)
+					{
+						for(i=0;i<3;i++)
+						{
+							MODS_SendWithCRC(sendmodegap,6);
+							Delay_ms(50);
+							
+						}
+						sendmodeflag = 0;
+					}
+					if(gaptimecount > 0)
+					{
+						gaptimecount--;
+					}
+					if(rmtrig[2] == 1)
+					{
+						SendToPC(2);
+					}
+				}else if(cdc_sw == cdc_off){
                     bc_raw = 0;
                     cbc_raw = 0;
                     c_sum = 0;
@@ -678,7 +718,7 @@ void TIM3_IRQHandler(void)
 					}
                 }else{
                     bc_raw = 0;
-                }
+                } 
             }break;
             case face_graph:
             {

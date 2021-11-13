@@ -224,7 +224,7 @@ extern float oc_data;
 extern vu8 lock;
 extern vu32 Run_Control[49];	
 extern u8 lockstat1,lockstat2;
-extern int32_t InFlashSave[40];
+extern int32_t InFlashSave[43];
 extern vu8 vflag;
 void dma_rec(vu16 buf,u16 ndtr);
 extern float disloadv;
@@ -232,6 +232,7 @@ extern u16 disrvalue;
 extern vu8 cflag;
 extern vu8 pow_sw;
 extern vu8 sendpcflag;
+extern u16 gaptimecount;
 #define set_max_lv						InFlashSave[0]
 #define set_min_lv						InFlashSave[1]
 #define set_max_pc						InFlashSave[2]
@@ -272,7 +273,9 @@ extern vu8 sendpcflag;
 #define Polar16						 	InFlashSave[37]
 #define SET_LoadV1						InFlashSave[38]
 #define SET_LoadV_Offset1				InFlashSave[39]
-
+#define CDCLOOP							InFlashSave[40]
+#define GAPTIME							InFlashSave[41]
+#define GAPTIME2						InFlashSave[42]
 
 #define SLAVE_REG_P00		0x0000       //R_VOLU
 #define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -476,6 +479,8 @@ extern vu16 coff[6];
 #define set_89          88
 #define set_90          89
 #define set_91          90
+#define set_92          91
+#define set_93          92
 /*
 ************************************************************************
 *						参数设置识别符
@@ -502,6 +507,8 @@ extern vu16 coff[6];
 #define mode_loadc          4
 #define mode_powc           5
 #define input               6
+#define mode_gapc           7
+#define mode_gapd           8
 #define load_on             1
 #define load_off            0
 #define pow_on              1
@@ -521,7 +528,7 @@ extern vu16 Contr_Voltage;//
 extern vu16 Contr_Current;//
 extern vu16 Contr_Laod;//
 extern vu32 Correct_Parametet[21];
-#define  REG_CorrectionV   Correct_Parametet[0]//???????
+#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 #define  REG_CorrectionV1   Correct_Parametet[13]//???????
 #define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 #define  REG_Load_A			   Correct_Parametet[1]//??CC???·???

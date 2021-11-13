@@ -1045,8 +1045,24 @@ GUI_CONST_STORAGE unsigned char acGUI_FontHZ16_963B[ 48] = { /* code 963B */
   _XX____X,X___XX__,________,
   _XX__XXX,XXXXXXXX,________,
   _XX_____,________,________};
-
-GUI_CONST_STORAGE GUI_CHARINFO GUI_FontHZ16_CharInfo[56] = {
+GUI_CONST_STORAGE unsigned char acGUI_FontHZ16_6401[ 48] = { /* code 6401 */
+  __XX__XX,________,________,
+  __XX___X,XXXXXXX_,________,
+  __XX_XXX,X____XX_,________,
+  __XX_XX_,XX___XX_,________,
+  XXXXXXX_,XXXXXXX_,________,	
+  __XX_XXX,X__XXXX_,________,
+  __XX_XXX,XXXX_XX_,________,
+  __XX_XX_,_XX__XX_,________,
+  __XXXXX_,XXXX_XX_,________,
+  XXXX_XXX,X__XXXX_,________,
+  __XX_XXX,XXXXXXX_,________,
+  __XX_XXX,X__XXXX_,________,
+  __XX_XXX,X__XXXX_,________,
+  __XX_XXX,XXXXXXX_,________,
+  XXXX_XXX,X__XXXX_,________,
+  _XX__XX_,____XX__,________};
+GUI_CONST_STORAGE GUI_CHARINFO GUI_FontHZ16_CharInfo[57] = {
    {  17,  17,  3, acGUI_FontHZ16_03A9 } /* code 03A9 */
   ,{  17,  17,  3, acGUI_FontHZ16_4E2D } /* code 4E2D */
   ,{  17,  17,  3, acGUI_FontHZ16_4E3B } /* code 4E3B */
@@ -1103,13 +1119,20 @@ GUI_CONST_STORAGE GUI_CHARINFO GUI_FontHZ16_CharInfo[56] = {
   ,{  17,  17,  3, acGUI_FontHZ16_8F7D } /* code 8F7D */
   ,{  17,  17,  3, acGUI_FontHZ16_8FC7 } /* code 8FC7 */
   ,{  17,  17,  3, acGUI_FontHZ16_963B } /* code 963B */
+  ,{  17,  17,  3, acGUI_FontHZ16_6401 } /* code 6401 */
+};
+GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontHZ16_Prop57 = {
+   0x6401 /* first character */
+  ,0x6401 /* last character  */
+  ,&GUI_FontHZ16_CharInfo[ 56] /* address of first character */
+  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontHZ16_Prop56 = {
    0x963B /* first character */
   ,0x963B /* last character  */
   ,&GUI_FontHZ16_CharInfo[ 55] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP *)0 /* pointer to next GUI_FONT_PROP */
+   ,&GUI_FontHZ16_Prop57 /* pointer to next GUI_FONT_PROP */
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontHZ16_Prop55 = {

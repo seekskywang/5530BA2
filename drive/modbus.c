@@ -400,7 +400,7 @@ void UART_Action(void)
 				Polar6 &= ~0x04;
 			}
 //---------------------------------------------------------------------------------------//
-		  Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		  Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 			DAC_Flag=0;
 		}
 /*************************************??§µ?**************************************************************************/
@@ -869,7 +869,7 @@ void UART_Action(void)
 				SET_LoadA_Offset1 = var32c;
 				Polar1 &= ~0x04;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 			Flag_DAC_OFF =0;
 		}
@@ -942,7 +942,7 @@ void UART_Action(void)
 				SET_LoadA_Offset2 = var32c;
 				Polar1 &= ~0x04;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 			Flag_DAC_OFF =0;
 		}
@@ -1015,7 +1015,7 @@ void UART_Action(void)
 				SET_LoadA_OffsetH = var32c;
 				Polar1 &= ~0x04;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 			Flag_DAC_OFF =0;
 		}
@@ -1088,7 +1088,7 @@ void UART_Action(void)
 				SET_LoadA_OffsetH1 = var32c;
 				Polar1 &= ~0x04;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 			Flag_DAC_OFF =0;
 		}
@@ -1159,7 +1159,7 @@ void UART_Action(void)
 				SET_POWERA_Offset1 = var32c;
 				Polar4 &= ~0x04;
 			}
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 			Flag_DAC_OFF=0;
 		}

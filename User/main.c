@@ -87,7 +87,7 @@ int main(void)
 	LCD_Initializtion();//液晶屏初始化	
 	EEPROM_READ_Coeff();//读取校准参数
 	IWDG_Inte();
-	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
+	Flash_Read32BitDatas(FLASH_USER_START_ADDR,43,InFlashSave);
 	if(jkflag > 1)
 	{
 		jkflag = 1;

@@ -35081,7 +35081,7 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int32_t InFlashSave[40];
+Nextern int32_t InFlashSave[43];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
 Nextern float disloadv;
@@ -35089,6 +35089,7 @@ Nextern u16 disrvalue;
 Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
+Nextern u16 gaptimecount;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35129,7 +35130,9 @@ N#define Polar15						 	InFlashSave[36]
 N#define Polar16						 	InFlashSave[37]
 N#define SET_LoadV1						InFlashSave[38]
 N#define SET_LoadV_Offset1				InFlashSave[39]
-N
+N#define CDCLOOP							InFlashSave[40]
+N#define GAPTIME							InFlashSave[41]
+N#define GAPTIME2						InFlashSave[42]
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35333,6 +35336,8 @@ N#define set_88          87
 N#define set_89          88
 N#define set_90          89
 N#define set_91          90
+N#define set_92          91
+N#define set_93          92
 N/*
 N************************************************************************
 N*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -35359,6 +35364,8 @@ N#define mode_pow            3
 N#define mode_loadc          4
 N#define mode_powc           5
 N#define input               6
+N#define mode_gapc           7
+N#define mode_gapd           8
 N#define load_on             1
 N#define load_off            0
 N#define pow_on              1
@@ -35378,7 +35385,7 @@ Nextern vu16 Contr_Voltage;//
 Nextern vu16 Contr_Current;//
 Nextern vu16 Contr_Laod;//
 Nextern vu32 Correct_Parametet[21];
-N#define  REG_CorrectionV   Correct_Parametet[0]//???????
+N#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -35805,7 +35812,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -35813,6 +35820,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -35853,7 +35861,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -36057,6 +36067,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -36083,6 +36095,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -36102,7 +36116,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -36450,7 +36464,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -36458,6 +36472,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -36498,7 +36513,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -36702,6 +36719,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -36728,6 +36747,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -36747,7 +36768,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -50968,7 +50989,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -50976,6 +50997,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51016,7 +51038,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -51220,6 +51244,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -51246,6 +51272,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -51265,7 +51293,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -51598,7 +51626,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -51606,6 +51634,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51646,7 +51675,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -51850,6 +51881,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -51876,6 +51909,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -51895,7 +51930,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -52240,7 +52275,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -52248,6 +52283,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -52288,7 +52324,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -52492,6 +52530,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -52518,6 +52558,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -52537,7 +52579,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -52872,7 +52914,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -52880,6 +52922,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -52920,7 +52963,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -53124,6 +53169,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						²ÎÊýÉèÖÃÊ¶±ð·û
@@ -53150,6 +53197,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -53169,7 +53218,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???¡¤???
@@ -53636,8 +53685,8 @@ N	AD7689_InitializeSPI1();//AD7689åˆå§‹åŒ–
 N	LCD_Initializtion();//æ¶²æ™¶å±åˆå§‹åŒ–	
 N	EEPROM_READ_Coeff();//è¯»å–æ ¡å‡†å‚æ•°
 N	IWDG_Inte();
-N	Flash_Read32BitDatas(FLASH_USER_START_ADDR,40,InFlashSave);
-X	Flash_Read32BitDatas(((uint32_t)0x080E0000),40,InFlashSave);
+N	Flash_Read32BitDatas(FLASH_USER_START_ADDR,43,InFlashSave);
+X	Flash_Read32BitDatas(((uint32_t)0x080E0000),43,InFlashSave);
 N	if(jkflag > 1)
 N	{
 N		jkflag = 1;

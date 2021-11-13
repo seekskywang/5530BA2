@@ -1037,7 +1037,7 @@ void LOAD_SET(void) {
             hItem = WM_GetDialogItem(load_wind, ID_TEXT_158);
             TEXT_SetBkColor(hItem,0x00BFFFFF);//选项背景色设为米色
             TEXT_SetTextColor(hItem, GUI_BLACK);
-            Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+            Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
             
             set_sw = set_86;
             bit = 0;

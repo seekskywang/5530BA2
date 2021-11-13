@@ -35081,7 +35081,7 @@ Nextern float oc_data;
 Nextern vu8 lock;
 Nextern vu32 Run_Control[49];	
 Nextern u8 lockstat1,lockstat2;
-Nextern int32_t InFlashSave[40];
+Nextern int32_t InFlashSave[43];
 Nextern vu8 vflag;
 Nvoid dma_rec(vu16 buf,u16 ndtr);
 Nextern float disloadv;
@@ -35089,6 +35089,7 @@ Nextern u16 disrvalue;
 Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
+Nextern u16 gaptimecount;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35129,7 +35130,9 @@ N#define Polar15						 	InFlashSave[36]
 N#define Polar16						 	InFlashSave[37]
 N#define SET_LoadV1						InFlashSave[38]
 N#define SET_LoadV_Offset1				InFlashSave[39]
-N
+N#define CDCLOOP							InFlashSave[40]
+N#define GAPTIME							InFlashSave[41]
+N#define GAPTIME2						InFlashSave[42]
 N
 N#define SLAVE_REG_P00		0x0000       //R_VOLU
 N#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -35333,6 +35336,8 @@ N#define set_88          87
 N#define set_89          88
 N#define set_90          89
 N#define set_91          90
+N#define set_92          91
+N#define set_93          92
 N/*
 N************************************************************************
 N*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -35359,6 +35364,8 @@ N#define mode_pow            3
 N#define mode_loadc          4
 N#define mode_powc           5
 N#define input               6
+N#define mode_gapc           7
+N#define mode_gapd           8
 N#define load_on             1
 N#define load_off            0
 N#define pow_on              1
@@ -35378,7 +35385,7 @@ Nextern vu16 Contr_Voltage;//
 Nextern vu16 Contr_Current;//
 Nextern vu16 Contr_Laod;//
 Nextern vu32 Correct_Parametet[21];
-N#define  REG_CorrectionV   Correct_Parametet[0]//???????
+N#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 N#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 N#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 N#define  REG_Load_A			   Correct_Parametet[1]//??CC???°§???
@@ -49580,7 +49587,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -49588,6 +49595,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -49628,7 +49636,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -49832,6 +49842,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -49858,6 +49870,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -49877,7 +49891,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???°§???
@@ -50212,7 +50226,7 @@ Sextern float oc_data;
 Sextern vu8 lock;
 Sextern vu32 Run_Control[49];	
 Sextern u8 lockstat1,lockstat2;
-Sextern int32_t InFlashSave[40];
+Sextern int32_t InFlashSave[43];
 Sextern vu8 vflag;
 Svoid dma_rec(vu16 buf,u16 ndtr);
 Sextern float disloadv;
@@ -50220,6 +50234,7 @@ Sextern u16 disrvalue;
 Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
+Sextern u16 gaptimecount;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50260,7 +50275,9 @@ S#define Polar15						 	InFlashSave[36]
 S#define Polar16						 	InFlashSave[37]
 S#define SET_LoadV1						InFlashSave[38]
 S#define SET_LoadV_Offset1				InFlashSave[39]
-S
+S#define CDCLOOP							InFlashSave[40]
+S#define GAPTIME							InFlashSave[41]
+S#define GAPTIME2						InFlashSave[42]
 S
 S#define SLAVE_REG_P00		0x0000       //R_VOLU
 S#define SLAVE_REG_P01		0x0001      //Load_Voltage
@@ -50464,6 +50481,8 @@ S#define set_88          87
 S#define set_89          88
 S#define set_90          89
 S#define set_91          90
+S#define set_92          91
+S#define set_93          92
 S/*
 S************************************************************************
 S*						≤Œ ˝…Ë÷√ ∂±∑˚
@@ -50490,6 +50509,8 @@ S#define mode_pow            3
 S#define mode_loadc          4
 S#define mode_powc           5
 S#define input               6
+S#define mode_gapc           7
+S#define mode_gapd           8
 S#define load_on             1
 S#define load_off            0
 S#define pow_on              1
@@ -50509,7 +50530,7 @@ Sextern vu16 Contr_Voltage;//
 Sextern vu16 Contr_Current;//
 Sextern vu16 Contr_Laod;//
 Sextern vu32 Correct_Parametet[21];
-S#define  REG_CorrectionV   Correct_Parametet[0]//???????
+S#define  REG_CorrectionV   Correct_Parametet[0]// ???????
 S#define  REG_CorrectionV1   Correct_Parametet[13]//???????
 S#define  REG_CorrectionV2   Correct_Parametet[14]//???????W
 S#define  REG_Load_A			   Correct_Parametet[1]//??CC???°§???
@@ -50658,7 +50679,9 @@ Nextern vu8 ocf;
 Nvu8 sendpcflag;
 Nu8 sendmodepow[6] = {0x01,0x53,0x00,0x00,0x00,0x01};
 Nu8 sendmodeload[6] = {0x01,0x53,0x00,0x00,0x00,0x02};
+Nu8 sendmodegap[6] = {0x01,0x53,0x00,0x00,0x00,0x03};
 Nu8 sendmodestop[6] = {0x01,0x52,0x00,0x00,0x00,0x04};
+Nu16 gaptimecount;
 N//????? 3 ?????
 N//arr®≤?????c psc®≤??????
 N//???????????:Tout=((arr+1)*(psc+1))/Ft us.
@@ -50731,27 +50754,27 @@ N                     GUI_Init();
 N                     if(page_sw == face_menu)
 X                     if(page_sw == 2)
 N                     {
-W "..\drive\TIM6.c" 142 26 function "ResetPow" declared implicitly
+W "..\drive\TIM6.c" 144 26 function "ResetPow" declared implicitly
 N                         ResetPow();
 N                     }else if(page_sw == face_cdc){
 X                     }else if(page_sw == 1){
-W "..\drive\TIM6.c" 144 26 function "ResetCDC" declared implicitly
+W "..\drive\TIM6.c" 146 26 function "ResetCDC" declared implicitly
 N                         ResetCDC();
 N                     }else if(page_sw == face_r){
 X                     }else if(page_sw == 3){
-W "..\drive\TIM6.c" 146 26 function "ResetR" declared implicitly
+W "..\drive\TIM6.c" 148 26 function "ResetR" declared implicitly
 N                         ResetR();
 N                     }else if(page_sw == face_load){
 X                     }else if(page_sw == 4){
-W "..\drive\TIM6.c" 148 26 function "ResetLoad" declared implicitly
+W "..\drive\TIM6.c" 150 26 function "ResetLoad" declared implicitly
 N                         ResetLoad();
 N                     }else if(page_sw == face_graph){
 X                     }else if(page_sw == 0){
-W "..\drive\TIM6.c" 150 26 function "ResetG" declared implicitly
+W "..\drive\TIM6.c" 152 26 function "ResetG" declared implicitly
 N                         ResetG();
 N                     }else if(page_sw == face_set){
 X                     }else if(page_sw == 5){
-W "..\drive\TIM6.c" 152 26 function "ResetSET" declared implicitly
+W "..\drive\TIM6.c" 154 26 function "ResetSET" declared implicitly
 N                         ResetSET();
 N                     }
 N//                     resdone = 1;
@@ -50783,7 +50806,7 @@ N					powcount++;
 N				}else{
 N					powcount = 0;
 N					C_SW(0);
-W "..\drive\TIM6.c" 178 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 180 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					
 N					step = 2;
@@ -50806,7 +50829,7 @@ N					static_pc = DISS_POW_Current;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 194 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 196 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50857,7 +50880,7 @@ N					powcount++;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 235 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 237 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜				
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50884,10 +50907,10 @@ X					(flagD . bit7) = 0;
 N					GPIO_ResetBits(GPIOA,GPIO_Pin_15);//÷ßÿìÿ∫’òOn
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N//				}
-W "..\drive\TIM6.c" 255 30 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 257 30 single-precision operand implicitly converted to double-precision
 N				if(((v - DISS_Voltage) > v*0.5)/* || (DISS_Current < 0.05)*/)
 N				{
-W "..\drive\TIM6.c" 257 6 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 259 6 function "IO_OFF" declared implicitly
 N					IO_OFF();
 N					if(oc_mode == 0)
 N					{
@@ -50916,7 +50939,7 @@ N	//                 shortv = DISS_Voltage;
 N				}else{
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 278 6 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 280 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -50984,7 +51007,7 @@ N			if(crec1 > crec2)
 N			{
 N				crec2 = crec1;
 N			}
-W "..\drive\TIM6.c" 332 35 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 334 35 single-precision operand implicitly converted to double-precision
 N            if(v - DISS_Voltage > v*0.9)
 N            {     
 N                oc_data = crec2;
@@ -51037,7 +51060,7 @@ N                powcount = 0;
 N                powflag = 0;
 N                GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\TIM6.c" 374 5 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 376 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N                GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜ 
 X                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
@@ -51063,10 +51086,10 @@ X                (flagD . bit7) = 0;
 N                GPIO_ResetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOn
 X                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N//            }
-W "..\drive\TIM6.c" 394 43 single-precision operand implicitly converted to double-precision
+W "..\drive\TIM6.c" 396 43 single-precision operand implicitly converted to double-precision
 N            if(((shortv - DISS_Voltage) > shortv*0.6)/* || (DISS_Current < 0.05)*/)
 N            {
-W "..\drive\TIM6.c" 396 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 398 17 function "IO_OFF" declared implicitly
 N                IO_OFF();
 N                usartshortflag = 0;
 N				flag_Load_CC = 1;                              
@@ -51101,19 +51124,19 @@ N                SET_Current_Laod = 1000;
 X                Run_Control[4] = 1000;
 N                powcount = 0;
 N                finishflag = 0;
-W "..\drive\TIM6.c" 423 17 function "IO_OFF" declared implicitly
+W "..\drive\TIM6.c" 425 17 function "IO_OFF" declared implicitly
 N                IO_OFF(); 
 N				C_SW(0);
 N            }
 N        }
 N    }    
-W "..\drive\TIM6.c" 115 8 variable "crec"  was declared but never referenced
-W "..\drive\TIM6.c" 116 9 variable "csend"  was declared but never referenced
-W "..\drive\TIM6.c" 117 16 variable "sendbuf"  was declared but never referenced
-W "..\drive\TIM6.c" 118 8 variable "sendlen"  was declared but never referenced
-W "..\drive\TIM6.c" 119 16 variable "recrc"  was declared but never referenced
-W "..\drive\TIM6.c" 120 16 variable "scrc"  was declared but never referenced
-W "..\drive\TIM6.c" 122 8 variable "i"  was declared but never referenced
+W "..\drive\TIM6.c" 117 8 variable "crec"  was declared but never referenced
+W "..\drive\TIM6.c" 118 9 variable "csend"  was declared but never referenced
+W "..\drive\TIM6.c" 119 16 variable "sendbuf"  was declared but never referenced
+W "..\drive\TIM6.c" 120 8 variable "sendlen"  was declared but never referenced
+W "..\drive\TIM6.c" 121 16 variable "recrc"  was declared but never referenced
+W "..\drive\TIM6.c" 122 16 variable "scrc"  was declared but never referenced
+W "..\drive\TIM6.c" 124 8 variable "i"  was declared but never referenced
 N}
 N
 N//void TIM6_Config(void)
@@ -51304,7 +51327,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodepow,6);
-W "..\drive\TIM6.c" 599 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 601 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N						}
 N						sendmodeflag = 0;
@@ -51314,7 +51337,7 @@ N                    second = ctime%60;//Áßí
 N                    minute = (ctime/60)%60;//ÂàÜ
 N                    hour   = ctime/3600;//Êó∂
 N                    cbc_raw += DISS_POW_Current * 1000 * 1/3600;
-N                    bc_raw = 0;
+N//                    bc_raw = 0;
 N					if(rmtrig[2] == 1)
 N					{
 N						SendToPC(2);
@@ -51327,7 +51350,7 @@ N					{
 N						for(i=0;i<3;i++)
 N						{
 N							MODS_SendWithCRC(sendmodeload,6);
-W "..\drive\TIM6.c" 620 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 622 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							
 N						}
@@ -51339,13 +51362,55 @@ N                    minute1 = (dctime/60)%60;//ÂàÜ
 N                    hour1   = dctime/3600;//Êó∂
 N                    bc_raw += DISS_Current * 1000 * 1/3600;
 N//                    c_sum += DISS_Current * 1000 * 1/3600;
-N                    cbc_raw = 0;
+N//                    cbc_raw = 0;
 N					if(rmtrig[2] == 1)
 N					{
 N						SendToPC(2);
 N					}
-N                }else if(cdc_sw == cdc_off){
-X                }else if(cdc_sw == 0){
+N                }else if(mode_sw == mode_gapc){
+X                }else if(mode_sw == 7){
+N					if(sendmodeflag == 1)
+N					{
+N						for(i=0;i<3;i++)
+N						{
+N							MODS_SendWithCRC(sendmodegap,6);
+W "..\drive\TIM6.c" 644 8 function "Delay_ms" declared implicitly
+N							Delay_ms(50);
+N							
+N						}
+N						sendmodeflag = 0;
+N					}
+N					if(gaptimecount > 0)
+N					{
+N						gaptimecount--;
+N					}
+N					if(rmtrig[2] == 1)
+N					{
+N						SendToPC(2);
+N					}
+N				}else if(mode_sw == mode_gapd){
+X				}else if(mode_sw == 8){
+N					if(sendmodeflag == 1)
+N					{
+N						for(i=0;i<3;i++)
+N						{
+N							MODS_SendWithCRC(sendmodegap,6);
+W "..\drive\TIM6.c" 663 8 function "Delay_ms" declared implicitly
+N							Delay_ms(50);
+N							
+N						}
+N						sendmodeflag = 0;
+N					}
+N					if(gaptimecount > 0)
+N					{
+N						gaptimecount--;
+N					}
+N					if(rmtrig[2] == 1)
+N					{
+N						SendToPC(2);
+N					}
+N				}else if(cdc_sw == cdc_off){
+X				}else if(cdc_sw == 0){
 N                    bc_raw = 0;
 N                    cbc_raw = 0;
 N                    c_sum = 0;
@@ -51359,7 +51424,7 @@ N							if(rmtrig[2] == 1)
 N							{
 N//								SendToPC(2);
 N							}
-W "..\drive\TIM6.c" 650 8 function "Delay_ms" declared implicitly
+W "..\drive\TIM6.c" 690 8 function "Delay_ms" declared implicitly
 N							Delay_ms(50);
 N							MODS_SendWithCRC(sendmodestop,6);
 N							Delay_ms(50);
@@ -51395,7 +51460,7 @@ N						SendToPC(0);
 N					}
 N                }else{
 N                    bc_raw = 0;
-N                }
+N                } 
 N            }break;
 N            case face_graph:
 X            case 0:
@@ -51624,7 +51689,7 @@ N
 N	/* ÂàÜÊûêÂ∫îÁî®Â±ÇÂçèËÆ?*/
 N    if(g_tModS.RxBuf[2] == 0xA5)
 N    {
-W "..\drive\TIM6.c" 892 9 function "UART_Action" declared implicitly
+W "..\drive\TIM6.c" 932 9 function "UART_Action" declared implicitly
 N        UART_Action();
 N    }else{
 N//        usartocflag = 1;
@@ -51639,7 +51704,7 @@ S	memcpy(g_tPrint.RxBuf, g_tModS.RxBuf, g_tModS.RxCount);
 N#endif
 N	
 N 	g_tModS.RxCount = 0;					/* ÂøÖÈ°ªÊ∏ÖÈõ∂ËÆ°Êï∞Âô®ÔºåÊñπ‰æø‰∏ãÊ¨°Â∏ßÂêåÊ≠?*/
-W "..\drive\TIM6.c" 827 11 variable "addr"  was declared but never referenced
-W "..\drive\TIM6.c" 828 18 variable "crc1"  was declared but never referenced
+W "..\drive\TIM6.c" 867 11 variable "addr"  was declared but never referenced
+W "..\drive\TIM6.c" 868 18 variable "crc1"  was declared but never referenced
 N}
 N

@@ -445,7 +445,7 @@ void Rlow_cal(u8 step)
             }
 //---------------------------------------------------------------------------------------//
             Flash_Write_all();	//参数写进FLASH
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
             flag_OverV=0;
             Flag_DAC_OFF=0;
         }
@@ -491,7 +491,7 @@ void Rlow_cal(u8 step)
             }
 //---------------------------------------------------------------------------------------//
             Flash_Write_all();	//参数写进FLASH
-			Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+			Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
             flag_OverV=0;
             Flag_DAC_OFF=0;
         }
@@ -608,7 +608,7 @@ void LoadVCal(u8 step)
 			Polar2 &= ~0x04;
 		}
         Flash_Write_all();	//??д?FLASH
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 		Flag_DAC_OFF =0;
 //        Flag_DAC_OFF=0;
     }else if(step == 3){
@@ -676,7 +676,7 @@ void LoadVCal(u8 step)
 //---------------------------------------------------------------------------------------//
 		Flag_DAC_OFF =0;
         Flash_Write_all();	//??д?FLASH
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //        Flag_DAC_OFF=0;
     }else if(step == 5){
         Modify_A_READ = Vmon1_value;//????
@@ -850,7 +850,7 @@ void LoadCCal(u8 step)
 			SET_LoadA_Offset1 = var32c;
 			Polar8 &= ~0x04;
 		}
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 		Flag_DAC_OFF =0;
 	}else if(step == 5){
@@ -916,7 +916,7 @@ void LoadCCal(u8 step)
 			SET_LoadA_Offset2 = var32c;
 			Polar9 &= ~0x04;
 		}
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 		Flag_DAC_OFF =0;
 	}else if(step == 7){
@@ -982,7 +982,7 @@ void LoadCCal(u8 step)
 			SET_LoadA_OffsetH = var32c;
 			Polar10 &= ~0x04;
 		}
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 		Flag_DAC_OFF =0;
 	}else if(step == 9){
@@ -1048,7 +1048,7 @@ void LoadCCal(u8 step)
 			SET_LoadA_OffsetH1 = var32c;
 			Polar11 &= ~0x04;
 		}
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 		Flag_DAC_OFF =0;
 	}
@@ -1184,7 +1184,7 @@ void PowVCal(u8 step)
 			Polar12 &= ~0x04;
 		}
 		Flash_Write_all ();
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 		Flag_DAC_OFF=0;
     }else if(step == 5){
         Modify_A_READ = Vmon_value;//??d
@@ -1249,7 +1249,7 @@ void PowVCal(u8 step)
 			Polar13 &= ~0x04;
 		}
 		Flash_Write_all ();	
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 		Flag_DAC_OFF=0;
     }
 }
@@ -1385,7 +1385,7 @@ void PowCCal(u8 step)
 			SET_POWERA_Offset1 = var32c;
 			Polar14 &= ~0x04;
 		}
-		Flash_Write32BitDatas(FLASH_USER_START_ADDR,40, InFlashSave);
+		Flash_Write32BitDatas(FLASH_USER_START_ADDR,43, InFlashSave);
 //			Flash_Write_all ();	
 		Flag_DAC_OFF=0;
 	}

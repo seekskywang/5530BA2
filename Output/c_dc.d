@@ -89,3 +89,4 @@
 ..\output\c_dc.o: ..\Include\my_register.h
 ..\output\c_dc.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\c_dc.o: ..\Include\beep.h
+..\output\c_dc.o: ..\Include\internalflash.h
