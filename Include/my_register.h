@@ -233,6 +233,7 @@ extern vu8 cflag;
 extern vu8 pow_sw;
 extern vu8 sendpcflag;
 extern u16 gaptimecount;
+extern vu8 flag_pow;
 #define set_max_lv						InFlashSave[0]
 #define set_min_lv						InFlashSave[1]
 #define set_max_pc						InFlashSave[2]

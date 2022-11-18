@@ -746,6 +746,17 @@ Ntypedef unsigned           int uint32_t;
 Ntypedef unsigned       __INT64 uint64_t;
 Xtypedef unsigned       __int64 uint64_t;
 N
+Ntypedef unsigned          char u8;
+Ntypedef unsigned short     int u16;
+Ntypedef unsigned           int u32;
+Ntypedef unsigned       __INT64 u64;
+Xtypedef unsigned       __int64 u64;
+N
+N//typedef unsigned          char vu8;
+N//typedef unsigned short     int vu16;
+N//typedef unsigned            int vu32;
+N//typedef unsigned       __INT64 vu64;
+N
 N    /* 7.18.1.2 */
 N
 N    /* smallest type of at least n bits */
@@ -35091,6 +35102,7 @@ Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
 Nextern u16 gaptimecount;
+Nextern vu8 flag_pow;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35733,6 +35745,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -36397,6 +36410,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -37030,6 +37044,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -53696,11 +53711,12 @@ X                            if(pow_sw==1)
 N                            {
 N                                GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X                                GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1873 9 function "Delay_ms" declared implicitly
-N								Delay_ms(1000);
+W "..\drive\key.c" 1873 17 function "Delay_ms" declared implicitly
+N																Delay_ms(1000);
 N                                GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-N                                mode_sw = 0;
+N                                flag_pow=0;
+N															mode_sw = 0;
 N                                pow_sw = pow_off;
 X                                pow_sw = 0;
 N                            }
@@ -53708,12 +53724,15 @@ N                            else if(pow_sw==pow_off)
 X                            else if(pow_sw==0)
 N                            {
 N//								SET_Voltage = pow_v-12;
-N								SET_Voltage = pow_v;
-X								Run_Control[1] = Run_Control[38];
+N															SET_Voltage = pow_v;
+X															Run_Control[1] = Run_Control[38];
 N                               GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
 X                               GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ                           
+W "..\drive\key.c" 1884 17 function "Delay_ms" declared implicitly
+N																Delay_ms(500);
+N                                GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ  
 X                                GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N																flag_pow=1;
 N                                mode_sw = mode_pow;
 X                                mode_sw = 3;
 N                                pow_sw = pow_on;
@@ -53738,10 +53757,11 @@ N
 N                               charge_step = 1;
 N                               GPIO_ResetBits(GPIOC,GPIO_Pin_13);//¥Úø™µÁ‘¥ ‰≥ˆºÃµÁ∆˜
 X                               GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\drive\key.c" 1901 11 function "Delay_ms" declared implicitly
-N							   Delay_ms(500);
+W "..\drive\key.c" 1904 16 function "Delay_ms" declared implicitly
+N															Delay_ms(500);
 N                               GPIO_SetBits(GPIOC,GPIO_Pin_1);//¥Úø™µÁ‘¥ ‰≥ˆ
 X                               GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N															flag_pow=1;
 N                               mode_sw = mode_pow;
 X                               mode_sw = 3;
 N                               cdc_sw = cdc_on;
@@ -53750,10 +53770,11 @@ N                            }else{
 N                               
 N                               GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X                               GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 1908 9 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 1912 9 function "Delay_ms" declared implicitly
 N								Delay_ms(500);
 N                               GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆˜
 X                               GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N															flag_pow=0;
 N                               GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
 X                               GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N                               cdc_sw = cdc_off;
@@ -53771,7 +53792,7 @@ N                        {
 N                            if(calmode == mode_pow)
 X                            if(calmode == 3)
 N                            {
-W "..\drive\key.c" 1923 9 function "PowVCal" declared implicitly
+W "..\drive\key.c" 1928 9 function "PowVCal" declared implicitly
 N								PowVCal(calstep);
 N//                                if(calstep == 1)
 N//                                {
@@ -53789,7 +53810,7 @@ N//                                    PowVCal(6);
 N//                                }
 N                            }else if(calmode == mode_loadc){
 X                            }else if(calmode == 4){
-W "..\drive\key.c" 1939 9 function "LoadCCal" declared implicitly
+W "..\drive\key.c" 1944 9 function "LoadCCal" declared implicitly
 N								LoadCCal(calstep);
 N//                                if(calstep == 1)
 N//                                {
@@ -53799,7 +53820,7 @@ N//                                    LoadCCal(2);
 N//                                }
 N                            }else if(calmode == mode_powc){
 X                            }else if(calmode == 5){
-W "..\drive\key.c" 1947 9 function "PowCCal" declared implicitly
+W "..\drive\key.c" 1952 9 function "PowCCal" declared implicitly
 N								PowCCal(calstep);
 N//                                if(calstep == 1)
 N//                                {
@@ -53813,7 +53834,7 @@ N//                                    PowCCal(4);
 N//                                }
 N                            }else if(calmode == mode_load){
 X                            }else if(calmode == 2){
-W "..\drive\key.c" 1959 9 function "LoadVCal" declared implicitly
+W "..\drive\key.c" 1964 9 function "LoadVCal" declared implicitly
 N								LoadVCal(calstep);
 N							}
 N                            KeyCounter = 0;
@@ -53934,11 +53955,12 @@ N                    GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
 X                    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X                    GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 2056 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 2061 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-N                    CreateR();
+N                    flag_pow=0;
+N									CreateR();
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//
 N                }
@@ -53957,10 +53979,11 @@ N                    CreateWindow2();
 N                    t_onoff = 0;
 N                    GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 X                    GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 2075 6 function "Delay_ms" declared implicitly
-N					Delay_ms(500);
-N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);
-X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+W "..\drive\key.c" 2081 11 function "Delay_ms" declared implicitly
+N										Delay_ms(500);
+N										GPIO_SetBits(GPIOC,GPIO_Pin_13);
+X										GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N										flag_pow=0;
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//
 N                }
@@ -53995,7 +54018,7 @@ N                    WM_DeleteWindow(hWinset);
 N//					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 N//					Delay_ms(500);
 N//				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
-W "..\drive\key.c" 2108 21 function "CreateCDC" declared implicitly
+W "..\drive\key.c" 2115 21 function "CreateCDC" declared implicitly
 N                    CreateCDC(); 
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//
@@ -54028,12 +54051,13 @@ N                    WM_DeleteWindow(hWincdc);
 N                    WM_DeleteWindow(hWinset);
 N					GPIO_ResetBits(GPIOC,GPIO_Pin_1);//πÿ±’µÁ‘¥ ‰≥ˆ
 X					GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\drive\key.c" 2137 6 function "Delay_ms" declared implicitly
+W "..\drive\key.c" 2144 6 function "Delay_ms" declared implicitly
 N					Delay_ms(500);
 N				    GPIO_SetBits(GPIOC,GPIO_Pin_13);//πÿ±’µÁ‘¥ ‰≥ˆºÃµÁ∆
 X				    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-W "..\drive\key.c" 2139 21 function "Createsysinfo" declared implicitly
-N                    Createsysinfo();
+N                    flag_pow=0;
+W "..\drive\key.c" 2147 10 function "Createsysinfo" declared implicitly
+N									Createsysinfo();
 N                    KeyCounter = 0;
 N                    BEEP_Tiggr();//Ëß¶ÂèëËúÇÈ∏£Âô?
 N                }
@@ -54071,6 +54095,7 @@ N    GPIO_SetBits(GPIOA,GPIO_Pin_15);//µÁ◊”∏∫‘ÿOFF
 X    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N    pow_sw = pow_off;
 X    pow_sw = 0;
+N		flag_pow=0;
 N    load_sw = load_off;
 X    load_sw = 0;
 N    mode_sw = mode_r;
@@ -54122,5 +54147,6 @@ N    pow_sw = pow_off;
 X    pow_sw = 0;
 N    load_sw = load_off;
 X    load_sw = 0;
+N		flag_pow=0;
 N}
 N

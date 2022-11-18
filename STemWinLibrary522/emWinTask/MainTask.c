@@ -40,6 +40,7 @@ extern vu8 test_start;
 extern vu8 step;
 RCC_ClocksTypeDef rcc;
 vu16 sendload = 0;
+vu16 powdacbuf = 0;
 vu8 jkflag;
 extern vu8 cdc_sw;
 vu8 ocf;
@@ -47,12 +48,24 @@ vu8 vflag;
 vu8 cflag;
 extern u8 calmode;
 extern vu8 con_flag;
-
+vu8 flag_pow=0;
 static void ee_Delay( vu32 nCount)	 //莶榨謩覔时诏私
 {
 	for(; nCount != 0; nCount--);
 }
 
+void PowDacRise(void)
+{
+	if(flag_pow==0)
+	{
+		powdacbuf=0;
+	}else{
+		powdacbuf++;
+		if(powdacbuf>100)
+			powdacbuf=Contr_Voltage;
+	}
+	TIM_SetCompare2(TIM2,powdacbuf);//稳压电源电压DAC
+}
 
 /**********************************************************************************************************
 *	函 数 名: MainTask
@@ -107,7 +120,10 @@ void MainTask(void)
 	while (1)
 	{
 		TIM_SetCompare1(TIM2,Contr_Current);//稳压电源电流DAC
-		TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
+		if(page_sw == face_menu || page_sw == face_cdc)
+			PowDacRise();
+		else
+			TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
 //		DAC8531_Send(sendload);//加载DAC值
 		if(usartocflag == 1)
 		{

@@ -933,6 +933,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				 SET_Current = opc1;
 			   GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 				GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
+				flag_pow=1;
 //                    GPIO_SetBits(GPIOB,GPIO_Pin_13);//打开稳压电源输出
 				mode_sw = mode_pow;
 				cutoff_flag = 0; 

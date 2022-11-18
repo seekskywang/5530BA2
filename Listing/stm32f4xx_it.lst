@@ -795,6 +795,17 @@ Ntypedef unsigned           int uint32_t;
 Ntypedef unsigned       __INT64 uint64_t;
 Xtypedef unsigned       __int64 uint64_t;
 N
+Ntypedef unsigned          char u8;
+Ntypedef unsigned short     int u16;
+Ntypedef unsigned           int u32;
+Ntypedef unsigned       __INT64 u64;
+Xtypedef unsigned       __int64 u64;
+N
+N//typedef unsigned          char vu8;
+N//typedef unsigned short     int vu16;
+N//typedef unsigned            int vu32;
+N//typedef unsigned       __INT64 vu64;
+N
 N    /* 7.18.1.2 */
 N
 N    /* smallest type of at least n bits */
@@ -35181,6 +35192,7 @@ Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
 Nextern u16 gaptimecount;
+Nextern vu8 flag_pow;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35802,6 +35814,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50606,6 +50619,22 @@ N//			C_SW(1);
 N			v= DISS_Voltage;
 N			value =	R_VLUE;	
 X			value =	Run_Control[13];	
+N			WM_DeleteWindow(hWinR);
+N			WM_DeleteWindow(hWinWind);
+N			WM_DeleteWindow(hWinG);
+N			WM_DeleteWindow(load_wind);
+N			WM_DeleteWindow(hWinsysinfo);
+N			WM_DeleteWindow(hWincdc);
+N			WM_DeleteWindow(hWinset);
+N			CreateWindow2();
+N			t_onoff = 0;
+N			GPIO_ResetBits(GPIOC,GPIO_Pin_1);
+X			GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+W "..\User\stm32f4xx_it.c" 509 4 function "Delay_ms" declared implicitly
+N			Delay_ms(500);
+N			GPIO_SetBits(GPIOC,GPIO_Pin_13);
+X			GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N			flag_pow=0;
 N			break;
 N		case SLAVE_REG_P01:
 X		case 0x0001:
@@ -50628,7 +50657,7 @@ N			value =	(int)(DISS_POW_Current*1000);		/* 将寄存器值读出 */
 N			break;
 N		case SLAVE_REG_P05:
 X		case 0x0005:
-W "..\User\stm32f4xx_it.c" 516 4 function "IO_OFF" declared implicitly
+W "..\User\stm32f4xx_it.c" 529 4 function "IO_OFF" declared implicitly
 N			IO_OFF();
 N            SET_Current_Laod = 0;
 X            Run_Control[4] = 0;
@@ -50892,7 +50921,7 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow2();
-W "..\User\stm32f4xx_it.c" 708 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 721 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				t_onoff = 0;
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
@@ -50900,7 +50929,7 @@ X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-N				
+N				 flag_pow=0;
 N				if(flag_Load_CC == 0)
 X				if((flagD . bit7) == 0)
 N				{
@@ -51025,14 +51054,16 @@ N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);
 N				CreateWindow();
-W "..\User\stm32f4xx_it.c" 810 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 823 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_13);//詹擢支源摔远輰支欠
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
-N				GPIO_SetBits(GPIOC,GPIO_Pin_1);//詹擢支源摔远                           
+N				Delay_ms(500);
+N				GPIO_SetBits(GPIOC,GPIO_Pin_1);//詹擢支源摔远 
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N				flag_pow=1;
 N				mode_sw = mode_pow;
 X				mode_sw = 3;
 N				pow_sw = pow_on;
@@ -51042,10 +51073,11 @@ N
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 820 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 835 5 function "Delay_ms" declared implicitly
 N				Delay_ms(1000);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N				flag_pow=0;
 N				mode_sw = 0;
 N				pow_sw = pow_off;
 X				pow_sw = 0;
@@ -51144,15 +51176,16 @@ N				WM_DeleteWindow(load_wind);
 N				WM_DeleteWindow(hWinsysinfo);
 N				WM_DeleteWindow(hWincdc);
 N				WM_DeleteWindow(hWinset);				
-W "..\User\stm32f4xx_it.c" 901 5 function "CreateCDC" declared implicitly
+W "..\User\stm32f4xx_it.c" 917 5 function "CreateCDC" declared implicitly
 N				CreateCDC(); 
-W "..\User\stm32f4xx_it.c" 902 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 918 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
 N				Delay_ms(500);
 N				GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支茘
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
+N				flag_pow=0;
 N				SET_Voltage = opv1;
 X				Run_Control[1] = Run_Control[31];
 N			    SET_Current = opc1;
@@ -51166,8 +51199,9 @@ X			    GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) 
 N			    Delay_ms(500);
 N			    GPIO_SetBits(GPIOC,GPIO_Pin_1);//詹擢支源摔远
 X			    GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-N			    mode_sw = mode_pow;
-X			    mode_sw = 3;
+N			    flag_pow=1;
+N					mode_sw = mode_pow;
+X					mode_sw = 3;
 N			    cdc_sw = cdc_on;
 X			    cdc_sw = 1;
 N				rmtrig[2] = 1;
@@ -51175,12 +51209,13 @@ N				sendmodeflag = 1;
 N			}else if(reg_value == 4){//鍋滄鐢垫簮
 N				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//跇視支源摔远
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
-W "..\User\stm32f4xx_it.c" 921 5 function "Delay_ms" declared implicitly
+W "..\User\stm32f4xx_it.c" 939 5 function "Delay_ms" declared implicitly
 N				Delay_ms(500);
 N			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//跇視支源摔远輰支欠
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N			   GPIO_SetBits(GPIOA,GPIO_Pin_15);//支負睾諛OFF
 X			   GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000)),((uint16_t)0x8000));
+N				flag_pow=0;
 N			   cdc_sw = cdc_off;
 X			   cdc_sw = 0;
 N			   paused = 0;
@@ -51335,7 +51370,7 @@ N	uint16_t crc;
 N	uint8_t i;
 N	uint8_t buf[S_TX_BUF_SIZE];
 X	uint8_t buf[128];
-W "..\User\stm32f4xx_it.c" 1054 2 function "memcpy" declared implicitly
+W "..\User\stm32f4xx_it.c" 1073 2 function "memcpy" declared implicitly
 N	memcpy(buf, _pBuf, _ucLen);
 N	crc = CRC16(_pBuf, _ucLen);
 N	buf[_ucLen++] = crc >> 8;
@@ -51352,7 +51387,7 @@ N// #if 1									/* 此部分为了串口打印结果,实际运用中可不要 */
 N// 	g_tPrint.Txlen = _ucLen;
 N// 	memcpy(g_tPrint.TxBuf, buf, _ucLen);
 N// #endif
-W "..\User\stm32f4xx_it.c" 1052 10 variable "i"  was declared but never referenced
+W "..\User\stm32f4xx_it.c" 1071 10 variable "i"  was declared but never referenced
 N}
 N
 Nstatic void MODS_06H(void)

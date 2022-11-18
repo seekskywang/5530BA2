@@ -496,6 +496,19 @@ static uint8_t MODS_ReadRegValue(uint16_t reg_addr, uint8_t *reg_value)
 //			C_SW(1);
 			v= DISS_Voltage;
 			value =	R_VLUE;	
+			WM_DeleteWindow(hWinR);
+			WM_DeleteWindow(hWinWind);
+			WM_DeleteWindow(hWinG);
+			WM_DeleteWindow(load_wind);
+			WM_DeleteWindow(hWinsysinfo);
+			WM_DeleteWindow(hWincdc);
+			WM_DeleteWindow(hWinset);
+			CreateWindow2();
+			t_onoff = 0;
+			GPIO_ResetBits(GPIOC,GPIO_Pin_1);
+			Delay_ms(500);
+			GPIO_SetBits(GPIOC,GPIO_Pin_13);
+			flag_pow=0;
 			break;
 		case SLAVE_REG_P01:
             shortv = DISS_Voltage;
@@ -710,7 +723,7 @@ static uint8_t MODS_Load(uint16_t reg_addr, uint16_t reg_value)
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 				Delay_ms(500);
 				GPIO_SetBits(GPIOC,GPIO_Pin_13);
-				
+				 flag_pow=0;
 				if(flag_Load_CC == 0)
 				{
 					GPIO_ResetBits(GPIOC,GPIO_Pin_13);
@@ -810,7 +823,9 @@ static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 				Delay_ms(500);
 				GPIO_SetBits(GPIOA,GPIO_Pin_15);
 				GPIO_ResetBits(GPIOC,GPIO_Pin_13);//ղߪ֧ԴˤԶ݌֧Ƿ
-				GPIO_SetBits(GPIOC,GPIO_Pin_1);//ղߪ֧ԴˤԶ                           
+				Delay_ms(500);
+				GPIO_SetBits(GPIOC,GPIO_Pin_1);//ղߪ֧ԴˤԶ 
+				flag_pow=1;
 				mode_sw = mode_pow;
 				pow_sw = pow_on;
 				rmtrig[1] = 1;
@@ -819,6 +834,7 @@ static uint8_t MODS_Pow(uint16_t reg_addr, uint16_t reg_value)
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 				Delay_ms(1000);
 				GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧Ƿ
+				flag_pow=0;
 				mode_sw = 0;
 				pow_sw = pow_off;
 				rmtrig[1] = 0;
@@ -903,6 +919,7 @@ static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);//ژҕ֧ԴˤԶ
 				Delay_ms(500);
 				GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧ƍ
+				flag_pow=0;
 				SET_Voltage = opv1;
 			    SET_Current = opc1;
 			    cutoff_flag = 0;
@@ -912,7 +929,8 @@ static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 			    GPIO_ResetBits(GPIOC,GPIO_Pin_13);//ղߪ֧ԴˤԶ݌֧Ƿ
 			    Delay_ms(500);
 			    GPIO_SetBits(GPIOC,GPIO_Pin_1);//ղߪ֧ԴˤԶ
-			    mode_sw = mode_pow;
+			    flag_pow=1;
+					mode_sw = mode_pow;
 			    cdc_sw = cdc_on;
 				rmtrig[2] = 1;
 				sendmodeflag = 1;
@@ -921,6 +939,7 @@ static uint8_t MODS_CDC(uint16_t reg_addr, uint16_t reg_value)
 				Delay_ms(500);
 			   GPIO_SetBits(GPIOC,GPIO_Pin_13);//ژҕ֧ԴˤԶ݌֧Ƿ
 			   GPIO_SetBits(GPIOA,GPIO_Pin_15);//֧ؓغ՘OFF
+				flag_pow=0;
 			   cdc_sw = cdc_off;
 			   paused = 0;
 			   mode_sw = 0;

@@ -14662,6 +14662,17 @@ Ntypedef unsigned           int uint32_t;
 Ntypedef unsigned       __INT64 uint64_t;
 Xtypedef unsigned       __int64 uint64_t;
 N
+Ntypedef unsigned          char u8;
+Ntypedef unsigned short     int u16;
+Ntypedef unsigned           int u32;
+Ntypedef unsigned       __INT64 u64;
+Xtypedef unsigned       __int64 u64;
+N
+N//typedef unsigned          char vu8;
+N//typedef unsigned short     int vu16;
+N//typedef unsigned            int vu32;
+N//typedef unsigned       __INT64 vu64;
+N
 N    /* 7.18.1.2 */
 N
 N    /* smallest type of at least n bits */
@@ -49007,6 +49018,7 @@ Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
 Nextern u16 gaptimecount;
+Nextern vu8 flag_pow;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49656,6 +49668,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50292,6 +50305,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -50931,6 +50945,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -51570,6 +51585,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -52180,6 +52196,7 @@ Nextern vu8 test_start;
 Nextern vu8 step;
 NRCC_ClocksTypeDef rcc;
 Nvu16 sendload = 0;
+Nvu16 powdacbuf = 0;
 Nvu8 jkflag;
 Nextern vu8 cdc_sw;
 Nvu8 ocf;
@@ -52187,12 +52204,25 @@ Nvu8 vflag;
 Nvu8 cflag;
 Nextern u8 calmode;
 Nextern vu8 con_flag;
-N
+Nvu8 flag_pow=0;
 Nstatic void ee_Delay( vu32 nCount)	 //莶榨謩覔时诏私
 N{
 N	for(; nCount != 0; nCount--);
 N}
 N
+Nvoid PowDacRise(void)
+N{
+N	if(flag_pow==0)
+N	{
+N		powdacbuf=0;
+N	}else{
+N		powdacbuf++;
+N		if(powdacbuf>100)
+N			powdacbuf=Contr_Voltage;
+N	}
+N	TIM_SetCompare2(TIM2,powdacbuf);//稳压电源电压DAC
+X	TIM_SetCompare2(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),powdacbuf);
+N}
 N
 N/**********************************************************************************************************
 N*	函 数 名: MainTask
@@ -52247,7 +52277,7 @@ N	Flag_Swtich_ON=0;
 X	(flagA . bit6)=0;
 N	if(jkflag == 1)
 N	{
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 93 3 function "CreateSTARTER" declared implicitly
+W "..\STemWinLibrary522\emWinTask\MainTask.c" 106 3 function "CreateSTARTER" declared implicitly
 N		CreateSTARTER();
 N	}else if(jkflag == 0){
 N		CreateR();
@@ -52266,8 +52296,12 @@ N	while (1)
 N	{
 N		TIM_SetCompare1(TIM2,Contr_Current);//稳压电源电流DAC
 X		TIM_SetCompare1(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),Contr_Current);
-N		TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
-X		TIM_SetCompare2(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),Contr_Voltage);
+N		if(page_sw == face_menu || page_sw == face_cdc)
+X		if(page_sw == 2 || page_sw == 1)
+N			PowDacRise();
+N		else
+N			TIM_SetCompare2(TIM2,Contr_Voltage);//稳压电源电压DAC
+X			TIM_SetCompare2(((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0000)),Contr_Voltage);
 N//		DAC8531_Send(sendload);//加载DAC值
 N		if(usartocflag == 1)
 N		{
@@ -52495,7 +52529,7 @@ N		BEEP_Ring();//蜂鸣器
 N		GUI_Delay(2);//GUI刷新
 N	}
 N  
-W "..\STemWinLibrary522\emWinTask\MainTask.c" 67 25 variable "read1964"  was set but never used
+W "..\STemWinLibrary522\emWinTask\MainTask.c" 80 25 variable "read1964"  was set but never used
 N}
 N
 Nvoid V_SW(u8 i)

@@ -236,6 +236,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			{
 				GPIO_ResetBits(GPIOC,GPIO_Pin_1);
 				  GPIO_SetBits(GPIOC,GPIO_Pin_13);
+				flag_pow=0;
 				  mode_sw = 0;
 				  pow_sw = pow_off;
 				  cdelay = 0;
@@ -593,7 +594,8 @@ WM_HWIN CreateWindow(void) {
 	  GPIO_ResetBits(GPIOC,GPIO_Pin_1);//¹Ø±ÕµçÔ´Êä³ö
 	  Delay_ms(500);
 	  GPIO_SetBits(GPIOC,GPIO_Pin_13);//¹Ø±ÕµçÔ´Êä³ö¼ÌµçÆ
-//      IO_OFF();
+		flag_pow=0;
+		//      IO_OFF();
 	  
   }
   page_sw = face_menu;

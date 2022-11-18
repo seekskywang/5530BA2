@@ -14614,6 +14614,17 @@ Ntypedef unsigned           int uint32_t;
 Ntypedef unsigned       __INT64 uint64_t;
 Xtypedef unsigned       __int64 uint64_t;
 N
+Ntypedef unsigned          char u8;
+Ntypedef unsigned short     int u16;
+Ntypedef unsigned           int u32;
+Ntypedef unsigned       __INT64 u64;
+Xtypedef unsigned       __int64 u64;
+N
+N//typedef unsigned          char vu8;
+N//typedef unsigned short     int vu16;
+N//typedef unsigned            int vu32;
+N//typedef unsigned       __INT64 vu64;
+N
 N    /* 7.18.1.2 */
 N
 N    /* smallest type of at least n bits */
@@ -48959,6 +48970,7 @@ Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
 Nextern u16 gaptimecount;
+Nextern vu8 flag_pow;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -49579,6 +49591,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -52304,6 +52317,7 @@ Sextern vu8 cflag;
 Sextern vu8 pow_sw;
 Sextern vu8 sendpcflag;
 Sextern u16 gaptimecount;
+Sextern vu8 flag_pow;
 S#define set_max_lv						InFlashSave[0]
 S#define set_min_lv						InFlashSave[1]
 S#define set_max_pc						InFlashSave[2]
@@ -54440,6 +54454,7 @@ N			   GPIO_ResetBits(GPIOC,GPIO_Pin_13);//打开电源输出继电器
 X			   GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x2000));
 N				GPIO_SetBits(GPIOC,GPIO_Pin_1);//打开电源输出
 X				GPIO_SetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0002));
+N				flag_pow=1;
 N//                    GPIO_SetBits(GPIOB,GPIO_Pin_13);//打开稳压电源输出
 N				mode_sw = mode_pow;
 X				mode_sw = 3;
@@ -55079,7 +55094,7 @@ X	  track = 1;
 N	  TM1650_SET_LED(0x68,0x70);
 N	  GPIO_ResetBits(GPIOD,GPIO_Pin_12);//İֆ+
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
-W "..\APP\c_dc.c" 1438 4 function "IO_OFF" declared implicitly
+W "..\APP\c_dc.c" 1439 4 function "IO_OFF" declared implicitly
 N	  IO_OFF();//ȍ
 N	  GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
 X	  GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800)),((uint16_t)0x0400));
@@ -55539,9 +55554,9 @@ N            }
 N        }break;
 N		default:break;
 N    }
-W "..\APP\c_dc.c" 1743 11 variable "buffer"  was declared but never referenced
-W "..\APP\c_dc.c" 1744 10 variable "buf"  was declared but never referenced
-W "..\APP\c_dc.c" 1745 13 variable "hItem"  was declared but never referenced
+W "..\APP\c_dc.c" 1744 11 variable "buffer"  was declared but never referenced
+W "..\APP\c_dc.c" 1745 10 variable "buf"  was declared but never referenced
+W "..\APP\c_dc.c" 1746 13 variable "hItem"  was declared but never referenced
 N}
 N
 N
@@ -55566,9 +55581,9 @@ N            }
 N        }break;
 N		default:break;
 N    }
-W "..\APP\c_dc.c" 1765 11 variable "buffer"  was declared but never referenced
-W "..\APP\c_dc.c" 1766 10 variable "buf"  was declared but never referenced
-W "..\APP\c_dc.c" 1767 13 variable "hItem"  was declared but never referenced
+W "..\APP\c_dc.c" 1766 11 variable "buffer"  was declared but never referenced
+W "..\APP\c_dc.c" 1767 10 variable "buf"  was declared but never referenced
+W "..\APP\c_dc.c" 1768 13 variable "hItem"  was declared but never referenced
 N}
 N
 N//充放电界面设置
@@ -56823,7 +56838,7 @@ N            break;
 N        }
 N        
 N    }    
-W "..\APP\c_dc.c" 2506 10 variable "loop_count"  was declared but never referenced
+W "..\APP\c_dc.c" 2507 10 variable "loop_count"  was declared but never referenced
 N}
 N
 Nint count_num(int data)

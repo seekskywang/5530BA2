@@ -745,6 +745,17 @@ Ntypedef unsigned           int uint32_t;
 Ntypedef unsigned       __INT64 uint64_t;
 Xtypedef unsigned       __int64 uint64_t;
 N
+Ntypedef unsigned          char u8;
+Ntypedef unsigned short     int u16;
+Ntypedef unsigned           int u32;
+Ntypedef unsigned       __INT64 u64;
+Xtypedef unsigned       __int64 u64;
+N
+N//typedef unsigned          char vu8;
+N//typedef unsigned short     int vu16;
+N//typedef unsigned            int vu32;
+N//typedef unsigned       __INT64 vu64;
+N
 N    /* 7.18.1.2 */
 N
 N    /* smallest type of at least n bits */
@@ -35090,6 +35101,7 @@ Nextern vu8 cflag;
 Nextern vu8 pow_sw;
 Nextern vu8 sendpcflag;
 Nextern u16 gaptimecount;
+Nextern vu8 flag_pow;
 N#define set_max_lv						InFlashSave[0]
 N#define set_min_lv						InFlashSave[1]
 N#define set_max_pc						InFlashSave[2]
@@ -35685,16 +35697,16 @@ Nvoid UART1_Send(void)
 N{
 N	static vu8 UART_Buffer_Send_pointer=0;
 N		if (UART_Buffer_Send_pointer < Transmit_BUFFERsize)
-N         {
-N					 if(UART_Buffer_Send[0]==ADDR)
-N					 {
-N						USART_SendData(USART1,UART_Buffer_Send[UART_Buffer_Send_pointer]);
-X						USART_SendData(((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x1000)),UART_Buffer_Send[UART_Buffer_Send_pointer]);
-N						while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == RESET);//??????
-X						while (USART_GetFlagStatus(((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x1000)),((uint16_t)0x0080)) == RESET);
-N						UART_Buffer_Send_pointer++;
-N					}
-N         }
+N	 {
+N		 if(UART_Buffer_Send[0]==ADDR)
+N		 {
+N			USART_SendData(USART1,UART_Buffer_Send[UART_Buffer_Send_pointer]);
+X			USART_SendData(((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x1000)),UART_Buffer_Send[UART_Buffer_Send_pointer]);
+N			while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == RESET);//??????
+X			while (USART_GetFlagStatus(((USART_TypeDef *) ((((uint32_t)0x40000000) + 0x00010000) + 0x1000)),((uint16_t)0x0080)) == RESET);
+N			UART_Buffer_Send_pointer++;
+N		}
+N	 }
 N		else 
 N		{
 N			UART_Buffer_Send_pointer=0;
