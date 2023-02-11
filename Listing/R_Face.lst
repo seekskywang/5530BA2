@@ -49983,6 +49983,8 @@ Nvu8 IIc_CheckDevice(vu8 _Address);
 Nvoid TM1650_GPIO_INT(void);
 Nvu8 TM1650_Read_KEY(void);
 Nvoid TM1650_SET_LED(vu8 addr,vu8 dat);
+Nvoid TM1650_SystemCmd(vu8 light,vu8 segMod, vu8 WorkMod, vu8 Onoff);
+Nvoid TM1650Disp(vu8 sdate1, vu8 sdate2, vu8 sdate3, vu8 sdate4);
 N#endif
 L 14 "..\APP\R_Face.c" 2
 N#include "stdio.h"
@@ -53901,18 +53903,26 @@ N			{
 N				TM1650_SET_LED(0x68,0x70);
 N				GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
 X				GPIO_ResetBits(((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00)),((uint16_t)0x1000));
+N//				
+N//				TM1650_SET_LED(0x68,0x70);//FAIL灯
+N//        GPIO_SetBits(GPIOD,GPIO_Pin_12);//
+N//				
+N//				GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+N//				TM1650_SET_LED(0x48,0x71);
+N//				TM1650_SET_LED(0x68,0xF2);//PASS灯
+N				
 N				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 0)
 X				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && Run_Control[13] > 20 && con_flag == 0)
 N				{
 N					con_flag = 1;
-W "..\APP\R_Face.c" 485 14 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 493 14 single-precision operand implicitly converted to double-precision
 N					time1 = (float)GUI_GetTime()/500.0;
 N				}
 N				if(con_flag == 1)
 N				{
 N					if(test_mode == 0)
 N					{
-W "..\APP\R_Face.c" 491 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 499 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 0.5)
 N						{
 N							if(staticcdc == 1)
@@ -53935,7 +53945,7 @@ X							r = Run_Control[13];
 N							v = DISS_Voltage;
 N						}
 N					}else if(test_mode == 1){
-W "..\APP\R_Face.c" 510 10 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 518 10 single-precision operand implicitly converted to double-precision
 N						if((float)(GUI_GetTime()/500.0 - time1) > 1.5)
 N						{
 N							if(staticcdc == 1)
@@ -53971,7 +53981,7 @@ N                    GUI_SetFont(&GUI_Font20_ASCII);
 N                    TEXT_SetText(hItem, "Untested");
 N                }
 N				
-W "..\APP\R_Face.c" 541 8 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 549 8 single-precision operand implicitly converted to double-precision
 N				if(DISS_Voltage < 0.3)
 N                {
 N                    hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54093,7 +54103,7 @@ N					}
 N					//归零
 N					if(DISS_Voltage < gate_v || DISS_Voltage < 1)
 N					{
-W "..\APP\R_Face.c" 640 7 function "IO_OFF" declared implicitly
+W "..\APP\R_Face.c" 648 7 function "IO_OFF" declared implicitly
 N						IO_OFF();
 N						test_start = 0;
 N						con_flag = 0;
@@ -54139,7 +54149,7 @@ N			}
 N			
 N			
 N		}else{
-W "..\APP\R_Face.c" 677 7 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 685 7 single-precision operand implicitly converted to double-precision
 N			if(DISS_Voltage < 0.3)
 N			{
 N				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
@@ -54955,7 +54965,7 @@ X  page_sw = 3;
 N  track = face_r;
 X  track = 3;
 N    con_flag = 0;
-W "..\APP\R_Face.c" 1306 5 function "setmode_r" declared implicitly
+W "..\APP\R_Face.c" 1314 5 function "setmode_r" declared implicitly
 N    setmode_r();
 N	C_SW(0);
 N//    GPIO_SetBits(GPIOA,GPIO_Pin_15);//电子负载OFF
@@ -55959,7 +55969,7 @@ N                oc_mode = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 1998 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 2006 21 variable "hItem"  was declared but never referenced
 N        }
 N		
 N		case set_81:
@@ -55975,7 +55985,7 @@ N                staticcdc = 0;
 N            }
 N            Write_Limits();
 N            break;
-W "..\APP\R_Face.c" 2011 21 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 2019 21 variable "hItem"  was declared but never referenced
 N        }
 N        
 N		case set_75:
@@ -56341,7 +56351,7 @@ N            break;
 N            
 N        }
 N    }
-W "..\APP\R_Face.c" 2179 5 variable "i"  was declared but never referenced
+W "..\APP\R_Face.c" 2187 5 variable "i"  was declared but never referenced
 N}
 N
 N//内阻页面数字输入
@@ -57262,7 +57272,7 @@ N		}
 N    }
 N	if(crec1 != 0)
 N	{
-W "..\APP\R_Face.c" 3190 26 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3198 26 single-precision operand implicitly converted to double-precision
 N		if((v - DISS_Voltage > v*0.9) && para_set2 == set_2_on)
 X		if((v - DISS_Voltage > v*0.9) && para_set2 == 0xff)
 N		{
@@ -57322,7 +57332,7 @@ N    char sbs_c[6];
 N    float change_sbs_c;
 N    static vu16 csum;
 N             
-W "..\APP\R_Face.c" 3240 43 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3248 43 single-precision operand implicitly converted to double-precision
 N    if(v - /*DISS_Voltage*/DISS_Voltage > v*0.8 && para_set2 == set_2_on)
 X    if(v -  DISS_Voltage > v*0.8 && para_set2 == 0xff)
 N    {
@@ -57421,9 +57431,9 @@ N//				step =5;
 N//            }
 N        }       
 N    }        
-W "..\APP\R_Face.c" 3235 13 variable "hItem"  was declared but never referenced
-W "..\APP\R_Face.c" 3236 10 variable "sbs_c"  was declared but never referenced
-W "..\APP\R_Face.c" 3237 11 variable "change_sbs_c"  was declared but never referenced
+W "..\APP\R_Face.c" 3243 13 variable "hItem"  was declared but never referenced
+W "..\APP\R_Face.c" 3244 10 variable "sbs_c"  was declared but never referenced
+W "..\APP\R_Face.c" 3245 11 variable "change_sbs_c"  was declared but never referenced
 N}
 N
 Nvoid test_r(void)
@@ -57434,7 +57444,7 @@ N	u32 rcomp;
 N    if(para_set2 == set_2_off)
 X    if(para_set2 == 0)
 N    {
-W "..\APP\R_Face.c" 3344 6 single-precision operand implicitly converted to double-precision
+W "..\APP\R_Face.c" 3352 6 single-precision operand implicitly converted to double-precision
 N		if(DISS_Voltage < 0.3)
 N		{
 N			rcomp = 0;

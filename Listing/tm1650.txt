@@ -5,37 +5,37 @@
                           AREA ||i.IIc_Ack||, CODE, READONLY, ALIGN=2
 
                   IIc_Ack PROC
-;;;178    **********************************************************************************************************/
-;;;179    void IIc_Ack(void)
+;;;182    **********************************************************************************************************/
+;;;183    void IIc_Ack(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;180    {
-;;;181    	TM1650_SDA_0();	/* CPUȽ֯SDA = 0 */
+;;;184    {
+;;;185    	TM1650_SDA_0();	/* CPUȽ֯SDA = 0 */
 000002  4d0d              LDR      r5,|L1.56|
 000004  f44f7480          MOV      r4,#0x100
 000008  4621              MOV      r1,r4
 00000a  4628              MOV      r0,r5
 00000c  f7fffffe          BL       GPIO_ResetBits
-;;;182    	IIc_Delay();
+;;;186    	IIc_Delay();
 000010  f7fffffe          BL       IIc_Delay
-;;;183    	TM1650_SCL_1();	/* CPUӺʺ1ٶʱד */
+;;;187    	TM1650_SCL_1();	/* CPUӺʺ1ٶʱד */
 000014  2180              MOVS     r1,#0x80
 000016  4628              MOV      r0,r5
 000018  f7fffffe          BL       GPIO_SetBits
-;;;184    	IIc_Delay();
+;;;188    	IIc_Delay();
 00001c  f7fffffe          BL       IIc_Delay
-;;;185    	TM1650_SCL_0();
+;;;189    	TM1650_SCL_0();
 000020  2180              MOVS     r1,#0x80
 000022  4628              MOV      r0,r5
 000024  f7fffffe          BL       GPIO_ResetBits
-;;;186    	IIc_Delay();
+;;;190    	IIc_Delay();
 000028  f7fffffe          BL       IIc_Delay
-;;;187    	TM1650_SDA_1();	/* CPUˍ؅SDA؜П */
+;;;191    	TM1650_SDA_1();	/* CPUˍ؅SDA؜П */
 00002c  4621              MOV      r1,r4
 00002e  4628              MOV      r0,r5
 000030  e8bd4070          POP      {r4-r6,lr}
 000034  f7ffbffe          B.W      GPIO_SetBits
-;;;188    }
-;;;189    
+;;;192    }
+;;;193    
                           ENDP
 
                   |L1.56|
@@ -70,32 +70,32 @@
                           AREA ||i.IIc_NAck||, CODE, READONLY, ALIGN=2
 
                   IIc_NAck PROC
-;;;195    **********************************************************************************************************/
-;;;196    void IIc_NAck(void)
+;;;199    **********************************************************************************************************/
+;;;200    void IIc_NAck(void)
 000000  b510              PUSH     {r4,lr}
-;;;197    {
-;;;198    	TM1650_SDA_1();	/* CPUȽ֯SDA = 1 */
+;;;201    {
+;;;202    	TM1650_SDA_1();	/* CPUȽ֯SDA = 1 */
 000002  4c0b              LDR      r4,|L3.48|
 000004  f44f7180          MOV      r1,#0x100
 000008  4620              MOV      r0,r4
 00000a  f7fffffe          BL       GPIO_SetBits
-;;;199    	IIc_Delay();
+;;;203    	IIc_Delay();
 00000e  f7fffffe          BL       IIc_Delay
-;;;200    	TM1650_SCL_1();	/* CPUӺʺ1ٶʱד */
+;;;204    	TM1650_SCL_1();	/* CPUӺʺ1ٶʱד */
 000012  2180              MOVS     r1,#0x80
 000014  4620              MOV      r0,r4
 000016  f7fffffe          BL       GPIO_SetBits
-;;;201    	IIc_Delay();
+;;;205    	IIc_Delay();
 00001a  f7fffffe          BL       IIc_Delay
-;;;202    	TM1650_SCL_0();
+;;;206    	TM1650_SCL_0();
 00001e  2180              MOVS     r1,#0x80
 000020  4620              MOV      r0,r4
 000022  f7fffffe          BL       GPIO_ResetBits
-;;;203    	IIc_Delay();	
+;;;207    	IIc_Delay();	
 000026  e8bd4010          POP      {r4,lr}
 00002a  f7ffbffe          B.W      IIc_Delay
-;;;204    }
-;;;205    /**********************************************************************************************************
+;;;208    }
+;;;209    
                           ENDP
 
 00002e  0000              DCW      0x0000
@@ -105,65 +105,65 @@
                           AREA ||i.IIc_ReadByte||, CODE, READONLY, ALIGN=2
 
                   IIc_ReadByte PROC
-;;;125    **********************************************************************************************************/
-;;;126    vu8 IIc_ReadByte(void)
+;;;129    **********************************************************************************************************/
+;;;130    vu8 IIc_ReadByte(void)
 000000  b57c              PUSH     {r2-r6,lr}
-;;;127    {
-;;;128    	vu8 i;
-;;;129    	vu8 value;
-;;;130    
-;;;131    	/*接受一个8位数据 */
-;;;132    	value = 0;
+;;;131    {
+;;;132    	vu8 i;
+;;;133    	vu8 value;
+;;;134    
+;;;135    	/*接受一个8位数据 */
+;;;136    	value = 0;
 000002  2000              MOVS     r0,#0
 000004  9000              STR      r0,[sp,#0]
-;;;133    	for (i = 0; i < 8; i++)
+;;;137    	for (i = 0; i < 8; i++)
 000006  9001              STR      r0,[sp,#4]
-;;;134    	{
-;;;135    		value <<= 1;
-;;;136    		TM1650_SCL_1();
+;;;138    	{
+;;;139    		value <<= 1;
+;;;140    		TM1650_SCL_1();
 000008  4c13              LDR      r4,|L4.88|
-;;;137    		IIc_Delay();
-;;;138    		if (TM1650_SDA_READ())
+;;;141    		IIc_Delay();
+;;;142    		if (TM1650_SDA_READ())
 00000a  15a5              ASRS     r5,r4,#22
 00000c  e01c              B        |L4.72|
                   |L4.14|
-00000e  f89d0000          LDRB     r0,[sp,#0]            ;135
-000012  0040              LSLS     r0,r0,#1              ;135
-000014  9000              STR      r0,[sp,#0]            ;135
-000016  2180              MOVS     r1,#0x80              ;136
-000018  4620              MOV      r0,r4                 ;136
+00000e  f89d0000          LDRB     r0,[sp,#0]            ;139
+000012  0040              LSLS     r0,r0,#1              ;139
+000014  9000              STR      r0,[sp,#0]            ;139
+000016  2180              MOVS     r1,#0x80              ;140
+000018  4620              MOV      r0,r4                 ;140
 00001a  f7fffffe          BL       GPIO_SetBits
 00001e  f7fffffe          BL       IIc_Delay
 000022  4629              MOV      r1,r5
 000024  4620              MOV      r0,r4
 000026  f7fffffe          BL       GPIO_ReadInputDataBit
 00002a  b118              CBZ      r0,|L4.52|
-;;;139    		{
-;;;140    			value++;
+;;;143    		{
+;;;144    			value++;
 00002c  f89d0000          LDRB     r0,[sp,#0]
 000030  1c40              ADDS     r0,r0,#1
 000032  9000              STR      r0,[sp,#0]
                   |L4.52|
-;;;141    		}
-;;;142    		TM1650_SCL_0();
+;;;145    		}
+;;;146    		TM1650_SCL_0();
 000034  2180              MOVS     r1,#0x80
 000036  4620              MOV      r0,r4
 000038  f7fffffe          BL       GPIO_ResetBits
-;;;143    		IIc_Delay();
+;;;147    		IIc_Delay();
 00003c  f7fffffe          BL       IIc_Delay
-000040  f89d0004          LDRB     r0,[sp,#4]            ;133
-000044  1c40              ADDS     r0,r0,#1              ;133
-000046  9001              STR      r0,[sp,#4]            ;133
+000040  f89d0004          LDRB     r0,[sp,#4]            ;137
+000044  1c40              ADDS     r0,r0,#1              ;137
+000046  9001              STR      r0,[sp,#4]            ;137
                   |L4.72|
-000048  f89d0004          LDRB     r0,[sp,#4]            ;133
-00004c  2808              CMP      r0,#8                 ;133
+000048  f89d0004          LDRB     r0,[sp,#4]            ;137
+00004c  2808              CMP      r0,#8                 ;137
 00004e  d3de              BCC      |L4.14|
-;;;144    	}
-;;;145    	return value;
+;;;148    	}
+;;;149    	return value;
 000050  f89d0000          LDRB     r0,[sp,#0]
-;;;146    }
+;;;150    }
 000054  bd7c              POP      {r2-r6,pc}
-;;;147    /**********************************************************************************************************
+;;;151    /**********************************************************************************************************
                           ENDP
 
 000056  0000              DCW      0x0000
@@ -173,82 +173,82 @@
                           AREA ||i.IIc_SendByte||, CODE, READONLY, ALIGN=2
 
                   IIc_SendByte PROC
-;;;92     **********************************************************************************************************/
-;;;93     void IIc_SendByte(vu8 _ucByte)
+;;;96     **********************************************************************************************************/
+;;;97     void IIc_SendByte(vu8 _ucByte)
 000000  b531              PUSH     {r0,r4,r5,lr}
-;;;94     {
+;;;98     {
 000002  b082              SUB      sp,sp,#8
-;;;95     	vu8 i;
-;;;96     
-;;;97     	/* 发送一个8位数据 */
-;;;98     	for (i = 0; i < 8; i++)
+;;;99     	vu8 i;
+;;;100    
+;;;101    	/* 发送一个8位数据 */
+;;;102    	for (i = 0; i < 8; i++)
 000004  2000              MOVS     r0,#0
 000006  9001              STR      r0,[sp,#4]
-;;;99     	{		
-;;;100    		if (_ucByte & 0x80)
-;;;101    		{
-;;;102    			TM1650_SDA_1();
+;;;103    	{		
+;;;104    		if (_ucByte & 0x80)
+;;;105    		{
+;;;106    			TM1650_SDA_1();
 000008  f44f7580          MOV      r5,#0x100
 00000c  4c18              LDR      r4,|L5.112|
 00000e  e02a              B        |L5.102|
                   |L5.16|
-000010  f89d0008          LDRB     r0,[sp,#8]            ;100
-000014  0600              LSLS     r0,r0,#24             ;100
+000010  f89d0008          LDRB     r0,[sp,#8]            ;104
+000014  0600              LSLS     r0,r0,#24             ;104
 000016  d504              BPL      |L5.34|
 000018  4629              MOV      r1,r5
 00001a  4620              MOV      r0,r4
 00001c  f7fffffe          BL       GPIO_SetBits
 000020  e003              B        |L5.42|
                   |L5.34|
-;;;103    		}
-;;;104    		else
-;;;105    		{
-;;;106    			TM1650_SDA_0();
+;;;107    		}
+;;;108    		else
+;;;109    		{
+;;;110    			TM1650_SDA_0();
 000022  4629              MOV      r1,r5
 000024  4620              MOV      r0,r4
 000026  f7fffffe          BL       GPIO_ResetBits
                   |L5.42|
-;;;107    		}
-;;;108    		IIc_Delay();
+;;;111    		}
+;;;112    		IIc_Delay();
 00002a  f7fffffe          BL       IIc_Delay
-;;;109    		TM1650_SCL_1();
+;;;113    		TM1650_SCL_1();
 00002e  2180              MOVS     r1,#0x80
 000030  4620              MOV      r0,r4
 000032  f7fffffe          BL       GPIO_SetBits
-;;;110    		IIc_Delay();	
+;;;114    		IIc_Delay();	
 000036  f7fffffe          BL       IIc_Delay
-;;;111    		TM1650_SCL_0();
+;;;115    		TM1650_SCL_0();
 00003a  2180              MOVS     r1,#0x80
 00003c  4620              MOV      r0,r4
 00003e  f7fffffe          BL       GPIO_ResetBits
-;;;112    		if (i == 7)
+;;;116    		if (i == 7)
 000042  f89d2004          LDRB     r2,[sp,#4]
 000046  2a07              CMP      r2,#7
 000048  d103              BNE      |L5.82|
-;;;113    		{
-;;;114    			 TM1650_SDA_1(); // 置高
+;;;117    		{
+;;;118    			 TM1650_SDA_1(); // 置高
 00004a  4629              MOV      r1,r5
 00004c  4620              MOV      r0,r4
 00004e  f7fffffe          BL       GPIO_SetBits
                   |L5.82|
-;;;115    		}
-;;;116    		_ucByte <<= 1;	/* 先送高位 */
+;;;119    		}
+;;;120    		_ucByte <<= 1;	/* 先送高位 */
 000052  f89d0008          LDRB     r0,[sp,#8]
 000056  0042              LSLS     r2,r0,#1
 000058  9202              STR      r2,[sp,#8]
-;;;117    		IIc_Delay();
+;;;121    		IIc_Delay();
 00005a  f7fffffe          BL       IIc_Delay
-00005e  f89d2004          LDRB     r2,[sp,#4]            ;98
-000062  1c52              ADDS     r2,r2,#1              ;98
-000064  9201              STR      r2,[sp,#4]            ;98
+00005e  f89d2004          LDRB     r2,[sp,#4]            ;102
+000062  1c52              ADDS     r2,r2,#1              ;102
+000064  9201              STR      r2,[sp,#4]            ;102
                   |L5.102|
-000066  f89d0004          LDRB     r0,[sp,#4]            ;98
-00006a  2808              CMP      r0,#8                 ;98
+000066  f89d0004          LDRB     r0,[sp,#4]            ;102
+00006a  2808              CMP      r0,#8                 ;102
 00006c  d3d0              BCC      |L5.16|
-;;;118    	}
-;;;119    }
+;;;122    	}
+;;;123    }
 00006e  bd3e              POP      {r1-r5,pc}
-;;;120    /**********************************************************************************************************
+;;;124    /**********************************************************************************************************
                           ENDP
 
                   |L5.112|
@@ -263,7 +263,7 @@
 ;;;63     {
 ;;;64     	/* 启动IIC */
 ;;;65     	TM1650_SCL_1();
-000002  4c0d              LDR      r4,|L6.56|
+000002  4c0c              LDR      r4,|L6.52|
 000004  2180              MOVS     r1,#0x80
 000006  4620              MOV      r0,r4
 000008  f7fffffe          BL       GPIO_SetBits
@@ -281,18 +281,17 @@
 ;;;69     	IIc_Delay();
 000022  f7fffffe          BL       IIc_Delay
 ;;;70     	TM1650_SCL_0();
-000026  2180              MOVS     r1,#0x80
-000028  4620              MOV      r0,r4
-00002a  f7fffffe          BL       GPIO_ResetBits
-;;;71     	IIc_Delay();
-00002e  e8bd4070          POP      {r4-r6,lr}
-000032  f7ffbffe          B.W      IIc_Delay
+000026  4620              MOV      r0,r4
+000028  e8bd4070          POP      {r4-r6,lr}
+00002c  2180              MOVS     r1,#0x80
+00002e  f7ffbffe          B.W      GPIO_ResetBits
+;;;71     //	IIc_Delay();
 ;;;72     }
 ;;;73     /**********************************************************************************************************
                           ENDP
 
-000036  0000              DCW      0x0000
-                  |L6.56|
+000032  0000              DCW      0x0000
+                  |L6.52|
                           DCD      0x40020800
 
                           AREA ||i.IIc_Stop||, CODE, READONLY, ALIGN=2
@@ -304,87 +303,122 @@
 ;;;80     {
 ;;;81     	/* 发送停止位 */
 ;;;82     	TM1650_SDA_0();
-000002  4d09              LDR      r5,|L7.40|
+000002  4d0a              LDR      r5,|L7.44|
 000004  f44f7480          MOV      r4,#0x100
 000008  4621              MOV      r1,r4
 00000a  4628              MOV      r0,r5
 00000c  f7fffffe          BL       GPIO_ResetBits
-;;;83     	TM1650_SCL_1();
-000010  2180              MOVS     r1,#0x80
-000012  4628              MOV      r0,r5
-000014  f7fffffe          BL       GPIO_SetBits
-;;;84     	IIc_Delay();
-000018  f7fffffe          BL       IIc_Delay
-;;;85     	TM1650_SDA_1();
-00001c  4621              MOV      r1,r4
-00001e  4628              MOV      r0,r5
-000020  e8bd4070          POP      {r4-r6,lr}
-000024  f7ffbffe          B.W      GPIO_SetBits
-;;;86     }
-;;;87     /**********************************************************************************************************
+;;;83     	IIc_Delay();
+000010  f7fffffe          BL       IIc_Delay
+;;;84     	TM1650_SCL_1();
+000014  2180              MOVS     r1,#0x80
+000016  4628              MOV      r0,r5
+000018  f7fffffe          BL       GPIO_SetBits
+;;;85     	IIc_Delay();
+00001c  f7fffffe          BL       IIc_Delay
+;;;86     	TM1650_SDA_1();
+000020  4621              MOV      r1,r4
+000022  4628              MOV      r0,r5
+000024  e8bd4070          POP      {r4-r6,lr}
+000028  f7ffbffe          B.W      GPIO_SetBits
+;;;87     //	IIc_Delay();
+;;;88     //	TM1650_SCL_0();
+;;;89     //	TM1650_SDA_0();
+;;;90     }
+;;;91     /**********************************************************************************************************
                           ENDP
 
-                  |L7.40|
+                  |L7.44|
                           DCD      0x40020800
 
                           AREA ||i.IIc_WaitAck||, CODE, READONLY, ALIGN=2
 
                   IIc_WaitAck PROC
-;;;152    **********************************************************************************************************/
-;;;153    vu8 IIc_WaitAck(void)
+;;;156    **********************************************************************************************************/
+;;;157    vu8 IIc_WaitAck(void)
 000000  b538              PUSH     {r3-r5,lr}
-;;;154    {
-;;;155    	vu8 re;
-;;;156    
-;;;157    	TM1650_SDA_1();	/*  */
+;;;158    {
+;;;159    	vu8 re;
+;;;160    
+;;;161    	TM1650_SDA_1();	/*  */
 000002  4c11              LDR      r4,|L8.72|
 000004  f44f7580          MOV      r5,#0x100
 000008  4629              MOV      r1,r5
 00000a  4620              MOV      r0,r4
 00000c  f7fffffe          BL       GPIO_SetBits
-;;;158    	IIc_Delay();
+;;;162    	IIc_Delay();
 000010  f7fffffe          BL       IIc_Delay
-;;;159    	TM1650_SCL_1();	/*  */
+;;;163    	TM1650_SCL_1();	/*  */
 000014  2180              MOVS     r1,#0x80
 000016  4620              MOV      r0,r4
 000018  f7fffffe          BL       GPIO_SetBits
-;;;160    	IIc_Delay();
+;;;164    	IIc_Delay();
 00001c  f7fffffe          BL       IIc_Delay
-;;;161    	if (TM1650_SDA_READ())	/* 读取ACK */
+;;;165    	if (TM1650_SDA_READ())	/* 读取ACK */
 000020  4629              MOV      r1,r5
 000022  4620              MOV      r0,r4
 000024  f7fffffe          BL       GPIO_ReadInputDataBit
 000028  b110              CBZ      r0,|L8.48|
-;;;162    	{
-;;;163    		re = 1;
+;;;166    	{
+;;;167    		re = 1;
 00002a  2001              MOVS     r0,#1
 00002c  9000              STR      r0,[sp,#0]
 00002e  e001              B        |L8.52|
                   |L8.48|
-;;;164    	}
-;;;165    	else
-;;;166    	{
-;;;167    		re = 0;
+;;;168    	}
+;;;169    	else
+;;;170    	{
+;;;171    		re = 0;
 000030  2000              MOVS     r0,#0
 000032  9000              STR      r0,[sp,#0]
                   |L8.52|
-;;;168    	}
-;;;169    	TM1650_SCL_0();
+;;;172    	}
+;;;173    	TM1650_SCL_0();
 000034  2180              MOVS     r1,#0x80
 000036  4620              MOV      r0,r4
 000038  f7fffffe          BL       GPIO_ResetBits
-;;;170    	IIc_Delay();
+;;;174    	IIc_Delay();
 00003c  f7fffffe          BL       IIc_Delay
-;;;171    	return re;
+;;;175    	return re;
 000040  f89d0000          LDRB     r0,[sp,#0]
-;;;172    }
+;;;176    }
 000044  bd38              POP      {r3-r5,pc}
-;;;173    /**********************************************************************************************************
+;;;177    /**********************************************************************************************************
                           ENDP
 
 000046  0000              DCW      0x0000
                   |L8.72|
                           DCD      0x40020800
+
+                          AREA ||i.TM1650Disp||, CODE, READONLY, ALIGN=1
+
+                  TM1650Disp PROC
+;;;232    ***/
+;;;233    void TM1650Disp(vu8 sdate1, vu8 sdate2, vu8 sdate3, vu8 sdate4)
+000000  b51f              PUSH     {r0-r4,lr}
+;;;234    {
+;;;235    		TM1650_SET_LED(0X68,sdate1);  //GID1-sdate1
+000002  f89d1000          LDRB     r1,[sp,#0]
+000006  2068              MOVS     r0,#0x68
+000008  f7fffffe          BL       TM1650_SET_LED
+;;;236    		TM1650_SET_LED(0X6A,sdate2);  //GID2-sdate2
+00000c  f89d1004          LDRB     r1,[sp,#4]
+000010  206a              MOVS     r0,#0x6a
+000012  f7fffffe          BL       TM1650_SET_LED
+;;;237    		TM1650_SET_LED(0X6C,sdate3);  //GID3-sdate3
+000016  f89d1008          LDRB     r1,[sp,#8]
+00001a  206c              MOVS     r0,#0x6c
+00001c  f7fffffe          BL       TM1650_SET_LED
+;;;238    		TM1650_SET_LED(0X6E,sdate4);  //GID4-sdate4
+000020  f89d100c          LDRB     r1,[sp,#0xc]
+000024  b004              ADD      sp,sp,#0x10
+000026  206e              MOVS     r0,#0x6e
+000028  e8bd4010          POP      {r4,lr}
+00002c  f7ffbffe          B.W      TM1650_SET_LED
+;;;239    }
+;;;240    
+                          ENDP
+
 
                           AREA ||i.TM1650_GPIO_INT||, CODE, READONLY, ALIGN=2
 
@@ -413,7 +447,7 @@
 00001c  f88d0005          STRB     r0,[sp,#5]
 ;;;43     	GPIO_Init(GPIOC, &GPIO_InitStructure);//
 000020  4669              MOV      r1,sp
-000022  4802              LDR      r0,|L9.44|
+000022  4802              LDR      r0,|L10.44|
 000024  f7fffffe          BL       GPIO_Init
 ;;;44     }
 000028  bd1c              POP      {r2-r4,pc}
@@ -421,72 +455,101 @@
                           ENDP
 
 00002a  0000              DCW      0x0000
-                  |L9.44|
+                  |L10.44|
                           DCD      0x40020800
 
                           AREA ||i.TM1650_Read_KEY||, CODE, READONLY, ALIGN=1
 
                   TM1650_Read_KEY PROC
-;;;210    **********************************************************************************************************/
-;;;211    vu8 TM1650_Read_KEY(void)
+;;;246    **********************************************************************************************************/
+;;;247    vu8 TM1650_Read_KEY(void)
 000000  b51c              PUSH     {r2-r4,lr}
-;;;212    {
-;;;213    	vu8 ucAck;
-;;;214    	vu8 key;
-;;;215    
-;;;216    	IIc_Start();		/* 开始*/
+;;;248    {
+;;;249    	vu8 ucAck;
+;;;250    	vu8 key;
+;;;251    
+;;;252    	IIc_Start();		/* 开始*/
 000002  f7fffffe          BL       IIc_Start
-;;;217    
-;;;218    	/* 发送地址 */
-;;;219    	IIc_SendByte(0x49);//读按键命令
-000006  2049              MOVS     r0,#0x49
+;;;253    
+;;;254    	/* 发送地址 */
+;;;255    	IIc_SendByte(0x4F);//读按键命令
+000006  204f              MOVS     r0,#0x4f
 000008  f7fffffe          BL       IIc_SendByte
-;;;220    	ucAck = IIc_WaitAck();	/* 等待ACK*/
+;;;256    	ucAck = IIc_WaitAck();	/* 等待ACK*/
 00000c  f7fffffe          BL       IIc_WaitAck
 000010  9001              STR      r0,[sp,#4]
-;;;221    	IIc_Delay();
+;;;257    	IIc_Delay();
 000012  f7fffffe          BL       IIc_Delay
-;;;222    	key=IIc_ReadByte();//读取键值
+;;;258    	key=IIc_ReadByte();//读取键值
 000016  f7fffffe          BL       IIc_ReadByte
 00001a  9000              STR      r0,[sp,#0]
-;;;223    	IIc_Stop();			/* 读完停止 */
+;;;259    	IIc_Stop();			/* 读完停止 */
 00001c  f7fffffe          BL       IIc_Stop
-;;;224    
-;;;225    	return key;
+;;;260    
+;;;261    	return key;
 000020  f89d0000          LDRB     r0,[sp,#0]
-;;;226    }
+;;;262    }
 000024  bd1c              POP      {r2-r4,pc}
-;;;227    /**********************************************************************************************************
+;;;263    
                           ENDP
 
 
                           AREA ||i.TM1650_SET_LED||, CODE, READONLY, ALIGN=1
 
                   TM1650_SET_LED PROC
-;;;232    **********************************************************************************************************/
-;;;233    void TM1650_SET_LED(vu8 addr,vu8 dat)
+;;;269    **********************************************************************************************************/
+;;;270    void TM1650_SET_LED(vu8 addr,vu8 dat)
 000000  b503              PUSH     {r0,r1,lr}
-;;;234    {
+;;;271    {
 000002  b081              SUB      sp,sp,#4
-;;;235    	vu8 ucAck;
-;;;236    	IIc_Start();		/* 开始*/
+;;;272    	vu8 ucAck;
+;;;273    	IIc_Start();		/* 开始*/
 000004  f7fffffe          BL       IIc_Start
-;;;237    	IIc_SendByte(addr);
+;;;274    	IIc_SendByte(addr);
 000008  f89d0004          LDRB     r0,[sp,#4]
 00000c  f7fffffe          BL       IIc_SendByte
-;;;238    	ucAck = IIc_WaitAck();	/* 等待ACK*/
+;;;275    	ucAck = IIc_WaitAck();	/* 等待ACK*/
 000010  f7fffffe          BL       IIc_WaitAck
 000014  9000              STR      r0,[sp,#0]
-;;;239    	IIc_SendByte(dat);
+;;;276    	IIc_SendByte(dat);
 000016  f89d0008          LDRB     r0,[sp,#8]
 00001a  f7fffffe          BL       IIc_SendByte
-;;;240    	ucAck = IIc_WaitAck();	/* 等待ACK*/
+;;;277    	ucAck = IIc_WaitAck();	/* 等待ACK*/
 00001e  f7fffffe          BL       IIc_WaitAck
 000022  9000              STR      r0,[sp,#0]
-;;;241    	IIc_Stop();			/* 读完停止 */
+;;;278    	IIc_Stop();			/* 读完停止 */
 000024  e8bd400e          POP      {r1-r3,lr}
 000028  f7ffbffe          B.W      IIc_Stop
-;;;242    }
+;;;279    }
+                          ENDP
+
+
+                          AREA ||i.TM1650_SystemCmd||, CODE, READONLY, ALIGN=1
+
+                  TM1650_SystemCmd PROC
+;;;217    ***/
+;;;218    void TM1650_SystemCmd(vu8 light,vu8 segMod, vu8 WorkMod, vu8 Onoff)
+000000  b51f              PUSH     {r0-r4,lr}
+;;;219    {
+;;;220     	IIc_Start();
+000002  f7fffffe          BL       IIc_Start
+;;;221    	IIc_SendByte(0x48);
+000006  2048              MOVS     r0,#0x48
+000008  f7fffffe          BL       IIc_SendByte
+;;;222    	IIc_SendByte(light | segMod | WorkMod | Onoff );
+00000c  f89d0000          LDRB     r0,[sp,#0]
+000010  f89d1004          LDRB     r1,[sp,#4]
+000014  4308              ORRS     r0,r0,r1
+000016  f89d1008          LDRB     r1,[sp,#8]
+00001a  4308              ORRS     r0,r0,r1
+00001c  f89d100c          LDRB     r1,[sp,#0xc]
+000020  4308              ORRS     r0,r0,r1
+000022  f7fffffe          BL       IIc_SendByte
+;;;223    	IIc_Stop();
+000026  e8bd401f          POP      {r0-r4,lr}
+00002a  f7ffbffe          B.W      IIc_Stop
+;;;224    }
+;;;225    
                           ENDP
 
 

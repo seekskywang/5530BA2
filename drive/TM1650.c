@@ -68,7 +68,7 @@ void IIc_Start(void)
 	TM1650_SDA_0();
 	IIc_Delay();
 	TM1650_SCL_0();
-	IIc_Delay();
+//	IIc_Delay();
 }
 /**********************************************************************************************************
 *	函数名: IIc_Stop
@@ -80,9 +80,13 @@ void IIc_Stop(void)
 {
 	/* 发送停止位 */
 	TM1650_SDA_0();
+	IIc_Delay();
 	TM1650_SCL_1();
 	IIc_Delay();
 	TM1650_SDA_1();
+//	IIc_Delay();
+//	TM1650_SCL_0();
+//	TM1650_SDA_0();
 }
 /**********************************************************************************************************
 *	函数名: IIc_SendByte
@@ -202,6 +206,38 @@ void IIc_NAck(void)
 	TM1650_SCL_0();
 	IIc_Delay();	
 }
+
+/**系统设置命令
+light -- 亮度级别(00H 8级亮度、10H为1级亮度。。。。。。70H为7级亮度)
+segMod -- 段模式设置(00H为8段模式，08H为7段模式)
+WorkMod -- 工作模式(00H为正常模式，04H为低功耗模式)
+Onoff -- 开关(00H为关显示，01H为开显示)
+例如：1级亮度，7段模式，正常工作模式，开显示则函数为
+TM1650_SystemCmd(0x10, 0x08, 0x01, 0x01 );
+***/
+void TM1650_SystemCmd(vu8 light,vu8 segMod, vu8 WorkMod, vu8 Onoff)
+{
+ 	IIc_Start();
+	IIc_SendByte(0x48);
+	IIc_SendByte(light | segMod | WorkMod | Onoff );
+	IIc_Stop();
+}
+
+/**4位显示数据
+0x68 对应DIG1
+0x6A 对应DIG2
+0x6C 对应DIG3
+0x6E 对应DIG4
+如果要DIG1-4显示0-3 则函数为TM1650Disp(DispCode[0],DispCode[1],DispCode[2],DispCode[3]);
+***/
+void TM1650Disp(vu8 sdate1, vu8 sdate2, vu8 sdate3, vu8 sdate4)
+{
+		TM1650_SET_LED(0X68,sdate1);  //GID1-sdate1
+		TM1650_SET_LED(0X6A,sdate2);  //GID2-sdate2
+		TM1650_SET_LED(0X6C,sdate3);  //GID3-sdate3
+		TM1650_SET_LED(0X6E,sdate4);  //GID4-sdate4
+}
+
 /**********************************************************************************************************
 *	函数名: IIc_Read_KEY
 *	功能: 读取键值
@@ -216,7 +252,7 @@ vu8 TM1650_Read_KEY(void)
 	IIc_Start();		/* 开始*/
 
 	/* 发送地址 */
-	IIc_SendByte(0x49);//读按键命令
+	IIc_SendByte(0x4F);//读按键命令
 	ucAck = IIc_WaitAck();	/* 等待ACK*/
 	IIc_Delay();
 	key=IIc_ReadByte();//读取键值
@@ -224,6 +260,7 @@ vu8 TM1650_Read_KEY(void)
 
 	return key;
 }
+
 /**********************************************************************************************************
 *	函数名: TM1650_SET_LED
 *	功能: 发送LED数据

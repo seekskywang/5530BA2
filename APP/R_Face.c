@@ -479,6 +479,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 			{
 				TM1650_SET_LED(0x68,0x70);
 				GPIO_ResetBits(GPIOD,GPIO_Pin_12);//灭灯
+//				
+//				TM1650_SET_LED(0x68,0x70);//FAIL灯
+//        GPIO_SetBits(GPIOD,GPIO_Pin_12);//
+//				
+//				GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+//				TM1650_SET_LED(0x48,0x71);
+//				TM1650_SET_LED(0x68,0xF2);//PASS灯
+				
 				if(DISS_Voltage > 1 && DISS_Voltage > gate_v && R_VLUE > 20 && con_flag == 0)
 				{
 					con_flag = 1;

@@ -17,4 +17,6 @@ vu8 IIc_CheckDevice(vu8 _Address);
 void TM1650_GPIO_INT(void);
 vu8 TM1650_Read_KEY(void);
 void TM1650_SET_LED(vu8 addr,vu8 dat);
+void TM1650_SystemCmd(vu8 light,vu8 segMod, vu8 WorkMod, vu8 Onoff);
+void TM1650Disp(vu8 sdate1, vu8 sdate2, vu8 sdate3, vu8 sdate4);
 #endif

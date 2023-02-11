@@ -51337,6 +51337,8 @@ Nvu8 IIc_CheckDevice(vu8 _Address);
 Nvoid TM1650_GPIO_INT(void);
 Nvu8 TM1650_Read_KEY(void);
 Nvoid TM1650_SET_LED(vu8 addr,vu8 dat);
+Nvoid TM1650_SystemCmd(vu8 light,vu8 segMod, vu8 WorkMod, vu8 Onoff);
+Nvoid TM1650Disp(vu8 sdate1, vu8 sdate2, vu8 sdate3, vu8 sdate4);
 N#endif
 L 19 "..\STemWinLibrary522\emWinTask\MainTask.c" 2
 N#include "dac8531.h"
@@ -52282,6 +52284,9 @@ N		CreateSTARTER();
 N	}else if(jkflag == 0){
 N		CreateR();
 N	}
+N	TM1650_SET_LED(0x48,0x71);
+N//	TM1650_SystemCmd(0x70,0x00,0x00,0x01);    //7级亮度+8段模式+正常工作模式+开显示
+N	TM1650Disp(0x00,0x00,0x00,0x00);          //上电清零操作
 N////	CreateR();//开机进入内阻测试界面
 N//// 	flag_Load_CC=1;//开机负载默认进入CC模式
 N//// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
@@ -52517,9 +52522,11 @@ N// 		}
 N		if(Flag_Key_Scan==1)
 X		if((flagA . bit3)==1)
 N		{
+N//			TM1650_SystemCmd(0x70,0x00,0x00,0x01);    //7级亮度+8段模式+正常工作模式+开显示
+N//			TM1650Disp(0x00,0x00,0x00,0x00);          //上电清零操作
 N			Flag_Key_Scan=0;
 X			(flagA . bit3)=0;
-N			NewKey=TM1650_Read_KEY();
+N			NewKey=TM1650_Read_KEY();//读键值
 N			Flag_Key_Scan = 1;
 X			(flagA . bit3) = 1;
 N		}

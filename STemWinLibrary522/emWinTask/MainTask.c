@@ -107,6 +107,9 @@ void MainTask(void)
 	}else if(jkflag == 0){
 		CreateR();
 	}
+	TM1650_SET_LED(0x48,0x71);
+//	TM1650_SystemCmd(0x70,0x00,0x00,0x01);    //7级亮度+8段模式+正常工作模式+开显示
+	TM1650Disp(0x00,0x00,0x00,0x00);          //上电清零操作
 ////	CreateR();//开机进入内阻测试界面
 //// 	flag_Load_CC=1;//开机负载默认进入CC模式
 //// 	GPIO_ResetBits(GPIOC,GPIO_Pin_10);//CC
@@ -328,8 +331,10 @@ void MainTask(void)
 // 		}
 		if(Flag_Key_Scan==1)
 		{
+//			TM1650_SystemCmd(0x70,0x00,0x00,0x01);    //7级亮度+8段模式+正常工作模式+开显示
+//			TM1650Disp(0x00,0x00,0x00,0x00);          //上电清零操作
 			Flag_Key_Scan=0;
-			NewKey=TM1650_Read_KEY();
+			NewKey=TM1650_Read_KEY();//读键值
 			Flag_Key_Scan = 1;
 		}
 		Key_Funtion();//键盘处理
