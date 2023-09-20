@@ -394,7 +394,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             TEXT_SetText(hItem,"");
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_128);       
             TEXT_SetText(hItem,"");
-            if(R_VLUE < 180 && DISS_Voltage > 1)
+            if(R_VLUE < 180/* && DISS_Voltage > 1*/)
             {
                 GPIO_ResetBits(GPIOB,GPIO_Pin_13);//R_RALY低档位 
                 r_raly = 0;
@@ -552,9 +552,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     sprintf(buf,"%.3f",0.000);
                     TEXT_SetText(hItem,buf);
 					
-					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
-					sprintf(buf,"%04d",0);       
-					TEXT_SetText(hItem,buf);
+//					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
+//					sprintf(buf,"%04d",0);       
+//					TEXT_SetText(hItem,buf);
                 }else{
                     hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
                     sprintf(buf,"%.3f",DISS_Voltage);       
@@ -688,9 +688,19 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				sprintf(buf,"%.3f",0.000);
 				TEXT_SetText(hItem,buf);
 				
-				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
-				sprintf(buf,"%04d",0);       
-				TEXT_SetText(hItem,buf);
+				if(R_VLUE >= 2000)
+				{
+						hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);
+						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
+						TEXT_SetText(hItem,"OVER");
+				}else{
+					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
+					sprintf(buf,"%04d",disrvalue);       
+					TEXT_SetText(hItem,buf);
+				}
+//				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
+//				sprintf(buf,"%04d",0);       
+//				TEXT_SetText(hItem,buf);
 			}else{
 				hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_80);
 				sprintf(buf,"%.3f",disloadv);       
@@ -698,9 +708,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				
 				if(R_VLUE >= 2000)
 				{
-//						hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);
-//						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
-//						TEXT_SetText(hItem,"OVER");
+						hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);
+						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
+						TEXT_SetText(hItem,"OVER");
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
 					sprintf(buf,"%04d",disrvalue);       

@@ -17,7 +17,7 @@
 ..\output\load_face.o: ..\STemWinLibrary522\inc\GUI_Private.h
 ..\output\load_face.o: ..\STemWinLibrary522\inc\LCD_Protected.h
 ..\output\load_face.o: ..\STemWinLibrary522\inc\GUI_Debug.h
-..\output\load_face.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\output\load_face.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\output\load_face.o: ..\STemWinLibrary522\inc\SCROLLBAR.h
 ..\output\load_face.o: ..\STemWinLibrary522\inc\WIDGET.h
 ..\output\load_face.o: ..\STemWinLibrary522\inc\CALENDAR.h
@@ -48,9 +48,9 @@
 ..\output\load_face.o: ..\Include\my_register.h
 ..\output\load_face.o: ..\User\STM32F4xx.h
 ..\output\load_face.o: ..\Libraries\CMSIS\inc\core_cm4.h
-..\output\load_face.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\output\load_face.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-..\output\load_face.o: E:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
+..\output\load_face.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\output\load_face.o: C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
+..\output\load_face.o: C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
 ..\output\load_face.o: ..\Libraries\CMSIS\inc\core_cm4_simd.h
 ..\output\load_face.o: ..\User\system_stm32f4xx.h
 ..\output\load_face.o: ..\User\stm32f4xx_conf.h
@@ -83,10 +83,10 @@
 ..\output\load_face.o: ..\Libraries\FWlib\inc\stm32f4xx_fsmc.h
 ..\output\load_face.o: ..\Include\tm1650.h
 ..\output\load_face.o: ..\Include\my_register.h
-..\output\load_face.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-..\output\load_face.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\output\load_face.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\output\load_face.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\output\load_face.o: ..\Include\key.h
 ..\output\load_face.o: ..\Include\my_register.h
-..\output\load_face.o: E:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\output\load_face.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\output\load_face.o: ..\Include\beep.h
 ..\output\load_face.o: ..\Include\internalflash.h
