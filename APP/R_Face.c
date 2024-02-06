@@ -691,7 +691,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				if(R_VLUE >= 2000)
 				{
 						hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);
-						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
+//						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
 						TEXT_SetText(hItem,"OVER");
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
@@ -709,7 +709,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 				if(R_VLUE >= 2000)
 				{
 						hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);
-						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
+//						TEXT_SetFont(hItem,&GUI_FontEN40);//设定文本字体
 						TEXT_SetText(hItem,"OVER");
 				}else{
 					hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_81);					
